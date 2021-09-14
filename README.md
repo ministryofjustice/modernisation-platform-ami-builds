@@ -1,13 +1,11 @@
-# Ministry of Justice Template Repository
+# Modernisation Platform AMI builds
 
-Use this template to [create a repository] with the default initial files for a Ministry of Justice Github repository, including:
 
-* The correct LICENSE
-* Github actions
-* .gitignore file
+## Introduction
 
-Once you have created your repository, please:
+This repository contains the Modernisation Platform AMI build code and workflows.
 
-* Edit the copy of this README.md file to document your project
+Here you can add code to build your AMIs. The process for building AMIs is still being determined. Progress can be tracked here: [#1059]
 
-[create a repository]: https://github.com/ministryofjustice/template-repository/generate
+
+[#1059]: https://github.com/ministryofjustice/modernisation-platform/issues/1059
