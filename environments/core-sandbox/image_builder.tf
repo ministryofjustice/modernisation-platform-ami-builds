@@ -37,7 +37,19 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
   version      = local.recipe.version
 }
 
+module "ImageBuilderLogsBucket" {
+  source = "github.com/ministryofjustice/modernisation-platform-terraform-s3-bucket?ref=v5.0.0"
 
+  providers = {
+    aws.bucket-replication = aws.bucket-replication
+  }
+
+  bucket_prefix       = "ec2-image-builder-logs-"
+  versioning_enabled  = false
+  replication_enabled = false
+
+  tags = local.tags
+}
 
 resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
   description                   = local.infra_config.description
@@ -48,6 +60,12 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
   subnet_id                     = local.infra_config.subnet_id
   terminate_instance_on_failure = local.infra_config.terminate_on_fail
 
+  logging {
+    s3_logs {
+      s3_bucket_name = module.ImageBuilderLogsBucket.bucket.id
+      s3_key_prefix  = "logs"
+    }
+  }
 }
 
 resource "aws_imagebuilder_component" "TestComponent" {

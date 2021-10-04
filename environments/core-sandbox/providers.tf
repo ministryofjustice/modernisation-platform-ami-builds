@@ -11,3 +11,8 @@ provider "aws" {
   alias  = "modernisation-platform"
   region = "eu-west-2"
 }
+
+provider "aws" {
+  alias  = "bucket-replication"
+  region = "eu-west-1"
+}
