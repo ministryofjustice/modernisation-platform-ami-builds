@@ -1,0 +1,11 @@
+name: Hello World
+description: This is hello world testing document for Linux.
+schemaVersion: 1.0
+phases:
+  - name: build
+    steps:
+      - name: HelloWorldStep
+        action: ExecuteBash
+        inputs:
+          commands:
+            - echo 'Hello World 2 from the build phase.'
