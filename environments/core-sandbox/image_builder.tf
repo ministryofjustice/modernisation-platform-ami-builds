@@ -41,7 +41,7 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
 
 resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
   description                   = local.infra_config.description
-  instance_profile_name         = local.infra_config.instance_profile_name
+  instance_profile_name         = aws_iam_instance_profile.image_builder_profile.name
   instance_types                = local.infra_config.instance_types
   name                          = local.infra_config.name
   security_group_ids            = local.infra_config.security_group_ids
