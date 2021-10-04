@@ -8,13 +8,13 @@ resource "aws_imagebuilder_image_pipeline" "TestPipeline" {
   }
 }
 
-
+/* This is being commented for reference, it is not necessary to deploy this and it takes a long time to apply.
 resource "aws_imagebuilder_image" "TestImage" {
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.TestDistributionConfig.arn
   image_recipe_arn                 = aws_imagebuilder_image_recipe.TestRecipe.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.TestInfraConfig.arn
 }
-
+*/
 
 
 resource "aws_imagebuilder_image_recipe" "TestRecipe" {
