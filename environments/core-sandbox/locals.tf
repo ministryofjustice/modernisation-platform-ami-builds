@@ -58,5 +58,9 @@ locals {
     ami_name = "TestAMI-{{ imagebuilder:buildDate }}"
   }
 
+  component_files = fileset(path.module, "components/*")
+  component_files_trimmed = [ for file in fileset(path.module, "components/*") : trimsuffix( trimprefix(file, "components/"), ".yml") ]
+  component_data  = [ for file in local.component_files: yamldecode(file("${path.module}/${file}")) ]
+
 
 }

@@ -28,8 +28,11 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
     }
   }
 
-  component {
-    component_arn = aws_imagebuilder_component.TestComponent.arn
+  dynamic "component" {
+    for_each = { for file in local.component_files : file => yamldecode(file("${path.module}/${file}")) }
+    content {
+      component_arn = aws_imagebuilder_component.TestComponent[component.key].arn
+    }
   }
 
   name         = local.recipe.name
@@ -69,21 +72,10 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
 }
 
 resource "aws_imagebuilder_component" "TestComponent" {
-  data = yamlencode({
-    phases = [{
-      name = "build"
-      steps = [{
-        action = "ExecuteBash"
-        inputs = {
-          commands = ["echo 'hello world'"]
-        }
-        name      = "example"
-        onFailure = "Continue"
-      }]
-    }]
-    schemaVersion = 1.0
-  })
-  name     = "example"
+  for_each = { for file in local.component_files : file => yamldecode(file("${path.module}/${file}")) }
+
+  data = yamlencode(file(each.key))
+  name     = trimsuffix( trimprefix(each.key, "components/"), ".yml")
   platform = "Linux"
   version  = "1.0.1"
 }
