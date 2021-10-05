@@ -45,7 +45,6 @@ locals {
 
   infra_config = {
     description             = "Description here"
-    instance_profile_name   = "ImageBuilder"
     instance_types          = ["t2.nano", "t3.micro"]
     name                    = "TestInfraConfig"
     security_group_ids      = ["sg-0c2fc68feb53f0122"]
