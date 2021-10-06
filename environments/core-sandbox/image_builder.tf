@@ -1,11 +1,16 @@
 resource "aws_imagebuilder_image_pipeline" "TestPipeline" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.TestRecipe.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.TestInfraConfig.arn
+  distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.TestDistributionConfig.arn
   name                             = local.pipeline.name
 
   schedule {
     schedule_expression = local.pipeline.schedule
   }
+
+  depends_on = [
+    aws_imagebuilder_image_recipe.TestRecipe
+  ]
 }
 
 /* This is being commented for reference, it is not necessary to deploy this and it takes a long time to apply.
@@ -29,10 +34,14 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
   }
 
   dynamic "component" {
-    for_each = { for file in local.component_files : file => yamldecode(file("${path.module}/${file}")) }
+    for_each = local.component_map
     content {
       component_arn = aws_imagebuilder_component.TestComponent[component.key].arn
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 
   name         = local.recipe.name
@@ -72,12 +81,16 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
 }
 
 resource "aws_imagebuilder_component" "TestComponent" {
-  for_each = { for file in local.component_files : file => yamldecode(file("${path.module}/${file}")) }
+  for_each = local.component_map
 
-  data = yamlencode(file(each.key))
-  name     = trimsuffix( trimprefix(each.key, "components/"), ".yml")
+  data = file("components/${each.key}.yml")
+  name     = each.key
   platform = "Linux"
-  version  = "1.0.1"
+  version  = each.value
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 
@@ -88,7 +101,12 @@ resource "aws_imagebuilder_distribution_configuration" "TestDistributionConfig" 
     region = local.distribution.region
 
     ami_distribution_configuration {
+
         name = local.distribution.ami_name
+
+        launch_permission {
+          user_ids = ["374269020027"]
+        }
     }
   }
 }

@@ -9,7 +9,7 @@ locals {
   recipe = {
     name         = "example"
     parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/amazon-linux-2-x86/x.x.x"
-    version      = "1.0.1"
+    version      = "1.0.3"
     device_name  = "/dev/xvdb"
 
     ebs = {
@@ -37,6 +37,12 @@ locals {
     ami_name = "TestAMI-{{ imagebuilder:buildDate }}"
   }
 
+// need a map of: file_name = version
+
+  component_map = {
+    "hello_world1" = "1.0.2"
+    "hello_world2" = "1.0.2"
+  }
 
   component_files = fileset(path.module, "components/*")
   component_files_trimmed = [ for file in fileset(path.module, "components/*") : trimsuffix( trimprefix(file, "components/"), ".yml") ]

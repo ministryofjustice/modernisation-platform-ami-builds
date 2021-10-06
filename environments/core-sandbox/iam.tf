@@ -41,7 +41,7 @@ resource "aws_iam_role" "image_builder_role" {
             ]
             Effect   = "Allow"
             Resource = [
-              "arn:aws:s3:::ec2-image-builder-diwbdb/*",
+              "arn:aws:s3:::ec2-image-builder-*/*",
             ]
           },
         ]
