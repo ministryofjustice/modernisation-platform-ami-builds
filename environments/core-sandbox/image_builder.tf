@@ -30,6 +30,7 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
       delete_on_termination = local.recipe.ebs.delete_on_termination
       volume_size           = local.recipe.ebs.volume_size
       volume_type           = local.recipe.ebs.volume_type
+      encrypted             = local.recipe.ebs.encrypted
     }
   }
 
@@ -83,7 +84,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
 resource "aws_imagebuilder_component" "TestComponent" {
   for_each = local.component_map
 
-  data = file("components/${each.key}.yml")
+  data     = file("components/${each.key}.yml")
   name     = each.key
   platform = "Linux"
   version  = each.value
@@ -102,11 +103,11 @@ resource "aws_imagebuilder_distribution_configuration" "TestDistributionConfig" 
 
     ami_distribution_configuration {
 
-        name = local.distribution.ami_name
+      name = local.distribution.ami_name
 
-        launch_permission {
-          user_ids = ["374269020027"]
-        }
+      launch_permission {
+        user_ids = ["374269020027"]
+      }
     }
   }
 }

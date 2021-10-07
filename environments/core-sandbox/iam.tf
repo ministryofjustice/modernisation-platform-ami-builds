@@ -13,8 +13,8 @@ resource "aws_iam_role" "image_builder_role" {
     {
       Statement = [
         {
-          Action    = "sts:AssumeRole"
-          Effect    = "Allow"
+          Action = "sts:AssumeRole"
+          Effect = "Allow"
           Principal = {
             Service = "ec2.amazonaws.com"
           }
@@ -30,16 +30,16 @@ resource "aws_iam_role" "image_builder_role" {
   ]
 
   inline_policy {
-    name   = "ImageBuilderS3BucketAccess"
+    name = "ImageBuilderS3BucketAccess"
     policy = jsonencode(
       {
         Statement = [
           {
-            Action   = [
+            Action = [
               "s3:PutObject",
               "s3:GetObject",
             ]
-            Effect   = "Allow"
+            Effect = "Allow"
             Resource = [
               "arn:aws:s3:::ec2-image-builder-*/*",
             ]
