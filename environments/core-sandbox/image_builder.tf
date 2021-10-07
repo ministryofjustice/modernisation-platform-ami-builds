@@ -31,6 +31,7 @@ resource "aws_imagebuilder_image_recipe" "TestRecipe" {
       volume_size           = local.recipe.ebs.volume_size
       volume_type           = local.recipe.ebs.volume_type
       encrypted             = local.recipe.ebs.encrypted
+      kms_key_id            = aws_kms_key.image_builder_encryption.arn
     }
   }
 
@@ -84,7 +85,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
 resource "aws_imagebuilder_component" "TestComponent" {
   for_each = local.component_map
 
-  data     = file("components/${each.key}.yml")
+  data = file("components/${each.key}.yml")
   name     = each.key
   platform = "Linux"
   version  = each.value
@@ -103,11 +104,65 @@ resource "aws_imagebuilder_distribution_configuration" "TestDistributionConfig" 
 
     ami_distribution_configuration {
 
-      name = local.distribution.ami_name
+        name = local.distribution.ami_name
 
-      launch_permission {
-        user_ids = ["374269020027"]
-      }
+        launch_permission {
+          user_ids = ["374269020027"]
+        }
     }
   }
+}
+
+
+resource "aws_kms_key" "image_builder_encryption" {
+  enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.image_builder_encryption.json
+
+}
+
+resource "aws_kms_alias" "image_builder_encryption" {
+  name          = "alias/image-builder-encryption"
+  target_key_id = aws_kms_key.image_builder_encryption.id
+}
+
+data "aws_iam_policy_document" "image_builder_encryption" {
+
+  # checkov:skip=CKV_AWS_109: "Key policy requires asterisk resource"
+  # checkov:skip=CKV_AWS_111: "Key policy requires asterisk resource"
+
+  statement {
+    effect  = "Allow"
+    actions = [
+      "kms:*"
+    ]
+
+    resources = ["*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = concat(local.root_users_with_state_access, [data.aws_caller_identity.current.account_id])
+    }
+
+  }
+
+  statement {
+    effect  = "Allow"
+    actions = [
+      "kms:DescribeKey",
+      "kms:ReEncrypt*",
+      "kms:CreateGrant",
+      "kms:Decrypt"
+    ]
+
+    resources = ["*"]
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "374269020027"
+      ]
+    }
+
+  }
+
 }

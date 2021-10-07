@@ -18,7 +18,7 @@ resource "aws_iam_role" "image_builder_role" {
           Principal = {
             Service = "ec2.amazonaws.com"
           }
-        },
+        }
       ]
       Version = "2012-10-17"
     }
@@ -44,6 +44,15 @@ resource "aws_iam_role" "image_builder_role" {
               "arn:aws:s3:::ec2-image-builder-*/*",
             ]
           },
+          {
+            "Action": [
+              "ec2: ModifyImageAttribute",
+            ],
+            "Effect": "Allow",
+            "Resource": [
+              "arn:aws:ec2:eu-west-2::image/*"
+            ]
+          }
         ]
         Version = "2012-10-17"
       }
