@@ -9,7 +9,7 @@ locals {
   recipe = {
     name         = "example"
     parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/amazon-linux-2-x86/x.x.x"
-    version      = "1.0.5"
+    version      = "1.0.7"
     device_name  = "/dev/xvdb"
 
     ebs = {
@@ -41,12 +41,12 @@ locals {
   // need a map of: file_name = version
 
   component_map = {
-    "hello_world1" = "1.0.3"
-    "hello_world2" = "1.0.3"
+    "hello_world1" = "1.0.4"
+    "hello_world2" = "1.0.4"
   }
 
-  component_files         = fileset(path.module, "components/*")
-  component_files_trimmed = [for file in fileset(path.module, "components/*") : trimsuffix(trimprefix(file, "components/"), ".yml")]
-  component_data          = [for file in local.component_files : yamldecode(file("${path.module}/${file}"))]
+  ami_share_accounts = [
+    "${local.environment_management.account_ids["core-shared-services-production"]}"
+  ]
 
 }
