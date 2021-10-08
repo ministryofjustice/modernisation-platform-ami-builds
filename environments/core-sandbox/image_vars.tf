@@ -9,7 +9,7 @@ locals {
   recipe = {
     name         = "example"
     parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/amazon-linux-2-x86/x.x.x"
-    version      = "1.0.7"
+    version      = "1.0.8"
     device_name  = "/dev/xvda"
 
     ebs = {
