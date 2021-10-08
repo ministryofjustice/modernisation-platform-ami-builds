@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "image_builder_encryption" {
   # checkov:skip=CKV_AWS_111: "Key policy requires asterisk resource"
 
   statement {
-    effect  = "Allow"
+    effect = "Allow"
     actions = [
       "kms:*"
     ]
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "image_builder_encryption" {
   }
 
   statement {
-    effect  = "Allow"
+    effect = "Allow"
     actions = [
       "kms:DescribeKey",
       "kms:ReEncrypt*",

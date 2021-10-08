@@ -45,11 +45,11 @@ resource "aws_iam_role" "image_builder_role" {
             ]
           },
           {
-            "Action": [
+            "Action" : [
               "ec2: ModifyImageAttribute",
             ],
-            "Effect": "Allow",
-            "Resource": [
+            "Effect" : "Allow",
+            "Resource" : [
               "arn:aws:ec2:eu-west-2::image/*"
             ]
           }

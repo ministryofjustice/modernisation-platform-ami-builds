@@ -85,7 +85,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "TestInfraConfig" {
 resource "aws_imagebuilder_component" "TestComponent" {
   for_each = local.component_map
 
-  data = file("components/${each.key}.yml")
+  data     = file("components/${each.key}.yml")
   name     = each.key
   platform = "Linux"
   version  = each.value
@@ -104,11 +104,11 @@ resource "aws_imagebuilder_distribution_configuration" "TestDistributionConfig" 
 
     ami_distribution_configuration {
 
-        name = local.distribution.ami_name
+      name = local.distribution.ami_name
 
-        launch_permission {
-          user_ids = local.ami_share_accounts
-        }
+      launch_permission {
+        user_ids = local.ami_share_accounts
+      }
     }
   }
 }
