@@ -10,15 +10,14 @@ locals {
     name         = "example"
     parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/amazon-linux-2-x86/x.x.x"
     version      = "1.0.7"
-    device_name  = "/dev/xvdb"
+    device_name  = "/dev/xvda"
 
     ebs = {
       delete_on_termination = true
-      volume_size           = 100
+      volume_size           = 30
       volume_type           = "gp2"
       encrypted             = true
     }
-
   }
 
 
