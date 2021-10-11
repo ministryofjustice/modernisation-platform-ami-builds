@@ -6,7 +6,7 @@ terraform {
     acl                  = "bucket-owner-full-control"
     bucket               = "modernisation-platform-terraform-state"
     encrypt              = true
-    key                  = "imagebuilder.tfstate"
+    key                  = "imagebuilder-team1.tfstate"
     region               = "eu-west-2"
     workspace_key_prefix = "environments/accounts/core-sandbox" # This will store the object as environments/core-sandbox/${workspace}/imagebuilder.tfstate
   }

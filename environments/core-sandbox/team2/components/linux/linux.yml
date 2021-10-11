@@ -1,7 +1,16 @@
 ---
-name: Hello World
-description: This is hello world testing document for Linux.
+name: Linux example
+description: Example linux component.
 schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.3"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
 phases:
   - name: build
     steps:

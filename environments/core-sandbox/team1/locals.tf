@@ -29,4 +29,10 @@ locals {
     "arn:aws:iam::${local.root_account.master_account_id}:user/DavidElliott"
   ]
 
+  ami_share_accounts = [
+    "${local.environment_management.account_ids["core-shared-services-production"]}"
+  ]
+
+  base_component_dir = "../../../components"
+
 }
