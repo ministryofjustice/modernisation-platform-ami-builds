@@ -37,7 +37,7 @@ resource "aws_imagebuilder_image_recipe" "Team1-Windows" {
   }
 
   dynamic "component" {
-    for_each = { for file in local.windows_pipeline.components: file => file }
+    for_each = { for file in local.windows_pipeline.components : file => file }
     content {
       component_arn = aws_imagebuilder_component.Team1-Windows-Components[component.key].arn
     }
@@ -71,9 +71,9 @@ resource "aws_imagebuilder_infrastructure_configuration" "Team1-Windows" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "Team1-Windows-Components" {
-  for_each = { for file in local.windows_pipeline.components: file => yamldecode(file("components/Windows/${file}")) }
+  for_each = { for file in local.windows_pipeline.components : file => yamldecode(file("components/Windows/${file}")) }
 
-  data = file("components/Windows/${each.key}")
+  data     = file("components/Windows/${each.key}")
   name     = trimsuffix(each.key, ".yml")
   platform = yamldecode(file("components/Windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/Windows/${each.key}")).parameters[0].Version.default
@@ -86,9 +86,9 @@ resource "aws_imagebuilder_component" "Team1-Windows-Components" {
 
 // create each component in the base component directory
 resource "aws_imagebuilder_component" "Team1-Windows-BaseComponents" {
-  for_each = { for file in fileset(local.base_component_dir, "*"): file => yamldecode(file("${local.base_component_dir}/Windows/${file}"))}
+  for_each = { for file in fileset(local.base_component_dir, "*") : file => yamldecode(file("${local.base_component_dir}/Windows/${file}")) }
 
-  data = file("${local.base_component_dir}/Windows/${each.key}")
+  data     = file("${local.base_component_dir}/Windows/${each.key}")
   name     = trimsuffix(each.key, ".yml")
   platform = yamldecode(file("${local.base_component_dir}/Windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("${local.base_component_dir}/Windows/${each.key}")).parameters[0].Version.default
@@ -108,11 +108,11 @@ resource "aws_imagebuilder_distribution_configuration" "Team1-Windows" {
 
     ami_distribution_configuration {
 
-        name = local.windows_pipeline.distribution.ami_name
+      name = local.windows_pipeline.distribution.ami_name
 
-        launch_permission {
-          user_ids = local.ami_share_accounts
-        }
+      launch_permission {
+        user_ids = local.ami_share_accounts
+      }
     }
   }
 }

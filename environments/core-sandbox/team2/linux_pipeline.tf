@@ -37,7 +37,7 @@ resource "aws_imagebuilder_image_recipe" "Team2-Linux" {
   }
 
   dynamic "component" {
-    for_each = { for file in local.linux_pipeline.components: file => file }
+    for_each = { for file in local.linux_pipeline.components : file => file }
     content {
       component_arn = aws_imagebuilder_component.Team2-Linux-Components[component.key].arn
     }
@@ -72,9 +72,9 @@ resource "aws_imagebuilder_infrastructure_configuration" "Team2-Linux" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "Team2-Linux-Components" {
-  for_each = { for file in local.linux_pipeline.components: file => yamldecode(file("components/linux/${file}")) }
+  for_each = { for file in local.linux_pipeline.components : file => yamldecode(file("components/linux/${file}")) }
 
-  data = file("components/linux/${each.key}")
+  data     = file("components/linux/${each.key}")
   name     = trimsuffix(each.key, ".yml")
   platform = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
@@ -87,9 +87,9 @@ resource "aws_imagebuilder_component" "Team2-Linux-Components" {
 
 // create each component in the base component directory
 resource "aws_imagebuilder_component" "Team2-Linux-BaseComponents" {
-  for_each = { for file in fileset(local.base_component_dir, "*"): file => yamldecode(file("${local.base_component_dir}/linux/${file}"))}
+  for_each = { for file in fileset(local.base_component_dir, "*") : file => yamldecode(file("${local.base_component_dir}/linux/${file}")) }
 
-  data = file("${local.base_component_dir}/linux/${each.key}")
+  data     = file("${local.base_component_dir}/linux/${each.key}")
   name     = trimsuffix(each.key, ".yml")
   platform = yamldecode(file("${local.base_component_dir}/linux/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("${local.base_component_dir}/linux/${each.key}")).parameters[0].Version.default
@@ -109,11 +109,11 @@ resource "aws_imagebuilder_distribution_configuration" "Team2-Linux-Distribution
 
     ami_distribution_configuration {
 
-        name = local.linux_pipeline.distribution.ami_name
+      name = local.linux_pipeline.distribution.ami_name
 
-        launch_permission {
-          user_ids = local.ami_share_accounts
-        }
+      launch_permission {
+        user_ids = local.ami_share_accounts
+      }
     }
   }
 }
