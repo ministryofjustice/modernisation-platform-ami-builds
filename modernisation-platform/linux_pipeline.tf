@@ -30,7 +30,7 @@ resource "aws_imagebuilder_image_recipe" "mp_amazonlinux2" {
       volume_size           = local.linux_pipeline.recipe.ebs.volume_size
       volume_type           = local.linux_pipeline.recipe.ebs.volume_type
       encrypted             = local.linux_pipeline.recipe.ebs.encrypted
-//      kms_key_id            = aws_kms_key.image_builder_encryption.arn
+      kms_key_id            = data.terraform_remote_state.modernisation-platform-repo.outputs.ebs_encryption_cmk_alias_arn
     }
   }
 
