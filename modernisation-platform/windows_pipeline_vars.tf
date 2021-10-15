@@ -10,8 +10,8 @@ locals {
     recipe = {
       name         = "MP_WindowsServer2022"
       parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/windows-server-2022-english-full-base-x86/x.x.x"
-      version      = "1.0.1"
-      device_name  = "/dev/xvda"
+      version      = "1.0.3"
+      device_name  = "/dev/sda1"
 
       ebs = {
         delete_on_termination = true
