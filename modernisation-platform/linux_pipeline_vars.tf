@@ -40,6 +40,16 @@ locals {
       "linux.yml"
     ]
 
+    aws_components = [
+      "aws-cli-version-2-linux",
+      "python-3-linux",
+      "amazon-cloudwatch-agent-linux",
+      "update-linux-kernel-mainline",
+      "update-linux",
+      "reboot-test-linux",
+      "reboot-linux"
+    ]
+
   }
 
 }

@@ -62,3 +62,7 @@ resource "aws_iam_role" "image_builder_role" {
   tags     = {}
   tags_all = {}
 }
+
+output image_builder_profile {
+  value = aws_iam_instance_profile.image_builder_profile.name
+}
