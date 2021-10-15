@@ -11,7 +11,7 @@ locals {
       name         = "Team1_WindowsServer2022"
       parent_image = "arn:aws:imagebuilder:eu-west-2:763252494486:image/mp-windowsserver2022/x.x.x"
       version      = "1.0.1"
-      device_name  = "/dev/xvda"
+      device_name  = "/dev/sda1"
 
       ebs = {
         delete_on_termination = true
