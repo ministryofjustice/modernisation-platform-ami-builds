@@ -72,7 +72,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "amazonlinux2" {
 
   logging {
     s3_logs {
-      s3_bucket_name = data.terraform_remote_state.mp-imagebuilder.outputs.imagebuilder_log_bucket_id
+      s3_bucket_name = data.terraform_remote_state.modernisation-platform-repo.outputs.imagebuilder_log_bucket_id
       s3_key_prefix  = "team1"
     }
   }
