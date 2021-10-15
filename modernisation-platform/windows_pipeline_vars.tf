@@ -23,7 +23,7 @@ locals {
 
     infra_config = {
       description        = "Description here"
-      instance_types     = ["t2.nano", "t3.micro"]
+      instance_types     = ["t3.medium"]
       name               = "MP_WindowsServer2022"
       security_group_ids = ["sg-0c2fc68feb53f0122"]
       subnet_id          = "subnet-07e6dac6dd1c1e8b5"
