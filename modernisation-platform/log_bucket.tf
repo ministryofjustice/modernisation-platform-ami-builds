@@ -11,3 +11,7 @@ module "ImageBuilderLogsBucket" {
 
   tags = local.tags
 }
+
+output "imagebuilder_log_bucket_id" {
+  value = module.ImageBuilderLogsBucket.bucket.id
+}
