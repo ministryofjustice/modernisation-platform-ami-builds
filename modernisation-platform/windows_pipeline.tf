@@ -69,8 +69,8 @@ resource "aws_imagebuilder_infrastructure_configuration" "windowsserver2022" {
 
   logging {
     s3_logs {
-      s3_bucket_name = module.ImageBuilderLogsBucket.bucket.id
-      s3_key_prefix  = "logs"
+      s3_bucket_name = data.terraform_remote_state.modernisation-platform-repo.outputs.imagebuilder_log_bucket_id
+      s3_key_prefix  = "mp"
     }
   }
 }
