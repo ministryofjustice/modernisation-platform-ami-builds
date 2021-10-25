@@ -30,7 +30,7 @@ resource "aws_imagebuilder_image_recipe" "windowsserver2022" {
       volume_size           = local.windows_pipeline.recipe.ebs.volume_size
       volume_type           = local.windows_pipeline.recipe.ebs.volume_type
       encrypted             = local.windows_pipeline.recipe.ebs.encrypted
-      kms_key_id            = data.terraform_remote_state.modernisation-platform-repo.outputs.ebs_encryption_cmk_alias_arn
+      kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
     }
   }
 
