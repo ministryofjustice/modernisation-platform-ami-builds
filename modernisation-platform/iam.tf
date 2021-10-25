@@ -27,6 +27,7 @@ resource "aws_iam_role" "image_builder_role" {
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder",
+    "arn:aws:iam::aws:policy/AmazonInspectorFullAccess"
   ]
 
   inline_policy {
@@ -53,6 +54,27 @@ resource "aws_iam_role" "image_builder_role" {
               "arn:aws:ec2:eu-west-2::image/*"
             ]
           }
+        ]
+        Version = "2012-10-17"
+      }
+    )
+  }
+
+  inline_policy {
+    name = "ImageBuilderInspectorComponentPrereqs"
+    policy = jsonencode(
+      {
+        Statement = [
+          {
+            Action = [
+              "ssm:SendCommand",
+              "ec2:CreateTags",
+            ]
+            Effect = "Allow"
+            Resource = [
+              "*",
+            ]
+          },
         ]
         Version = "2012-10-17"
       }
