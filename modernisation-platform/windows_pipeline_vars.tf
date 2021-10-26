@@ -41,7 +41,8 @@ locals {
     ]
 
     aws_components = [
-      "chocolatey"
+      "chocolatey",
+      "stig-build-windows-high"
     ]
 
   }

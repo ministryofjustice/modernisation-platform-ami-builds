@@ -46,6 +46,7 @@ locals {
       "amazon-cloudwatch-agent-linux",
       "update-linux-kernel-mainline",
       "update-linux",
+      "stig-build-linux-high",
       "inspector-test-linux",
       "reboot-test-linux",
       "reboot-linux"
