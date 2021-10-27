@@ -10,7 +10,7 @@ locals {
     recipe = {
       name         = "MP_WindowsServer2022"
       parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/windows-server-2022-english-full-base-x86/x.x.x"
-      version      = "1.0.3"
+      version      = "1.0.6"
       device_name  = "/dev/sda1"
 
       ebs = {
@@ -42,7 +42,7 @@ locals {
 
     aws_components = [
       "chocolatey",
-      "stig-build-windows-high"
+      "stig-build-windows-medium"
     ]
 
   }
