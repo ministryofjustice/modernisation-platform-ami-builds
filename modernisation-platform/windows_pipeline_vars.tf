@@ -25,8 +25,8 @@ locals {
       description        = "Description here"
       instance_types     = ["t3.medium"]
       name               = "MP_WindowsServer2022"
-      security_group_ids = ["sg-0a3ea802b54cafc58"]
-      subnet_id          = "subnet-0a198afa44c614a14"
+      security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
+      subnet_id          = "${random_shuffle.image_builder_subnet_ids.result[0]}"
       terminate_on_fail  = true
     }
 
