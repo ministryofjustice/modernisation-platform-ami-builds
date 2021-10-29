@@ -29,7 +29,7 @@ locals {
     "arn:aws:iam::${local.root_account.master_account_id}:user/DavidElliott"
   ]
 
-  ami_share_accounts = [ for account, id in local.environment_management.account_ids : id ]
+  ami_share_accounts = [for account, id in local.environment_management.account_ids : id]
 
   base_component_dir = "../../../components"
 
