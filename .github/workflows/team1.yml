@@ -1,0 +1,70 @@
+---
+name: team1
+on:
+  push:
+    branches:
+      - main
+      - feature/*
+    paths:
+      - 'teams/team1/**'
+      - '.github/workflows/team1.yml'
+  pull_request:
+    branches:
+      - main
+    types: [opened, edited, reopened, synchronize]
+    paths:
+      - 'teams/team1/**'
+      - '.github/workflows/team1.yml'
+  workflow_dispatch:
+env:
+  AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_IN_AUTOMATION: true
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  plan-team1:
+    name: Plan - team1 pipelines
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2.3.4
+      - name: Load and Configure Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 1.0.1
+          terraform_wrapper: false
+      - name: Terraform plan - team1 pipelines
+        run: |
+          echo "Terraform plan - ${TF_ENV}"
+          bash scripts/terraform-init.sh teams/team1
+          terraform -chdir="teams/team1" workspace select "core-shared-services-${TF_ENV}"
+          bash scripts/terraform-plan.sh teams/team1
+        env:
+          TF_ENV: production
+
+  deploy-core-shared-services:
+    name: Deploy - team1 pipelines
+    runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    environment:
+      name: core-shared-services
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2.3.4
+      - name: Load and Configure Terraform
+        uses: hashicorp/setup-terraform@v1.3.2
+        with:
+          terraform_version: 1.0.1
+          terraform_wrapper: false
+      - name: Terraform apply - team1 pipelines
+        run: |
+          echo "Terraform apply - ${TF_ENV}"
+          bash scripts/terraform-init.sh teams/team1
+          terraform -chdir="teams/team1" workspace select "core-shared-services-${TF_ENV}"
+          bash scripts/terraform-apply.sh teams/team1
+        env:
+          TF_ENV: production
