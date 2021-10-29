@@ -26,7 +26,7 @@ locals {
       instance_types     = ["t3.medium"]
       name               = "MP_AmazonLinux2"
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
-      subnet_id          = "${random_shuffle.image_builder_subnet_ids.result[0]}"
+      subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_subnet_ids[0]}"
       terminate_on_fail  = true
     }
 
