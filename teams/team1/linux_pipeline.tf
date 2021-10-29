@@ -5,7 +5,7 @@ resource "aws_imagebuilder_image_pipeline" "amazonlinux2" {
   name                             = local.linux_pipeline.pipeline.name
 
   schedule {
-    schedule_expression = local.linux_pipeline.pipeline.schedule
+    schedule_expression                = local.linux_pipeline.pipeline.schedule
     pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 
@@ -45,7 +45,7 @@ resource "aws_imagebuilder_image_recipe" "amazonlinux2" {
   }
 
   dynamic "component" {
-    for_each =  toset(local.linux_pipeline.aws_components)
+    for_each = toset(local.linux_pipeline.aws_components)
     content {
       component_arn = "arn:aws:imagebuilder:eu-west-2:aws:component/${component.key}/x.x.x"
     }
@@ -83,7 +83,7 @@ resource "aws_imagebuilder_component" "amazonlinux2_components" {
   for_each = { for file in local.linux_pipeline.components : file => yamldecode(file("components/linux/${file}")) }
 
   data     = file("components/linux/${each.key}")
-  name     = join("_", ["team1", trimsuffix(each.key, ".yml") ])
+  name     = join("_", ["team1", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
 
