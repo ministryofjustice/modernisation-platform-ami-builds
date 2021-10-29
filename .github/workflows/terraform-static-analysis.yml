@@ -6,9 +6,9 @@ on:
     branches:
       - main
       - feature/*
-    paths: 
-      - 'core-sandbox/**'
-      - 'core-shared-services/**'
+    paths:
+      - 'modernisation-platform/**'
+      - 'teams/team1/**'
       - '.github/workflows/terraform-static-analysis.yml'
 
 jobs:
