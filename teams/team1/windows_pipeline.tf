@@ -5,7 +5,7 @@ resource "aws_imagebuilder_image_pipeline" "windowsserver2022" {
   name                             = local.windows_pipeline.pipeline.name
 
   schedule {
-    schedule_expression = local.windows_pipeline.pipeline.schedule
+    schedule_expression                = local.windows_pipeline.pipeline.schedule
     pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 
@@ -42,7 +42,7 @@ resource "aws_imagebuilder_image_recipe" "windowsserver2022" {
   }
 
   dynamic "component" {
-    for_each =  toset(local.windows_pipeline.aws_components)
+    for_each = toset(local.windows_pipeline.aws_components)
     content {
       component_arn = "arn:aws:imagebuilder:eu-west-2:aws:component/${component.key}/x.x.x"
     }
@@ -80,7 +80,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
   for_each = { for file in local.windows_pipeline.components : file => yamldecode(file("components/windows/${file}")) }
 
   data     = file("components/windows/${each.key}")
-  name     = join("_", ["team1", trimsuffix(each.key, ".yml") ])
+  name     = join("_", ["team1", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/windows/${each.key}")).parameters[0].Version.default
 
