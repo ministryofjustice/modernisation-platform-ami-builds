@@ -46,7 +46,7 @@ jobs:
         env:
           TF_ENV: production
 
-  deploy-core-shared-services:
+  deploy-team1:
     name: Deploy - team1 pipelines
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
