@@ -70,7 +70,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "windowsserver2022" {
   logging {
     s3_logs {
       s3_bucket_name = data.terraform_remote_state.modernisation-platform-repo.outputs.imagebuilder_log_bucket_id
-      s3_key_prefix  = "team1"
+      s3_key_prefix  = local.team_name
     }
   }
 }
@@ -80,7 +80,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
   for_each = { for file in local.windows_pipeline.components : file => yamldecode(file("components/windows/${file}")) }
 
   data     = file("components/windows/${each.key}")
-  name     = join("_", ["team1", trimsuffix(each.key, ".yml")])
+  name     = join("_", [local.team_name, trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/windows/${each.key}")).parameters[0].Version.default
 
