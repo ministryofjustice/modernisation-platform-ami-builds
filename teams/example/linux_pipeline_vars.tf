@@ -25,8 +25,8 @@ locals {
       description        = "Description here"
       instance_types     = ["t2.nano", "t3.micro"]
       name               = join("", [local.team_name, "_AmazonLinux2"])
-      security_group_ids = ["sg-0c2fc68feb53f0122"]
-      subnet_id          = "subnet-07e6dac6dd1c1e8b5"
+      security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
+      subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
     }
 
