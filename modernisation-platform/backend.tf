@@ -6,7 +6,7 @@ terraform {
     acl                  = "bucket-owner-full-control"
     bucket               = "modernisation-platform-terraform-state"
     encrypt              = true
-    key                  = "imagebuilder-mp.tfstate"
+    key                  = join("", ["imagebuilder-", local.team_name, ".tfstate"])
     region               = "eu-west-2"
     workspace_key_prefix = "environments/accounts/core-shared-services" # This will store the object as environments/core-shared-services/${workspace}/imagebuilder-mp.tfstate
   }
