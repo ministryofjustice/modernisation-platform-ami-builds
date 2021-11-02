@@ -10,7 +10,7 @@ locals {
     recipe = {
       name         = join("", [local.team_name, "_AmazonLinux2"])
       parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/amazon-linux-2-x86/x.x.x"
-      version      = "1.0.5"
+      version      = "1.0.6"
       device_name  = "/dev/xvda"
 
       ebs = {
