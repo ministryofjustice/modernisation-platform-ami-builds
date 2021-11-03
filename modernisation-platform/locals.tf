@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
 
-  team_name = "mp"
+  team_name         = "mp"
   team_remote_state = join("", ["imagebuilder-", local.team_name, ".tfstate"])
 
   root_account           = data.aws_organizations_organization.root_account
