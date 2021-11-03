@@ -28,7 +28,7 @@ jobs:
   plan-example:
     name: Plan - example pipelines
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2.3.4
@@ -49,7 +49,7 @@ jobs:
   deploy-example:
     name: Deploy - example pipelines
     runs-on: ubuntu-latest
-    if: github.ref != 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch'
     environment:
       name: core-shared-services
     steps:
