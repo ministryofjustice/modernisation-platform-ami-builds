@@ -48,6 +48,7 @@ jobs:
 
   deploy-example:
     name: Deploy - example pipelines
+    needs: plan-example
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     environment:
