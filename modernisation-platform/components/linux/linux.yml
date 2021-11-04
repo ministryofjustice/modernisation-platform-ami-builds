@@ -32,4 +32,4 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - echo 'HELLOOOOOOOOOOOOOOOOO'
+            - echo 'Hello world from the test phase'
