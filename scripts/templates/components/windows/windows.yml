@@ -1,0 +1,35 @@
+---
+name: Windows example
+description: Example Windows component.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: HelloWorldStep
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - Write-Host 'Hello World from the build phase.'
+  - name: validate
+    steps:
+      - name: HelloWorldStep
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - Write-Host 'Hello World from the validate phase.'
+  - name: test
+    steps:
+      - name: HelloWorldStep
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - Write-Host 'Hello World from the test phase.'
