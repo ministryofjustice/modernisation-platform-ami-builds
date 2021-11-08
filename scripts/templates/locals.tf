@@ -1,4 +1,3 @@
-data "aws_organizations_organization" "root_account" {}
 data "aws_caller_identity" "current" {}
 
 locals {
@@ -6,7 +5,6 @@ locals {
   team_name = "#TEAM#"
   suffix    = "#SUFFIX#"
 
-  root_account           = data.aws_organizations_organization.root_account
   application_name       = "core-shared-services"
   environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
 
@@ -27,11 +25,6 @@ locals {
   }
 
   json_data = jsondecode(file("networking.auto.tfvars.json"))
-
-  root_users_with_state_access = [
-    "arn:aws:iam::${local.root_account.master_account_id}:user/ModernisationPlatformOrganisationManagement",
-    "arn:aws:iam::${local.root_account.master_account_id}:user/DavidElliott"
-  ]
 
   ami_share_accounts = [
     "${local.environment_management.account_ids["core-shared-services-production"]}"
