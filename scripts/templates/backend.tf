@@ -6,8 +6,8 @@ terraform {
     acl                  = "bucket-owner-full-control"
     bucket               = "modernisation-platform-terraform-state"
     encrypt              = true
-    key                  = "imagebuilder-#TEAM#.tfstate" # replace team1 with your team name when copying this file
+    key                  = "imagebuilder-#TEAM#.tfstate"
     region               = "eu-west-2"
-    workspace_key_prefix = "environments/accounts/core-shared-services" # This will store the object as environments/core-shared-services/${workspace}/imagebuilder-[team name].tfstate
+    workspace_key_prefix = "environments/accounts/core-shared-services" # This will store the object as environments/core-shared-services/${workspace}/imagebuilder-#TEAM#.tfstate
   }
 }
