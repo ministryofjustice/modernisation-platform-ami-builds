@@ -66,7 +66,7 @@ Using the linux_pipeline.tf and linux_pipeline_vars.tf files as example files
 - Update any other variables you wish to change, such as cron schedule, instance size etc.
 
 
-### How to new components and manage versions
+### How to add new components and manage versions
 
 To add a new component or make changes to an existing component:
 
