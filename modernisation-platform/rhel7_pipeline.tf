@@ -79,7 +79,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel7" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "rhel7_components" {
-  for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/linux/${file}")) }
+  for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/rhel7/${file}")) }
 
   data     = file("components/linux/${each.key}")
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
