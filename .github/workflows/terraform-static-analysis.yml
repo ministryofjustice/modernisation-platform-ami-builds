@@ -30,6 +30,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         scan_type: changed
+        checkov_exclude: CKV_AWS_180
 
   terraform-static-analysis-full-scan:
     name: Terraform Static Analysis - scan all directories
@@ -46,7 +47,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         scan_type: full
-        checkov_exclude: CKV_AWS_180
 
   terraform-static-analysis-scheduled-scan:
     name: Terraform Static Analysis - scheduled scan of all directories
