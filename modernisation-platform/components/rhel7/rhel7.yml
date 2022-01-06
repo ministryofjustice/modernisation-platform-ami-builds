@@ -9,7 +9,7 @@ parameters:
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
-      default: "Rhel7"
+      default: "Linux"
       description: Platform.
 phases:
   - name: build

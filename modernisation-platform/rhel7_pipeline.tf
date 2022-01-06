@@ -81,10 +81,10 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel7" {
 resource "aws_imagebuilder_component" "rhel7_components" {
   for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/rhel7/${file}")) }
 
-  data     = file("components/linux/${each.key}")
+  data     = file("components/rhel7/${each.key}")
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
-  platform = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
+  platform = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
+  version  = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default
 
   lifecycle {
     create_before_destroy = true
