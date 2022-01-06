@@ -1,4 +1,5 @@
 resource "aws_imagebuilder_image_pipeline" "rhel7" {
+
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel7.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel7.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel7.arn
@@ -78,7 +79,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel7" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "rhel7_components" {
-  for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/linux/${file}")) }
+  for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/rhel7/${file}")) }
 
   data     = file("components/rhel7/${each.key}")
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
