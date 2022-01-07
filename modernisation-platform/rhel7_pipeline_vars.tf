@@ -11,7 +11,7 @@ locals {
       name         = join("", [local.team_name, "_rhel7"])
       parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/red-hat-enterprise-linux-7-x86/x.x.x"
       version      = "1.0.1"
-      device_name  = "/dev/xvda"
+      device_name  = "/dev/sda1"
 
       ebs = {
         delete_on_termination = true
@@ -45,11 +45,7 @@ locals {
       "python-3-linux",
       "amazon-cloudwatch-agent-linux",
       "update-linux-kernel-mainline",
-      "update-linux",
-      "stig-build-linux-medium",
-      "inspector-test-linux",
-      "reboot-test-linux",
-      "reboot-linux"
+      "update-linux"
     ]
 
   }

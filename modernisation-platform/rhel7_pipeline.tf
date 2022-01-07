@@ -1,9 +1,7 @@
 resource "aws_imagebuilder_image_pipeline" "rhel7" {
-
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel7.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel7.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel7.arn
-
   name = local.rhel_pipeline.pipeline.name
 
   schedule {
@@ -31,7 +29,7 @@ resource "aws_imagebuilder_image_recipe" "rhel7" {
       delete_on_termination = local.rhel_pipeline.recipe.ebs.delete_on_termination
       volume_size           = local.rhel_pipeline.recipe.ebs.volume_size
       volume_type           = local.rhel_pipeline.recipe.ebs.volume_type
-      encrypted             = local.rhel_pipeline.recipe.ebs.encrypted
+      encrypted             = local.linux_pipeline.recipe.ebs.encrypted
       kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
     }
   }
