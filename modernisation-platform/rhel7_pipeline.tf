@@ -2,7 +2,7 @@ resource "aws_imagebuilder_image_pipeline" "rhel7" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel7.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel7.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel7.arn
-  name = local.rhel_pipeline.pipeline.name
+  name                             = local.rhel_pipeline.pipeline.name
 
   schedule {
     schedule_expression                = local.rhel_pipeline.pipeline.schedule
