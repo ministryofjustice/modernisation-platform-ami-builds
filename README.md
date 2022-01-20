@@ -69,7 +69,10 @@ Using the linux_pipeline.tf and linux_pipeline_vars.tf files as example files
 
 Under your team directory:
 
-- In *__data.tf__*, edit the data block changing the *__key_id__* to match the new key to be used in the pipeline.
+- In *__data.tf__*, edit the data block changing the *__key_id__* to match the new key to be used in the pipeline.\
+*__default key:__* `key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"`\
+*__team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
+*__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
 
 ### How to add new components and manage versions
 
