@@ -65,6 +65,14 @@ Using the linux_pipeline.tf and linux_pipeline_vars.tf files as example files
 - Update _components_ and _aws_components_ lists with the sequenced components you want included in the image (_components_ being your custom yml files under the components directory, _aws_components_ being the names of the components supplied by Amazon which are [not in this repo])
 - Update any other variables you wish to change, such as cron schedule, instance size etc.
 
+### How to add your own team kms key
+
+Under your team directory:
+
+- In *__data.tf__*, edit the data block changing the *__key_id__* to match the new key to be used in the pipeline.\
+*__default key:__* `key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"`\
+*__team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
+*__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
 
 ### How to add new components and manage versions
 
