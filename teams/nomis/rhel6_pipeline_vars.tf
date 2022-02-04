@@ -4,7 +4,7 @@ locals {
 
     pipeline = {
       name     = join("", [local.team_name, "_RHEL6_10"])
-      schedule = "cron(0 * * * *)"
+      schedule = "rate(2 hours)"
     }
 
     recipe = {
