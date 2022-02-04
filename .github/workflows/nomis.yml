@@ -3,7 +3,6 @@ name: nomis
 on:
   push:
     branches:
-      - main
       - nomis/*
     paths:
       - 'teams/nomis/**'

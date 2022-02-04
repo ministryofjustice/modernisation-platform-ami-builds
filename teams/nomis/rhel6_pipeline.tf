@@ -54,7 +54,7 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
     create_before_destroy = true
   }
 
-  name         = local.rhel_pipeline.recipe.name
+  name         = local.rhel6_pipeline.recipe.name
   parent_image = data.aws_ami.latest-rhel-610.id
   version      = local.rhel6_pipeline.recipe.version
 }
@@ -79,7 +79,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel6" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "rhel6_components" {
-  for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/rhel6/${file}")) }
+  for_each = { for file in local.rhel6_pipeline.components : file => yamldecode(file("components/rhel6/${file}")) }
 
   data     = file("components/rhel6/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
