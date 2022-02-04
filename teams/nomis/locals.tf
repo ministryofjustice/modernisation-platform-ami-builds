@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
 
-  team_name = "team1"
+  team_name = "nomis"
 
   root_account           = data.aws_organizations_organization.root_account
   application_name       = "core-shared-services"
