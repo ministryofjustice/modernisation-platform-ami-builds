@@ -41,8 +41,8 @@ locals {
       "rhel6.yml"
     ]
 
-    aws_components = [
-      # "yum-repository-test-linux"
+      aws_components = [
+      "apache-tomcat-9-linux"
     ]
 
   }
