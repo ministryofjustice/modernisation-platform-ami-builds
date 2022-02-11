@@ -74,6 +74,16 @@ Under your team directory:
 *__team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
 *__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
 
+### How to edit ami account share
+
+This is a optional task and doesn't have to be done, this should only be changed if you want to share images with particular accounts.\ 
+Under your team directory:
+
+- In *__locals.tf__* edit the *__ami_share_accounts__* section, changing the account from the default core-shared-services to your account of choice.\
+*__default:__* `"${local.environment_management.account_ids["core-shared-services-production"]}"`\
+*__member account:__* `"${local.environment_management.account_ids["<member account>"]}"`\
+*__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
+
 ### How to add new components and manage versions
 
 To add a new component or make changes to an existing component:

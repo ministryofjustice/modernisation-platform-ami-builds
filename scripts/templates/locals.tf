@@ -27,7 +27,7 @@ locals {
   json_data = jsondecode(file("networking.auto.tfvars.json"))
 
   ami_share_accounts = [
-    "${local.environment_management.account_ids["core-shared-services-production"]}"
+    "${local.environment_management.account_ids["core-shared-services-production"]}" ## << Replace core-shared-services-production with the name of the account to share the ami with or this can be left as the default
   ]
 
 }
