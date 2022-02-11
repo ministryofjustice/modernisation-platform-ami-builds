@@ -76,9 +76,10 @@ Under your team directory:
 
 ### How to edit ami account share
 
-This is a Optional task and doesnt have to be done, should only be chaged if you only want to share images with particular accounts. Under your team directory:
+This is a optional task and doesn't have to be done, this should only be changed if you want to share images with particular accounts.\ 
+Under your team directory:
 
-- In *__locals.tf__*, edit the *__ami_share_accounts__* changing the account from the default core-shared-services to your account of choice.\
+- In *__locals.tf__* edit the *__ami_share_accounts__* section, changing the account from the default core-shared-services to your account of choice.\
 *__default:__* `"${local.environment_management.account_ids["core-shared-services-production"]}"`\
 *__member account:__* `"${local.environment_management.account_ids["<member account>"]}"`\
 *__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
