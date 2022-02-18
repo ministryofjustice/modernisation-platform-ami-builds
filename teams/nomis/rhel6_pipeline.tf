@@ -51,7 +51,7 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       delete_on_termination = local.rhel6_pipeline.recipe.ebs.delete_on_termination
       volume_size           = local.rhel6_pipeline.recipe.ebs.volume_size
       volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
-      encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
+      //encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
       //kms_key_id            = data.aws_kms_key.sprinkler_ebs_encryption_key.arn
       #TODO: Turn on encryption with nomis cmk
     }
