@@ -24,7 +24,7 @@ resource "aws_imagebuilder_image" "rhel6" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
-  name                             = local.rhel6_pipeline.pipeline.name
+  //name                             = local.rhel6_pipeline.pipeline.name
 
 }
 
