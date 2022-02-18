@@ -38,7 +38,7 @@ locals {
     }
 
     components = [
-      //"rhel6.yml"
+      "rhel6.yml"
     ]
 
     aws_components = [
