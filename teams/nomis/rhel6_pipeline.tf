@@ -40,6 +40,7 @@ owners = ["309956199498"] # Redhat
 
 
 resource "aws_imagebuilder_image_recipe" "rhel6" {
+    user_data_base64      =  base64encode(local.user_data)
   block_device_mapping {
     device_name = local.rhel6_pipeline.recipe.device_name
 
@@ -48,7 +49,6 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       volume_size           = local.rhel6_pipeline.recipe.ebs.volume_size
       volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
       encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
-      user_data_base64      =  base64encode(local.user_data)
       //kms_key_id            = data.aws_kms_key.sprinkler_ebs_encryption_key.arn
     #TODO: Turn on encryption with nomis cmk
     }
