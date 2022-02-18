@@ -1,8 +1,8 @@
 locals {
-    user_data = <<EOF
-    #!/bin/bash
+  user_data = <<EOF
+#!/bin/bash
 cd /tmp
-sudo yum install -y sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
+sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
 sudo start amazon-ssm-agent
 EOF
 }
@@ -24,23 +24,26 @@ resource "aws_imagebuilder_image" "rhel6" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
-  //name                             = local.rhel6_pipeline.pipeline.name
+
+#   tags {
+#     name = local.rhel6_pipeline.pipeline.name
+#   }
 
 }
 
 data "aws_ami" "latest-rhel-610" {
-most_recent = true
-owners = ["309956199498"] # Redhat
+  most_recent = true
+  owners      = ["309956199498"] # Redhat
 
   filter {
-      name   = "name"
-      values = ["RHEL-6.10_HVM-*"]
+    name   = "name"
+    values = ["RHEL-6.10_HVM-*"]
   }
 }
 
 
 resource "aws_imagebuilder_image_recipe" "rhel6" {
-    user_data_base64      =  base64encode(local.user_data)
+  user_data_base64 = base64encode(local.user_data)
   block_device_mapping {
     device_name = local.rhel6_pipeline.recipe.device_name
 
@@ -50,7 +53,7 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
       encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
       //kms_key_id            = data.aws_kms_key.sprinkler_ebs_encryption_key.arn
-    #TODO: Turn on encryption with nomis cmk
+      #TODO: Turn on encryption with nomis cmk
     }
   }
 

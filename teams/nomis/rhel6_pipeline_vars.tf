@@ -8,11 +8,11 @@ locals {
     }
 
     recipe = {
-      name         = join("", [local.team_name, "_RHEL6_10"])
+      name           = join("", [local.team_name, "_RHEL6_10"])
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
-      version      = "1.0.1"
-      device_name  = "/dev/sda1"
+      version     = "1.0.1"
+      device_name = "/dev/sda1"
 
       ebs = {
         delete_on_termination = true
@@ -41,7 +41,7 @@ locals {
       "rhel6.yml"
     ]
 
-      aws_components = [
+    aws_components = [
       "apache-tomcat-9-linux"
     ]
 
