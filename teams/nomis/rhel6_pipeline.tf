@@ -52,7 +52,7 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       volume_size           = local.rhel6_pipeline.recipe.ebs.volume_size
       volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
       encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
-      kms_key_id            = data.rhel6_pipeline.recipe.ebs.kms_key_id
+      kms_key_id            = local.rhel6_pipeline.recipe.ebs.kms_key_id
       #TODO: Turn on encryption with nomis cmk
     }
   }
