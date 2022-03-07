@@ -25,7 +25,7 @@ resource "aws_imagebuilder_image" "rhel6" {
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
   image_tests_configuration {
-    image_test_enabled               = false
+    image_tests_enabled               = false
   }
 
 
