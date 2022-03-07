@@ -43,7 +43,7 @@ locals {
     ]
 
     aws_components = [
-      "scap-checker-linux"
+      "scap-compliance-checker-linux/2021.04.0"
     ]
 
   }
