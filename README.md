@@ -16,6 +16,7 @@ __Contents__
     - [How to define an AMI (and associated Image Builder resources)](#how-to-define-an-ami-and-associated-image-builder-resources)
     - [How to new components and manage versions](#how-to-new-components-and-manage-versions)
     - [How to add a new GitHub workflow](#how-to-add-a-new-github-workflow)
+    - [Viewing and starting Image Builder pipelines](#how-to-view-and-start-ec2-image-builder-pipelines)
   - [Future additions and improvements](#future-additions-and-improvements)
 
 ### AWS EC2 Image Builder
@@ -24,9 +25,9 @@ Infrastructure-as-code (Terraform) is used in this repository to define AMIs and
 
 AWS Image Builder introduces concepts such as pipelines, recipes and components to define an AMI. These concepts are backed by equivalent Terraform resources. Recipes and Components natively enforce versioning, allowing changes to be tracked and identified. This raises an interesting consideration around the declarative nature of Terraform in combination with inherent versioning within Git repositories - a consideration which has led to a recommended approach in the use of AWS Image Builder within this repository.
 
-### Building and testing of AMIs target the core shared-services account
+### Building and testing of AMIs target the core-shared-services account
 
-All Image Builder resources are deployed to, and execute within, the core shared-services account within the Modernisation Platform.
+All Image Builder resources are deployed to, and execute within, the core-shared-services account within the Modernisation Platform.
 Therefore, Image Builder resources other than your own will exist in this account. However, all resources are prefixed with a team name to allow your resources to be easily identified and separated from others.
 
 ## Structure
@@ -100,6 +101,17 @@ No further change will need to be made to the component block of the pipeline te
 GitHub workflow files are used to invoke Terraform and an example workflow is defined at [./.github/workflows/example.yml](./.github/workflows/example.yml).
 To create a workflow for your team, simply copy ```example.yml``` and add a new file named ```[your_team_name].yml```.
 The workflow within the example workflow has no branch condition that might restrict when Terraform is applied. Please change as appropriate for your team's processes.
+
+### How to view and start EC2 Image Builder pipelines
+
+You can view and start EC2 Image Builder pipelines by assuming a role in the core-shared-services account.
+
+* [Log in to the AWS console](https://user-guide.modernisation-platform.service.justice.gov.uk/user-guide/accessing-the-aws-console.html#accessing-the-aws-console) via SSO as a modernisation-platform-developer
+* Click your SSO username in the top right of the AWS Console and choose "Switch Role"
+* Enter the core-shared-services account number ([see Slack message](https://mojdt.slack.com/archives/C01A7QK5VM1/p1645178678535589)) 
+* Enter role as `member-shared-services`
+* Navigate to EC2 Image Builder and click on “Image pipelines”
+* Choose your pipeline, you can view details and run the pipeline via “Actions”
 
 ## Future additions and improvements
 
