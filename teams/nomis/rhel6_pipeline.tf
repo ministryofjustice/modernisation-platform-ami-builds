@@ -27,7 +27,7 @@ resource "aws_imagebuilder_image" "rhel6" {
   image tests configuration {
     image_test_enabled               = false
   }
-  
+
 
 #   tags {
 #     name = local.rhel6_pipeline.pipeline.name
