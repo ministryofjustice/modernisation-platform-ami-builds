@@ -24,6 +24,7 @@ resource "aws_imagebuilder_image" "rhel6" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
+  image_test_enabled               = false
 
 #   tags {
 #     name = local.rhel6_pipeline.pipeline.name
@@ -53,7 +54,6 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
       encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
       kms_key_id            = local.rhel6_pipeline.recipe.ebs.kms_key_id
-      #TODO: Turn on encryption with nomis cmk
     }
   }
 
