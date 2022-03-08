@@ -10,7 +10,7 @@ locals {
     recipe = {
       name           = join("", [local.team_name, "_RHEL7_9"])
       parent_account = "309956199498" #RedHat
-      version        = "1.0.1"
+      version        = "1.0.2"
       # device_name = "/dev/sda1"
 
       # ebs = {
@@ -89,7 +89,7 @@ locals {
     ]
 
     aws_components = [
-      "	stig-build-linux-low", "scap-compliance-checker-linux"
+      "stig-build-linux-low", "scap-compliance-checker-linux"
     ]
 
   }
