@@ -88,7 +88,9 @@ locals {
       "rhel7.yml"
     ]
 
-    aws_components = []
+    aws_components = [
+      "	stig-build-linux-low", "scap-compliance-checker-linux"
+    ]
 
   }
 
