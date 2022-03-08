@@ -56,20 +56,19 @@ resource "aws_imagebuilder_image_recipe" "rhel7" {
     }
   }
 
-  dynamic "component" {
-    for_each = toset(local.rhel7_pipeline.components)
-    content {
-      component_arn = aws_imagebuilder_component.rhel7_components[component.key].arn
-    }
-  }
-
+  
   dynamic "component" {
     for_each = toset(local.rhel7_pipeline.aws_components)
     content {
       component_arn = "arn:aws:imagebuilder:eu-west-2:aws:component/${component.key}/x.x.x"
     }
   }
-
+  dynamic "component" {
+    for_each = toset(local.rhel7_pipeline.components)
+    content {
+      component_arn = aws_imagebuilder_component.rhel7_components[component.key].arn
+    }
+  }
   lifecycle {
     create_before_destroy = true
   }
