@@ -10,7 +10,7 @@ locals {
     recipe = {
       name           = join("", [local.team_name, "_RHEL7_9"])
       parent_account = "309956199498" #RedHat
-      version        = "1.0.2"
+      version        = "1.0.3"
       # device_name = "/dev/sda1"
 
       # ebs = {
