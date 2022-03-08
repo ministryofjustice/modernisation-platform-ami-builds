@@ -16,10 +16,7 @@ resource "aws_imagebuilder_image" "rhel7" {
   image_tests_configuration {
     image_tests_enabled = false
   }
-
-  tags {
-    name = local.rhel7_pipeline.pipeline.name
-  }
+  # TAGS NOT SUPPORTED FOR IMAGES
 }
 
 data "aws_ami" "latest-rhel-79" {
