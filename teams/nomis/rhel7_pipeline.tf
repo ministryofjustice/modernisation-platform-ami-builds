@@ -44,13 +44,13 @@ resource "aws_imagebuilder_image_recipe" "rhel7" {
   dynamic "block_device_mapping" {
     for_each = local.rhel7_pipeline.recipe.ebs_block_device
     content {
-      device_name = ebs_block_device.value.device_name
+      device_name = local.rhel7_pipeline.recipe.ebs_block_device.value.device_name
       ebs {
-        delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
-        encrypted             = lookup(ebs_block_device.value, "encrypted", null)
-        kms_key_id            = lookup(ebs_block_device.value, "kms_key_id", null)
-        volume_size           = lookup(ebs_block_device.value, "volume_size", null)
-        volume_type           = lookup(ebs_block_device.value, "volume_type", null)
+        delete_on_termination = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "delete_on_termination", null)
+        encrypted             = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "encrypted", null)
+        kms_key_id            = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "kms_key_id", null)
+        volume_size           = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "volume_size", null)
+        volume_type           = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "volume_type", null)
       }
     }
   }
