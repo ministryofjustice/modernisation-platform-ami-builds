@@ -1,5 +1,5 @@
 locals {
-user_data = <<EOF
+  user_data = <<EOF
 #!/bin/bash
 cd /tmp
 sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
@@ -20,20 +20,20 @@ EOF
 
 # }
 
-resource "aws_imagebuilder_image" "rhel6" {
-  image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
-  infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
-  distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
-  image_tests_configuration {
-    image_tests_enabled               = false
-  }
-
-
-#   tags {
-#     name = local.rhel6_pipeline.pipeline.name
+# resource "aws_imagebuilder_image" "rhel6" {
+#   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
+#   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
+#   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
+#   image_tests_configuration {
+#     image_tests_enabled               = false
 #   }
 
-}
+
+# #   tags {
+# #     name = local.rhel6_pipeline.pipeline.name
+# #   }
+
+# }
 
 data "aws_ami" "latest-rhel-610" {
   most_recent = true

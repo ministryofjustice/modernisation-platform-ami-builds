@@ -1,5 +1,5 @@
 ---
-name: Rhel7 example
+name: Rhel7
 description: Example Rhel7 component.
 schemaVersion: 1.0
 parameters:

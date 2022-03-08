@@ -11,7 +11,7 @@ locals {
       name           = join("", [local.team_name, "_RHEL6_10"])
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
-      version     = "1.0.9"
+      version     = "1.0.10"
       device_name = "/dev/sda1"
 
       ebs = {
@@ -42,9 +42,7 @@ locals {
       "rhel6.yml"
     ]
 
-    aws_components = [
-      "scap-compliance-checker-linux"
-    ]
+    aws_components = []
 
   }
 
