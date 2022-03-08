@@ -1,7 +1,7 @@
 ---
 name: Rhel7
 description: Example Rhel7 component.
-schemaVersion: 1.0
+schemaVersion: 1.0.1
 parameters:
   - Version:
       type: string
@@ -18,7 +18,7 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - echo 'Hello World from the build phase.'
+            - aws ssm list-documents
   - name: validate
     steps:
       - name: HelloWorldStep
