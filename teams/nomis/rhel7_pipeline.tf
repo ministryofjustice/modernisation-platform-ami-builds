@@ -44,7 +44,7 @@ resource "aws_imagebuilder_image_recipe" "rhel7" {
   dynamic "block_device_mapping" {
     for_each = local.rhel7_pipeline.recipe.ebs_block_device
     content {
-      device_name = local.rhel7_pipeline.recipe.ebs_block_device.value.device_name
+      device_name = ebs_block_device.value.device_name
       ebs {
         delete_on_termination = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "delete_on_termination", null)
         encrypted             = lookup(local.rhel7_pipeline.recipe.ebs_block_device.value, "encrypted", null)
