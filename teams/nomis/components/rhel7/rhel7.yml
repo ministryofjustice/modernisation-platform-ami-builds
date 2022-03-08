@@ -1,7 +1,7 @@
 ---
 name: Rhel7
 description: Example Rhel7 component.
-schemaVersion: 1.0.1
+schemaVersion: 1.0
 parameters:
   - Version:
       type: string
