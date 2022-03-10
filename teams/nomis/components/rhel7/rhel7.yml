@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.2"
+      default: "1.0.3"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -15,10 +15,10 @@ phases:
   - name: build
     steps:
       - name: HelloWorldStep
-        action: ExecuteBash
-        inputs:
-          commands:
-            - aws ssm list-documents
+        action: aws:downloadContent
+        # inputs:
+        #   commands:
+        #     - aws ssm list-documents
   - name: validate
     steps:
       - name: HelloWorldStep
