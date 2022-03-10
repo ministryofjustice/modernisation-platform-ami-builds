@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - nomis/*
-    # paths:
-    #   - 'teams/nomis/**'
-    #   - '.github/workflows/nomis.yml'
+    paths:
+      - 'teams/nomis/**'
+      - '.github/workflows/nomis.yml'
   pull_request:
     branches:
       - main
