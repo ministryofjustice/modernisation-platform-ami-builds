@@ -73,7 +73,11 @@ Under your team directory:
 - In *__data.tf__*, edit the data block changing the *__key_id__* to match the new key to be used in the pipeline.\
 *__default key:__* `key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"`\
 *__team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
+
 *__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
+
+More details of the required change can be seen in https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c - ignore the rhel7 sections. \
+
 
 ### How to edit ami account share
 
@@ -83,7 +87,11 @@ Under your team directory:
 - In *__locals.tf__* edit the *__ami_share_accounts__* section, changing the account from the default core-shared-services to your account of choice.\
 *__default:__* `"${local.environment_management.account_ids["core-shared-services-production"]}"`\
 *__member account:__* `"${local.environment_management.account_ids["<member account>"]}"`\
+
 *__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
+
+Additional changes are needed in the kms.tf in the *__terrform/environments__* section of *__modernisation-platform-environments__* repo. as shown in https://github.com/ministryofjustice/modernisation-platform-environments/pull/317/files/44b198eb12e50654c1b2a2b2f79eb4936879b241 \ 
+This is to provide access to root to the keys for that environment.\
 
 ### How to add new components and manage versions
 
