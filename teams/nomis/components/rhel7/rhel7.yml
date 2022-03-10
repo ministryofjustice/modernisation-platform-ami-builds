@@ -15,7 +15,7 @@ phases:
   - name: build
     steps:
       - name: HelloWorldStep
-        action: aws:runCommand
+        action: 'aws:runCommand'
         # inputs:
         #   commands:
         #     - aws ssm list-documents
