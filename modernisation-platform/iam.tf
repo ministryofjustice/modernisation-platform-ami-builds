@@ -80,6 +80,37 @@ resource "aws_iam_role" "image_builder_role" {
       }
     )
   }
+  inline_policy {
+    name = "ImageBuilderSessionManagerDocsPrereqs"
+    policy = jsonencode(
+      {
+        Statement = [
+          {
+            Action = [
+              "ssm:ListDocuments",
+              "ssm:ListDocumentVersions",
+              "ssm:DescribeInstanceInformation",
+              "ssm:DescribeDocumentParameters",
+              "ssm:DescribeInstanceProperties",
+              "ssm:CancelCommand",
+              "ssm:ListCommands",
+              "ssm:ListCommandInvocations",
+              "ec2:DescribeInstanceStatus",
+              "ssm:StartAutomationExecution",
+              "ssm:DescribeAutomationExecutions",
+
+
+            ]
+            Effect = "Allow"
+            Resource = [
+              "*",
+            ]
+          },
+        ]
+        Version = "2012-10-17"
+      }
+    )
+  }
 
   tags     = {}
   tags_all = {}
