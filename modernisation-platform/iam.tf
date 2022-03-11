@@ -80,7 +80,7 @@ resource "aws_iam_role" "image_builder_role" {
       }
     )
   }
-    inline_policy {
+  inline_policy {
     name = "ImageBuilderSessionManagerDocsPrereqs"
     policy = jsonencode(
       {
