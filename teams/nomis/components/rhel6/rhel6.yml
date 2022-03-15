@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.3"
+      default: "1.0.4"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -21,6 +21,7 @@ phases:
             - |
               set -e
               provision_server() {
+                  sudo cat /etc/group
                   groupadd oinstall -g501
                   useradd oracle -u501 -g501
                   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
