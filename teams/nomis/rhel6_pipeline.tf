@@ -54,14 +54,8 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
         kms_key_id            = lookup(block_device_mapping.value, "kms_key_id", null)
         volume_size           = lookup(block_device_mapping.value, "volume_size", null)
         volume_type           = lookup(block_device_mapping.value, "volume_type", null)
+        iops                  = lookup(block_device_mapping.value, "iops", null)
       }
-    }
-  }
-
-  dynamic "component" {
-    for_each = toset(local.rhel6_pipeline.components)
-    content {
-      component_arn = aws_imagebuilder_component.rhel6_components[component.key].arn
     }
   }
 
@@ -71,6 +65,13 @@ resource "aws_imagebuilder_image_recipe" "rhel6" {
       component_arn = "arn:aws:imagebuilder:eu-west-2:aws:component/${component.key}/x.x.x"
     }
   }
+  dynamic "component" {
+    for_each = toset(local.rhel6_pipeline.components)
+    content {
+      component_arn = aws_imagebuilder_component.rhel6_components[component.key].arn
+    }
+  }
+
 
   lifecycle {
     create_before_destroy = true
