@@ -3,9 +3,7 @@ locals {
 #!/bin/bash
 cd /tmp
 curl -v https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/
-curl https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm --output ssm-agent.rpm
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
-sudo yum install -y ./ssm-agent.rpm
+sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
 sudo start amazon-ssm-agent
 EOF
 }
