@@ -56,7 +56,7 @@ resource "aws_imagebuilder_image_recipe" "rhel7" {
     }
   }
 
-  
+
   dynamic "component" {
     for_each = toset(local.rhel7_pipeline.aws_components)
     content {

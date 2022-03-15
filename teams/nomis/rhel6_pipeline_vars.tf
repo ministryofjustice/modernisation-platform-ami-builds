@@ -11,7 +11,7 @@ locals {
       name           = join("", [local.team_name, "_RHEL6_10"])
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
-      version     = "1.1.0"
+      version = "1.1.0"
       # device_name = "/dev/sda1"
 
       # ebs = {
@@ -38,7 +38,7 @@ locals {
           encrypted             = true
           kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
           delete_on_termination = true
-          }
+        }
       ]
     }
 
