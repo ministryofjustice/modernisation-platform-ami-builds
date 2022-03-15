@@ -12,15 +12,34 @@ locals {
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
       version     = "1.0.10"
-      device_name = "/dev/sda1"
+      # device_name = "/dev/sda1"
 
-      ebs = {
-        delete_on_termination = true
-        volume_size           = 30
-        volume_type           = "gp2"
-        encrypted             = true
-        kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-      }
+      # ebs = {
+      #   delete_on_termination = true
+      #   volume_size           = 30
+      #   volume_type           = "gp2"
+      #   encrypted             = true
+      #   kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
+      # }
+
+      ebs_block_device = [
+        {
+          device_name           = "/dev/sda1"
+          volume_type           = "gp3"
+          volume_size           = 30
+          encrypted             = true
+          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
+          delete_on_termination = true
+        },
+        {
+          device_name           = "/dev/sdb"
+          volume_type           = "gp3"
+          volume_size           = 150
+          encrypted             = true
+          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
+          delete_on_termination = true
+          }
+      ]
     }
 
     infra_config = {

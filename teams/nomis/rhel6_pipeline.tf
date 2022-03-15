@@ -43,15 +43,17 @@ data "aws_ami" "latest-rhel-610" {
 
 resource "aws_imagebuilder_image_recipe" "rhel6" {
   user_data_base64 = base64encode(local.user_data)
-  block_device_mapping {
-    device_name = local.rhel6_pipeline.recipe.device_name
-
-    ebs {
-      delete_on_termination = local.rhel6_pipeline.recipe.ebs.delete_on_termination
-      volume_size           = local.rhel6_pipeline.recipe.ebs.volume_size
-      volume_type           = local.rhel6_pipeline.recipe.ebs.volume_type
-      encrypted             = local.rhel6_pipeline.recipe.ebs.encrypted
-      kms_key_id            = local.rhel6_pipeline.recipe.ebs.kms_key_id
+  dynamic "block_device_mapping" {
+    for_each = local.rhel6_pipeline.recipe.ebs_block_device
+    content {
+      device_name = block_device_mapping.value.device_name
+      ebs {
+        delete_on_termination = lookup(block_device_mapping.value, "delete_on_termination", null)
+        encrypted             = lookup(block_device_mapping.value, "encrypted", null)
+        kms_key_id            = lookup(block_device_mapping.value, "kms_key_id", null)
+        volume_size           = lookup(block_device_mapping.value, "volume_size", null)
+        volume_type           = lookup(block_device_mapping.value, "volume_type", null)
+      }
     }
   }
 
