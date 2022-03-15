@@ -47,7 +47,7 @@ locals {
     infra_config = {
       description        = "RHEL 6_10 Base Image for Weblogic"
       instance_types     = ["t2.large"]
-      name               = join("", [local.team_name, "_RHEL6_10"])
+      name               = join("", [local.team_name, "_RHEL6_10v1"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
