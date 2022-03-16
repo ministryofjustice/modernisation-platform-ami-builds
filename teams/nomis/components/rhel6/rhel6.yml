@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.14"
+      default: "1.0.15"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -53,9 +53,9 @@ phases:
                   yes | ./jdk-6u43-linux-x64-rpm.bin
 
                   echo "~~~ Downloading weblogic setup script ~~~"
-                  ls -al /u01/software/weblogic/
-                  aws --debug s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/weblogic-setup.sh /tmp/weblogic-setup.sh
-                  chmod +x /u01/software/weblogic/weblogic-setup.sh
+                  aws s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/weblogic-setup.sh /tmp/weblogic-setup.sh
+                  echo "~~~ Downloaded weblogic setup script ~~~"
+                  #chmod +x /u01/software/weblogic/weblogic-setup.sh
 
                   chown -R oracle:oinstall /u01/
 
