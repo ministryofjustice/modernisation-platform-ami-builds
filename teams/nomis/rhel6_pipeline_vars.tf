@@ -11,7 +11,7 @@ locals {
       name           = join("", [local.team_name, "_RHEL6_10"])
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
-      version = "1.1.22"
+      version = "1.1.23"
       # device_name = "/dev/sda1"
 
       # ebs = {
@@ -47,7 +47,7 @@ locals {
     infra_config = {
       description        = "RHEL 6_10 Base Image for Weblogic"
       instance_types     = ["t2.large"]
-      name               = join("", [local.team_name, "_RHEL6_10v1"])
+      name               = join("", [local.team_name, "_RHEL6_10"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
