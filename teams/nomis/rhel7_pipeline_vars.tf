@@ -10,7 +10,7 @@ locals {
     recipe = {
       name           = join("", [local.team_name, "_RHEL7_9"])
       parent_account = "309956199498" #RedHat
-      version        = "1.0.9"
+      version        = "1.0.10"
       # device_name = "/dev/sda1"
 
       # ebs = {
@@ -71,7 +71,7 @@ locals {
 
     infra_config = {
       description        = "RHEL 7_9 Base Image for Oracle"
-      instance_types     = ["t3.medium"]
+      instance_types     = ["t3.large"]
       name               = join("", [local.team_name, "_RHEL7_9"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
