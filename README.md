@@ -99,9 +99,6 @@ There are keys created per business unit which have permissions to be used by al
 For example:
 
 'data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-hmpps"}'
-
-If, however, a customer key is needed then follow the instructions in the section "### How to add your own team kms key".
-
 ### How to edit ami account share
 
 This is a optional task and doesn't have to be done, this should only be changed if you want to share images with particular accounts.\ 
@@ -113,8 +110,7 @@ Under your team directory:
 
 *__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
 
-Additional changes are needed in the kms.tf in the *__terrform/environments__* section of *__modernisation-platform-environments__* repo. as shown in https://github.com/ministryofjustice/modernisation-platform-environments/pull/317/files/44b198eb12e50654c1b2a2b2f79eb4936879b241 \ 
-This is to provide access to root to the keys for that environment.\
+Example code on how to create a team KMS key, and the permissions needed can be found in https://github.com/ministryofjustice/modernisation-platform-environments/blob/b73bba2e9d708efbc0db4492582829f52f00cb60/terraform/environments/sprinkler/kms.tf
 
 ### How to add new components and manage versions
 
