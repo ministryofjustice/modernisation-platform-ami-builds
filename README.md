@@ -76,18 +76,17 @@ Under your team directory:
 
 *__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
 
-More details of the required change can be seen in https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c - ignore the rhel7 sections. \
+More details of the required change can be seen in https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c - ignore the rhel7 sections. 
 
-Should you have a shared kms key the above would not be required. If a default key is to be used this is already in place in the template, as below\
+Should you have a shared kms key the above would not be required. If a default key is to be used this is already in place in the template, as below
 
-'data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"}'\
+'data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-<business-unit>"}
 
-If, however, a customer key is needed then the following needs to be set up
+For example:
 
-data "aws_kms_key" "sprinkler_ebs_encryption_key" {key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<ENV-NAME>"]}:alias/<KEY-NAME>"}
+data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-hmpps"}'
 
-*__sprinkler example__*
-data "aws_kms_key" "sprinkler_ebs_encryption_key" {key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"}
+If, however, a customer key is needed then follow the instructions in the section "### How to add your own team kms key".
 
 ### How to edit ami account share
 
