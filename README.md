@@ -79,7 +79,7 @@ Under your team directory:
 The requirements, as an example, for sprinkler are shown below.
 
 Under data.tf
-# Retrieve KMS key for AMI/snapshot encryption
+#### Retrieve KMS key for AMI/snapshot encryption
 data "aws_kms_key" "sprinkler_ebs_encryption_key" {
   key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"
 } 
@@ -91,14 +91,14 @@ At the end of locals.tf include
 
 The above can be seen in the pull request https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c# but this includes far more detail than is required here.
 
+### How to use the per business unit shared kms key
+There are keys created per business unit which have permissions to be used by all the member accounts in that business unit.  Using these keys means you do not have to create your own key, and you can easily share your AMIs between other accounts in your business unit.  A full list of the shared keys available can be found in the core-shared-services account. To be used as shown below.
 
-Should you have a shared kms key the above would not be required. If a default key is to be used this is already in place in the template, as below
-
-data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-<business-unit>"}
+'data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-<business-unit>"}'
 
 For example:
 
-data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-hmpps"}'
+'data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-hmpps"}'
 
 If, however, a customer key is needed then follow the instructions in the section "### How to add your own team kms key".
 
