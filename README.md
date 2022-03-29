@@ -79,15 +79,20 @@ Under your team directory:
 The requirements, as an example, for sprinkler are shown below.
 
 Under data.tf
-# Retrieve KMS key for AMI/snapshot encryption
+
+```
 data "aws_kms_key" "sprinkler_ebs_encryption_key" {
   key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"
 }
+```
 
 At the end of locals.tf include
-  ami_share_accounts = [
-    "${local.environment_management.account_ids["sprinkler-development"]}"
-  ]
+  
+```
+ami_share_accounts = [
+  "${local.environment_management.account_ids["sprinkler-development"]}"
+]
+```
 
 The above can be seen in the pull request https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c# but this includes far more detail than is required here.
 
@@ -112,8 +117,6 @@ Under your team directory:
 *__member account:__* `"${local.environment_management.account_ids["<member account>"]}"`\
 
 *__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
-
-Example code on how to create a team KMS key, and the permissions needed can be found in https://github.com/ministryofjustice/modernisation-platform-environments/blob/b73bba2e9d708efbc0db4492582829f52f00cb60/terraform/environments/sprinkler/kms.tf
 
 ### How to add new components and manage versions
 
