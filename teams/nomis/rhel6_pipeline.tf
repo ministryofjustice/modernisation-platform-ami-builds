@@ -22,15 +22,15 @@ EOF
 
 # }
 
-resource "aws_imagebuilder_image" "rhel6" {
-  image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
-  infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
-  distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
-  image_tests_configuration {
-    image_tests_enabled = false
-  }
-  # TAGS NOT SUPPORTED FOR IMAGES
-}
+# resource "aws_imagebuilder_image" "rhel6" {
+#   image_recipe_arn                 = aws_imagebuilder_image_recipe.rhel6.arn
+#   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.rhel6.arn
+#   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel6.arn
+#   image_tests_configuration {
+#     image_tests_enabled = false
+#   }
+#   # TAGS NOT SUPPORTED FOR IMAGES
+# }
 
 data "aws_ami" "latest-rhel-610" {
   most_recent = true
