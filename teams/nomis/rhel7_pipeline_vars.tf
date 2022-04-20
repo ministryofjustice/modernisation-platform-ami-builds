@@ -10,7 +10,7 @@ locals {
     recipe = {
       name           = join("", [local.team_name, "_RHEL7_9"])
       parent_account = "309956199498" #RedHat
-      version        = "1.0.11"
+      version        = "1.0.12"
       # device_name = "/dev/sda1"
 
       # ebs = {
@@ -25,42 +25,6 @@ locals {
           device_name           = "/dev/sda1"
           volume_type           = "gp3"
           volume_size           = 30
-          encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-          delete_on_termination = true
-        },
-        {
-          device_name           = "/dev/sdb"
-          volume_type           = "gp3"
-          volume_size           = 100
-          encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-          delete_on_termination = true
-          }, {
-          device_name           = "/dev/sdc"
-          volume_type           = "gp3"
-          volume_size           = 100
-          encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-          delete_on_termination = true
-          }, {
-          device_name           = "/dev/sde"
-          volume_type           = "gp3"
-          volume_size           = 1
-          encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-          delete_on_termination = true
-          }, {
-          device_name           = "/dev/sdf"
-          volume_type           = "gp3"
-          volume_size           = 1
-          encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
-          delete_on_termination = true
-          }, {
-          device_name           = "/dev/sds"
-          volume_type           = "gp3"
-          volume_size           = 16
           encrypted             = true
           kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
           delete_on_termination = true
