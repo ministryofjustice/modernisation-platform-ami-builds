@@ -11,19 +11,19 @@ updates:
   # Dependabot doesn't currently support wildcard or multiple directory declarations within
   # a dependabot configuration, so we need to add all directories individually
   # See: github.com/dependabot/dependabot-core/issues/2178
-- package-ecosystem: "terraform"
-  directory: "/modernisation-platform"
-  schedule:
-    interval: "daily"
-- package-ecosystem: "terraform"
-  directory: "/scripts/templates"
-  schedule:
-    interval: "daily"
-- package-ecosystem: "terraform"
-  directory: "/teams/example"
-  schedule:
-    interval: "daily"
-- package-ecosystem: "terraform"
-  directory: "/teams/sprinkler"
-  schedule:
-    interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/modernisation-platform"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/scripts/templates"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/example"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/sprinkler"
+    schedule:
+      interval: "daily"
