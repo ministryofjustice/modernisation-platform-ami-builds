@@ -125,9 +125,12 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
 
       name = local.weblogic_pipeline.distribution.ami_name
 
-      launch_permission {
-        user_ids = local.ami_share_accounts
-      }
+
+# TODO: Temporarily commenting out launch permissions
+
+      # launch_permission {
+      #   user_ids = local.ami_share_accounts
+      # }
     }
   }
 }
