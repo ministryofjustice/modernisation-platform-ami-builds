@@ -3,12 +3,12 @@ locals {
   weblogic_pipeline = {
 
     pipeline = {
-      name     = join("", [local.team_name, "_Weblogic"])
+      name     = join("", [local.team_name, "_weblogic", replace(local.version, ".","_")])
       schedule = "rate(1 hour)"
     }
 
     recipe = {
-      name           = join("", [local.team_name, "_Weblogic"])
+      name           = join("", [local.team_name, "_weblogic"])
       parent_account = "309956199498" #RedHat
       # parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-amazonlinux2/x.x.x"
       version = local.version
