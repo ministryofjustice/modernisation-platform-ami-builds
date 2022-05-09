@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
+      default: "1.0.2"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
