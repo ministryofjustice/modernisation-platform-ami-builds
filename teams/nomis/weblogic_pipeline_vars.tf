@@ -1,9 +1,9 @@
 locals {
-  version = "1.0.2"
+  version = "1.0.3"
   weblogic_pipeline = {
 
     pipeline = {
-      name     = join("", [local.team_name, "_weblogic", replace(local.version, ".","_")])
+      name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".","_")])
       schedule = "rate(1 hour)"
     }
 
