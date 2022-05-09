@@ -132,5 +132,12 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
       #   user_ids = local.ami_share_accounts
       # }
     }
+
+# TODO: HARDCODING BAD
+    launch_template_configuration {
+      default = true
+      account_id = "${local.environment_management.account_ids["nomis-test"]}"
+      launch_template_id = "lt-0a9feed8c4c5cda63"
+    }
   }
 }
