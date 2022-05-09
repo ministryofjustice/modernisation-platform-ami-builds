@@ -128,9 +128,9 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
 
 # TODO: Temporarily commenting out launch permissions
 
-      # launch_permission {
-      #   user_ids = local.ami_share_accounts
-      # }
+      launch_permission {
+        user_ids = local.ami_share_accounts
+      }
     }
 
 # TODO: HARDCODING BAD
