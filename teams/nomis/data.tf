@@ -10,7 +10,7 @@ data "aws_kms_key" "ebs_encryption_cmk" {
 data "aws_launch_template" "weblogic-launch-templates" {
     provider = aws.nomis-test
     filter {
-        name = "environment-name"
+        name = "tag:environment-name"
         values = ["nomis-test"]
     }
 }
