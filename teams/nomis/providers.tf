@@ -16,3 +16,11 @@ provider "aws" {
   alias  = "bucket-replication"
   region = "eu-west-1"
 }
+
+provider "aws" {
+    alias = "nomis-test"
+    region = "eu-west-2"
+    assume_role {
+        role_arn = "arn:aws:iam::${llocal.environment_management.account_ids["nomis-test"]}:role/NomisLaunchTemplateReaderRole"
+    }
+}

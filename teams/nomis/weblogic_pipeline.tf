@@ -125,19 +125,15 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
 
       name = local.weblogic_pipeline.distribution.ami_name
 
-
-# TODO: Temporarily commenting out launch permissions
-
       launch_permission {
         user_ids = local.ami_share_accounts
       }
     }
 
-# TODO: HARDCODING BAD
     launch_template_configuration {
       default = true
       account_id = "${local.environment_management.account_ids["nomis-test"]}"
-      launch_template_id = "lt-0a9feed8c4c5cda63"
+      launch_template_id = data.aws_launch_template.weblogic-launch-templates.id
     }
   }
 }

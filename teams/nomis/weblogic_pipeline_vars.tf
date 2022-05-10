@@ -1,5 +1,5 @@
 locals {
-  version = "1.0.3"
+  version = "1.0.4"
   weblogic_pipeline = {
 
     pipeline = {
