@@ -11,6 +11,6 @@ data "aws_launch_template" "weblogic-launch-templates" {
     provider = aws.nomis-test
     filter {
         name = "environment-name"
-        values = "nomis-test"
+        values = ["nomis-test"]
     }
 }
