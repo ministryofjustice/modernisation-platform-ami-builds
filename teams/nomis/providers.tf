@@ -21,6 +21,6 @@ provider "aws" {
     alias = "nomis-test"
     region = "eu-west-2"
     assume_role {
-        role_arn = "arn:aws:iam::${llocal.environment_management.account_ids["nomis-test"]}:role/NomisLaunchTemplateReaderRole"
+        role_arn = "arn:aws:iam::${local.environment_management.account_ids["nomis-test"]}:role/NomisLaunchTemplateReaderRole"
     }
 }
