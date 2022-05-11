@@ -14,25 +14,3 @@ data "aws_launch_template" "weblogic-launch-templates" {
         values = ["nomis-test"]
     }
 }
-
-data "aws_ami" "weblogic" {
-  most_recent = true
-  owners      = [local.environment_management.account_ids["core-shared-services-production"]]
-
-  filter {
-    name   = "name"
-    values = ["nomis_Weblogic_2022-05-10T12*"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
-
-resource "aws_snapshot_create_volume_permission" "volume-launch-permissions" {
-
-    for_each = {for bd in data.aws_ami.weblogic.block_device_mappings: bd.device_name => bd}
-    account_id = local.environment_management.account_ids["nomis-test"]
-    snapshot_id = each.value.ebs.snapshot_id
-}
