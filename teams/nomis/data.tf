@@ -21,7 +21,7 @@ data "aws_ami" "weblogic" {
 
   filter {
     name   = "name"
-    values = ["nomis_Weblogic_*"]
+    values = ["nomis_Weblogic_2022-05-10T12*"]
   }
 
   filter {
@@ -30,7 +30,7 @@ data "aws_ami" "weblogic" {
   }
 }
 
-resource "aws_snapshot_create_volume_permission" "volume-laucnh-permissions" {
+resource "aws_snapshot_create_volume_permission" "volume-launch-permissions" {
 
     for_each = {for bd in data.aws_ami.weblogic.block_device_mappings: bd.device_name => bd}
     account_id = local.environment_management.account_ids["nomis-test"]
