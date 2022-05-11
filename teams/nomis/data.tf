@@ -17,7 +17,7 @@ data "aws_launch_template" "weblogic-launch-templates" {
 
 data "aws_ami" "weblogic" {
   most_recent = true
-  owners      = ["arn:aws:iam::${local.environment_management.account_ids["core-shared-services-production"]}:root"]
+  owners      = local.environment_management.account_ids["core-shared-services-production"]
 
   filter {
     name   = "name"
