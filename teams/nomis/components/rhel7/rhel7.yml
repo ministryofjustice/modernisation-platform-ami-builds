@@ -1,0 +1,18 @@
+---
+name: rhel7 Patch OS
+description: rhel 7.9 OS Patch Component
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: UpdateOS
+        action: UpdateOS
