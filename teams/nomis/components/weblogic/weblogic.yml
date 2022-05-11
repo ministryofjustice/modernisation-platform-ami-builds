@@ -1,0 +1,112 @@
+---
+name: Weblogic
+description: Weblogic provisioner component.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.5"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+    - name: UpdateOS
+      action: UpdateOS
+    - name: WeblogicInstall
+      action: ExecuteBash
+      inputs:
+        commands:
+          - |
+            set -e
+
+            provision_server() {
+                groupadd oinstall -g501
+                useradd oracle -u501 -g501
+
+                curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                unzip awscliv2.zip
+                ./aws/install -i /usr/aws-cli -b /usr/bin
+
+                mkdir /u01
+                mkfs -t ext4 /dev/xvdb
+                mount /dev/xvdb /u01
+                fallocate -l 1G /swapfile
+                dd if=/dev/zero of=/swapfile bs=1024 count=1048576
+                chmod 600 /swapfile
+                mkswap /swapfile
+                swapon /swapfile
+                mkdir -p /var/opt/oracle/
+                chown oracle:oinstall /var/opt/oracle/
+
+                echo "/swapfile               swap                    swap    defaults        0 0" >> /etc/fstab
+                OUTPUT="$(blkid -s UUID -o value /dev/xvdb)"
+                echo "UUID="$OUTPUT" /u01                     ext4    defaults        0 0" >> /etc/fstab
+
+                yum install -y libaio-devel compat-libstdc++-33 libstdc++-devel gcc gcc-c++ ksh compat-libcap1-1.10 glibc glibc-devel.i686 compat-libstdc++-33.i686  libstdc++.i686 libXext.i686 libXtst.i686 openmotif openmotif22
+
+                mkdir -p /u01/software
+                aws s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/jdk-6u43-linux-x64-rpm.bin jdk-6u43-linux-x64-rpm.bin
+                aws s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/software.tar /u01/software.tar
+                aws s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/tag.tar /u01/tag.tar
+
+                chmod +x jdk-6u43-linux-x64-rpm.bin
+                yes | ./jdk-6u43-linux-x64-rpm.bin
+
+                chown -R oracle:oinstall /u01/
+
+                tar -xf /u01/software.tar --directory=/u01
+                tar -xf /u01/tag.tar --directory=/u01
+
+                java -d64  -Xmx1024m -jar /u01/software/weblogic/wls1036_generic.jar -mode=silent -silent_xml=/u01/software/weblogic/silent.xml -Djava.io.tmpdir=/u01/software
+
+                export MW_HOME=/u01/app/oracle/Middleware
+                export WL_HOME='/u01/app/oracle/Middleware/wlserver_10.3'
+
+                mkdir ${MW_HOME}/utils/bsu/cache_dir
+                cp -pr /u01/software/weblogic_patch/p21984589_1036_Generic.zip ${MW_HOME}/utils/bsu/cache_dir
+
+                cd ${MW_HOME}/utils/bsu/cache_dir
+                unzip p21984589_1036_Generic.zip
+                cd ${MW_HOME}/utils/bsu/
+                sed -i 's/-Xms256m -Xmx512m/-Xms4096m -Xmx4096m/g' bsu.sh
+                ./bsu.sh -install -patch_download_dir=$MW_HOME/utils/bsu/cache_dir -patchlist=S8C2 -prod_dir=$WL_HOME -verbose
+                sed -i '/^export PATH/a JAVA_OPTIONS="${JAVA_OPTIONS} -Djava.net.preferIPv4Stack=true"\nMEM_ARGS="${MEM_ARGS} -Djava.security.egd=file:/dev/./urandom"' /u01/app/oracle/Middleware/wlserver_10.3/server/bin/startNodeManager.sh
+
+                mkdir -p ${MW_HOME}/forms_home
+                yes | cp -p /u01/software/bash_profile /home/oracle/.bash_profile
+                chmod +x /home/oracle/.bash_profile
+                chown -R oracle:oinstall /u01/
+                source /home/oracle/.bash_profile
+                touch /var/opt/oracle/oraInst.loc
+                echo "inventory_loc=/u01/app/oracle/oraInventory
+                inst_group=oinstall" > /var/opt/oracle/oraInst.loc
+                cd /u01/software/forms
+                tar xf Disk1.tar
+                tar xf Disk2.tar
+                tar xf Disk3.tar
+                tar xf Disk4.tar
+
+                # Weblogic service
+                cp /u01/software/weblogic/service/nomis_weblogic /etc/init.d/
+
+                runuser -l oracle -c 'bash /u01/software/forms/Disk1/runInstaller -silent -responseFile /u01/software/forms/install_only.rsp -invPtrLoc /var/opt/oracle/oraInst.loc'
+                # Wait for all oracle subprocesses to finish
+                tail --pid=$(pgrep -u oracle) -f /dev/null
+
+                rm /u01/software.tar /u01/tag.tar
+                echo "~~~ Downloading weblogic setup script ~~~"
+                aws s3api get-object --bucket ec2-image-builder-nomis20220314103938567000000001 --key weblogic-software/weblogic-setup.sh /u01/software/weblogic/weblogic-setup.sh
+                echo "~~~ Downloaded weblogic setup script ~~~"
+                chown oracle:oinstall /u01/software/weblogic/weblogic-setup.sh
+                chmod +x /u01/software/weblogic/weblogic-setup.sh
+            }
+
+            main() {
+                provision_server
+            }
+
+            main
