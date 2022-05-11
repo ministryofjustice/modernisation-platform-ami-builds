@@ -30,7 +30,6 @@ locals {
           encrypted             = true
           kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
           delete_on_termination = true
-          iops                  = 5000
         },
         {
           device_name           = "/dev/sdb"
@@ -39,7 +38,6 @@ locals {
           encrypted             = true
           kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
           delete_on_termination = true
-          iops                  = 5000
         }
       ]
     }
