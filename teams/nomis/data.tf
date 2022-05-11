@@ -32,7 +32,7 @@ data "aws_ami" "weblogic" {
 
 resource "aws_snapshot_create_volume_permission" "volume-laucnh-permissions" {
 
-    for_each = data.aws_ami.weblogic.block_device_mappings
+    for_each = {for bd in data.aws_ami.weblogic.block_device_mappings: bd.device_name => bd}
     account_id = local.environment_management.account_ids["nomis-test"]
     snapshot_id = each.value.ebs.snapshot_id
 }
