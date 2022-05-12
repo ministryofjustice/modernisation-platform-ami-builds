@@ -136,7 +136,7 @@ resource "aws_imagebuilder_distribution_configuration" "rhel7" {
     ami_distribution_configuration {
       kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
       name       = local.rhel7_pipeline.distribution.ami_name
-      #   target_account_ids = local.ami_share_accounts
+      target_account_ids = local.ami_share_accounts
       launch_permission {
         user_ids = local.ami_share_accounts
       }
