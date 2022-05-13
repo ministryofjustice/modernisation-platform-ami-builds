@@ -4,12 +4,12 @@ locals {
   rhel7_pipeline = {
 
     pipeline = {
-      name     = join("", [local.team_name, "_RHEL7_9", replace(local.rhel7_version, ".", "_")])
+      name     = join("", [local.team_name, "_RHEL7_9_", replace(local.rhel7_version, ".", "_")])
       schedule = "rate(1 hour)"
     }
 
     recipe = {
-      name           = join("", [local.team_name, "_RHEL7_9", replace(local.rhel7_version, ".", "_")])
+      name           = join("", [local.team_name, "_RHEL7_9_", replace(local.rhel7_version, ".", "_")])
       parent_account = "309956199498" #RedHat
       version        = local.rhel7_version
       # device_name = "/dev/sda1"
@@ -78,14 +78,14 @@ locals {
     infra_config = {
       description        = "RHEL 7_9 Base Image for Oracle"
       instance_types     = ["t3.large"]
-      name               = join("", [local.team_name, "_RHEL7_9", replace(local.rhel7_version, ".", "_")])
+      name               = join("", [local.team_name, "_RHEL7_9_", replace(local.rhel7_version, ".", "_")])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
     }
 
     distribution = {
-      name     = join("", [local.team_name, "_RHEL7_9", replace(local.rhel7_version, ".", "_")])
+      name     = join("", [local.team_name, "_RHEL7_9_", replace(local.rhel7_version, ".", "_")])
       region   = "eu-west-2"
       ami_name = join("", [local.team_name, "_RHEL7_9_{{ imagebuilder:buildDate }}"])
     }
