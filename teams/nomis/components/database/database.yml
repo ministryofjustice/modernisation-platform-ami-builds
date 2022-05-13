@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
+      default: "1.0.1"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -30,5 +30,11 @@ phases:
         action: WebDownload
         maxAttempts: 3
         inputs:
-          - source: https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-ami-builds/nomis/database/teams/nomis/files/nginx.yml
-            destination: /tmp/nginx.yml
+          - source: https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-ami-builds/nomis/database/teams/nomis/files/packages.yml
+            destination: /tmp/packages.yml
+      - name: InvokeAnsible
+        action: ExecuteBinary
+        inputs:
+          path: ansible-playbook
+          arguments:
+            - '{{build.DownloadPlaybookFiles.inputs[0].destination}}'
