@@ -1,5 +1,6 @@
 ---
 - name: Nginx Installer
+  hosts: all
   become: yes
   tasks:
     - name: ensure nginx is at the latest version
