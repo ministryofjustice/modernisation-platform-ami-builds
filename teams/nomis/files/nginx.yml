@@ -11,23 +11,3 @@
           name: nginx
           state: started
       become: yes
-    - name: copy the nginx config file and restart nginx
-      copy:
-        src: /home/foo/static_site.cfg
-        dest: /etc/nginx/sites-available/static_site.cfg
-      become: yes
-    - name: create symlink
-      file:
-        src: /etc/nginx/sites-available/static_site.cfg
-        dest: /etc/nginx/sites-enabled/default
-        state: link
-      become: yes
-    - name: copy the content of the web site
-      copy:
-        src: /home/foo/static-site-src/
-        dest: /home/foo/static-site
-    - name: restart nginx
-      service:
-        name: nginx
-        state: restarted
-      become: yes
