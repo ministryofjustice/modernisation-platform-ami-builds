@@ -91,7 +91,7 @@ locals {
     }
 
     components = [
-      "rhel7.yml"
+      "database.yml"
     ]
 
     aws_components = [
