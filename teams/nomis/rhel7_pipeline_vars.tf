@@ -1,5 +1,5 @@
 locals {
-  rhel7_version = "1.0.4"
+  rhel7_version = "1.0.5"
 
   rhel7_pipeline = {
 
@@ -95,7 +95,7 @@ locals {
     ]
 
     aws_components = [
-      "stig-build-linux-medium", "scap-compliance-checker-linux", "aws-cli-version-2-linux", "amazon-cloudwatch-agent-linux"
+      "stig-build-linux-medium", "scap-compliance-checker-linux", "aws-cli-version-2-linux", "amazon-cloudwatch-agent-linux", "aws-cli-version-2-linux", "yum-repository-test-linux"
     ]
 
   }
