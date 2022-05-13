@@ -1,5 +1,5 @@
 locals {
-  rhel7_version = "1.0.3"
+  rhel7_version = "1.0.4"
 
   rhel7_pipeline = {
 
