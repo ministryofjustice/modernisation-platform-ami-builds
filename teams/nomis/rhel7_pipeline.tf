@@ -114,9 +114,9 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel7" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "rhel7_components" {
-  for_each = { for file in local.rhel7_pipeline.components : file => yamldecode(file("components/rhel7/${file}")) }
+  for_each = { for file in local.rhel7_pipeline.components : file => yamldecode(file("components/database/${file}")) }
 
-  data     = file("components/rhel7/${each.key}")
+  data     = file("components/database/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default

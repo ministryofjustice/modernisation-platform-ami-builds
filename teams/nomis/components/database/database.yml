@@ -1,0 +1,34 @@
+---
+name: Oracle g11 Install
+description: Installation and Configuration of Oracle g11
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.0"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: UpdateOS
+        action: UpdateOS
+      - name: ProvisionAnsible
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo yum -y install python3-pip
+            - LC_CTYPE=en_US.UTF-8 # Getting around encoding error when
+            - export LC_CTYPE
+            - sudo pip3 install --upgrade pip
+            - sudo pip3 install ansible
+            - sudo yum -y install unzip
+      - name: Download Playbook Files
+        action: WebDownload
+        maxAttempts: 3
+        inputs:
+          - source: https://raw.githubusercontent.com/ministryofjustice/modernisation-platform-ami-builds/nomis/database/teams/nomis/files/nginx.yml
+            destination: /tmp/nginx.yml
