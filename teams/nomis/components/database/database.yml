@@ -26,7 +26,7 @@ phases:
             - sudo pip3 install --upgrade pip
             - sudo pip3 install ansible
             - sudo yum -y install unzip
-      - name: Download Playbook Files
+      - name: DownloadPlaybookFiles
         action: WebDownload
         maxAttempts: 3
         inputs:
