@@ -1,7 +1,9 @@
 ---
 - name: Packages Playbook
-  hosts: localhost
+  hosts: 127.0.0.1
   become: yes
+  connection: local
+  gather_facts: false
   tasks:
     - name: install common packages
       ansible.builtin.yum:
