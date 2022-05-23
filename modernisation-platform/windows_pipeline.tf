@@ -83,6 +83,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/windows/${each.key}")).parameters[0].Version.default
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
     create_before_destroy = true
@@ -93,6 +94,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
 
 resource "aws_imagebuilder_distribution_configuration" "windowsserver2022" {
   name = local.windows_pipeline.distribution.name
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   distribution {
     region = local.windows_pipeline.distribution.region

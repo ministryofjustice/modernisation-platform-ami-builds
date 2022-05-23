@@ -83,6 +83,7 @@ resource "aws_imagebuilder_component" "amazonlinux2_components" {
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
     create_before_destroy = true
