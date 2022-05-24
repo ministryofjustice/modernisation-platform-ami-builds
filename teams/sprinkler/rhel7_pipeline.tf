@@ -94,6 +94,7 @@ resource "aws_imagebuilder_component" "rhel7_components" {
 
 resource "aws_imagebuilder_distribution_configuration" "rhel7" {
   name = local.rhel_pipeline.distribution.name
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   distribution {
     region = local.rhel_pipeline.distribution.region
@@ -101,6 +102,7 @@ resource "aws_imagebuilder_distribution_configuration" "rhel7" {
     ami_distribution_configuration {
 
       name = local.rhel_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts

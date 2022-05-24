@@ -117,6 +117,7 @@ resource "aws_imagebuilder_component" "weblogic_components" {
 
 resource "aws_imagebuilder_distribution_configuration" "weblogic" {
   name = local.weblogic_pipeline.distribution.name
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   distribution {
     region = local.weblogic_pipeline.distribution.region
@@ -124,6 +125,7 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
     ami_distribution_configuration {
 
       name = local.weblogic_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts

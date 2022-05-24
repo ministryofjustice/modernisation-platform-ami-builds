@@ -102,6 +102,7 @@ resource "aws_imagebuilder_distribution_configuration" "amazonlinux2" {
     ami_distribution_configuration {
 
       name = local.linux_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts
