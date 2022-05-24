@@ -81,6 +81,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
 
   data     = file("components/windows/${each.key}")
   name     = join("_", [local.team_name, trimsuffix(each.key, ".yml")])
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
   platform = yamldecode(file("components/windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/windows/${each.key}")).parameters[0].Version.default
 

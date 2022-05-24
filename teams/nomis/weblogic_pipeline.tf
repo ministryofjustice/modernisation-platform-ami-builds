@@ -107,6 +107,7 @@ resource "aws_imagebuilder_component" "weblogic_components" {
 
   data     = file("components/weblogic/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
   platform = yamldecode(file("components/weblogic/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/weblogic/${each.key}")).parameters[0].Version.default
 

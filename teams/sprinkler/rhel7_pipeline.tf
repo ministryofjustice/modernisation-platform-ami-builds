@@ -84,6 +84,7 @@ resource "aws_imagebuilder_component" "rhel7_components" {
 
   data     = file("components/rhel7/${each.key}")
   name     = join("_", ["sprinkler", trimsuffix(each.key, ".yml")])
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
   platform = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default
 
