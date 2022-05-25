@@ -30,7 +30,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         scan_type: changed
-        tfsec_exclude: no-policy-wildcards
+        tfsec_exclude: aws-iam-no-policy-wildcards,no-policy-wildcards
         checkov_exclude: CKV_AWS_180
 
   terraform-static-analysis-full-scan:
