@@ -28,6 +28,7 @@ jobs:
       uses: ministryofjustice/github-actions/terraform-static-analysis@main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        INPUT_TFSEC_EXCLUDE: aws-iam-no-policy-wildcards
       with:
         scan_type: changed
         tfsec_exclude: aws-iam-no-policy-wildcards,no-policy-wildcards
