@@ -118,7 +118,6 @@ resource "aws_imagebuilder_component" "weblogic_components" {
 
 resource "aws_imagebuilder_distribution_configuration" "weblogic" {
   name = local.weblogic_pipeline.distribution.name
-  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   distribution {
     region = local.weblogic_pipeline.distribution.region

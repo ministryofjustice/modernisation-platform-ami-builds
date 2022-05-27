@@ -95,7 +95,6 @@ resource "aws_imagebuilder_component" "#SUFFIX#_components" {
 
 resource "aws_imagebuilder_distribution_configuration" "#SUFFIX#" {
   name = local.#SUFFIX#_pipeline.distribution.name
-  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   distribution {
     region = local.#SUFFIX#_pipeline.distribution.region
