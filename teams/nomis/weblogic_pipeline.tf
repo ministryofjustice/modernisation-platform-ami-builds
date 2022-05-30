@@ -107,6 +107,7 @@ resource "aws_imagebuilder_component" "weblogic_components" {
 
   data     = file("components/weblogic/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
   platform = yamldecode(file("components/weblogic/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/weblogic/${each.key}")).parameters[0].Version.default
 
@@ -124,6 +125,7 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
     ami_distribution_configuration {
 
       name = local.weblogic_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts
@@ -132,7 +134,7 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
 
     launch_template_configuration {
       default = true
-      account_id = "${local.environment_management.account_ids["nomis-test"]}"
+      account_id = local.environment_management.account_ids["nomis-test"]
       launch_template_id = data.aws_launch_template.weblogic-launch-templates.id
     }
   }

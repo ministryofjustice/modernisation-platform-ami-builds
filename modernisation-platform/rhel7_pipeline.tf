@@ -83,6 +83,7 @@ resource "aws_imagebuilder_component" "rhel7_components" {
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
     create_before_destroy = true
@@ -100,6 +101,7 @@ resource "aws_imagebuilder_distribution_configuration" "rhel7" {
     ami_distribution_configuration {
 
       name = local.rhel_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts

@@ -3,6 +3,7 @@ resource "aws_iam_instance_profile" "image_builder_profile" {
   role = aws_iam_role.image_builder_role.name
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_role" "image_builder_role" {
   path                 = "/"
   name                 = "ImageBuilder"

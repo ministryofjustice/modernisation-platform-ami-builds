@@ -40,9 +40,10 @@ locals {
       "windows.yml"
     ]
 
+    # Removed "stig-build-windows-medium" because current version 1.5.1 does not support the Parent Image OS Version of Microsoft Windows Server 2022
+    # For more info refer to https://docs.aws.amazon.com/imagebuilder/latest/userguide/toe-stig.html
     aws_components = [
-      "chocolatey",
-      "stig-build-windows-medium"
+      "chocolatey"
     ]
 
   }

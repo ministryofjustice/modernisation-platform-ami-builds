@@ -83,6 +83,7 @@ resource "aws_imagebuilder_component" "windowsserver2022_components" {
   name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/windows/${each.key}")).parameters[1].Platform.default
   version  = yamldecode(file("components/windows/${each.key}")).parameters[0].Version.default
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
     create_before_destroy = true
@@ -100,6 +101,7 @@ resource "aws_imagebuilder_distribution_configuration" "windowsserver2022" {
     ami_distribution_configuration {
 
       name = local.windows_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts
