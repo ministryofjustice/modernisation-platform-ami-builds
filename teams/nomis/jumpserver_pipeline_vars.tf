@@ -2,7 +2,7 @@ locals {
   version_js = "1.0.0"
   jumpserver_pipeline = {
     pipeline = {
-      name     = join("", [local.team_name, "_jumpserver_", replace(local.version_js, ".","_")])
+      name     = join("", [local.team_name, "_jumpserver_", replace(local.version_js, ".", "_")])
       schedule = "cron(0 0 2 * ? *)"
     }
 
@@ -27,14 +27,14 @@ locals {
     infra_config = {
       description        = "Windows Server 2022 Image for Jumpserver"
       instance_types     = ["t3.large"]
-      name               = join("", [local.team_name, "_jumpserver_",replace(local.version_js, ".","_")])
+      name               = join("", [local.team_name, "_jumpserver_", replace(local.version_js, ".", "_")])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
     }
 
     distribution = {
-      name     = join("", [local.team_name, "_jumpserver_", replace(local.version_js, ".","_")])
+      name     = join("", [local.team_name, "_jumpserver_", replace(local.version_js, ".", "_")])
       region   = "eu-west-2"
       ami_name = join("", [local.team_name, "_jumpserver_{{ imagebuilder:buildDate }}"])
     }
