@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.0"
+      default: "1.1.1"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -103,6 +103,11 @@ phases:
                 echo "~~~ Downloaded weblogic setup script ~~~"
                 chown oracle:oinstall /u01/software/weblogic/weblogic-setup.sh
                 chmod +x /u01/software/weblogic/weblogic-setup.sh
+
+                # logfiles cleanout
+                cat /dev/null > /u01/tag/tmp/HotPage.log
+                cat /dev/null > /u01/tag/tmp/web.log
+                cat /dev/null > /u01/tag/autologoff/autologoff.log
             }
 
             main() {
