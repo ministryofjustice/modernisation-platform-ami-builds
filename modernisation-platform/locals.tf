@@ -26,15 +26,7 @@ locals {
     owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
   }
 
-  json_data = jsondecode(file("networking.auto.tfvars.json"))
-
-  root_users_with_state_access = [
-    "arn:aws:iam::${local.root_account.master_account_id}:user/ModernisationPlatformOrganisationManagement",
-    "arn:aws:iam::${local.root_account.master_account_id}:user/DavidElliott"
-  ]
-
   ami_share_accounts = [for account, id in local.environment_management.account_ids : id]
 
   base_component_dir = "../../../components"
-
 }
