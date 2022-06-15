@@ -3,14 +3,14 @@ locals {
   weblogic_pipeline = {
 
     pipeline = {
-      name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".","_")])
+      name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".", "_")])
       schedule = "rate(1 hour)"
     }
 
     recipe = {
       name           = join("", [local.team_name, "_weblogic"])
       parent_account = "309956199498" #RedHat
-      version = local.version
+      version        = local.version
 
       ebs_block_device = [
         {
@@ -35,14 +35,14 @@ locals {
     infra_config = {
       description        = "RHEL 6_10 Image for Weblogic"
       instance_types     = ["t2.large"]
-      name               = join("", [local.team_name, "_weblogic_",replace(local.version, ".","_")])
+      name               = join("", [local.team_name, "_weblogic_", replace(local.version, ".", "_")])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
       terminate_on_fail  = true
     }
 
     distribution = {
-      name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".","_")])
+      name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".", "_")])
       region   = "eu-west-2"
       ami_name = join("", [local.team_name, "_Weblogic_{{ imagebuilder:buildDate }}"])
     }

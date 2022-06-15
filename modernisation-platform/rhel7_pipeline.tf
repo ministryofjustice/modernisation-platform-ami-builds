@@ -79,10 +79,10 @@ resource "aws_imagebuilder_infrastructure_configuration" "rhel7" {
 resource "aws_imagebuilder_component" "rhel7_components" {
   for_each = { for file in local.rhel_pipeline.components : file => yamldecode(file("components/rhel7/${file}")) }
 
-  data     = file("components/rhel7/${each.key}")
-  name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
-  platform = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default
+  data       = file("components/rhel7/${each.key}")
+  name       = join("_", ["mp", trimsuffix(each.key, ".yml")])
+  platform   = yamldecode(file("components/rhel7/${each.key}")).parameters[1].Platform.default
+  version    = yamldecode(file("components/rhel7/${each.key}")).parameters[0].Version.default
   kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
@@ -100,7 +100,7 @@ resource "aws_imagebuilder_distribution_configuration" "rhel7" {
 
     ami_distribution_configuration {
 
-      name = local.rhel_pipeline.distribution.ami_name
+      name       = local.rhel_pipeline.distribution.ami_name
       kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
