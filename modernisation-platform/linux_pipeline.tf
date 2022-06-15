@@ -79,10 +79,11 @@ resource "aws_imagebuilder_infrastructure_configuration" "amazonlinux2" {
 resource "aws_imagebuilder_component" "amazonlinux2_components" {
   for_each = { for file in local.linux_pipeline.components : file => yamldecode(file("components/linux/${file}")) }
 
-  data     = file("components/linux/${each.key}")
-  name     = join("_", ["mp", trimsuffix(each.key, ".yml")])
-  platform = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
+  data       = file("components/linux/${each.key}")
+  name       = join("_", ["mp", trimsuffix(each.key, ".yml")])
+  platform   = yamldecode(file("components/linux/${each.key}")).parameters[1].Platform.default
+  version    = yamldecode(file("components/linux/${each.key}")).parameters[0].Version.default
+  kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
   lifecycle {
     create_before_destroy = true
@@ -99,7 +100,8 @@ resource "aws_imagebuilder_distribution_configuration" "amazonlinux2" {
 
     ami_distribution_configuration {
 
-      name = local.linux_pipeline.distribution.ami_name
+      name       = local.linux_pipeline.distribution.ami_name
+      kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
 
       launch_permission {
         user_ids = local.ami_share_accounts
