@@ -19,7 +19,8 @@ phases:
     - name: ConfigureJavaIE
       action: ExecutePowerShell
       inputs:
-        commands: |
+        commands: 
+          - |
           # Download/Install Java
           Read-S3Object -BucketName ec2-image-builder-nomis20220314103938567000000001 -Key jumpserver-software/jre-6u33-windows-i586.exe -File C:\jumpserver-software\jre-6u33-windows-i586.exe
           Start-Process -Wait -FilePath "C:\jumpserver-software\jre-6u33-windows-i586.exe" -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "C:\jumpserver-software\jre-install.log"
