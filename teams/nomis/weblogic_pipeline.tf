@@ -14,11 +14,9 @@ resource "aws_imagebuilder_image_pipeline" "weblogic" {
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.weblogic.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.weblogic.arn
   name                             = local.weblogic_pipeline.pipeline.name
-
-  #   schedule {
-  #     schedule_expression                = local.weblogic_pipeline.pipeline.schedule
-  #     pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  #   }
+  image_tests_configuration {
+    image_tests_enabled = false
+  }
 
 }
 
