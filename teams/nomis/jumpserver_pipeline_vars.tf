@@ -25,7 +25,7 @@ locals {
 
     infra_config = {
       description        = "Windows Server 2022 Image for Jumpserver"
-      instance_types     = ["t3.large"]
+      instance_types     = ["t3.medium"]
       name               = join("", [local.team_name, "_jumpserver"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
       subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
@@ -44,7 +44,7 @@ locals {
 
     aws_components = [
       "amazon-cloudwatch-agent-windows",
-      "ec2launch-v2-windows"
+      "ec2launch-v2-windows",
     ]
 
   }
