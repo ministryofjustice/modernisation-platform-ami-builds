@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
+      default: "1.1.0"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -14,22 +14,39 @@ parameters:
 phases:
   - name: build
     steps:
-    # - name: UpdateOS
-    #   action: UpdateOS
-    - name: ConfigureJavaIE
+    - name: UpdateOS
+      action: UpdateOS 
+    - name: ConfigureLocale
+      action: ExecutePowerShell
+      inputs:
+        commands:
+          -  Set-TimeZone "GMT Standard Time"
+          -  Set-WinSystemLocale "en-GB"
+    - name: ConfigureJava
       action: ExecutePowerShell
       inputs:
         commands: 
           - |
-            # Download/Install Java
-            Read-S3Object -BucketName ec2-image-builder-nomis20220314103938567000000001 -Key jumpserver-software/jre-6u33-windows-i586.exe -File C:\jumpserver-software\jre-6u33-windows-i586.exe
+            # Download files
+            $s3bucket = "ec2-image-builder-nomis20220314103938567000000001"
+            $s3prefix = "jumpserver-software"
+            $download_folder = "C:\jumpserver-software"
+
+            Read-S3Object -BucketName $s3bucket -KeyPrefix $folder -Folder $download_folder
+
+            # Install Java
             Start-Process -Wait -FilePath "C:\jumpserver-software\jre-6u33-windows-i586.exe" -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "C:\jumpserver-software\jre-install.log"
 
-            # Configure Java
-            Read-S3Object -BucketName ec2-image-builder-nomis20220314103938567000000001 -Key jumpserver-software/deployment.config -File C:\Windows\Sun\Java\Deployment\deployment.config
-            Read-S3Object -BucketName ec2-image-builder-nomis20220314103938567000000001 -Key jumpserver-software/deployment.properties -File C:\Windows\Sun\Java\Deployment\deployment.properties
-            Read-S3Object -BucketName ec2-image-builder-nomis20220314103938567000000001 -Key jumpserver-software/trusted.certs -File C:\Windows\Sun\Java\Deployment\trusted.certs 
-        
+            # Set Java Deployment files
+            Move-Item -Path $download_folder\java-deployment-config\* -Destination C:\Windows\Sun\Java\Deployment
+
+            # Prevent Java update check
+            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force
+    - name: ConfigureTrustedSites
+      action: ExecutePowerShell
+      inputs:
+        commands: 
+          - |    
             # Add Nomis sites to trusted sites
             $sites = @(
                 "*.nomis.hmpps-test.modernisation-platform.internal"
@@ -55,12 +72,9 @@ phases:
             # Use Local Machine settings for Internet Security Settings
             $reg_path = "HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings"
             New-Item -Path $reg_path -Force
-            New-ItemProperty -Path $reg_path -Name Security_HKLM_only -Value 1 -PropertyType DWORD -Force 
-
-            # Set timezone and locale
-            Set-TimeZone "GMT Standard Time"
-            Set-WinSystemLocale "en-GB"
-
-            # Prevent Java update check
-            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force 
-    
+            New-ItemProperty -Path $reg_path -Name Security_HKLM_only -Value 1 -PropertyType DWORD -Force
+    - name: InstallWMIExporter
+      action: ExecutePowerShell
+      inputs:
+        commands: 
+          - choco install -y prometheus-windows-exporter.install
