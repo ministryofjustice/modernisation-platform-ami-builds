@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.3"
+      default: "1.1.4"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -109,6 +109,8 @@ phases:
                 cat /dev/null > /u01/tag/tmp/HotPage.log
                 cat /dev/null > /u01/tag/tmp/web.log
                 cat /dev/null > /u01/tag/autologoff/autologoff.log
+
+                rm /u01/tag/autologoff/autologoff.log*
             }
 
             main() {
