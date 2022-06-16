@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.1"
+      default: "1.1.2"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -14,12 +14,6 @@ parameters:
 phases:
   - name: build
     steps:
-    - name: ConfigureLocale
-      action: ExecutePowerShell
-      inputs:
-        commands:
-          -  Set-TimeZone "GMT Standard Time"
-          -  Set-WinSystemLocale "en-GB"
     - name: ConfigureJava
       action: ExecutePowerShell
       inputs:
@@ -30,13 +24,15 @@ phases:
             $s3prefix = "jumpserver-software"
             $download_folder = "C:\jumpserver-software"
 
-            Read-S3Object -BucketName $s3bucket -KeyPrefix $folder -Folder $download_folder
+            Read-S3Object -BucketName $s3bucket -KeyPrefix $s3prefix -Folder $download_folder
 
             # Install Java
-            Start-Process -Wait -FilePath "C:\jumpserver-software\jre-6u33-windows-i586.exe" -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "C:\jumpserver-software\jre-install.log"
+            Start-Process -Wait -FilePath $download_folder\jre-6u33-windows-i586.exe -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "$download_folder\jre-install.log"
 
             # Set Java Deployment files
-            Move-Item -Path $download_folder\java-deployment-config\* -Destination C:\Windows\Sun\Java\Deployment
+            $deployment_folder = "C:\Windows\Sun\Java\Deployment"
+            New-Item -Path $deployment_folder -ItemType Directory -Force 
+            Move-Item -Path $download_folder\java-deployment-config\* -Destination $deployment_folder -Force
 
             # Prevent Java update check
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force
