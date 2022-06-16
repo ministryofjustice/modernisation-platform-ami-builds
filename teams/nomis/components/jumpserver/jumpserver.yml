@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.2"
+      default: "1.1.3"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -19,21 +19,19 @@ phases:
       inputs:
         commands: 
           - |
-            # Download files
-            $s3bucket = "ec2-image-builder-nomis20220314103938567000000001"
-            $s3prefix = "jumpserver-software"
-            $download_folder = "C:\jumpserver-software"
+            $S3_BUCKET = "ec2-image-builder-nomis20220314103938567000000001"
 
-            Read-S3Object -BucketName $s3bucket -KeyPrefix $s3prefix -Folder $download_folder
-
-            # Install Java
-            Start-Process -Wait -FilePath $download_folder\jre-6u33-windows-i586.exe -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "$download_folder\jre-install.log"
-
-            # Set Java Deployment files
+            # Download/Install Java
+            Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/jre-6u33-windows-i586.exe -File C:\jumpserver-software\jre-6u33-windows-i586.exe
+            Start-Process -Wait -FilePath "C:\jumpserver-software\jre-6u33-windows-i586.exe" -ArgumentList "/qn", "/s", "/v" -PassThru -RedirectStandardOutput "C:\jumpserver-software\jre-install.log"
+            
+            # Copy deployment config files
             $deployment_folder = "C:\Windows\Sun\Java\Deployment"
             New-Item -Path $deployment_folder -ItemType Directory -Force 
-            Move-Item -Path $download_folder\java-deployment-config\* -Destination $deployment_folder -Force
-
+            Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/deployment.config -File $deployment_folder\deployment.config
+            Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/deployment.properties -File $deployment_folder\deployment.properties
+            Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/trusted.certs -File $deployment_folder\trusted.certs
+            
             # Prevent Java update check
             Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force
     - name: ConfigureTrustedSites
