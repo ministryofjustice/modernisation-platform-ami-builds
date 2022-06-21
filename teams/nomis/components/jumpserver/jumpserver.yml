@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.3"
+      default: "1.0.0"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -33,7 +33,7 @@ phases:
             Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/trusted.certs -File $deployment_folder\trusted.certs
             
             # Prevent Java update check
-            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force
+            Remove-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" -Name SunJavaUpdateSched -Force -ErrorAction SilentlyContinue 
     - name: ConfigureTrustedSites
       action: ExecutePowerShell
       inputs:
