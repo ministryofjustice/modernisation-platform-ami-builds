@@ -4,10 +4,10 @@ resource "aws_imagebuilder_image_pipeline" "jumpserver" {
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.jumpserver.arn
   name                             = local.jumpserver_pipeline.pipeline.name
 
-    schedule {
-      schedule_expression                = local.jumpserver_pipeline.pipeline.schedule
-      pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-    }
+  schedule {
+    schedule_expression                = local.jumpserver_pipeline.pipeline.schedule
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+  }
 
 }
 
