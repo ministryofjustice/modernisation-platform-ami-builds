@@ -2,7 +2,7 @@ locals {
   jumpserver_pipeline = {
     pipeline = {
       name     = join("", [local.team_name, "_jumpserver"])
-      schedule = "cron(0 0 2 * ? *)"
+      schedule = "cron(0 0 2 * ? *)" # day after source image is built
     }
 
     recipe = {
