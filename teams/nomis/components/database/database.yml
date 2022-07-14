@@ -1,0 +1,68 @@
+---
+name: Database
+description: Database provisioner component.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.0"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps: # mainly taken from EwaTest-AWS-ApplyAnsiblePlaybooks SSM Document
+      name: InvokeSSMDocument
+      action: ExecuteBash
+      inputs:
+        commands:
+          - |
+            set -e
+            INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
+            aws ssm send-command --document-name "EwaTest-AWS-ApplyAnsiblePlaybooks" --document-version "18" --targets '[{"Key":"InstanceIds","Values":["$INSTANCE_ID"]}]' --parameters '{"SourceInfo":["{\"owner\":\"ministryofjustice\",\"repository\":\"dso-nomis-modernisation-poc\",\"getOptions\":\"branch:feature/test-ansible-local\",\"path\":\"ansible/\",\"tokenInfo\":\"{{ssm-secure:arn:aws:ssm:eu-west-2:612659970365:parameter/database/ewatest/GH}}\"}"],"PlaybookFile":["playbooks/ssm-oracle-local.yml"],"ExtraVariables":["SSM=True instance_id=$INSTANCE_ID"],"Check":["False"],"InstallDependencies":["True"],"TimeoutSeconds":["7200"]}' --timeout-seconds 7200 --max-concurrency "50" --max-errors "0" --output-s3-bucket-name "ec2-image-builder-nomis20220314103938567000000001" --output-s3-key-prefix "run-command-logs/ansible-db-logs/" --region eu-west-2
+      # name: InstallAnsible
+      # action: ExecuteBash
+      # inputs:
+      #   commands:
+      #     - |
+      #       set -e
+      #       sudo yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget unzip -y
+      #       cd /tmp
+      #       wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
+      #       tar xzf Python-3.9.6.tgz
+      #       cd Python-3.9.6
+      #       ./configure --enable-optimizations
+      #       sudo make altinstall
+      #       cd ..
+      #       rm -f Python-3.9.6.tgz
+      #       python3.9 -V
+      #       python3.9 -m pip -V
+      #       python3.9 -m pip install --user ansible==6.0.0
+      #       export PATH=\"/root/.local/bin:$PATH\"
+      # name: DownloadAnsiblePlaybook
+      # action: ExecuteBash
+      # inputs:
+      #   commands:
+      #     - |
+      #       set -e
+      #       cd /tmp
+      #       mkdir ansible
+
+      # name: InstallAnsibleRequirements
+      # action: ExecuteBash
+      # inputs:
+      #   commands:
+      #     - |
+      #       set -e
+      #       export PATH=\"/root/.local/bin:$PATH\"
+      #       cd /tmp/ansible
+      #       python3.9 -m pip install -r requirements.txt
+      #       ansible-galaxy role install -r requirements.yml
+      #       ansible-galaxy collection install -r requirements.yml
+      # name: RunAnsiblePlaybook
+      # action: ExecuteBash
+      # inputs:
+      #   commands:
+      #     - ansible-playbook --connection=local --inventory 127.0.0.1, --limit 127.0.0.1 -e \"{{ExtraVariables}}\" -v --become --tags "all,opatch,patch,deconfig" \"${PlaybookFile}\"
