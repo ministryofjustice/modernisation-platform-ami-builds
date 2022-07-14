@@ -56,7 +56,7 @@ resource "aws_imagebuilder_image_recipe" "database" {
   }
 
   name         = local.database_pipeline.recipe.name
-  parent_image = parent_image = data.aws_ami.database.id
+  parent_image = data.aws_ami.database.id
   version      = local.database_pipeline.recipe.version
 }
 

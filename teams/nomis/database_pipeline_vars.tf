@@ -6,10 +6,10 @@ locals {
     }
 
     recipe = {
-      name         = join("", [local.team_name, "_database"])
+      name           = join("", [local.team_name, "_database"])
       parent_account = "309956199498" #RedHat
-      parent_image = "RHEL-7.9_HVM-*"
-      version      = "1.0.0"
+      parent_image   = "RHEL-7.9_HVM-*"
+      version        = "1.0.0"
 
       ebs_block_device = [
         {
