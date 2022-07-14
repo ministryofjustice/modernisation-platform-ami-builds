@@ -14,14 +14,14 @@ parameters:
 phases:
   - name: build
     steps: # mainly taken from EwaTest-AWS-ApplyAnsiblePlaybooks SSM Document
-    - name: InvokeSSMDocument
-      action: ExecuteBash
-      inputs:
-        commands:
-          - |
-            set -e
-            INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
-            aws ssm send-command --document-name "EwaTest-AWS-ApplyAnsiblePlaybooks" --document-version "18" --targets '[{"Key":"InstanceIds","Values":["$INSTANCE_ID"]}]' --parameters '{"SourceInfo":["{\"owner\":\"ministryofjustice\",\"repository\":\"dso-nomis-modernisation-poc\",\"getOptions\":\"branch:feature/test-ansible-local\",\"path\":\"ansible/\",\"tokenInfo\":\"{{ssm-secure:arn:aws:ssm:eu-west-2:612659970365:parameter/database/ewatest/GH}}\"}"],"PlaybookFile":["playbooks/ssm-oracle-local.yml"],"ExtraVariables":["SSM=True instance_id=$INSTANCE_ID"],"Check":["False"],"InstallDependencies":["True"],"TimeoutSeconds":["7200"]}' --timeout-seconds 7200 --max-concurrency "50" --max-errors "0" --output-s3-bucket-name "ec2-image-builder-nomis20220314103938567000000001" --output-s3-key-prefix "run-command-logs/ansible-db-logs/" --region eu-west-2
+      - name: InvokeSSMDocument
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
+              aws ssm send-command --document-name "EwaTest-AWS-ApplyAnsiblePlaybooks" --document-version "18" --targets '[{"Key":"InstanceIds","Values":["$INSTANCE_ID"]}]' --parameters '{"SourceInfo":["{\"owner\":\"ministryofjustice\",\"repository\":\"dso-nomis-modernisation-poc\",\"getOptions\":\"branch:feature/test-ansible-local\",\"path\":\"ansible/\",\"tokenInfo\":\"{{ssm-secure:arn:aws:ssm:eu-west-2:612659970365:parameter/database/ewatest/GH}}\"}"],"PlaybookFile":["playbooks/ssm-oracle-local.yml"],"ExtraVariables":["SSM=True instance_id=$INSTANCE_ID"],"Check":["False"],"InstallDependencies":["True"],"TimeoutSeconds":["7200"]}' --timeout-seconds 7200 --max-concurrency "50" --max-errors "0" --output-s3-bucket-name "ec2-image-builder-nomis20220314103938567000000001" --output-s3-key-prefix "run-command-logs/ansible-db-logs/" --region eu-west-2
     # - name: InstallAnsible
     #   action: ExecuteBash
     #   inputs:
