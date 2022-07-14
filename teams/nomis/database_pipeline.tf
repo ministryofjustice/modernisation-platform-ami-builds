@@ -11,7 +11,7 @@ resource "aws_imagebuilder_image_pipeline" "database" {
 
 }
 
-data "aws_ami" "latest-rhel-610" {
+data "aws_ami" "database" {
   most_recent = true
   owners      = [local.database_pipeline.recipe.parent_account]
 
@@ -56,7 +56,7 @@ resource "aws_imagebuilder_image_recipe" "database" {
   }
 
   name         = local.database_pipeline.recipe.name
-  parent_image = local.database_pipeline.recipe.parent_image
+  parent_image = parent_image = data.aws_ami.database.id
   version      = local.database_pipeline.recipe.version
 }
 
