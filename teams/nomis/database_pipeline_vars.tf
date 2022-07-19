@@ -124,7 +124,6 @@ locals {
     ]
 
     aws_components = [
-      "update-linux-kernel-mainline",
       "update-linux",
       "stig-build-linux-medium",
       "aws-cli-version-2-linux",
