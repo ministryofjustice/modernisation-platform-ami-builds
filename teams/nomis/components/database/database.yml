@@ -37,11 +37,11 @@ phases:
     - name: InstallAndRunAnsible
       action: ExecuteBash
       inputs:
-         commands:
+        commands:
           - |
             set -e
             cd /tmp
-            
+
             # install, create, activate virtual environment
             pip3.9 install virtualenv
             mkdir /tmp/python-venv && cd "$_"
@@ -51,14 +51,6 @@ phases:
             # Install ansible modules in virtual env
             python3.9 -m pip install --upgrade pip
             python3.9 -m pip install ansible==6.0.0
-
-            # Download playbook and install requirements in virtual env
-            mkdir /tmp/database-ansible-playbook && cd "$_"
-            aws s3 cp s3://ec2-image-builder-nomis20220314103938567000000001/playbook.tar .
-            tar -xf playbook.tar
-            python3.9 -m pip install -r requirements.txt
-            ansible-galaxy role install -r requirements.yml
-            ansible-galaxy collection install -r requirements.yml
 
             # Get required extra vars and run ansible
             INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
