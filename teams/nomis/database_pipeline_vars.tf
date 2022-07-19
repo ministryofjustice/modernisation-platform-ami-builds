@@ -10,6 +10,7 @@ locals {
       parent_account = "309956199498" #RedHat
       parent_image   = "RHEL-7.9_HVM-*"
       version        = "1.0.0"
+      working_directory = "/tmp"
 
       ebs_block_device = [
         {
