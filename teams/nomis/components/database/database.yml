@@ -34,7 +34,14 @@ phases:
             cd Python-3.9.6
             ./configure --enable-optimizations
             sudo make altinstall
-
+    - name: InstallAndRunAnsible
+      action: ExecuteBash
+      inputs:
+         commands:
+          - |
+            set -e
+            cd /tmp
+            
             # install, create, activate virtual environment
             pip3.9 install virtualenv
             mkdir /tmp/python-venv && cd "$_"
