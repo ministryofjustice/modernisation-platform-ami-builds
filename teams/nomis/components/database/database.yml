@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.1"
+      default: "1.0.2"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -68,7 +68,7 @@ phases:
               ansible-playbook playbooks/ssm-oracle-local.yml \
               --connection=local \
               --inventory localhost, \
-              --extra-vars "instance_id=$INSTANCE_ID ansible_python_interpreter=$PY_INTERPRETER s3_bucket_with_prefix=s3://ec2-image-builder-nomis20220314103938567000000001/oracle-11g-software" \
+              --extra-vars "instance_id=$INSTANCE_ID ansible_python_interpreter=$PY_INTERPRETER s3_bucket_with_prefix=ec2-image-builder-nomis20220314103938567000000001/oracle-11g-software" \
               --become \
               --tags "all,opatch,patch,deconfig"
 
