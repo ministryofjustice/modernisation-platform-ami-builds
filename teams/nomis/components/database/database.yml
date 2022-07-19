@@ -19,7 +19,7 @@ phases:
       inputs:
          commands:
           - sudo yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget unzip screen -y
-    - name: InstallPython3.9
+    - name: InstallPython3-9
       action: ExecuteBash
       inputs:
          commands:
@@ -63,7 +63,12 @@ phases:
             # Get required extra vars and run ansible
             INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
             PY_INTERPRETER=$(which python3.9) 
-            ansible-playbook --connection=local --inventory localhost, --extra-vars "instance_id=$INSTANCE_ID ansible_python_interpreter=$PY_INTERPRETER" --become --tags "all,opatch,patch,deconfig" playbooks/ssm-oracle-local.yml
+            ansible-playbook playbooks/ssm-oracle-local.yml \
+            --connection=local \
+            --inventory localhost, \
+            --extra-vars "instance_id=$INSTANCE_ID ansible_python_interpreter=$PY_INTERPRETER s3_bucket_with_prefix=s3://ec2-image-builder-nomis20220314103938567000000001/oracle-11g-software" \
+            --become \
+            --tags "all,opatch,patch,deconfig"
             
             # Deactivate virtual env and cleanup
             deactivate
