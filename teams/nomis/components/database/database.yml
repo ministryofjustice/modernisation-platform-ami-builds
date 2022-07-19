@@ -56,7 +56,7 @@ phases:
               mkdir /tmp/database-ansible-playbook && cd "$_"
               aws s3 cp s3://ec2-image-builder-nomis20220314103938567000000001/playbook.tar .
               tar -xf playbook.tar
-              
+
               # Install requirements in virtual env
               python3.9 -m pip install -r requirements.txt
               ansible-galaxy role install -r requirements.yml
