@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
+      default: "1.0.1"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -52,10 +52,12 @@ phases:
               python3.9 -m pip install --upgrade pip
               python3.9 -m pip install ansible==6.0.0
 
-              # Download playbook and install requirements in virtual env
+              # Download playbook
               mkdir /tmp/database-ansible-playbook && cd "$_"
               aws s3 cp s3://ec2-image-builder-nomis20220314103938567000000001/playbook.tar .
               tar -xf playbook.tar
+              
+              # Install requirements in virtual env
               python3.9 -m pip install -r requirements.txt
               ansible-galaxy role install -r requirements.yml
               ansible-galaxy collection install -r requirements.yml
