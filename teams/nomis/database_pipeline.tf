@@ -101,7 +101,7 @@ resource "aws_imagebuilder_distribution_configuration" "database" {
 
     ami_distribution_configuration {
 
-      name = local.database_pipeline.distribution.ami_name
+      name               = local.database_pipeline.distribution.ami_name
       target_account_ids = local.ami_share_accounts
       launch_permission {
         user_ids = local.ami_share_accounts
