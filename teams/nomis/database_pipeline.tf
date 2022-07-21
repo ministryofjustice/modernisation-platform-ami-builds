@@ -1,3 +1,13 @@
+locals {
+  user_data = <<EOF
+#!/bin/bash
+cd /tmp
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+EOF
+}
+
 resource "aws_imagebuilder_image_pipeline" "database" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.database.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.database.arn
@@ -22,6 +32,7 @@ data "aws_ami" "database" {
 }
 
 resource "aws_imagebuilder_image_recipe" "database" {
+  user_data_base64 = base64encode(local.user_data)
   dynamic "block_device_mapping" {
     for_each = local.database_pipeline.recipe.ebs_block_device
     content {
@@ -59,6 +70,10 @@ resource "aws_imagebuilder_image_recipe" "database" {
   parent_image      = data.aws_ami.database.id
   version           = local.database_pipeline.recipe.version
   working_directory = local.database_pipeline.recipe.working_directory
+
+  systems_manager_agent {
+    uninstall_after_build = false
+  }
 }
 
 
@@ -103,9 +118,9 @@ resource "aws_imagebuilder_distribution_configuration" "database" {
 
       name               = local.database_pipeline.distribution.ami_name
       target_account_ids = local.ami_share_accounts
-      launch_permission {
-        user_ids = local.ami_share_accounts
-      }
+      # launch_permission {
+      #   user_ids = local.ami_share_accounts
+      # }
 
       ami_tags = {
         Name = local.database_pipeline.distribution.ami_name
