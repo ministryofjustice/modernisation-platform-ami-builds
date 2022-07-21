@@ -1,5 +1,5 @@
 locals {
-  user_data = <<EOF
+  user_data_database = <<EOF
 #!/bin/bash
 cd /tmp
 sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
@@ -32,7 +32,7 @@ data "aws_ami" "database" {
 }
 
 resource "aws_imagebuilder_image_recipe" "database" {
-  user_data_base64 = base64encode(local.user_data)
+  user_data_base64 = base64encode(local.user_data_database)
   dynamic "block_device_mapping" {
     for_each = local.database_pipeline.recipe.ebs_block_device
     content {
