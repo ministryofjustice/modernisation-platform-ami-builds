@@ -18,7 +18,7 @@ locals {
           volume_type           = "gp3"
           volume_size           = 30
           encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
+          kms_key_id            = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
           delete_on_termination = true
         },
         {
@@ -26,7 +26,7 @@ locals {
           volume_type           = "gp3"
           volume_size           = 150
           encrypted             = true
-          kms_key_id            = data.aws_kms_key.ebs_encryption_cmk.arn
+          kms_key_id            = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
           delete_on_termination = true
         }
       ]
