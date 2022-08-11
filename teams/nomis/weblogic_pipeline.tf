@@ -71,7 +71,6 @@ resource "aws_imagebuilder_image_recipe" "weblogic" {
     }
   }
 
-
   lifecycle {
     create_before_destroy = true
   }
@@ -79,6 +78,12 @@ resource "aws_imagebuilder_image_recipe" "weblogic" {
   name         = local.weblogic_pipeline.recipe.name
   parent_image = data.aws_ami.latest-rhel-610.id
   version      = local.weblogic_pipeline.recipe.version
+
+  tags = merge({
+    weblogic_component="1.1.4"
+    weblogic_pipeline="1.1.5"
+  }, local.tags)
+
 }
 
 
