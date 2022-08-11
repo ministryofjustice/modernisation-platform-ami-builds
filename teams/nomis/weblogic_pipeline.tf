@@ -80,8 +80,9 @@ resource "aws_imagebuilder_image_recipe" "weblogic" {
   version      = local.weblogic_pipeline.recipe.version
 
   tags = merge({
-    weblogic_component="1.1.4"
-    weblogic_pipeline="1.1.5"
+    weblogic_component  = "1.1.4"
+    weblogic_pipeline   = "${local.version}" # set in the weblogic_pipeline_vars.tf
+    pipeline_name       = "${local.weblogic_pipeline.pipeline.name}" # set in the weblogic_pipeline_vars.tf
   }, local.tags)
 
 }
