@@ -51,7 +51,7 @@ locals {
     distribution = {
       name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".", "_")])
       region   = "eu-west-2"
-      ami_name = join("_", [replace(local.os_version, ".", "-"), local.middleware, replace(local.weblogic_server_version, ".", "-"), local.release_or_patch, "{{ imagebuilder:buildDate }}" ])
+      ami_name = join("_", [replace(local.os_version, ".", "-"), local.middleware, replace(local.weblogic_server_version, ".", "-"), local.release_or_patch, "{{ imagebuilder:buildDate }}"])
     }
 
     components = [
