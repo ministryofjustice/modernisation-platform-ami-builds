@@ -135,16 +135,16 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
         user_ids = local.ami_share_accounts
       }
 
-      # local.tag_name are pulled from weblogic_pipeline_vars.tf
+      # local.<tag_name> are pulled from weblogic_pipeline_vars.tf
       # local.tags are pulled from locals.tf
       # module.component_tags.component_tags are pulled from the components/<component_name>/<component_name>.yml config
       ami_tags = merge({
-        release-or-patch  = "${local.instance}"
-        distro            = "${local.os_version}"                      # distro name and version
-        middleware        = "${local.middleware}"                      # middleware on the ami
-        weblogic-server   = "${local.weblogic_server}"                 # version of the weblogic app being used in the pipeline
-        pipeline-name     = "${local.weblogic_pipeline.pipeline.name}" # name of the pipeline
-        weblogic-pipeline = "${local.version}"                         # version of the pipeline
+        release-or-patch          = "${local.release_or_patch}"                # IMPORTANT: use "Release" when the application NOMIS version changes, use "Patch" otherwise
+        os-version                = "${local.os_version}"                      # distro name and version
+        middleware                = "${local.middleware}"                      # middleware on the ami
+        weblogic-server-version   = "${local.weblogic_server_version}"         # version of the weblogic app being used in the pipeline
+        pipeline-name             = "${local.weblogic_pipeline.pipeline.name}" # name of the pipeline
+        weblogic-pipeline-version = "${local.version}"                         # version of the pipeline
       }, local.tags, module.component_tags.component_tags)
 
     }

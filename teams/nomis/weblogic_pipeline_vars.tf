@@ -1,11 +1,11 @@
 locals {
-  version = "1.1.6" # change this value every time you update this file or the weblogic_pipeline.tf file 
+  version = "1.1.7" # change this value every time you update this file or the weblogic_pipeline.tf file 
 
   # Ideally these values should be pulled from the weblogic component file or the ansible when it is changed in DSOS-1446
-  os_version      = "RHEL6.10"
-  middleware      = "WebLogicAppServer"
-  weblogic_server = "10.3"
-  instance        = "Patch" # IMPORTANT: use "Release" when the application NOMIS version changes, use "Patch" otherwise
+  os_version              = "RHEL6.10"
+  middleware              = "WebLogicAppServer"
+  weblogic_server_version = "10.3"
+  release_or_patch        = "Patch" # IMPORTANT: use "Release" when the application NOMIS version changes, use "Patch" otherwise
 
   weblogic_pipeline = {
 
@@ -51,7 +51,7 @@ locals {
     distribution = {
       name     = join("", [local.team_name, "_weblogic_", replace(local.version, ".", "_")])
       region   = "eu-west-2"
-      ami_name = join("_", [replace(local.os_version, ".", "-"), local.middleware, replace(local.weblogic_server, ".", "-"), local.instance, "{{ imagebuilder:buildDate }}" ])
+      ami_name = join("_", [replace(local.os_version, ".", "-"), local.middleware, replace(local.weblogic_server_version, ".", "-"), local.release_or_patch, "{{ imagebuilder:buildDate }}" ])
     }
 
     components = [
