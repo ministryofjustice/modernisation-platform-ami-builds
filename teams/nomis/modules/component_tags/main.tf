@@ -1,5 +1,5 @@
 locals {
-  config = yamldecode(file("./${path.root}/components/${var.component_filename}"))["parameters"]
+  config = yamldecode(file("./components/${replace("${var.component_filename}", ".yml", "")}/${var.component_filename}"))["parameters"]
   params = flatten([
     for d, value in local.config : [
       for v, item in value : {
