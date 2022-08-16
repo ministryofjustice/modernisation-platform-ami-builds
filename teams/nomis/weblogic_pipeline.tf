@@ -79,14 +79,7 @@ resource "aws_imagebuilder_image_recipe" "weblogic" {
   parent_image = data.aws_ami.latest-rhel-610.id
   version      = local.weblogic_pipeline.recipe.version
 
-  tags = merge({
-    weblogic_component = "1.1.4"
-    weblogic_pipeline  = "${local.version}"                         # set in the weblogic_pipeline_vars.tf
-    pipeline_name      = "${local.weblogic_pipeline.pipeline.name}" # set in the weblogic_pipeline_vars.tf
-  }, local.tags)
-
 }
-
 
 resource "aws_imagebuilder_infrastructure_configuration" "weblogic" {
   description                   = local.weblogic_pipeline.infra_config.description
@@ -120,6 +113,13 @@ resource "aws_imagebuilder_component" "weblogic_components" {
   }
 }
 
+# pulls the parameters from the component's yml config and sets them as key-value pairs to tag the ami with
+module "component_tags" {
+  source = "./modules/component_tags" 
+
+  component_filename = "${local.weblogic_pipeline.components[0]}"
+}
+
 resource "aws_imagebuilder_distribution_configuration" "weblogic" {
   name = local.weblogic_pipeline.distribution.name
 
@@ -141,5 +141,18 @@ resource "aws_imagebuilder_distribution_configuration" "weblogic" {
       account_id         = local.environment_management.account_ids["nomis-test"]
       launch_template_id = data.aws_launch_template.weblogic-launch-templates.id
     }
+
+    # local.tag_name are pulled from weblogic_pipeline_vars.tf
+    # local.tags are pulled from locals.tf
+    # module.component_tags.component_tags are pulled from the components/<component_name>/<component_name>.yml config
+    ami_tags = merge({
+      release-or-patch   = "${local.instance}"
+      distro             = "${local.os_version}"                      # distro name and version
+      middleware         = "${local.middleware}"                      # middleware on the ami
+      weblogic-server    = "${local.weblogic_server}"                 # version of the weblogic app being used in the pipeline
+      pipeline-name      = "${local.weblogic_pipeline.pipeline.name}" # name of the pipeline
+      weblogic-pipeline  = "${local.version}"                         # version of the pipeline
+    }, local.tags, module.component_tags.component_tags)
+
   }
 }
