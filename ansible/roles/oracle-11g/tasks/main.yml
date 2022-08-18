@@ -3,8 +3,8 @@
 #    name: common
 #    tasks_from: oracle_user.yml
 #
-#- name: install asm, grid and database
-#  block:
+- name: install asm, grid and database
+  block:
 #    - import_tasks: pre_install_tasks.yml
 #    - import_tasks: configure_asm.yml
 #    - import_tasks: install_grid.yml
