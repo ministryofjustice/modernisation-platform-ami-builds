@@ -1,15 +1,15 @@
 # This playbook is for use when running on a localhost via an AWS Run Command document
-#- name: installing-common-packages
-#  hosts: localhost
-#  tasks:
-#    - import_role:
-#        name: common
-#        tasks_from: common_packages_rhel7.yml
+- name: installing-common-packages
+  hosts: localhost
+  tasks:
+    - import_role:
+        name: common
+        tasks_from: common_packages_rhel7.yml
 
 - name: database-ami-provisioning
   hosts: localhost
   roles:
-    #    - time
-    #    - hugepages
-    #    - disks
+    - time
+    - hugepages
+    - disks
     - oracle-11g
