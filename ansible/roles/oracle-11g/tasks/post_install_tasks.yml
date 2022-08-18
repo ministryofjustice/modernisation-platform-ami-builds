@@ -38,9 +38,9 @@
     path: "{{ artefact_dir }}/{{ oracle_tar }}"
     state: absent
 
-- name: recursively change ownership of the {{ oracle_externaljob_path }} directory
+- name: recursively change ownership of the {{ oracle_externaljob_bin_path }} directory
   ansible.builtin.file:
-    path: "{{ oracle_externaljob_path }}"
+    path: "{{ oracle_externaljob_bin_path }}"
     state: directory
     recurse: yes
     mode: u=r,g=rwX,o=rx
@@ -49,13 +49,13 @@
 
 - name: update run_user for the {{ oracle_externaljob_file }}
   replace:
-    path: "{{ oracle_externaljob_path }}/{{ oracle_externaljob_file }}"
+    path: "{{ oracle_externaljob_rdbms_path }}/{{ oracle_externaljob_file }}"
     regexp: "run_user = nobody"
     replace: "run_user = oracle"
 
 - name: update run_group for the {{ oracle_externaljob_file }}
   replace:
-    path: "{{ oracle_externaljob_path }}/{{ oracle_externaljob_file }}"
+    path: "{{ oracle_externaljob_rdbms_path }}/{{ oracle_externaljob_file }}"
     regexp: "run_group = nobody"
     replace: "run_group = dba"
 
@@ -63,10 +63,10 @@
 # that any instances launched from the image do so with oracle services not
 # running, so that they can be reconfigured with the hostname of the launch instance
 
-- name: deconfigure oracle HAS
-  ansible.builtin.command: perl/bin/perl -I perl/lib -I crs/install crs/install/roothas.pl -deconfig -force
-  args:
-    chdir: "{{ grid_home }}"
-  tags:
-    - never
-    - deconfig
+#- name: deconfigure oracle HAS
+#  ansible.builtin.command: perl/bin/perl -I perl/lib -I crs/install crs/install/roothas.pl -deconfig -force
+#  args:
+#    chdir: "{{ grid_home }}"
+#  tags:
+#    - never
+#    - deconfig
