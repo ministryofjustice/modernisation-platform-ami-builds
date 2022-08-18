@@ -1,0 +1,25 @@
+- name: check swap
+  ansible.builtin.command: swapon --show --noheading {{ drive_map[swap_disk] }}
+  register: current_swap
+
+- name: swap off
+  ansible.builtin.command: sudo swapoff {{ drive_map[swap_disk] }}
+  when: current_swap.stdout_lines | length > 0
+
+- name: make swap
+  ansible.builtin.command: mkswap {{ drive_map[swap_disk] }}
+
+- name: get uuid
+  ansible.builtin.command: lsblk {{ drive_map[swap_disk] }} -no UUID
+  register: uuid
+
+- name: add entry to fstab
+  ansible.posix.mount:
+    path: swap
+    src: "UUID={{ uuid.stdout_lines[0] }}"
+    opts: sw
+    fstype: swap
+    state: present
+
+- name: activate swap
+  ansible.builtin.command: swapon UUID={{ uuid.stdout_lines[0] }}

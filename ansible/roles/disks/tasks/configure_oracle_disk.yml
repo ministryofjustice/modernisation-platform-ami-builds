@@ -1,0 +1,21 @@
+# this sets up the oracle installation disks, /u01 and /u02
+
+- name: create xfs filesystem on each volume
+  community.general.filesystem:
+    fstype: xfs
+    dev: "{{ drive_map[item.device] }}"
+  loop: "{{ oracle_app_disks }}"
+
+- name: get UUID
+  ansible.builtin.command: lsblk {{ drive_map[item.device] }} -no UUID
+  loop: "{{ oracle_app_disks }}"
+  register: uuid
+
+- name: mount new volumes and create fstab entries
+  ansible.posix.mount:
+    path: "{{ item.item.mount }}"
+    src: UUID={{ item.stdout_lines[0] }}
+    state: mounted
+    fstype: xfs
+    opts: defaults,nofail
+  loop: "{{ uuid.results }}"

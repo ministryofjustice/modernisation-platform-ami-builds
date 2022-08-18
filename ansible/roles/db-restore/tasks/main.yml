@@ -1,0 +1,131 @@
+- name: create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwx,g=rxs,o=rx
+    state: directory
+    recurse: yes
+  loop:
+    - "{{ db_backup_dir }}"
+    - "{{ audit_file_dir }}"
+
+- name: copy database backup from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command: 
+    cmd: aws s3 sync s3://{{ s3_bucket_with_prefix | quote }}/{{ s3_db_backup | quote}} {{ db_backup_dir | quote }}
+  become_user: oracle  
+  environment:
+    PATH: "{{ oracle_PATH }}:/usr/local/bin/aws" # https://stackoverflow.com/questions/67687211/ansible-aws-cli-not-working-with-command-or-shell-module
+  vars:
+    ansible_remote_tmp: "{{ temp_dir }}" # this is here to supress a warning about temp directory not being available
+
+- name: get list of control files
+  ansible.builtin.find:
+    paths: "{{ db_backup_dir }}"
+    patterns: "*_cf_*"
+  register: control_files
+
+- name: get latest control file
+  ansible.builtin.set_fact: 
+    control_file_latest: "{{ control_files.files | sort(attribute='mtime') | last }}"
+
+- name: add database entry to oratab
+  ansible.builtin.lineinfile:
+    path: /etc/oratab
+    regexp: '^{{ db_name }}:{{ database_home }}:N'
+    line: "{{ db_name }}:{{ database_home }}:N"
+    create: yes
+    group: oinstall
+    owner: oracle
+
+- name: create init.ora file
+  ansible.builtin.template:
+    src: init.ora.j2
+    dest: "{{ database_home }}/dbs/init{{ db_name }}.ora"
+    mode: u=rw,g=r
+    owner: oracle
+    group: oinstall
+
+- name: create sql query script
+  ansible.builtin.template:
+    src: query.sql.j2
+    dest: "{{ temp_dir }}/query.sql"
+    mode: u=rw,g=r
+    owner: oracle
+    group: oinstall
+
+- name: prepare to restore database
+  block:
+  - ansible.builtin.shell: |
+      source oraenv <<< {{ db_name }}
+      rman target / <<EOF 
+      startup nomount
+      restore controlfile from '{{ control_file_latest.path }}';
+      exit
+      EOF
+    args:
+      chdir: "{{ database_home }}/dbs"
+
+  - ansible.builtin.shell: |
+      source oraenv <<< {{ db_name }}
+      sqlplus -s / as sysdba <<EOF 
+      alter database mount;
+      alter database flashback off;
+      alter database disable block change tracking;
+      alter database set standby database to maximize performance;
+      exit
+      EOF
+    args:
+      chdir: "{{ database_home }}/dbs"
+
+  - ansible.builtin.shell: |
+      source oraenv <<< {{ db_name }}
+      sqlplus -s / as sysdba @{{ temp_dir }}/query.sql | grep "set until time"
+    args:
+      chdir: "{{ database_home }}/dbs"
+    register: set_until_time
+  
+  become_user: oracle
+  environment: "{{ db_env }}" 
+
+- debug:
+    var: set_until_time
+
+- name: create rman restore script
+  ansible.builtin.template:
+    src: restore.rman.j2
+    dest: "{{ temp_dir }}/restore.rman"
+    mode: u=rw,g=r
+    owner: oracle
+    group: oinstall
+
+- name: run rman restore script
+  ansible.builtin.shell: |
+    source oraenv <<< {{ db_name }}
+    rman target / @{{ temp_dir }}/restore.rman
+  args:
+    chdir: "{{ database_home }}/dbs"
+  become_user: oracle
+  environment: "{{ db_env }}" 
+
+- name: add database to RAC
+  ansible.builtin.command: srvctl add database -d {{ db_name }} -o {{ database_home }}
+  become_user: oracle
+  environment: "{{ db_env }}" 
+
+- name: shutdown database
+  ansible.builtin.shell: |
+    source oraenv <<< {{ db_name }}
+    sqlplus -s / as sysdba <<< "shutdown immediate"
+  become_user: oracle
+  environment: "{{ db_env }}" 
+
+# - name: start database
+#   ansible.builtin.command: srvctl start database -d {{ db_name }}
+#   become_user: oracle
+#   environment: "{{ db_env }}"
+
+- name: deconfigure oracle HAS
+  ansible.builtin.command: perl/bin/perl -I perl/lib -I crs/install crs/install/roothas.pl -deconfig -force
+  args:
+    chdir: /u01/app/oracle/product/11.2.0.4/gridhome_1

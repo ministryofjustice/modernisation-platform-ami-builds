@@ -1,0 +1,2 @@
+timeservers: # the first server in this list will be set as the preferred source in chrony.conf
+  - 169.254.169.123

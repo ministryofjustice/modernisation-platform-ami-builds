@@ -1,0 +1,62 @@
+# Managed by Ansible.  Manual edits will get overwritten.
+
+# NTP timeservers:
+{% for server in timeservers %}
+server {{server}} iburst {%- if loop.first %} prefer
+{% else %}{{"\n"}}{% endif %}
+{% endfor %}
+
+# Ignore stratum in source selection.
+stratumweight 0
+
+# Record the rate at which the system clock gains/losses time.
+driftfile /var/lib/chrony/drift
+
+# Enable kernel RTC synchronization.
+rtcsync
+
+# Step the system clock instead of slew if the
+# adjustment is larger than 1.0 second.
+# Comment this out before starting Chrony if clock is siginifcantly out
+# and you don't want to perform an instant correction 
+makestep 1.0 -1
+
+# Allow chrony to step the clock at boot if adjustment more than 1.0 second
+# Comment this out before starting Chrony if clock is siginifcantly out
+# and you don't want to perform an instant correction 
+initstepslew 1.0 {% for server in timeservers %}
+{{server}}
+{%- if not loop.last %}{{" "}}{% endif %}
+{% endfor %}
+
+
+# Allow NTP client access from local network.
+#allow 192.168/16
+
+# Listen for commands only on localhost.
+bindcmdaddress 127.0.0.1
+bindcmdaddress ::1
+
+# Serve time even if not synchronized to any NTP server.
+#local stratum 10
+
+# Specify file containing keys for NTP and command authentication.
+keyfile /etc/chrony.keys
+
+# Specify the key used as password for chronyc.
+commandkey 1
+
+# Generate command key if missing.
+generatecommandkey
+
+# Disable logging of client accesses.
+noclientlog
+
+# Send a message to syslog if a clock adjustment is larger than 0.5 seconds.
+logchange 0.5
+
+# Specify directory for log files.
+logdir /var/log/chrony
+
+# Select which information is logged.
+#log measurements statistics tracking

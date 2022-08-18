@@ -1,0 +1,14 @@
+run {
+    allocate channel ch1 device type disk;
+    allocate channel ch2 device type disk;
+    allocate channel ch3 device type disk;
+    allocate channel ch4 device type disk;
+    allocate channel ch5 device type disk;
+    allocate channel ch6 device type disk;
+    allocate channel ch7 device type disk;
+    allocate channel ch8 device type disk;
+   {{ set_until_time.stdout_lines[1][:-1] }}; {# since we used shell module with multiple commands to obtain the variable, we take the second line of stdout. Use [:-1] to remove trailing '-' from line #}
+    restore database;
+    recover database;
+    sql 'alter database open resetlogs';
+}
