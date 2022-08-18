@@ -2,7 +2,7 @@
   template:
     src: db_install.rsp.j2
     dest: "{{ stage }}/{{ database_response_file }}"
-    mode: u=rw,g=r
+    mode: u=rw,g=r,o=r
     owner: oracle
     group: oinstall
 
