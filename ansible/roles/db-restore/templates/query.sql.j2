@@ -1,0 +1,2 @@
+select 'set until time "to_date('''|| to_char(min(completion_time)-0.5/60/24,'dd.mm.yyyy hh24:mi:ss')||''',''DD.MM.YYYY HH24:MI:SS'')"' ||'-' from (select THREAD#, max(completion_time) completion_time  from  v$archived_log group by thread#);
+exit

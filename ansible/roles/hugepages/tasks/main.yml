@@ -1,0 +1,53 @@
+# Transparent HugePages should have been disabled in the AMI if not you can do
+# grubby --update-kernel=/boot/vmlinuz-$(uname -r) --args="transparent_hugepage=never"
+# and reboot
+
+# - name: check transparent hugepages has been diabled in kernel entry
+#   ansible.builtin.shell: grubby --info="/boot/vmlinuz-$(uname -r)" | grep transparent_hugepage=never
+#   register: kernel_args
+#   failed_when: kernel_args.rc > 1
+
+- name: disable transparent hugepages at boot
+  ansible.builtin.command: grubby --update-kernel=/boot/vmlinuz-{{ ansible_kernel }} --args="transparent_hugepage=never"
+  # when: kernel_args.rc != 0
+
+- name: check no transparent (AnonHugePages) huge pages in use
+  ansible.builtin.command: awk '/^AnonHugePages/ {print $2}' /proc/meminfo
+  register: anon_hugepages_total
+
+- name: check AnonHugePages is zero
+  ansible.builtin.assert:
+    that: "{{ ( anon_hugepages_total.stdout_lines[0] | int ) == 0 }}"
+  tags:
+    - assert-pages
+    - never # this check wont run unless you specify it.  Running it can cause problems when creating AMIs
+
+- name: configure explicit huge pages
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    regexp: "^vm.nr_hugepages"
+    line: vm.nr_hugepages={{ pages }}
+    create: yes
+
+- name: load new explicit huge page setting
+  ansible.builtin.command: sysctl -p
+
+- name: check number of pages created
+  ansible.builtin.command: awk '/^HugePages_Total/ {print $2}' /proc/meminfo # sed -rn 's/^(HugePages_Total:\s*)(.*)$/\2/p' /proc/meminfo
+  register: hugepages_total
+
+- name: check expected number of pages created
+  ansible.builtin.assert:
+    that: "{{ ( hugepages_total.stdout_lines[0] | int ) == ( pages | int ) }}"
+  tags:
+    - assert-pages
+    - never # this check wont run unless you specify it.  Running it can cause problems when creating AMIs
+
+# See readme for why this is commented out
+# - name: set memlock limits
+#   ansible.builtin.blockinfile:
+#     path: /etc/security/limits.d/99-grid-oracle-limits.conf
+#     block: |
+#       oracle soft memlock {{ memlock_limit }}
+#       oracle hard memlock {{ memlock_limit }}
+#     create: yes

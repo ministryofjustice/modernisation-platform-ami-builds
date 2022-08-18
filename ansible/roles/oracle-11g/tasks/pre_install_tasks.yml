@@ -1,0 +1,46 @@
+- name: create new directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwx,g=rxs,o=rx
+    state: directory
+    recurse: yes
+  loop:
+    - "{{ oracle_home }}"
+    - "{{ temp }}"
+    - "{{ stage }}"
+
+- name: copy {{ oracle_tar }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ oracle_tar }} .
+    creates: "{{ oracle_tar }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: unarchive {{ oracle_tar }}
+  ansible.builtin.unarchive:
+    src: "{{ artefact_dir }}/{{ oracle_tar }}"
+    dest: "{{ artefact_dir }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwX,g=rX,o=rX
+    remote_src: yes
+
+- name: get list of rpms included with {{ oracle_tar }}
+  ansible.builtin.find:
+    paths: "{{ stage }}"
+    patterns: "*.rpm"
+  register: packages
+
+- name: install oracle rpms from {{ oracle_tar }}
+  ansible.builtin.yum:
+    name: "{{ packages.files | map(attribute='path') }}"
+    state: present
+    enablerepo: rhel-7-server-rhui-optional-rpms # required for compat-libstdc++-33, also see https://access.redhat.com/articles/4599971
+
+- name: disable selinux
+  import_role:
+    name: common
+    tasks_from: selinux.yml
+  vars:
+    selinux_state: permissive

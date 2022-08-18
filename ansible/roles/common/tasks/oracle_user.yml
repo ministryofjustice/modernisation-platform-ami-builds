@@ -1,0 +1,16 @@
+- name: create oracle groups
+  ansible.builtin.group:
+    system: yes
+    name: "{{ item }}"
+  loop:
+    - oinstall
+    - dba
+
+- name: create oracle user
+  ansible.builtin.user:
+    name: oracle
+    home: /home/oracle
+    group: oinstall
+    groups: dba,wheel
+    system: yes
+    # shell: /bin/bash

@@ -1,0 +1,28 @@
+_aq_tm_scanlimit=0
+_client_enable_auto_unregister=TRUE
+_disk_sector_size_override=TRUE
+archive_lag_target=1800
+audit_file_dest='{{ audit_file_dir }}'
+audit_sys_operations=TRUE
+audit_trail='db'
+compatible='11.2.0.4.0'
+control_files='+DATA/cnomt1/controlfile/current01.ctl','+DATA/cnomt1/controlfile/control02.ctl'
+cursor_sharing='FORCE'
+db_block_size=8192
+db_create_file_dest='+DATA'
+db_domain=''
+db_name='CNOMT1'
+db_recovery_file_dest='+DATA'
+db_recovery_file_dest_size=107374182400
+diagnostic_dest='/u01/app/oracle'
+dispatchers='(PROTOCOL=TCP) (SERVICE=CNOMT1XDB)'
+java_jit_enabled=TRUE
+job_queue_processes=30
+log_archive_dest_1='LOCATION=USE_DB_RECOVERY_FILE_DEST VALID_FOR=(ONLINE_LOGFILES,ALL_ROLES)'
+open_cursors=300
+pga_aggregate_target=536870912
+processes=150
+remote_login_passwordfile='EXCLUSIVE'
+sga_target=1610612736
+undo_tablespace='UNDOTBS1'
+db_file_name_convert='+DATA','+DATA'
