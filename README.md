@@ -32,7 +32,7 @@ Therefore, Image Builder resources other than your own will exist in this accoun
 
 ## Structure
 
-In terms of defining AMIs, two important directories exist in this repository.
+In terms of defining AMIs, three important directories exist in this repository.
 
 - ./*__modernisation-platform__* 
   - This directory will contain pipelines that will define AMIs acting as parent images for more customised AMIs required by Modernisation Platform consumers. Types of AMIs produced could be
@@ -42,8 +42,10 @@ In terms of defining AMIs, two important directories exist in this repository.
   - This directory is designed to hold additional directories for each team that is a Modernisation Platform consumer (AKA environment or member)
   - Teams therefore define their AMIs within their own directory, referencing parent images defined and generated within the Modernisation Platform directory
   - The ```example``` directory is a template for each new team
+- ./*__ansible__*
+  - This directory will contain common ansible resources, such as ansible roles, that can be used in AMI builds.
 
-Both of the above directories also contain a ```components``` directory, holding components relevant to Linux or Windows (within the respective OS folder)
+The ```modernisation-platform``` and ```teams``` directories also contain a ```components``` directory, holding components relevant to Linux or Windows (within the respective OS folder)
 
 ## How to guides
 
