@@ -18,11 +18,13 @@ locals {
   is-preproduction = substr(terraform.workspace, length(local.application_name), length(terraform.workspace)) == "-preproduction"
   is_live          = [substr(terraform.workspace, length(local.application_name), length(terraform.workspace)) == "-production" || substr(terraform.workspace, length(local.application_name), length(terraform.workspace)) == "-preproduction" ? "live" : "non-live"]
 
+  # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
   tags = {
-    business-unit = "Platforms"
-    application   = "Modernisation Platform: ${terraform.workspace}"
+    business-unit = "HMPPS"
+    application   = upper(local.team_name)
     is-production = local.is-production
-    owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+    owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
+    source        = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
 
   ami_share_accounts = [
