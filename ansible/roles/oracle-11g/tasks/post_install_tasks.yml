@@ -58,7 +58,6 @@
     path: "{{ oracle_externaljob_rdbms_path }}/{{ oracle_externaljob_file }}"
     regexp: "run_group = nobody"
     replace: "run_group = dba"
-
 # typically you will only run the `deconfig` tag when creating an image, such
 # that any instances launched from the image do so with oracle services not
 # running, so that they can be reconfigured with the hostname of the launch instance
