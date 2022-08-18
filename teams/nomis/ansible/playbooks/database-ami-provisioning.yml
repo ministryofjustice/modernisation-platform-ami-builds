@@ -1,0 +1,8 @@
+# This playbook is for use when running on a localhost via an AWS Run Command document
+- name: database-ami-provisioning
+  hosts: localhost
+  roles:
+    - time
+    - hugepages
+    - disks
+    - oracle-11g
