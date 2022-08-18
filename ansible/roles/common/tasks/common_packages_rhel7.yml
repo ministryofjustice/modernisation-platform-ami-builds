@@ -1,6 +1,6 @@
 - name: install common packages
   ansible.builtin.yum:
-    name: 
+    name:
       - zip
       - unzip
       - wget

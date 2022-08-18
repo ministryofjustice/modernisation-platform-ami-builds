@@ -9,7 +9,7 @@
 - name: database-ami-provisioning
   hosts: localhost
   roles:
-#    - time
-#    - hugepages
-#    - disks
+    #    - time
+    #    - hugepages
+    #    - disks
     - oracle-11g
