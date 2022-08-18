@@ -9,7 +9,7 @@
 - name: create oracle user
   ansible.builtin.user:
     name: oracle
-    home: /home/oracle 
+    home: /home/oracle
     group: oinstall
     groups: dba,wheel
     system: yes

@@ -1,5 +1,5 @@
-  # there's a big assumption here that we're running on one of the newer Nitro
-  # based EC2 instances.  If not then this will not work in its current state.
+# there's a big assumption here that we're running on one of the newer Nitro
+# based EC2 instances.  If not then this will not work in its current state.
 
 - name: map ebs device names
   import_role:

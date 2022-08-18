@@ -1,4 +1,4 @@
-A collection of common tasks.  Role is not intended to be called directly,
+A collection of common tasks. Role is not intended to be called directly,
 rather import tasks where needed, for example:
 
 ```

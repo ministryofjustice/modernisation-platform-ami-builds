@@ -20,7 +20,7 @@ grid_home: "{{ oracle_home }}/gridhome_1"
 
 password_response_file: grid_pw.rsp
 
-asmpassword: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=12') }}" 
+asmpassword: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=12') }}"
 asmmonitorpassword: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=12') }}"
 
 grid_env:

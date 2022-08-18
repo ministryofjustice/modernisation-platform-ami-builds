@@ -10,13 +10,12 @@
     source oraenv <<< +ASM
     sqlplus -s / as sysasm <<< "create diskgroup FLASH external redundancy disk {{ disks }};"
   become_user: oracle
-  environment: "{{ grid_env }}" 
+  environment: "{{ grid_env }}"
   vars:
     disks: "{{ oracle_asm_flash_disks | json_query('[*].label') | map('regex_replace', '(^.*$)', \"'ORCL:\\1'\") | join(',') }}"
 
 - name: save spfile location
-  ansible.builtin.shell:
-    source oraenv <<< +ASM
+  ansible.builtin.shell: source oraenv <<< +ASM
     asmcmd spget > {{ temp }}/spfilelocation.txt
   become_user: oracle
   environment: "{{ grid_env }}"
@@ -25,7 +24,7 @@
   ansible.builtin.find:
     paths: "{{ stage }}"
     file_type: any
-    excludes: '*.rsp'
+    excludes: "*.rsp"
   register: files
 
 - name: clean up {{ stage }} directory
@@ -38,9 +37,9 @@
   ansible.builtin.file:
     path: "{{ artefact_dir }}/{{ oracle_tar }}"
     state: absent
-  
-# typically you will only run the `deconfig` tag when creating an image, such 
-# that any instances launched from the image do so with oracle services not  
+
+# typically you will only run the `deconfig` tag when creating an image, such
+# that any instances launched from the image do so with oracle services not
 # running, so that they can be reconfigured with the hostname of the launch instance
 
 - name: deconfigure oracle HAS

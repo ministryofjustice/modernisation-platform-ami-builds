@@ -1,7 +1,7 @@
 - name: setup oracle user and groups
   import_role:
     name: common
-    tasks_from: oracle_user.yml 
+    tasks_from: oracle_user.yml
 
 - name: install asm, grid and database
   block:

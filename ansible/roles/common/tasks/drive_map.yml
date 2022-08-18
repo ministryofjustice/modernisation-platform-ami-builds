@@ -1,5 +1,5 @@
-# Newer EC2 types are Nitro based and use NVMe spec. The NVMe device name can 
-# change depending on the order in which the devices respond during instance 
+# Newer EC2 types are Nitro based and use NVMe spec. The NVMe device name can
+# change depending on the order in which the devices respond during instance
 # boot. Therefore to ensure we target the correct drive we map the ebs device
 # name to the NVMe name via the device serial number, which is consistent
 # See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html
@@ -16,7 +16,7 @@
   ansible.builtin.set_fact:
     ebs_devices: "{{ ebs_devices | default({}) | combine({item.device_name: (item.volume_id | regex_replace('^(vol-)', 'vol')) }) }}"
   loop: "{{ ebs_devices_temp }}"
-  vars: 
+  vars:
     ebs_devices_temp: "{{ ec2_info.instances[0].block_device_mappings | json_query('[*].{volume_id: ebs.volume_id, device_name: device_name}') }}" # | items2dict(key_name='device_name', value_name='volume_id'
 
 - debug:

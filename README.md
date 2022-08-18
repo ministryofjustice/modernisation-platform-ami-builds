@@ -1,10 +1,12 @@
 # Modernisation Platform AMI builds
+
 [![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=for-the-badge&logo=github&label=MoJ%20Compliant&query=%24.data%5B%3F%28%40.name%20%3D%3D%20%22modernisation-platform-ami-builds%22%29%5D.status&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fgithub_repositories)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/github_repositories#modernisation-platform-ami-builds "Link to report")
+
 ## Introduction
 
 This repository contains the Modernisation Platform AMI build code and workflows.
 
-__Contents__
+**Contents**
 
 - [Modernisation Platform AMI builds](#modernisation-platform-ami-builds)
   - [Introduction](#introduction)
@@ -21,7 +23,7 @@ __Contents__
 
 ### AWS EC2 Image Builder
 
-Infrastructure-as-code (Terraform) is used in this repository to define AMIs and uses __AWS EC2 Image Builder__ - a managed service for building, testing and deploying Amazon Machine Images. See https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html for information.
+Infrastructure-as-code (Terraform) is used in this repository to define AMIs and uses **AWS EC2 Image Builder** - a managed service for building, testing and deploying Amazon Machine Images. See https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html for information.
 
 AWS Image Builder introduces concepts such as pipelines, recipes and components to define an AMI. These concepts are backed by equivalent Terraform resources. Recipes and Components natively enforce versioning, allowing changes to be tracked and identified. This raises an interesting consideration around the declarative nature of Terraform in combination with inherent versioning within Git repositories - a consideration which has led to a recommended approach in the use of AWS Image Builder within this repository.
 
@@ -34,18 +36,18 @@ Therefore, Image Builder resources other than your own will exist in this accoun
 
 In terms of defining AMIs, three important directories exist in this repository.
 
-- ./*__modernisation-platform__* 
+- ./_**modernisation-platform**_
   - This directory will contain pipelines that will define AMIs acting as parent images for more customised AMIs required by Modernisation Platform consumers. Types of AMIs produced could be
     - AMIs for hardened OSs
     - AMIs for vanilla server applications, installed onto hardened OSs
-- ./*__teams__*
+- ./_**teams**_
   - This directory is designed to hold additional directories for each team that is a Modernisation Platform consumer (AKA environment or member)
   - Teams therefore define their AMIs within their own directory, referencing parent images defined and generated within the Modernisation Platform directory
-  - The ```example``` directory is a template for each new team
-- ./*__ansible__*
+  - The `example` directory is a template for each new team
+- ./_**ansible**_
   - This directory will contain common ansible resources, such as ansible roles, that can be used in AMI builds.
 
-The ```modernisation-platform``` and ```teams``` directories also contain a ```components``` directory, holding components relevant to Linux or Windows (within the respective OS folder)
+The `modernisation-platform` and `teams` directories also contain a `components` directory, holding components relevant to Linux or Windows (within the respective OS folder)
 
 ## How to guides
 
@@ -53,9 +55,10 @@ The ```modernisation-platform``` and ```teams``` directories also contain a ```c
 
 To add a new team
 
-- copy the files under the *__teams/example__* directory into e.g. *__teams/your_team__*
-- change the _team_name_ variable in *__locals.tf__*, which will subsequently be interpolated and used in all Image Builder resource names.
-- Each team directory will use a different terraform remote state file defined in *__backend.tf__* - so also rename the state file name by renaming the ```key``` attribute value, updating the team name to be consistent to that used in the previous step.   
+- copy the files under the _**teams/example**_ directory into e.g. _**teams/your_team**_
+- change the _team_name_ variable in _**locals.tf**_, which will subsequently be interpolated and used in all Image Builder resource names.
+- Each team directory will use a different terraform remote state file defined in _**backend.tf**_ - so also rename the state file name by renaming the `key` attribute value, updating the team name to be consistent to that used in the previous step.
+
 ```
   key = "imagebuilder-[team name].tfstate"
 ```
@@ -72,11 +75,11 @@ Using the linux_pipeline.tf and linux_pipeline_vars.tf files as example files
 
 Under your team directory:
 
-- In *__data.tf__*, edit the data block changing the *__key_id__* to match the new key to be used in the pipeline.\
-*__default key:__* `key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"`\
-*__team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
+- In _**data.tf**_, edit the data block changing the _**key_id**_ to match the new key to be used in the pipeline.\
+  _**default key:**_ `key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-encryption-key"`\
+  _**team key:**_ `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["<team environemnt>"]}:alias/<team kms key alias name>"`\
 
-*__example of team key:__* `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
+_**example of team key:**_ `key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"`
 
 The requirements, as an example, for sprinkler are shown below.
 
@@ -89,7 +92,7 @@ data "aws_kms_key" "sprinkler_ebs_encryption_key" {
 ```
 
 At the end of locals.tf include
-  
+
 ```
 ami_share_accounts = [
   "${local.environment_management.account_ids["sprinkler-development"]}"
@@ -100,33 +103,34 @@ The above can be seen in the pull request https://github.com/ministryofjustice/m
 
 Example code on how to create a team KMS key, and the permissions needed can be found in https://github.com/ministryofjustice/modernisation-platform-environments/blob/b73bba2e9d708efbc0db4492582829f52f00cb60/terraform/environments/sprinkler/kms.tf
 
-
 ### How to use the per business unit shared kms key
-There are keys created per business unit which have permissions to be used by all the member accounts in that business unit.  Using these keys means you do not have to create your own key, and you can easily share your AMIs between other accounts in your business unit.  A full list of the shared keys available can be found in the core-shared-services account. To be used as shown below.
+
+There are keys created per business unit which have permissions to be used by all the member accounts in that business unit. Using these keys means you do not have to create your own key, and you can easily share your AMIs between other accounts in your business unit. A full list of the shared keys available can be found in the core-shared-services account. To be used as shown below.
 
 `data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-<business-unit>"}`
 
 For example:
 
 `data "aws_kms_key" "ebs_encryption_cmk" {key_id = "arn:aws:kms:eu-west-2:${data.aws_caller_identity.current.account_id}:alias/ebs-hmpps"}`
+
 ### How to edit ami account share
 
-This is a optional task and doesn't have to be done, this should only be changed if you want to share images with particular accounts.\ 
+This is a optional task and doesn't have to be done, this should only be changed if you want to share images with particular accounts.\
 Under your team directory:
 
-- In *__locals.tf__* edit the *__ami_share_accounts__* section, changing the account from the default core-shared-services to your account of choice.\
-*__default:__* `"${local.environment_management.account_ids["core-shared-services-production"]}"`\
-*__member account:__* `"${local.environment_management.account_ids["<member account>"]}"`\
+- In _**locals.tf**_ edit the _**ami_share_accounts**_ section, changing the account from the default core-shared-services to your account of choice.\
+  _**default:**_ `"${local.environment_management.account_ids["core-shared-services-production"]}"`\
+  _**member account:**_ `"${local.environment_management.account_ids["<member account>"]}"`\
 
-*__example member account:__* `"${local.environment_management.account_ids["sprinkler-development"]}"`
+_**example member account:**_ `"${local.environment_management.account_ids["sprinkler-development"]}"`
 
 ### How to add new components and manage versions
 
 To add a new component or make changes to an existing component:
 
-* Make the change to the file in the corresponding components directory (modernisation-platform or team)
-* Increment the **component** version in the parameters section of the component file
-* Increment the **recipe** version in the recipe block in the pipeline vars file
+- Make the change to the file in the corresponding components directory (modernisation-platform or team)
+- Increment the **component** version in the parameters section of the component file
+- Increment the **recipe** version in the recipe block in the pipeline vars file
 
 Both the component version(s) and recipe version will need to be updated for a successful Terraform run.
 No further change will need to be made to the component block of the pipeline terraform file to add / edit a component (there is logic to ingest the list defined in the pipeline vars and create terraform resources from them).
@@ -134,26 +138,25 @@ No further change will need to be made to the component block of the pipeline te
 ### How to add a new GitHub workflow
 
 GitHub workflow files are used to invoke Terraform and an example workflow is defined at [./.github/workflows/example.yml](./.github/workflows/example.yml).
-To create a workflow for your team, simply copy ```example.yml``` and add a new file named ```[your_team_name].yml```.
+To create a workflow for your team, simply copy `example.yml` and add a new file named `[your_team_name].yml`.
 The workflow within the example workflow has no branch condition that might restrict when Terraform is applied. Please change as appropriate for your team's processes.
 
 ### How to view and start EC2 Image Builder pipelines
 
 You can view and start EC2 Image Builder pipelines by assuming a role in the core-shared-services account.
 
-* [Log in to the AWS console](https://user-guide.modernisation-platform.service.justice.gov.uk/user-guide/accessing-the-aws-console.html#accessing-the-aws-console) via SSO as a modernisation-platform-developer
-* Click your SSO username in the top right of the AWS Console and choose "Switch Role"
-* Enter the core-shared-services account number ([see Slack message](https://mojdt.slack.com/archives/C01A7QK5VM1/p1645178678535589)) 
-* Enter role as `member-shared-services`
-* Navigate to EC2 Image Builder and click on “Image pipelines”
-* Choose your pipeline, you can view details and run the pipeline via “Actions”
+- [Log in to the AWS console](https://user-guide.modernisation-platform.service.justice.gov.uk/user-guide/accessing-the-aws-console.html#accessing-the-aws-console) via SSO as a modernisation-platform-developer
+- Click your SSO username in the top right of the AWS Console and choose "Switch Role"
+- Enter the core-shared-services account number ([see Slack message](https://mojdt.slack.com/archives/C01A7QK5VM1/p1645178678535589))
+- Enter role as `member-shared-services`
+- Navigate to EC2 Image Builder and click on “Image pipelines”
+- Choose your pipeline, you can view details and run the pipeline via “Actions”
 
 ## Future additions and improvements
 
-* Investigate and implement a design around access to S3 buckets for purposes of analysing Image Builder logs and hosting of external software packages and installers 
-* Implement AMI lifecycle management (including EBS volume snapshots)
-* Pipeline name could be variabilised further (e.g. with operating system)
-* Investigate and consider potential to integrate Image Distribution with AWS Organisation OUs (new feature at the time of writing introduced Oct 2021)
-* Consider separate environment for deploying / testing branches against
-* Consider implementation of OPA tests to safeguard changes to files that should remain static
-
+- Investigate and implement a design around access to S3 buckets for purposes of analysing Image Builder logs and hosting of external software packages and installers
+- Implement AMI lifecycle management (including EBS volume snapshots)
+- Pipeline name could be variabilised further (e.g. with operating system)
+- Investigate and consider potential to integrate Image Distribution with AWS Organisation OUs (new feature at the time of writing introduced Oct 2021)
+- Consider separate environment for deploying / testing branches against
+- Consider implementation of OPA tests to safeguard changes to files that should remain static

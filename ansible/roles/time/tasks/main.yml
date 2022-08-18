@@ -14,9 +14,9 @@
     dest: /etc/chrony.conf
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
     backup: yes
-  notify: Restart chrony    
+  notify: Restart chrony
 
 - name: Remove ntp package
   yum:

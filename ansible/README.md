@@ -5,8 +5,8 @@
 AMI images can use ansible as part of the build process.
 
 The following directory structure is proposed where common ansible resources,
-such as roles, are located here.  Team specific resources, such as playbooks,
-are located within the relevant `teams` directory.  Directory strucure as
+such as roles, are located here. Team specific resources, such as playbooks,
+are located within the relevant `teams` directory. Directory strucure as
 follows:
 
 <pre>
@@ -41,6 +41,7 @@ Please include a README.md for each role.
 ## Using ansible within a build
 
 Include an ansible step within the build phase which:
+
 - installs ansible wihtin a virtual environment
 - clones this repo
 - installs dependencies

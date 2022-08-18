@@ -7,10 +7,10 @@
     group: oinstall
 
 - name: install database server
-  ansible.builtin.command: 
-    argv: 
+  ansible.builtin.command:
+    argv:
       - "{{ stage }}/database/runInstaller"
-      - -silent 
+      - -silent
       - -waitforcompletion
       - -ignoreSysPrereqs
       - -ignorePrereq

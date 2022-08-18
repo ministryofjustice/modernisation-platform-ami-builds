@@ -2,10 +2,10 @@
     file: patches.yml
 
 - name: copy OPatch from s3 bucket
-  ansible.builtin.command: 
+  ansible.builtin.command:
     cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ opatch }} {{ stage }}
     creates: "{{ stage }}/{{ opatch }}"
-  
+
 - name: backup existing OPatch directories
   ansible.builtin.archive:
     path: "{{ item }}/OPatch"
@@ -14,7 +14,7 @@
     remove: yes
     owner: oracle
     group: oinstall
-  loop: 
+  loop:
     - "{{ database_home }}"
     - "{{ grid_home }}"
 
@@ -26,6 +26,6 @@
     group: oinstall
     mode: u=rwX,g=rX,o=rX
     remote_src: yes
-  loop: 
+  loop:
     - "{{ database_home }}"
     - "{{ grid_home }}"

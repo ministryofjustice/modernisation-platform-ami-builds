@@ -2,7 +2,7 @@
     file: patches.yml
 
 - name: copy patches from s3 bucket
-  ansible.builtin.command: 
+  ansible.builtin.command:
     cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ patch_set }} .
     creates: "{{ patch_set }}"
     chdir: "{{ stage }}"
@@ -22,22 +22,22 @@
   become_user: oracle
   environment: "{{ grid_env }}"
   failed_when: db_result.rc > 1
-    
+
 - name: create temporary TEST database for patching purposes
   block:
-  - ansible.builtin.lineinfile:
-      path: "{{ database_home }}/dbs/initTEST.ora"
-      regexp: '^db_name=TEST'
-      line: db_name=TEST
-      create: yes
-      group: oinstall
-      owner: oracle
+    - ansible.builtin.lineinfile:
+        path: "{{ database_home }}/dbs/initTEST.ora"
+        regexp: "^db_name=TEST"
+        line: db_name=TEST
+        create: yes
+        group: oinstall
+        owner: oracle
 
-  - ansible.builtin.shell: |
-      srvctl add database -d TEST -o "{{ database_home }}" -s nomount
-      srvctl start database -d TEST
-    become_user: oracle
-    environment: "{{ grid_env }}"
+    - ansible.builtin.shell: |
+        srvctl add database -d TEST -o "{{ database_home }}" -s nomount
+        srvctl start database -d TEST
+      become_user: oracle
+      environment: "{{ grid_env }}"
 
   when: db_result.rc != 0
 
@@ -59,7 +59,7 @@
     patch_ids: "{{ patches_batch | join(',') }}"
   become_user: oracle
 
-- name: apply patch "{{ patches_single }}" to database home 
+- name: apply patch "{{ patches_single }}" to database home
   ansible.builtin.command: "{{ database_home }}/OPatch/opatch apply {{ patch }}/{{ item }} -silent -oh {{ database_home }}"
   loop: "{{ patches_single }}"
   become_user: oracle

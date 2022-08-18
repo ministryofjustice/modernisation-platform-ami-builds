@@ -25,21 +25,21 @@
 - name: configure explicit huge pages
   ansible.builtin.lineinfile:
     path: /etc/sysctl.conf
-    regexp: '^vm.nr_hugepages'
+    regexp: "^vm.nr_hugepages"
     line: vm.nr_hugepages={{ pages }}
     create: yes
 
 - name: load new explicit huge page setting
   ansible.builtin.command: sysctl -p
 
-- name: check number of pages created  
+- name: check number of pages created
   ansible.builtin.command: awk '/^HugePages_Total/ {print $2}' /proc/meminfo # sed -rn 's/^(HugePages_Total:\s*)(.*)$/\2/p' /proc/meminfo
   register: hugepages_total
 
 - name: check expected number of pages created
   ansible.builtin.assert:
     that: "{{ ( hugepages_total.stdout_lines[0] | int ) == ( pages | int ) }}"
-  tags: 
+  tags:
     - assert-pages
     - never # this check wont run unless you specify it.  Running it can cause problems when creating AMIs
 
