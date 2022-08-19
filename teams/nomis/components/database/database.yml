@@ -54,8 +54,8 @@ phases:
 
               # Download playbook
               mkdir /tmp/database-ansible-playbook && cd "$_"
-              aws s3 cp s3://ec2-image-builder-nomis20220314103938567000000001/playbook.tar .
-              tar -xf playbook.tar
+              git clone "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              cd modernisation-platform-ami-builds/ansible
 
               # Install requirements in virtual env
               python3.9 -m pip install -r requirements.txt
@@ -65,7 +65,7 @@ phases:
               # Get required extra vars and run ansible
               INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
               PY_INTERPRETER=$(which python3.9) 
-              ansible-playbook playbooks/ssm-oracle-local.yml \
+              ansible-playbook ../teams/nomis/ansible/playbooks/database-ami-provisioning.yml \
               --connection=local \
               --inventory localhost, \
               --extra-vars "instance_id=$INSTANCE_ID ansible_python_interpreter=$PY_INTERPRETER s3_bucket_with_prefix=ec2-image-builder-nomis20220314103938567000000001/oracle-11g-software" \

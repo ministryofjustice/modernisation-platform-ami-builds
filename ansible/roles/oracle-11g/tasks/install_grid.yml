@@ -2,7 +2,7 @@
   template:
     src: "{{ item }}.j2"
     dest: "{{ stage }}/{{ item }}"
-    mode: u=rw,g=r
+    mode: u=rw,g=r,o=r
     owner: oracle
     group: oinstall
   loop:

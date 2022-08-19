@@ -48,3 +48,7 @@ oracle_asm_flash_disks:
     label: FLASH01
   - device: /dev/sdk
     label: FLASH02
+
+oracle_externaljob_bin_path: /u01/app/oracle/product/11.2.0.4/db_1/bin/extjob
+oracle_externaljob_rdbms_path: /u01/app/oracle/product/11.2.0.4/db_1/rdbms/admin
+oracle_externaljob_file: externaljob.ora
