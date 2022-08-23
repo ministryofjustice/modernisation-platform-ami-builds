@@ -36,6 +36,12 @@ locals {
           launch_permission_user_ids = local.ami_share_accounts
         }
       }
+
+      image_pipeline = {
+        schedule = {
+          schedule_expression = "cron(0 0 1 * ? *)"
+        }
+      }
     }
   }
 }
