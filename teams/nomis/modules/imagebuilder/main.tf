@@ -60,12 +60,12 @@ resource "aws_imagebuilder_image_recipe" "this" {
     }
   }
 
-  #  dynamic "component" {
-  #    for_each = toset(var.image_recipe.components_aws)
-  #    content {
-  #      component_arn = "arn:aws:imagebuilder:${var.region}:aws:component/${component.key}/x.x.x"
-  #    }
-  #  }
+  dynamic "component" {
+    for_each = toset(var.image_recipe.components_aws)
+    content {
+      component_arn = "arn:aws:imagebuilder:${var.region}:aws:component/${component.key}/x.x.x"
+    }
+  }
 
   dynamic "component" {
     for_each = toset(var.image_recipe.components_custom)
