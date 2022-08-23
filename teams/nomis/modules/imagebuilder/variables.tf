@@ -14,8 +14,8 @@ variable "name" {
 }
 
 variable "configuration_version" {
-  type        = number
-  description = "Version number of this configuration, increment on changes"
+  type        = string
+  description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
 }
 
 variable "description" {

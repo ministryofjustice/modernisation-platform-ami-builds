@@ -4,7 +4,7 @@ locals {
   imagebuilders = {
 
     "RHEL7-9_BaseImage" = {
-      configuration_version = "1"
+      configuration_version = "1.0.1"
       description           = "nomis RHEL7.9 base image"
 
       tags = {

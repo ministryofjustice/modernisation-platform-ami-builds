@@ -1,6 +1,6 @@
 locals {
   name             = "${var.team_name}_${var.name}"
-  name_and_version = "${local.name}_v${var.configuration_version}"
+  name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
   default_tags = {
     pipeline-name    = local.name
     pipeline-version = var.configuration_version
