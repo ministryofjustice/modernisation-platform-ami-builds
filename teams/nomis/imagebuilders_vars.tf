@@ -18,6 +18,7 @@ locals {
         }
         block_device_mappings_ebs = []
         components_aws = [
+          "update-linux",
           "aws-cli-version-2-linux",
           "amazon-cloudwatch-agent-linux"
         ]
