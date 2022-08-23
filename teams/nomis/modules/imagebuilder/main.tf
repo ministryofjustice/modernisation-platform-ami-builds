@@ -71,7 +71,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   dynamic "component" {
     for_each = toset(var.image_recipe.components_custom)
     content {
-      component_arn = aws_imagebuilder_component.rhel7_9_base_components[component.key].arn
+      component_arn = aws_imagebuilder_component.this[component.key].arn
     }
   }
 
