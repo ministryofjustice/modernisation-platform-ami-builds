@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.3"
+    configuration_version = "1.0.4"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -29,7 +29,7 @@ locals {
 
     distribution_configuration = {
       ami_distribution_configuration = {
-        kms_key_id                 = data.aws_kms_key.ebs_encryption_cmk.arn
+        kms_key_id                 = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
         launch_permission_user_ids = local.ami_share_accounts
       }
     }
