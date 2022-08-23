@@ -108,14 +108,9 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     ami_distribution_configuration {
-      name       = "${local.name}_{{ imagebuilder:buildDate }}"
-      kms_key_id = var.distribution_configuration.ami_distribution_configuration.kms_key_id
-
-      launch_permission {
-        user_ids = var.distribution_configuration.ami_distribution_configuration.launch_permission_user_ids
-      }
-
-      ami_tags = local.tags
+      name               = "${local.name}_{{ imagebuilder:buildDate }}"
+      target_account_ids = var.distribution_configuration.ami_distribution_configuration.target_account_ids
+      ami_tags           = local.tags
     }
   }
 }
