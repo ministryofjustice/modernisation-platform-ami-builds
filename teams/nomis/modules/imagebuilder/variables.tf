@@ -71,9 +71,10 @@ variable "image_pipeline" {
 }
 
 variable "core_shared_services" {
-  type = object({
-    repo_tfstate            = map(any)
-    imagebuilder_mp_tfstate = map(any)
-  })
+  # Set the tfstate variables to the corresponding data.terraform_remote_state output
+  # type = object({
+  #   repo_tfstate
+  #   imagebuilder_mp_tfstate
+  # })
   description = "core-shared-services terraform state outputs"
 }
