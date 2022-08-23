@@ -54,7 +54,8 @@ variable "infrastructure_configuration" {
 variable "distribution_configuration" {
   type = object({
     ami_distribution_configuration = object({
-      target_account_ids = list(string)
+      kms_key_id = string
+      # target_account_ids = list(string)
     })
   })
   description = "Distribution configuration, see aws_imagebuilder_distribution_configuration documentation for details on the parameters"

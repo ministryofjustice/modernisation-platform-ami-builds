@@ -109,7 +109,9 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
 
     ami_distribution_configuration {
       name               = "${local.name}_{{ imagebuilder:buildDate }}"
-      target_account_ids = var.distribution_configuration.ami_distribution_configuration.target_account_ids
+      description        = var.description
+      kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", null)
+      target_account_ids = lookup(var.distribution_configuration.ami_distribution_configuration, "target_account_ids", null)
       ami_tags           = local.tags
     }
   }
