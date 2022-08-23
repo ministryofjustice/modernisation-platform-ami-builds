@@ -14,11 +14,11 @@ parameters:
 phases:
   - name: build
     steps:
-    - name: UpdateOS
-      action: UpdateOS
+      - name: UpdateOS
+        action: UpdateOS
 
-    - name: InstallPackages
-      action: ExecuteBash
-      inputs:
-        commands:
-          - sudo yum install wget curl unzip git python nc ca-certificates -y
+      - name: InstallPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo yum install wget curl unzip git python nc ca-certificates -y
