@@ -20,7 +20,7 @@ data "aws_ami" "parent" {
 
 resource "aws_imagebuilder_component" "this" {
   for_each = {
-    for file in var.image_recipe.components_custom : file => yamldecode(file)
+    for component_filename in var.image_recipe.components_custom : file => yamldecode(file(component_filename))
   }
 
   name        = each.value.name
