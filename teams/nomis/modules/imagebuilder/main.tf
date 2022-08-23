@@ -1,9 +1,9 @@
 locals {
   name             = "${var.team_name}_${var.name}"
-  name_and_version = "${local.name}_${var.configuration_version}"
+  name_and_version = "${local.name}_v${var.configuration_version}"
   default_tags = {
-    pipeline-name             = local.name
-    weblogic-pipeline-version = var.configuration_version
+    pipeline-name    = local.name
+    pipeline-version = var.configuration_version
   }
   tags = merge(local.default_tags, var.tags)
 }
@@ -107,7 +107,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     ami_distribution_configuration {
-      name       = local.name
+      name       = "${local.name}_{{ imagebuilder:buildDate }}"
       kms_key_id = var.distribution_configuration.ami_distribution_configuration.kms_key_id
 
       launch_permission {
