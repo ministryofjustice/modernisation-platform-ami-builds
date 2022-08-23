@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.2"
+    configuration_version = "1.0.3"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -18,7 +18,9 @@ locals {
         "aws-cli-version-2-linux",
         "amazon-cloudwatch-agent-linux"
       ]
-      components_custom = []
+      components_custom = [
+        "components/RHEL7-9_BaseImage.yml"
+      ]
     }
 
     infrastructure_configuration = {
