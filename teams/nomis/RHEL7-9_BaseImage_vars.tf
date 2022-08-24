@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.6"
+    configuration_version = "1.0.7"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -15,6 +15,7 @@ locals {
       block_device_mappings_ebs = []
       components_aws = [
         "update-linux",
+        "stig-build-linux-medium",
         "aws-cli-version-2-linux",
         "amazon-cloudwatch-agent-linux"
       ]
