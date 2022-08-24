@@ -1,10 +1,23 @@
 locals {
   name             = "${var.team_name}_${var.name}"
   name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
-  default_tags = {
-    pipeline-name    = local.name
-    pipeline-version = var.configuration_version
+
+  components_custom_yaml = {
+    for component_filename in var.image_recipe.components_custom :
+    component_filename => yamldecode(file(component_filename))
   }
+
+  components_custom_versions = [
+    for component_filename, component_yaml in local.components_custom_yaml :
+    join("/", component_yaml.name, component_yaml.parameters[0].Version.default)
+  ]
+
+  default_tags = {
+    pipeline-name              = local.name
+    pipeline-version           = var.configuration_version
+    components-custom-versions = join(" ", local.components_custom_versions)
+  }
+
   tags = merge(local.default_tags, var.tags)
 }
 
@@ -19,10 +32,7 @@ data "aws_ami" "parent" {
 }
 
 resource "aws_imagebuilder_component" "this" {
-  for_each = {
-    for component_filename in var.image_recipe.components_custom :
-    component_filename => yamldecode(file(component_filename))
-  }
+  for_each = local.components_custom_yaml
 
   name        = each.value.name
   description = each.value.description
