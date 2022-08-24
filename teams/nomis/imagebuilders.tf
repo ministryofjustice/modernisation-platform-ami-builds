@@ -8,6 +8,7 @@ module "imagebuilder" {
   configuration_version        = each.value.configuration_version
   description                  = each.value.description
   tags                         = merge(local.tags, each.value.tags)
+  kms_key_id                   = data.aws_kms_key.hmpps_ebs_encryption_cmk
   image_recipe                 = each.value.image_recipe
   infrastructure_configuration = each.value.infrastructure_configuration
   distribution_configuration   = each.value.distribution_configuration

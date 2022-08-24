@@ -50,6 +50,7 @@ resource "aws_imagebuilder_component" "this" {
   platform    = each.value.parameters[1].Platform.default
   version     = each.value.parameters[0].Version.default
   data        = file(each.key)
+  kms_key_id  = var.kms_key_id
   tags        = local.tags
 
   lifecycle {
@@ -74,7 +75,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
       ebs {
         delete_on_termination = lookup(block_device_mapping.value, "delete_on_termination", null)
         encrypted             = lookup(block_device_mapping.value, "encrypted", null)
-        kms_key_id            = lookup(block_device_mapping.value, "kms_key_id", null)
+        kms_key_id            = lookup(block_device_mapping.value, "kms_key_id", var.kms_key_id)
         volume_size           = lookup(block_device_mapping.value, "volume_size", null)
         volume_type           = lookup(block_device_mapping.value, "volume_type", null)
         iops                  = lookup(block_device_mapping.value, "iops", null)
@@ -131,7 +132,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     ami_distribution_configuration {
       name               = "${local.name}_{{ imagebuilder:buildDate }}"
       description        = var.description
-      kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", null)
+      kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", var.kms_key_id)
       target_account_ids = lookup(var.distribution_configuration.ami_distribution_configuration, "target_account_ids", null)
       ami_tags           = local.tags
     }

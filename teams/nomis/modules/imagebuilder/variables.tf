@@ -28,6 +28,12 @@ variable "tags" {
   description = "Set of tags to apply to resources"
 }
 
+variable "kms_key_id" {
+  type        = string
+  description = "Encryption key to apply to image and components"
+  default     = null
+}
+
 variable "image_recipe" {
   type = object({
     parent_image = object({
@@ -54,8 +60,7 @@ variable "infrastructure_configuration" {
 variable "distribution_configuration" {
   type = object({
     ami_distribution_configuration = object({
-      kms_key_id = string
-      # target_account_ids = list(string)
+      target_account_ids = list(string)
     })
   })
   description = "Distribution configuration, see aws_imagebuilder_distribution_configuration documentation for details on the parameters"

@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.8"
+    configuration_version = "1.0.9"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -12,7 +12,15 @@ locals {
         owner             = "309956199498" # Redhat
         filter_name_value = "RHEL-7.9_HVM-*"
       }
-      block_device_mappings_ebs = []
+      block_device_mappings_ebs = [
+        {
+          device_name           = "/dev/sda1" # root volume
+          encrypted             = true
+          delete_on_termination = true
+          volume_size           = 30
+          volume_type           = "gp3"
+        }
+      ]
       components_aws = [
         "update-linux",
         "stig-build-linux-medium",
@@ -30,7 +38,7 @@ locals {
 
     distribution_configuration = {
       ami_distribution_configuration = {
-        kms_key_id = data.aws_kms_key.ebs_encryption_cmk.arn
+        target_account_ids = local.ami_share_accounts
       }
     }
 
