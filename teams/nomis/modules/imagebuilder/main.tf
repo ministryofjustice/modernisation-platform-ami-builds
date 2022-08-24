@@ -9,7 +9,7 @@ locals {
 
   components_custom_versions = [
     for component_filename, component_yaml in local.components_custom_yaml :
-    join("/", component_yaml.name, component_yaml.parameters[0].Version.default)
+    join("/", [component_yaml.name, component_yaml.parameters[0].Version.default])
   ]
 
   default_tags = {
