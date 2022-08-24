@@ -24,7 +24,7 @@ locals {
     application   = upper(local.team_name)
     is-production = local.is-production
     owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
-    source        = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
+    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
 
   ami_share_accounts = [
