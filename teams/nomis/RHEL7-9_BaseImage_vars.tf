@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.7"
+    configuration_version = "1.0.8"
     description           = "nomis RHEL7.9 base image"
 
     tags = {

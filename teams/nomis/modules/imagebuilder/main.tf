@@ -1,3 +1,18 @@
+data "aws_imagebuilder_component" "this" {
+  for_each = toset(var.image_recipe.components_aws)
+  arn      = "arn:aws:imagebuilder:${var.region}:aws:component/${each.key}/x.x.x"
+}
+
+data "aws_ami" "parent" {
+  most_recent = true
+  owners      = [var.image_recipe.parent_image.owner]
+
+  filter {
+    name   = "name"
+    values = [var.image_recipe.parent_image.filter_name_value]
+  }
+}
+
 locals {
   name             = "${var.team_name}_${var.name}"
   name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
@@ -12,23 +27,19 @@ locals {
     join("/", [component_yaml.name, component_yaml.parameters[0].Version.default])
   ]
 
+  components_aws_versions = [
+    for component_aws in var.image_recipe.components_aws :
+    join("/", [component_aws, data.aws_imagebuilder_component.this[component_aws].version])
+  ]
+
   default_tags = {
-    pipeline-name              = local.name
-    pipeline-version           = var.configuration_version
-    components-custom-versions = join(" ", local.components_custom_versions)
+    image-pipeline               = local.name
+    image-recipe                 = join("/", [local.name, var.configuration_version])
+    infrastructure-configuration = join("/", [local.name, var.configuration_version])
+    component-versions           = join(" ", concat(local.components_aws_versions, local.components_custom_versions))
   }
 
   tags = merge(local.default_tags, var.tags)
-}
-
-data "aws_ami" "parent" {
-  most_recent = true
-  owners      = [var.image_recipe.parent_image.owner]
-
-  filter {
-    name   = "name"
-    values = [var.image_recipe.parent_image.filter_name_value]
-  }
 }
 
 resource "aws_imagebuilder_component" "this" {
@@ -133,6 +144,7 @@ resource "aws_imagebuilder_image_pipeline" "this" {
   image_recipe_arn                 = aws_imagebuilder_image_recipe.this.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.this.arn
+  tags                             = local.tags
 
   schedule {
     schedule_expression = var.image_pipeline.schedule.schedule_expression
