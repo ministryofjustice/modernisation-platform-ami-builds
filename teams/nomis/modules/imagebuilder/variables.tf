@@ -43,6 +43,8 @@ variable "image_recipe" {
     # user_data = string 
     block_device_mappings_ebs = list(object({
       device_name = string
+      volume_size = number
+      volume_type = string
     }))
     components_aws    = list(string)
     components_custom = list(string)

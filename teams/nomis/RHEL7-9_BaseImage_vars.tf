@@ -1,6 +1,6 @@
 locals {
   RHEL7-9_BaseImage = {
-    configuration_version = "1.0.10"
+    configuration_version = "1.1.1"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -14,11 +14,9 @@ locals {
       }
       block_device_mappings_ebs = [
         {
-          device_name           = "/dev/sda1" # root volume
-          encrypted             = true
-          delete_on_termination = true
-          volume_size           = 30
-          volume_type           = "gp3"
+          device_name = "/dev/sda1" # root volume
+          eolume_size = 30
+          volume_type = "gp3"
         }
       ]
       components_aws = [

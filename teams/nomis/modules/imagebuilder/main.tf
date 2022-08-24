@@ -73,12 +73,11 @@ resource "aws_imagebuilder_image_recipe" "this" {
       device_name = block_device_mapping.value.device_name
 
       ebs {
-        delete_on_termination = lookup(block_device_mapping.value, "delete_on_termination", null)
-        encrypted             = lookup(block_device_mapping.value, "encrypted", null)
-        kms_key_id            = lookup(block_device_mapping.value, "kms_key_id", var.kms_key_id)
-        volume_size           = lookup(block_device_mapping.value, "volume_size", null)
-        volume_type           = lookup(block_device_mapping.value, "volume_type", null)
-        iops                  = lookup(block_device_mapping.value, "iops", null)
+        delete_on_termination = true
+        encrypted             = true
+        kms_key_id            = var.kms_key_id
+        volume_size           = block_device_mapping.value.volume_size
+        volume_type           = block_device_mapping.value.volume_type
       }
     }
   }
