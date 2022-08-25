@@ -123,7 +123,8 @@ resource "aws_imagebuilder_distribution_configuration" "database" {
       # }
 
       ami_tags = {
-        Name = local.database_pipeline.distribution.ami_name
+        Name   = "${local.database_pipeline.distribution.ami_name}${var.BRANCH_NAME == "main" ? "" : "-in-development"}"
+        branch = var.BRANCH_NAME
       }
     }
   }

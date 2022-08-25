@@ -27,10 +27,9 @@ locals {
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
 
-  ami_share_accounts = [
-    "${local.environment_management.account_ids["core-shared-services-production"]}",
-    "${local.environment_management.account_ids["nomis-test"]}",
-    "${local.environment_management.account_ids["nomis-production"]}"
-  ]
+  ami_share_accounts = flatten([
+    local.environment_management.account_ids["core-shared-services-production"],
+    local.environment_management.account_ids["nomis-test"]],
+    var.BRANCH_NAME == "main" ? [local.environment_management.account_ids["nomis-production"]] : [])
 
 }
