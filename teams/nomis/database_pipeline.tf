@@ -96,12 +96,12 @@ resource "aws_imagebuilder_infrastructure_configuration" "database" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "database_components" {
-  for_each = { for file in local.database_pipeline.components : file => yamldecode(file("components/database/${file}")) }
+  for_each = { for file in local.database_pipeline.components : file => yamldecode(try(file("components/database/${file}"), templatefile("components/database/templates/${file}.tmpl", { BRANCH_NAME = var.BRANCH_NAME }))) }
 
-  data     = file("components/database/${each.key}")
+  data     = try(file("components/database/${each.key}"), templatefile("components/database/templates/${each.key}.tmpl", { BRANCH_NAME = var.BRANCH_NAME }))
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
-  platform = yamldecode(file("components/database/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/database/${each.key}")).parameters[0].Version.default
+  platform = each.value.parameters[1].Platform.default
+  version  = each.value.parameters[0].Version.default
 
   lifecycle {
     create_before_destroy = true
@@ -123,7 +123,9 @@ resource "aws_imagebuilder_distribution_configuration" "database" {
       # }
 
       ami_tags = {
-        Name = local.database_pipeline.distribution.ami_name
+        Name          = "${local.database_pipeline.distribution.ami_name}${var.BRANCH_NAME == "main" ? "" : "_${var.GH_ACTOR_NAME}"}"
+        branch        = var.BRANCH_NAME
+        is_production = "${var.BRANCH_NAME == "main" ? "true" : "false"}"
       }
     }
   }
