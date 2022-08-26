@@ -20,7 +20,7 @@ env:
   AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_IN_AUTOMATION: true
   TF_VAR_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-  TF_VAR_GH_ACTOR_NAME: ${{ github.event.head_commit.actor.login }}
+  TF_VAR_GH_ACTOR_NAME: ${{ github.event.actor.login }}
 defaults:
   run:
     shell: bash
