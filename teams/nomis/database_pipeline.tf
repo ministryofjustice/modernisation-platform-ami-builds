@@ -61,11 +61,6 @@ resource "aws_imagebuilder_image_recipe" "database" {
     }
   }
 
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
   name              = local.database_pipeline.recipe.name
   parent_image      = data.aws_ami.database.id
   version           = local.database_pipeline.recipe.version
@@ -102,10 +97,6 @@ resource "aws_imagebuilder_component" "database_components" {
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
   platform = each.value.parameters[1].Platform.default
   version  = each.value.parameters[0].Version.default
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_imagebuilder_distribution_configuration" "database" {
