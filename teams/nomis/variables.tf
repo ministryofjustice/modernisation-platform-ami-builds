@@ -5,7 +5,7 @@ variable "BRANCH_NAME" {
 }
 
 variable "GH_ACTOR_NAME" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "GH username triggering Github action"
 }
