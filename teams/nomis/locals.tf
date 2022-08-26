@@ -30,6 +30,6 @@ locals {
   ami_share_accounts = flatten([
     local.environment_management.account_ids["core-shared-services-production"],
     local.environment_management.account_ids["nomis-test"]],
-    var.BRANCH_NAME == "main" ? [local.environment_management.account_ids["nomis-production"]] : [])
+  var.BRANCH_NAME == "main" ? [local.environment_management.account_ids["nomis-production"]] : [])
 
 }
