@@ -32,6 +32,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/nomis/modules/imagebuilder"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/sprinkler"
     schedule:
       interval: "daily"
