@@ -33,7 +33,7 @@ locals {
   ]
 
   default_tags = {
-    Name                         = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}"
+    name                         = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}"
     image-pipeline               = local.name
     image-recipe                 = join("/", [local.name, var.configuration_version])
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
