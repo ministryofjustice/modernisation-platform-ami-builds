@@ -22,7 +22,8 @@ locals {
   tags = {
     business-unit = "HMPPS"
     application   = upper(local.team_name)
-    is-production = local.is-production
+    branch        = var.BRANCH_NAME
+    is-production = "${var.BRANCH_NAME == "main" ? "true" : "false"}"
     owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
