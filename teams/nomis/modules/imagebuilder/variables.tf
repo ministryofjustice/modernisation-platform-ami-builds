@@ -89,11 +89,9 @@ variable "core_shared_services" {
 variable "branch" {
   type        = string
   description = "Name of the branch to use for the image"
-  default     = var.BRANCH_NAME
 }
 
 variable "gh_actor" {
   type        = string
   description = "Name of the GitHub actor to use for the image"
-  default     = var.GH_ACTOR_NAME
 }
