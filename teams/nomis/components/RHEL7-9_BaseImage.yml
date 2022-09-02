@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.4"
+      default: "1.0.5"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -22,9 +22,3 @@ phases:
         inputs:
           commands:
             - sudo yum install wget curl unzip git python nc ca-certificates -y
-
-      - name: RetainSSMAgentInstallation
-        action: ExecuteBash
-        inputs:
-          commands:
-            - sudo rm -rf /tmp/imagebuilder_service/ssm_installed

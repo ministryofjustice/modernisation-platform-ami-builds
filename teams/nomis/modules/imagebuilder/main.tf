@@ -100,6 +100,10 @@ resource "aws_imagebuilder_image_recipe" "this" {
   lifecycle {
     create_before_destroy = true
   }
+
+  systems_manager_agent {
+    uninstall_after_build = false
+  }
 }
 
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
@@ -134,7 +138,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
       description        = var.description
       kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", var.kms_key_id)
       target_account_ids = lookup(var.distribution_configuration.ami_distribution_configuration, "target_account_ids", null)
-      ami_tags           = local.tags
+      ami_tags           = merge(local.tags, { Name = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}" })
     }
   }
 }
