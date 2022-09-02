@@ -100,6 +100,10 @@ resource "aws_imagebuilder_image_recipe" "this" {
   lifecycle {
     create_before_destroy = true
   }
+
+  systems_manager_agent {
+    uninstall_after_build = false
+  }
 }
 
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
