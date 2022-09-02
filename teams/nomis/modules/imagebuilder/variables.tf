@@ -85,3 +85,13 @@ variable "core_shared_services" {
   # })
   description = "core-shared-services terraform state outputs"
 }
+
+variable "branch" {
+  type        = string
+  description = "Name of the branch to use for the image"
+}
+
+variable "gh_actor" {
+  type        = string
+  description = "Name of the GitHub actor to use for the image"
+}
