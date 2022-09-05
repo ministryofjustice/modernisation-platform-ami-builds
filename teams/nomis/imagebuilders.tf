@@ -13,6 +13,8 @@ module "imagebuilder" {
   infrastructure_configuration = each.value.infrastructure_configuration
   distribution_configuration   = each.value.distribution_configuration
   image_pipeline               = each.value.image_pipeline
+  branch                       = each.value.branch
+  gh_actor                     = each.value.gh_actor
 
   core_shared_services = {
     repo_tfstate            = data.terraform_remote_state.modernisation-platform-repo.outputs
