@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "0.0.5"
+      default: "0.0.6"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -23,29 +23,29 @@ phases:
           commands:
             - sudo yum install wget curl unzip git nc ca-certificates -y
 
-      - name: InstallPython
-        action: ExecuteBash
-        inputs:
-          commands:
-            - |
-              # Install Python 3.6.3 pre-requisites
-              sudo yum groupinstall "development tools" -y
-              sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel expat-devel gcc xz -y
+      # - name: InstallPython
+      #   action: ExecuteBash
+      #   inputs:
+      #     commands:
+      #       - |
+      #         # Install Python 3.6.3 pre-requisites
+      #         sudo yum groupinstall "development tools" -y
+      #         sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel expat-devel gcc xz -y
 
-              # Download and build Python 3.6.3
-              cd /tmp
-              sudo wget --no-check-certificate http://python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
-              tar xf Python-3.6.3.tar.xz
-              rm -f Python-3.6.3.tar.xz
-              cd Python-3.6.3
-              ./configure
-              sudo make altinstall
+      #         # Download and build Python 3.6.3
+      #         cd /tmp
+      #         sudo wget --no-check-certificate http://python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
+      #         tar xf Python-3.6.3.tar.xz
+      #         rm -f Python-3.6.3.tar.xz
+      #         cd Python-3.6.3
+      #         ./configure
+      #         sudo make altinstall
 
-              # Install and upgrade Pip and virtualenv module
-              cd /tmp
-              sudo wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
-              python3.6 get-pip.py
-              python3.6 -m pip install --upgrade pip
+      #         # Install and upgrade Pip and virtualenv module
+      #         cd /tmp
+      #         sudo wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+      #         python3.6 get-pip.py
+      #         python3.6 -m pip install --upgrade pip
 
       # Install ansible in venv to be done here
       # - name: InstallAnsible
