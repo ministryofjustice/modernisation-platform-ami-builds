@@ -91,9 +91,9 @@ resource "aws_imagebuilder_infrastructure_configuration" "database" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "database_components" {
-  for_each = { for file in local.database_pipeline.components : file => yamldecode(try(file("components/database/${file}"), templatefile("components/database/templates/${file}.tmpl", { BRANCH_NAME = var.BRANCH_NAME }))) }
+  for_each = { for file in local.database_pipeline.components : file => yamldecode(try(file("components/database/${file}"), templatefile("components/database/templates/${file}.tmpl", { var.run_ansible_from_branch ? BRANCH_NAME = var.BRANCH_NAME : BRANCH_NAME = "main" }))) }
 
-  data     = try(file("components/database/${each.key}"), templatefile("components/database/templates/${each.key}.tmpl", { BRANCH_NAME = var.BRANCH_NAME }))
+  data     = try(file("components/database/${each.key}"), templatefile("components/database/templates/${each.key}.tmpl", { var.run_ansible_from_branch ? BRANCH_NAME = var.BRANCH_NAME : BRANCH_NAME = "main" }))
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
   platform = each.value.parameters[1].Platform.default
   version  = each.value.parameters[0].Version.default
