@@ -22,24 +22,26 @@ locals {
     component_filename => yamldecode(file(component_filename))
   }
 
-  components_custom_versions = [
+  components_custom_versions = {
     for component_filename, component_yaml in local.components_custom_yaml :
-    join("/", [component_yaml.name, component_yaml.parameters[0].Version.default])
-  ]
+    "${component_yaml.name}-version" => component_yaml.parameters[0].Version.default
+  }
 
-  components_aws_versions = [
+  components_aws_versions = {
     for component_aws in var.image_recipe.components_aws :
-    join("/", [component_aws, data.aws_imagebuilder_component.this[component_aws].version])
-  ]
+    "${component_aws}-version" => data.aws_imagebuilder_component.this[component_aws].version
+  }
+
+  component_version_tags = merge(local.components_custom_tags, local.components_aws_tags)
 
   default_tags = {
+    Name = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}"
     image-pipeline               = local.name
     image-recipe                 = join("/", [local.name, var.configuration_version])
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
-    component-versions           = join(" ", concat(local.components_aws_versions, local.components_custom_versions))
   }
 
-  tags = merge(local.default_tags, var.tags)
+  tags = merge(local.default_tags, local.component_version_tags, var.tags)
 }
 
 resource "aws_imagebuilder_component" "this" {
