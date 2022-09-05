@@ -22,7 +22,7 @@ phases:
         inputs:
           commands:
             - sudo yum install wget curl unzip git nc ca-certificates -y
-      
+
       - name: InstallPython
         action: ExecuteBash
         inputs:
