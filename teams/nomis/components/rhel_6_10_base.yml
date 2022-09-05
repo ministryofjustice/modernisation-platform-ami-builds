@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "0.0.2"
+      default: "0.0.3"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -39,7 +39,7 @@ phases:
               rm -f Python-3.6.3.tar.xz
               cd Python-3.6.3
               ./configure
-              sudo make && make --alt-install
+              sudo make altinstall
 
               # Install and upgrade Pip and virtualenv module
               cd /tmp
