@@ -1,5 +1,5 @@
 data "aws_imagebuilder_component" "this" {
-  for_each = toset(var.image_recipe.components_aws)
+  for_each = (var.image_recipe.components_aws == null) ? [] : toset(var.image_recipe.components_aws)
   arn      = "arn:aws:imagebuilder:${var.region}:aws:component/${each.key}/x.x.x"
 }
 
