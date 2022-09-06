@@ -2,6 +2,8 @@
 name: nomis
 on:
   push:
+    branches:
+     - main
     paths:
       - 'teams/nomis/**'
       - '.github/workflows/nomis.yml'
