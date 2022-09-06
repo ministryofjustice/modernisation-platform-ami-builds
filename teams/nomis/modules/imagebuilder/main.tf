@@ -32,7 +32,7 @@ locals {
     "${component_aws}-version" => data.aws_imagebuilder_component.this[component_aws].version
   }
 
-  component_version_tags = merge(local.components_custom_tags, local.components_aws_tags)
+  component_version_tags = merge(local.components_custom_versions, local.components_aws_versions)
 
   default_tags = {
     Name = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}"
@@ -41,7 +41,7 @@ locals {
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
   }
 
-  tags = merge(local.default_tags, component_version_tags, var.tags)
+  tags = merge(local.default_tags, local.component_version_tags, var.tags)
 }
 
 resource "aws_imagebuilder_component" "this" {
