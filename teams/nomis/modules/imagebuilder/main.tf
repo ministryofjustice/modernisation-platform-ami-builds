@@ -35,7 +35,6 @@ locals {
   component_version_tags = merge(local.components_custom_versions, local.components_aws_versions)
 
   default_tags = {
-    Name = "${local.name}_${var.branch == "main" ? "" : "_${var.gh_actor}"}"
     image-pipeline               = local.name
     image-recipe                 = join("/", [local.name, var.configuration_version])
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
