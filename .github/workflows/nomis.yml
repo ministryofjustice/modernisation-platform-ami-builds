@@ -1,21 +1,20 @@
 ---
 name: nomis
 on:
-  # push:
-  #   branches:
-  #     - nomis/*
-  #   paths:
-  #     - 'teams/nomis/**'
-  #     - '.github/workflows/nomis.yml'
-  #     - '!teams/nomis/pipelines/**'
-
-  pull_request:
-    branches:
-      - main
+  push:
     paths:
       - 'teams/nomis/**'
       - '.github/workflows/nomis.yml'
-      - '!teams/nomis/pipelines/jumpserver/**'
+      - '!teams/nomis/pipelines/**'
+
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types: [opened, edited, reopened, synchronize]
+  #   paths:
+  #     - 'teams/nomis/**'
+  #     - '.github/workflows/nomis.yml'
+  #     - '!teams/nomis/pipelines/jumpserver/**'
   workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -32,6 +31,12 @@ jobs:
     name: Plan - nomis pipelines
     runs-on: ubuntu-latest
     steps:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            nomis-pipelines:
+              - 'src/**'
       - name: Checkout Repository
         uses: actions/checkout@v2.3.4
       - name: Load and Configure Terraform

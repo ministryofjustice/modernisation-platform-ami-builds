@@ -1,20 +1,20 @@
 ---
 name: nomis-pipelines
 on:
-  # push:
-  #   branches:
-  #     - nomis/*
-  #   paths:
-  #     - '.github/workflows/nomis-pipelines-jumpserver.yml'
-  #     - 'teams/nomis/pipelines/**'
-
-  pull_request:
-    branches:
-      - main
-#     types: [opened, edited, reopened, synchronize]
+  push:
+    # branches:
+    #   - nomis/*
     paths:
-      - 'teams/nomis/pipelines/**'
       - '.github/workflows/nomis-pipelines-jumpserver.yml'
+      - 'teams/nomis/pipelines/**'
+
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types: [opened, edited, reopened, synchronize]
+  #   paths:
+  #     - 'teams/nomis/pipelines/**'
+  #     - '.github/workflows/nomis-pipelines-jumpserver.yml'
   workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
