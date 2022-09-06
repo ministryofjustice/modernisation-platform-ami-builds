@@ -47,25 +47,25 @@ jobs:
         env:
           TF_ENV: production
 
-  # deploy-nomis:
-  #   name: Deploy - nomis pipelines
-  #   needs: plan-nomis
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: core-shared-services-production
-  #   steps:
-  #     - name: Checkout Repository
-  #       uses: actions/checkout@v2.3.4
-  #     - name: Load and Configure Terraform
-  #       uses: hashicorp/setup-terraform@v2.0.0
-  #       with:
-  #         terraform_version: 1.0.1
-  #         terraform_wrapper: false
-  #     - name: Terraform apply - nomis pipelines
-  #       run: |
-  #         echo "Terraform apply - ${TF_ENV}"
-  #         bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
-  #         terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
-  #         bash scripts/terraform-apply.sh teams/nomis/pipelines/jumpserver
-  #       env:
-  #         TF_ENV: production
+  deploy-nomis:
+    name: Deploy - nomis pipelines
+    needs: plan-nomis
+    runs-on: ubuntu-latest
+    environment:
+      name: core-shared-services
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2.3.4
+      - name: Load and Configure Terraform
+        uses: hashicorp/setup-terraform@v2.0.0
+        with:
+          terraform_version: 1.0.1
+          terraform_wrapper: false
+      - name: Terraform apply - nomis pipelines
+        run: |
+          echo "Terraform apply - ${TF_ENV}"
+          bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
+          terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
+          bash scripts/terraform-apply.sh teams/nomis/pipelines/jumpserver
+        env:
+          TF_ENV: production
