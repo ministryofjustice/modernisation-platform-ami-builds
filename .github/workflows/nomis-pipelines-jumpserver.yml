@@ -64,7 +64,7 @@ jobs:
       - name: Terraform apply - nomis pipelines
         run: |
           echo "Terraform apply - ${TF_ENV}"
-          bash scripts/terraform-init.sh teams/nomis
+          bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
           terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
           bash scripts/terraform-apply.sh teams/nomis/pipelines/jumpserver
         env:
