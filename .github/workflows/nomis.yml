@@ -12,7 +12,6 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, edited, reopened, synchronize]
     paths:
       - 'teams/nomis/**'
       - '.github/workflows/nomis.yml'
