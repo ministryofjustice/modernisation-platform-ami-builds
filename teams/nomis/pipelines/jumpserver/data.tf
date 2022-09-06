@@ -7,10 +7,10 @@ data "aws_kms_key" "ebs_encryption_cmk" {
   key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["nomis-test"]}:alias/nomis-image-builder"
 }
 
-data "aws_launch_template" "weblogic-launch-templates" {
+data "aws_launch_template" "jumpserver-launch-template" {
   provider = aws.nomis-test
   filter {
-    name   = "tag:environment-name"
-    values = ["nomis-test"]
+    name   = "tag:Name"
+    values = ["jumpserver_windows"]
   }
 }

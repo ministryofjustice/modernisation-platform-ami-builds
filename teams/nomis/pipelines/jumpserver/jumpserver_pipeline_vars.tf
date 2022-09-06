@@ -8,7 +8,7 @@ locals {
     recipe = {
       name         = join("", [local.team_name, "_jumpserver"])
       parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-windowsserver2022/x.x.x"
-      version      = "1.0.7"
+      version      = "1.0.8"
       device_name  = "/dev/sda1"
 
       ebs_block_device = [

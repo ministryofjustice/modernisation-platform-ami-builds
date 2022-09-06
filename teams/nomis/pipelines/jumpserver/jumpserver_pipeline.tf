@@ -111,5 +111,10 @@ resource "aws_imagebuilder_distribution_configuration" "jumpserver" {
         Name = local.jumpserver_pipeline.distribution.ami_name
       }
     }
+    launch_template_configuration {
+      default            = true
+      account_id         = local.environment_management.account_ids["nomis-test"]
+      launch_template_id = data.aws_launch_template.jumpserver-launch-template.id
+    }
   }
 }
