@@ -40,7 +40,7 @@ variable "image_recipe" {
       owner             = string
       filter_name_value = string
     })
-    user_data = string
+    user_data = optional(string)
     block_device_mappings_ebs = list(object({
       device_name = string
       volume_size = number
