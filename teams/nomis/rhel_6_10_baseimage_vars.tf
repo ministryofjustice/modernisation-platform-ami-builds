@@ -1,5 +1,5 @@
 locals {
-  rhel_6_10_base = {
+  rhel_6_10_baseimage = {
     gh_actor              = var.GH_ACTOR_NAME
     branch                = var.BRANCH_NAME
     configuration_version = "0.0.7"
@@ -21,14 +21,11 @@ locals {
           volume_type = "gp3"
         }
       ]
-      components_aws = [
-        "update-linux",
-        "stig-build-linux-medium",
-        "aws-cli-version-2-linux",
-        "amazon-cloudwatch-agent-linux"
-      ]
+      components_aws = []
+      # rhel6.10 cannot use AWS components, these are supplied via user_data below
+      
       components_custom = [
-        "components/rhel_6_10_base.yml"
+        "components/rhel_6_10_baseimage.yml"
       ]
 
       user_data = <<EOF

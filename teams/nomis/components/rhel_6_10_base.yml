@@ -1,5 +1,5 @@
 ---
-name: rhel_6_10_base
+name: rhel_6_10_baseimage
 description: rhel 6.10 base image component.
 schemaVersion: 1.0
 parameters:
