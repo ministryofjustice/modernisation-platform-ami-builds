@@ -1,0 +1,40 @@
+---
+name: rhel_7_9_baseimage
+description: RHEL7.9 BaseImage provisioner component.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.6"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: UpdateOS
+        action: UpdateOS
+
+      - name: InstallPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo yum install wget curl unzip git nc ca-certificates gcc screen openssl-devel bzip2-devel libffi-devel zlib-devel -y
+
+      - name: InstallPython3-9
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+
+              # install python 3.9
+              wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
+              tar xzf Python-3.9.6.tgz
+              rm -f Python-3.9.6.tgz
+              cd Python-3.9.6
+              ./configure --enable-optimizations
+              sudo make altinstall

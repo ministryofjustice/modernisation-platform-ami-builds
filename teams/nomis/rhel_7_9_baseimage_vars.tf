@@ -1,8 +1,6 @@
 locals {
-  RHEL7-9_BaseImage = {
-    gh_actor              = var.GH_ACTOR_NAME
-    branch                = var.BRANCH_NAME
-    configuration_version = "1.1.5"
+  rhel_7_9_baseimage = {
+    configuration_version = "1.1.6"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -28,7 +26,7 @@ locals {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "components/RHEL7-9_BaseImage.yml"
+        "components/rhel_7_9_baseimage.yml"
       ]
     }
 
