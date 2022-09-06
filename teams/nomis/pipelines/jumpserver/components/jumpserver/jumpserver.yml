@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
+      default: "1.0.2"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -27,7 +27,7 @@ phases:
 
               # Copy deployment config files
               $deployment_folder = "C:\Windows\Sun\Java\Deployment"
-              New-Item -Path $deployment_folder -ItemType Directory -Force 
+              New-Item -Path $deployment_folder -ItemType Directory -Force
               Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/deployment.config -File $deployment_folder\deployment.config
               Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/deployment.properties -File $deployment_folder\deployment.properties
               Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/trusted.certs -File $deployment_folder\trusted.certs
@@ -69,4 +69,4 @@ phases:
         action: ExecutePowerShell
         inputs:
           commands:
-            - choco install -y prometheus-windows-exporter.install
+            - choco install -y prometheus-windows-exporter.install --version 0.19.0 --params '"/ListenPort:9100"'
