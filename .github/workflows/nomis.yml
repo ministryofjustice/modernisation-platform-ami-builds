@@ -1,22 +1,20 @@
 ---
 name: nomis
 on:
-#   push:
+  push:
 #     branches:
 #       - nomis/*
-#     paths:
-#       - 'teams/nomis/**'
-#       - '.github/workflows/nomis.yml'
-#       - '!teams/nomis/pipelines/**'
-
-  pull_request:
-    branches:
-      - main
-    types: [opened, edited, reopened, synchronize]
     paths:
       - 'teams/nomis/**'
       - '.github/workflows/nomis.yml'
       - '!teams/nomis/pipelines/**'
+#   pull_request:
+#     branches:
+#       - main
+#     types: [opened, edited, reopened]
+#     paths:
+#       - 'teams/nomis/**'
+#       - '.github/workflows/nomis.yml'
   workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
