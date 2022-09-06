@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "0.0.6"
+      default: "0.0.7"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -21,40 +21,50 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - sudo yum install wget curl unzip git nc ca-certificates -y
+            - sudo yum install wget curl unzip git nc ca-certificates zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel xz-devel expat-devel gcc xz -y
+            # libpcap-devel is not available in the default yum repos for RHEL 6.10 although it may be available in the EPEL repo.  We don't need it for our purposes so we'll skip it.
 
-      # - name: InstallPython
+      - name: InstallPython
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+
+              # download and build Python 3.6.3 
+              sudo wget --no-check-certificate http://python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
+              tar xf Python-3.6.3.tar.xz
+              sudo rm -f Python-3.6.3.tar.xz
+              cd Python-3.6.3/
+              ./configure --enable-optimizations
+              sudo make altinstall
+
+      # - name: InstallPipAndVirtualenv
       #   action: ExecuteBash
       #   inputs:
       #     commands:
       #       - |
-      #         # Install Python 3.6.3 pre-requisites
-      #         sudo yum groupinstall "development tools" -y
-      #         sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel expat-devel gcc xz -y
-
-      #         # Download and build Python 3.6.3
+      #         set -e
       #         cd /tmp
-      #         sudo wget --no-check-certificate http://python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
-      #         tar xf Python-3.6.3.tar.xz
-      #         rm -f Python-3.6.3.tar.xz
-      #         cd Python-3.6.3
-      #         ./configure
-      #         sudo make altinstall
 
-      #         # Install and upgrade Pip and virtualenv module
-      #         cd /tmp
+      #         # install pip and virtualenv
       #         sudo wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
       #         python3.6 get-pip.py
       #         python3.6 -m pip install --upgrade pip
+      #         python3.6 -m pip install virtualenv
 
-      # Install ansible in venv to be done here
       # - name: InstallAnsible
       #   action: ExecuteBash
       #   inputs:
       #     commands:
       #       - |
-      #         # Create virtualenv
+      #         set -e
       #         cd /tmp
+      #
+      #         # install ansible and create virtualenv
       #         python3.6 -m venv ansible
       #         source ansible/bin/activate
-      #         python3.6 - pip install ansible-core=2.11.12
+      #         pip install --upgrade pip
+      #         export LC_ALL=en_US.UTF-8
+      #         python3.6 -m pip install ansible-core==2.11.12
