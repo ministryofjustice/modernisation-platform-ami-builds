@@ -31,12 +31,6 @@ jobs:
     name: Plan - nomis pipelines
     runs-on: ubuntu-latest
     steps:
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            nomis-pipelines:
-              - 'src/**'
       - name: Checkout Repository
         uses: actions/checkout@v2.3.4
       - name: Load and Configure Terraform
