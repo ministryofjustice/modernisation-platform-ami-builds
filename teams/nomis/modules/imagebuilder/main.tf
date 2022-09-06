@@ -41,7 +41,7 @@ locals {
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
   }
 
-  tags = merge(local.default_tags, local.component_version_tags, var.tags)
+  tags = merge(local.default_tags, component_version_tags, var.tags)
 }
 
 resource "aws_imagebuilder_component" "this" {
