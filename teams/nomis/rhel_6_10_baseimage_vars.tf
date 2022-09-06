@@ -21,7 +21,7 @@ locals {
           volume_type = "gp3"
         }
       ]
-      
+
       components_custom = [
         "components/rhel_6_10_baseimage.yml"
       ]
