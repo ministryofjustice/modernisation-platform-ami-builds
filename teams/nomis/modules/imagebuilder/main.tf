@@ -64,7 +64,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   parent_image     = data.aws_ami.parent.id
   version          = var.configuration_version
   description      = var.description
-  user_data_base64 = try(base64encode(var.image_recipe.user_data), null)
+  user_data_base64 = base64encode(lookup(var.image_recipe,"user_data", null))
   tags             = local.tags
 
   dynamic "block_device_mapping" {

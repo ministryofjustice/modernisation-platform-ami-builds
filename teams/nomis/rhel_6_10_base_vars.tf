@@ -2,7 +2,7 @@ locals {
   rhel_6_10_base = {
     gh_actor              = var.GH_ACTOR_NAME
     branch                = var.BRANCH_NAME
-    configuration_version = "0.0.6"
+    configuration_version = "0.0.7"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -38,7 +38,7 @@ sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.
 sudo start amazon-ssm-agent
 wget https://s3.eu-west-2.amazonaws.com/amazoncloudwatch-agent-eu-west-2/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
-EOF 
+EOF
 
     }
 
