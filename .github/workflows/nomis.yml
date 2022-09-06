@@ -1,13 +1,13 @@
 ---
 name: nomis
 on:
-  push:
-    branches:
-      - nomis/*
-    paths:
-      - 'teams/nomis/**'
-      - '.github/workflows/nomis.yml'
-      - '!teams/nomis/pipelines/**'
+#   push:
+#     branches:
+#       - nomis/*
+#     paths:
+#       - 'teams/nomis/**'
+#       - '.github/workflows/nomis.yml'
+#       - '!teams/nomis/pipelines/**'
 
   pull_request:
     branches:
