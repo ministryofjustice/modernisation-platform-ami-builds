@@ -21,13 +21,12 @@ locals {
           volume_type = "gp3"
         }
       ]
-      components_aws = []
-      # rhel6.10 cannot use AWS components, these are supplied via user_data below
-
+      
       components_custom = [
         "components/rhel_6_10_baseimage.yml"
       ]
 
+      # rhel6.10 cannot use AWS components, these are supplied below
       user_data = <<EOF
 #!/bin/bash
 cd /tmp

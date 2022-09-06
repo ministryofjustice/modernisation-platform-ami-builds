@@ -46,7 +46,7 @@ variable "image_recipe" {
       volume_size = number
       volume_type = string
     }))
-    components_aws    = list(string)
+    components_aws    = optional(list(string))
     components_custom = list(string)
   })
   description = "Details of image builder recipe, see aws_imagebuilder_image_recipe documentation for details on the parameters"
