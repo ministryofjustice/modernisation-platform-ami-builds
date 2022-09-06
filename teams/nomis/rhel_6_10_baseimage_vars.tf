@@ -27,7 +27,7 @@ locals {
       ]
 
       components_aws = [] # rhel6.10 cannot use AWS components, these are supplied below
-      
+
       user_data = <<EOF
 #!/bin/bash
 cd /tmp
