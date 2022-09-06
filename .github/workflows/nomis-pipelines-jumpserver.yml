@@ -1,5 +1,5 @@
 ---
-name: nomis
+name: nomis-pipelines
 on:
   # push:
   #   branches:
@@ -42,7 +42,7 @@ jobs:
         run: |
           echo "Terraform plan - ${TF_ENV}"
           bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
-          terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
+          terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}" || terraform -chdir="teams/nomis/pipelines/jumpserver" workspace new "core-shared-services-${TF_ENV}"
           bash scripts/terraform-plan.sh teams/nomis/pipelines/jumpserver
         env:
           TF_ENV: production
