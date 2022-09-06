@@ -2,7 +2,7 @@ locals {
   rhel_6_10_baseimage = {
     gh_actor              = var.GH_ACTOR_NAME
     branch                = var.BRANCH_NAME
-    configuration_version = "0.0.7"
+    configuration_version = "0.0.8"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -26,7 +26,8 @@ locals {
         "components/rhel_6_10_baseimage.yml"
       ]
 
-      # rhel6.10 cannot use AWS components, these are supplied below
+      components_aws = [] # rhel6.10 cannot use AWS components, these are supplied below
+      
       user_data = <<EOF
 #!/bin/bash
 cd /tmp
