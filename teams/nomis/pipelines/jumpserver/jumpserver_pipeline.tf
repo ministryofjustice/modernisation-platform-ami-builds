@@ -49,7 +49,7 @@ resource "aws_imagebuilder_image_recipe" "jumpserver" {
     content {
       component_arn = aws_imagebuilder_component.jumpserver_components[component.key].arn
       dynamic "parameter"{
-        for_each = local.jumpserver_pipeline.components.parameters
+        for_each = component.value.parameters
         content {
           parameter {
             name = parameter.value.name
