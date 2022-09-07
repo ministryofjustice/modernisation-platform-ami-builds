@@ -78,11 +78,10 @@
 #     mode: 0755
 #   when: ansible_distribution_major_version == '6'
 
-
 - name: node_exporter systemd metrics enabled rhel7 or rhel8 (misload absent)
   ansible.builtin.lineinfile:
     path: /etc/default/node_exporter
-    regexp: '^NODE_EXPORTER_OPTS.*$'
+    regexp: "^NODE_EXPORTER_OPTS.*$"
     line: 'NODE_EXPORTER_OPTS=--collector.systemd --collector.systemd.unit-whitelist ".+\.service"'
     owner: root
     group: root
@@ -95,7 +94,7 @@
 - name: node_exporter systemd metrics enabled rhel7 or rhel8 (misload present)
   ansible.builtin.lineinfile:
     path: /etc/default/node_exporter
-    regexp: '^NODE_EXPORTER_OPTS.*$'
+    regexp: "^NODE_EXPORTER_OPTS.*$"
     line: 'NODE_EXPORTER_OPTS=--collector.systemd --collector.systemd.unit-whitelist ".+\.service" --collector.textfile.directory=/opt/textfile_monitoring'
     owner: root
     group: root
