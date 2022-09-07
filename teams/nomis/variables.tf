@@ -9,3 +9,9 @@ variable "GH_ACTOR_NAME" {
   default     = ""
   description = "GH username triggering Github action"
 }
+
+variable "run_ansible_from_branch" {
+  type        = bool
+  default     = false
+  description = "Run Ansible components from working branch"
+}
