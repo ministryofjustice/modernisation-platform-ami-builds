@@ -2,7 +2,7 @@ locals {
   rhel_7_9_baseimage = {
     gh_actor              = var.GH_ACTOR_NAME
     branch                = var.BRANCH_NAME
-    configuration_version = "1.1.6"
+    configuration_version = "1.1.7"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
