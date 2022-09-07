@@ -45,11 +45,11 @@ locals {
           name = "WindowsExporterVersion",
           value = "0.19.0"
         }
-      },
-      {
-        content = "jumpserver.yml",
-        parameters = {}
       }
+//      {
+//        content = "jumpserver.yml",
+//        parameters = {}
+//      }
     ]
 
     aws_components = [
