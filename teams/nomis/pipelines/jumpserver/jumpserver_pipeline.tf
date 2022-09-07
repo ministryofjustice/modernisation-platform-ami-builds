@@ -48,6 +48,15 @@ resource "aws_imagebuilder_image_recipe" "jumpserver" {
     for_each = toset(local.jumpserver_pipeline.components)
     content {
       component_arn = aws_imagebuilder_component.jumpserver_components[component.key].arn
+      dynamic "parameter"{
+        for_each = toset(local.jumpserver_pipeline.components.parameters)
+        content {
+          parameter {
+            name = parameter.value.name
+            value = parameter.value.value
+          }
+        }
+      }
     }
   }
 
@@ -81,7 +90,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "jumpserver" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "jumpserver_components" {
-  for_each = { for file in local.jumpserver_pipeline.components : file => yamldecode(file("components/jumpserver/${file}")) }
+  for_each = { for file in local.jumpserver_pipeline.components : file => yamldecode(file("components/jumpserver/${file.content}")) }
 
   data     = file("components/jumpserver/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
