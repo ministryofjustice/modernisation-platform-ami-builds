@@ -1,0 +1,59 @@
+## Copied from https://github.com/ministryofjustice/ansible-monorepo
+## Needs to be verified and tested before commenting out
+
+# - name: Check if IIS service is installed
+#   win_service:
+#     name: W3SVC
+#   register: iis_service_info
+#
+# - name: Check if WMI Exporter service is installed
+#   win_service:
+#     name: wmi_exporter
+#   register: wmi_exporter_service_info
+#
+# - name: "Remove wmi exporter when IIS installed and not configured on exporter"
+#   win_package:
+#     path: "{{ artifacts_storage_blob }}{{ wmi_exporter_msi }}"
+#     creates_path: 'C:\Program Files (x86)\wmi_exporter\wmi_exporter.exe'
+#     state: absent
+#   when:
+#     - 'wmi_exporter_service_info.exists'
+#     - 'iis_service_info.exists'
+#     - '"iis" not in wmi_exporter_service_info.path'
+#
+# - name: Remove wmi exporter when IIS not installed and is configured on exporter
+#   win_package:
+#     path: "{{ artifacts_storage_blob }}{{ wmi_exporter_msi }}"
+#     creates_path: 'C:\Program Files (x86)\wmi_exporter\wmi_exporter.exe'
+#     state: absent
+#   when:
+#     - 'wmi_exporter_service_info.exists'
+#     - 'not iis_service_info.exists'
+#     - '"iis" in wmi_exporter_service_info.path'
+#
+# - name: Install wmi exporter for prometheus with IIS metrics
+#   win_package:
+#     path: "{{ artifacts_storage_blob }}{{ wmi_exporter_msi }}"
+#     creates_path: 'C:\Program Files (x86)\wmi_exporter\wmi_exporter.exe'
+#     arguments:
+#       - 'LISTEN_PORT=9182'
+#       - 'ENABLED_COLLECTORS=cpu,cs,logical_disk,net,os,service,system,textfile,iis'
+#     state: present
+#   when:
+#     - iis_service_info.exists
+#
+# - name: Install wmi exporter for prometheus default collectors
+#   win_package:
+#     path: "{{ artifacts_storage_blob }}{{ wmi_exporter_msi }}"
+#     creates_path: 'C:\Program Files (x86)\wmi_exporter\wmi_exporter.exe'
+#     arguments:
+#       - 'LISTEN_PORT=9182'
+#     state: present
+#   when:
+#     - not iis_service_info.exists
+#
+# - name: Set startup mode to auto and ensure started
+#   win_service:
+#     name: 'WMI exporter'
+#     start_mode: auto
+#     state: started
