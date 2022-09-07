@@ -78,4 +78,4 @@ phases:
               # Deactivate virtual env and cleanup
               deactivate
               rm -r /tmp/python-venv
-              rm -r /tmp/database-ansible-playbook
+              rm -r /tmp/node-exporter-ansible-playbook
