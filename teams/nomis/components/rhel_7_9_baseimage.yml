@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.7"
+      default: "1.0.8"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -59,7 +59,7 @@ phases:
 
               # Download playbook
               mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
-              git clone -b "feature/DSOS-1463" "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              git clone "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
               cd modernisation-platform-ami-builds/ansible
 
               # Install requirements in virtual env
