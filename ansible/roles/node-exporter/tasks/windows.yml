@@ -1,5 +1,5 @@
 ## Copied from https://github.com/ministryofjustice/ansible-monorepo
-## Needs to be verified and tested before commenting out
+## Needs to be verified and tested before uncommenting
 
 # - name: Check if IIS service is installed
 #   win_service:
