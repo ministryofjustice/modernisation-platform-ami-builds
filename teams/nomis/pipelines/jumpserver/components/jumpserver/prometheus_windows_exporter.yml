@@ -1,0 +1,21 @@
+---
+name: PrometheusWindowsExporter
+description: Component to install prometheus windows exporter.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "1.0.0"
+      description: Component version (update this each time the file changes).
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallWMIExporter
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - choco install -y prometheus-windows-exporter.install --version 0.19.0 --params '"/ListenPort:9100"'

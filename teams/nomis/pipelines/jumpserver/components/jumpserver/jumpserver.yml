@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.3"
+      default: "1.0.4"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -65,8 +65,3 @@ phases:
               $reg_path = "HKLM:\Software\Policies\Microsoft\Windows\CurrentVersion\Internet Settings"
               New-Item -Path $reg_path -Force
               New-ItemProperty -Path $reg_path -Name Security_HKLM_only -Value 1 -PropertyType DWORD -Force
-      - name: InstallWMIExporter
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - choco install -y prometheus-windows-exporter.install --version 0.19.0 --params '"/ListenPort:9100"'
