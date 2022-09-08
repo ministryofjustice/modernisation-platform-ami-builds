@@ -313,16 +313,26 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Apply
-        if: ${{ needs.init.outputs.action == 'apply' }}
+      - name: Init and State Refresh
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
           terraform workspace select "core-shared-services-${TF_ENV}"
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . | tee tfapply.txt
+          ${GITHUB_WORKSPACE}/scripts/terraform-refresh.sh .
+
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -out=tf.plan
+
+      - name: Apply
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
 
       - name: Create Apply PR message
-        if: ${{ needs.init.outputs.action == 'apply' && github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' }}
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -344,7 +354,7 @@ jobs:
       # security best practice: use specific version of public actions (v1.3.0)
       - name: Post Apply to PR
         uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
-        if: ${{ needs.init.outputs.action == 'apply' && github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}ds
           message: "${{ env.TF_APPLY_OUT }}"
