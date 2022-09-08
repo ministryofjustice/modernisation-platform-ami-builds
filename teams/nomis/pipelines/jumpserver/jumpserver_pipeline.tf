@@ -89,12 +89,12 @@ resource "aws_imagebuilder_infrastructure_configuration" "jumpserver" {
 // create each component in team directory
 resource "aws_imagebuilder_component" "jumpserver_components" {
   //for_each = { for file in local.jumpserver_pipeline.components : file => yamldecode(file("components/jumpserver/${file}")) }
-  for_each = { for comp in local.jumpserver_pipeline.components : comp.content => yamldecode(file("components/jumpserver/${comp.content}")) }
+  for_each = { for component in local.jumpserver_pipeline.components : component.content => component.parameters }
 
   data     = file("components/jumpserver/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/jumpserver/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/jumpserver/${each.key}")).parameters[0].Version.default
+  version  = each.value.Version
 
   lifecycle {
     create_before_destroy = true
