@@ -47,8 +47,7 @@ locals {
         }
       },
       {
-        content = "jumpserver.yml",
-        parameters = {}
+        content = "jumpserver.yml"
       }
     ]
 
