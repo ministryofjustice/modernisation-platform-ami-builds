@@ -324,15 +324,18 @@ jobs:
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -out=tf.plan
+          exitcode=0
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          echo ::set-output name=exitcode::${exitcode}
 
       - name: Apply
+        if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
 
       - name: Create Apply PR message
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -354,8 +357,8 @@ jobs:
       # security best practice: use specific version of public actions (v1.3.0)
       - name: Post Apply to PR
         uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}ds
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           message: "${{ env.TF_APPLY_OUT }}"
           pr_number: "${{ needs.init.outputs.pr_number }}"
