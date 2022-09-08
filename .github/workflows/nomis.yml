@@ -121,8 +121,7 @@ jobs:
           echo "Updated files: ${{ steps.files.outputs.all }}"
           set +o pipefail
           allprojects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
-          changed=$(echo "${{ steps.files.outputs.all }}" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
-          changed=$(echo "${files}" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo ::set-output name=projects::${projects}
