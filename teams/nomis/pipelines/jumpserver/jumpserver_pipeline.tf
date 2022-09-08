@@ -49,7 +49,7 @@ resource "aws_imagebuilder_image_recipe" "jumpserver" {
     content {
       component_arn = aws_imagebuilder_component.jumpserver_components[component.value.content].arn
       dynamic "parameter" {
-        for_each = tomap({ for param in component.value.parameters : param => param if param != {} })
+        for_each = { for param_key, param_value in component.value.parameters : param_key => param_value if component.value.parameters != {} }
         content {
           name  = parameter.key
           value = parameter.value
