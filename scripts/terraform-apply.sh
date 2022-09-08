@@ -11,7 +11,7 @@ set -e
 # are exposed via terraform apply.
 
 # Make redact-output.sh executable
-chmod +x ./scripts/redact-output.sh
+chmod +x $(dirname $0)/redact-output.sh
 
 if [ -z "$1" ]; then
   echo "Unsure where to run terraform, exiting"
@@ -20,7 +20,7 @@ fi
 
 if [ ! -z "$2" ]; then
   options="$2"
-  terraform -chdir="$1" apply -input=false -no-color -auto-approve $options | ./scripts/redact-output.sh
+  terraform -chdir="$1" apply -input=false -no-color -auto-approve $options | $(dirname $0)/redact-output.sh
 else
-  terraform -chdir="$1" apply -input=false -no-color -auto-approve | ./scripts/redact-output.sh  
+  terraform -chdir="$1" apply -input=false -no-color -auto-approve | $(dirname $0)/redact-output.sh
 fi
