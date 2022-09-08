@@ -238,6 +238,7 @@ jobs:
 
       - name: Create Plan PR message
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
@@ -336,6 +337,7 @@ jobs:
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
