@@ -1,7 +1,20 @@
 ---
-name: nomis
+name: nomis-pipelines
 on:
-# New version coming soon .... setting to workflow_dispatch only while we sort this out
+  push:
+    # branches:
+    #   - nomis/*
+    paths:
+      - '.github/workflows/nomis-pipelines-jumpserver.yml'
+      - 'teams/nomis/pipelines/jumpserver/**'
+
+  # pull_request:
+  #   branches:
+  #     - main
+  #   types: [opened, edited, reopened, synchronize]
+  #   paths:
+  #     - 'teams/nomis/pipelines/**'
+  #     - '.github/workflows/nomis-pipelines-jumpserver.yml'
   workflow_dispatch:
 env:
   AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -15,7 +28,7 @@ defaults:
 
 jobs:
   plan-nomis:
-    name: Plan - nomis pipelines
+    name: Plan - nomis jumpserver pipelines
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -25,12 +38,12 @@ jobs:
         with:
           terraform_version: 1.0.1
           terraform_wrapper: false
-      - name: Terraform plan - nomis pipelines
+      - name: Terraform plan - nomis jumpserver pipelines
         run: |
           echo "Terraform plan - ${TF_ENV}"
-          bash scripts/terraform-init.sh teams/nomis
-          terraform -chdir="teams/nomis" workspace select "core-shared-services-${TF_ENV}"
-          bash scripts/terraform-plan.sh teams/nomis
+          bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
+          terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
+          bash scripts/terraform-plan.sh teams/nomis/pipelines/jumpserver
         env:
           TF_ENV: production
 
@@ -51,8 +64,8 @@ jobs:
       - name: Terraform apply - nomis pipelines
         run: |
           echo "Terraform apply - ${TF_ENV}"
-          bash scripts/terraform-init.sh teams/nomis
-          terraform -chdir="teams/nomis" workspace select "core-shared-services-${TF_ENV}"
-          bash scripts/terraform-apply.sh teams/nomis
+          bash scripts/terraform-init.sh teams/nomis/pipelines/jumpserver
+          terraform -chdir="teams/nomis/pipelines/jumpserver" workspace select "core-shared-services-${TF_ENV}"
+          bash scripts/terraform-apply.sh teams/nomis/pipelines/jumpserver
         env:
           TF_ENV: production

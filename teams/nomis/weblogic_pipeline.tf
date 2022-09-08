@@ -79,6 +79,10 @@ resource "aws_imagebuilder_image_recipe" "weblogic" {
   parent_image = data.aws_ami.latest-rhel-610.id
   version      = local.weblogic_pipeline.recipe.version
 
+  systems_manager_agent {
+    uninstall_after_build = false
+  }
+
 }
 
 resource "aws_imagebuilder_infrastructure_configuration" "weblogic" {
