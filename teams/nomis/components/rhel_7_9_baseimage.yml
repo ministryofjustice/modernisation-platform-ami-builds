@@ -39,7 +39,7 @@ phases:
               ./configure --enable-optimizations
               sudo make altinstall
 
-      # Install node exporter agent with ansible 
+      # Install node exporter agent with ansible
       - name: InstallAndRunAnsible
         action: ExecuteBash
         inputs:
