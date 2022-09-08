@@ -233,6 +233,7 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "exitcode=${exitcode}"
           echo ::set-output name=exitcode::${exitcode}
 
       - name: Create Plan PR message
