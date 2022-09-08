@@ -4,7 +4,7 @@ locals {
 
   # Component's version:
   prometheus_windows_exporter_component_version = "1.0.3"
-  jumpserver_component_version = "1.0.5"
+  jumpserver_component_version                  = "1.0.5"
 
   # Software's version:
   prometheus_windows_exporter_version = "0.19.0"
@@ -53,11 +53,11 @@ locals {
         content = "prometheus_windows_exporter.yml",
         parameters = {
           WindowsExporterVersion = local.prometheus_windows_exporter_version,
-          Version = local.prometheus_windows_exporter_component_version
+          Version                = local.prometheus_windows_exporter_component_version
         }
       },
       {
-        content    = "jumpserver.yml",
+        content = "jumpserver.yml",
         parameters = {
           Version = local.jumpserver_component_version
         }
