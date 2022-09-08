@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.6"
+      default: "1.0.8"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -38,3 +38,45 @@ phases:
               cd Python-3.9.6
               ./configure --enable-optimizations
               sudo make altinstall
+
+      # Install node exporter agent with ansible
+      - name: InstallAndRunAnsible
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+
+              # install, create, activate virtual environment
+              pip3.9 install virtualenv
+              mkdir /tmp/python-venv && cd "$_"
+              python3.9 -m venv ansible
+              source ansible/bin/activate
+
+              # Install ansible modules in virtual env
+              python3.9 -m pip install --upgrade pip
+              python3.9 -m pip install ansible==6.0.0
+
+              # Download playbook
+              mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
+              git clone "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              cd modernisation-platform-ami-builds/ansible
+
+              # Install requirements in virtual env
+              python3.9 -m pip install -r requirements.txt
+              ansible-galaxy role install -r requirements.yml
+              ansible-galaxy collection install -r requirements.yml
+
+              # Get required extra vars and run ansible
+              PY_INTERPRETER=$(which python3.9)
+              ansible-playbook ../teams/nomis/ansible/playbooks/node-exporter-install.yml \
+              --connection=local \
+              --inventory localhost \
+              --extra-vars "ansible_python_interpreter=$PY_INTERPRETER" \
+              --become
+
+              # Deactivate virtual env and cleanup
+              deactivate
+              rm -r /tmp/python-venv
+              rm -r /tmp/node-exporter-ansible-playbook
