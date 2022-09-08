@@ -42,8 +42,7 @@ locals {
       {
         content = "prometheus_windows_exporter.yml",
         parameters = {
-          name = "WindowsExporterVersion",
-          value = "0.19.0"
+          WindowsExporterVersion = "0.19.0"
         }
       },
       {

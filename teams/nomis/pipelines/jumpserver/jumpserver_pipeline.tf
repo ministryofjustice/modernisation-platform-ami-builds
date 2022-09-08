@@ -52,8 +52,8 @@ resource "aws_imagebuilder_image_recipe" "jumpserver" {
         for_each = component.value.parameters
         content {
           parameter {
-            name = parameter.value.name
-            value = parameter.value.value
+            name = parameter.key
+            value = parameter.value
           }
         }
       }
