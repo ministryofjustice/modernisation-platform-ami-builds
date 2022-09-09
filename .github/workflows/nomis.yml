@@ -225,7 +225,9 @@ jobs:
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
           terraform workspace select "core-shared-services-${TF_ENV}"
-          ${GITHUB_WORKSPACE}/scripts/terraform-refresh.sh .
+          # refresh as objects are often changed outside of Terraform
+          # suppress that from the plan PR comment
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
 
       - name: Plan
         id: plan
@@ -319,7 +321,9 @@ jobs:
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
           terraform workspace select "core-shared-services-${TF_ENV}"
-          ${GITHUB_WORKSPACE}/scripts/terraform-refresh.sh .
+          # refresh as objects are often changed outside of Terraform
+          # suppress that from the plan PR comment
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
 
       - name: Plan
         id: plan
