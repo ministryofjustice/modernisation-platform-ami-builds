@@ -6,14 +6,14 @@ parameters:
   - Version:
       type: string
       default: "1.0.2"
-      description: Component version (update this each time the file changes).
+      description: Component version, set outside of this document. Update this in the pipeline variables, each time the file changes.
   - Platform:
       type: string
       default: "Windows"
       description: Platform.
   - WindowsExporterVersion:
       type: string
-      description: Version of the prometheus-windows-exporter, set outside of this document.
+      description: Version of the prometheus-windows-exporter, set outside of this document (in the pipeline variables).
 phases:
   - name: build
     steps:

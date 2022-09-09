@@ -6,7 +6,7 @@ parameters:
   - Version:
       type: string
       default: "1.0.4"
-      description: Component version (update this each time the file changes)
+      description: Component version, set outside of this document. Update this in the pipeline variables, each time the file changes.
   - Platform:
       type: string
       default: "Windows"
