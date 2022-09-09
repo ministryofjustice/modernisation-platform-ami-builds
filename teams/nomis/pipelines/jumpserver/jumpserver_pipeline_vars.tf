@@ -1,4 +1,14 @@
 locals {
+  # Recipe's version:
+  jumpserver_recipe_version = "1.1.2"
+
+  # Component's version:
+  prometheus_windows_exporter_component_version = "1.0.4"
+  jumpserver_component_version                  = "1.0.6"
+
+  # Software's version:
+  prometheus_windows_exporter_version = "0.19.0"
+
   jumpserver_pipeline = {
     pipeline = {
       name     = join("", [local.team_name, "_jumpserver"])
@@ -8,7 +18,7 @@ locals {
     recipe = {
       name         = join("", [local.team_name, "_jumpserver"])
       parent_image = "arn:aws:imagebuilder:eu-west-2:${data.aws_caller_identity.current.account_id}:image/mp-windowsserver2022/x.x.x"
-      version      = "1.0.10"
+      version      = local.jumpserver_recipe_version
       device_name  = "/dev/sda1"
 
       ebs_block_device = [
@@ -28,7 +38,7 @@ locals {
       instance_types     = ["t3.medium"]
       name               = join("", [local.team_name, "_jumpserver"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
-      subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
+      subnet_id          = data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]
       terminate_on_fail  = true
     }
 
@@ -39,8 +49,19 @@ locals {
     }
 
     components = [
-      "prometheus_windows_exporter.yml",
-      "jumpserver.yml"
+      {
+        content = "prometheus_windows_exporter.yml",
+        parameters = {
+          WindowsExporterVersion = local.prometheus_windows_exporter_version,
+          Version                = local.prometheus_windows_exporter_component_version
+        }
+      },
+      {
+        content = "jumpserver.yml",
+        parameters = {
+          Version = local.jumpserver_component_version
+        }
+      }
     ]
 
     aws_components = [

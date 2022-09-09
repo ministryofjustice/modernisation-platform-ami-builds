@@ -45,9 +45,16 @@ resource "aws_imagebuilder_image_recipe" "jumpserver" {
     }
   }
   dynamic "component" {
-    for_each = toset(local.jumpserver_pipeline.components)
+    for_each = local.jumpserver_pipeline.components
     content {
-      component_arn = aws_imagebuilder_component.jumpserver_components[component.key].arn
+      component_arn = aws_imagebuilder_component.jumpserver_components[component.value.content].arn
+      dynamic "parameter" {
+        for_each = { for param_key, param_value in component.value.parameters : param_key => param_value if component.value.parameters != {} }
+        content {
+          name  = parameter.key
+          value = parameter.value
+        }
+      }
     }
   }
 
@@ -81,12 +88,13 @@ resource "aws_imagebuilder_infrastructure_configuration" "jumpserver" {
 
 // create each component in team directory
 resource "aws_imagebuilder_component" "jumpserver_components" {
-  for_each = { for file in local.jumpserver_pipeline.components : file => yamldecode(file("components/jumpserver/${file}")) }
+  //for_each = { for file in local.jumpserver_pipeline.components : file => yamldecode(file("components/jumpserver/${file}")) }
+  for_each = { for component in local.jumpserver_pipeline.components : component.content => component.parameters }
 
   data     = file("components/jumpserver/${each.key}")
   name     = join("_", ["nomis", trimsuffix(each.key, ".yml")])
   platform = yamldecode(file("components/jumpserver/${each.key}")).parameters[1].Platform.default
-  version  = yamldecode(file("components/jumpserver/${each.key}")).parameters[0].Version.default
+  version  = each.value.Version
 
   lifecycle {
     create_before_destroy = true

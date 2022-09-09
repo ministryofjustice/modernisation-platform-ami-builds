@@ -5,12 +5,15 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.0"
-      description: Component version (update this each time the file changes).
+      default: "1.0.2"
+      description: Component version, set outside of this document. Update this in the pipeline variables, each time the file changes.
   - Platform:
       type: string
       default: "Windows"
       description: Platform.
+  - WindowsExporterVersion:
+      type: string
+      description: Version of the prometheus-windows-exporter, set outside of this document (in the pipeline variables).
 phases:
   - name: build
     steps:
@@ -18,4 +21,4 @@ phases:
         action: ExecutePowerShell
         inputs:
           commands:
-            - choco install -y prometheus-windows-exporter.install --version 0.19.0 --params '"/ListenPort:9100"'
+            - choco install -y prometheus-windows-exporter.install --version '{{ WindowsExporterVersion }}' --params '"/ListenPort:9100"'
