@@ -15,9 +15,4 @@ module "imagebuilder" {
   image_pipeline               = each.value.image_pipeline
   branch                       = each.value.branch
   gh_actor                     = each.value.gh_actor
-
-  core_shared_services = {
-    repo_tfstate            = data.terraform_remote_state.modernisation-platform-repo.outputs
-    imagebuilder_mp_tfstate = data.terraform_remote_state.mp-imagebuilder.outputs
-  }
 }
