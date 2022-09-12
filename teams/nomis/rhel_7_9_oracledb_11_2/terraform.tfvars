@@ -29,7 +29,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/database.yml.tmpl"
+        "../components/rhel_7_9_oracledb_11_2/database.yml.tmpl"
       ]
 
       components_aws = []
