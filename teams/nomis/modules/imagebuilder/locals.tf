@@ -47,12 +47,12 @@ locals {
     var.tags
   )
 
-  ami_name = join("_", flatten(
+  ami_name = join("_", flatten([
     [local.name],
     var.release_or_patch == "" ? [] : ["$var.release_or_patch"],
     (var.branch == "" || var.branch == "main") ? [] : ["$var.branch"],
     ["{{ imagebuilder:buildDate }}"]
-  ))
+  ]))
 
   ami_tags = merge(local.tags, {
     Name = local.ami_name
