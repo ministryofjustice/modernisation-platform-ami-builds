@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.1.3"
+    configuration_version = "0.1.4"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -43,7 +43,7 @@ EOF
     }
 
     infrastructure_configuration = {
-      instance_types = ["t3.medium"]
+      instance_types = ["t2.large"]
     }
 
     image_pipeline = {
