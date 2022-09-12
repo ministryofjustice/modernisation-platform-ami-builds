@@ -34,7 +34,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml.tmpl"
+        "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
       ]
 
       components_aws = []
