@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.0.2"
+    configuration_version = "0.0.3"
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
     tags = {
@@ -100,13 +100,11 @@ imagebuilders = {
 distribution_target_account_names_by_branch = {
   main = [
     "core-shared-services-production",
-    "nomis-development",
     "nomis-test",
-    "nomis-preproduction",
-    "nomis-production",
+    "nomis-production"
   ]
   default = [
     "core-shared-services-production",
-    "nomis-development"
+    "nomis-test"
   ]
 }
