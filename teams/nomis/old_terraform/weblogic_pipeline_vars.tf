@@ -1,5 +1,5 @@
 locals {
-  version = "1.1.8" # change this value every time you update this file or the weblogic_pipeline.tf file
+  version = "1.1.9" # change this value every time you update this file or the weblogic_pipeline.tf file
 
   # Ideally these values should be pulled from the weblogic component file or the ansible when it is changed in DSOS-1446
   os_version              = "RHEL6.10"
