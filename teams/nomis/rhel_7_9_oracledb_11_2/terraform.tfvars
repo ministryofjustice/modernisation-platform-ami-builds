@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.0.1"
+    configuration_version = "0.0.2"
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
     tags = {
@@ -25,6 +25,56 @@ imagebuilders = {
           device_name = "/dev/sda1" # root volume
           volume_size = 30
           volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdb" # /u01 oracle app disk
+          volume_size = 100
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdc" # /u02 oracle app disk
+          volume_size = 100
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sds" # swap disk
+          volume_size = 4
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sde" # oracle asm disk DATA01
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdf" # oracle asm disk DATA02
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdg" # oracle asm disk DATA03
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdh" # oracle asm disk DATA04
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdi" # oracle asm disk DATA05
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdj" # oracle asm disk FLASH01
+          volume_size = 1
+          volume_type = "gp3"
+        },
+        {
+          device_name = "/dev/sdk" # oracle asm disk FLASH02
+          volume_size = 1
+          volume_type = "gp3"
         }
       ]
 
@@ -36,12 +86,12 @@ imagebuilders = {
     }
 
     infrastructure_configuration = {
-      instance_types = ["t2.large"]
+      instance_types = ["t3.medium"]
     }
 
     image_pipeline = {
       schedule = {
-        schedule_expression = "cron(0 0 1 * ? *)"
+        schedule_expression = "cron(0 0 2 * ? *)"
       }
     }
   }
