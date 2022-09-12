@@ -224,7 +224,7 @@ jobs:
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}"
+          terraform workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment
           ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
@@ -235,8 +235,8 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "exitcode=${exitcode}"
           echo ::set-output name=exitcode::${exitcode}
+          (( exitcode == 1 )) && exit 1
 
       - name: Create Plan PR message
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
@@ -320,7 +320,7 @@ jobs:
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}"
+          terraform workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment
           ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
@@ -332,6 +332,7 @@ jobs:
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
           echo ::set-output name=exitcode::${exitcode}
+          (( exitcode == 1 )) && exit 1
 
       - name: Apply
         if: ${{ steps.plan.outputs.exitcode == '2' }}
