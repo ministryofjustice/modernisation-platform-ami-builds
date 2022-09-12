@@ -23,7 +23,7 @@ data "aws_imagebuilder_component" "this" {
 
 data "aws_ami" "parent" {
   most_recent = true
-  owners      = [var.image_recipe.parent_image.owner]
+  owners      = flatten([try(var.account_ids_lookup[var.image_recipe.parent_image.owner], var.image_recipe.parent_image.owner)])
 
   filter {
     name   = "name"

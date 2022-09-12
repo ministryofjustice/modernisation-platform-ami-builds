@@ -34,10 +34,15 @@ variable "kms_key_id" {
   default     = null
 }
 
+variable "account_ids_lookup" {
+  description = "A map of account names to account ids that can be used for image_recipe.parent_image.owner"
+  default     = {}
+}
+
 variable "image_recipe" {
   type = object({
     parent_image = object({
-      owner             = string
+      owner             = string # either an ID or a name which is a key in var.account_ids_lookup
       filter_name_value = string
     })
     user_data = optional(string)
