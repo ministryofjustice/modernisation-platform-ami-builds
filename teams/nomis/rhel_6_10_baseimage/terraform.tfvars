@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.1.4"
+    configuration_version = "0.1.5"
     description           = "nomis rhel 6.10 base image"
 
     tags = {

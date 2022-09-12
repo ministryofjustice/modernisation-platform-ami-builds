@@ -36,9 +36,9 @@ locals {
     image-pipeline               = local.name
     image-recipe                 = join("/", [local.name, var.configuration_version])
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
-    github-branch                = var.branch
-    github-actor                 = var.gh_actor
-    release-or-patch             = var.release_or_patch
+    github-branch                = var.branch == "" ? "n/a" : var.branch
+    github-actor                 = var.gh_actor == "" ? "n/a" : var.gh_actor
+    release-or-patch             = var.release_or_patch == "" ? "n/a" : var.release_or_patch
   }
 
   tags = merge(
