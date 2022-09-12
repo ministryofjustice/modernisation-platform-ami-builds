@@ -235,6 +235,7 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
           (( exitcode == 1 )) && exit 1
 
@@ -331,6 +332,7 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
           (( exitcode == 1 )) && exit 1
 
