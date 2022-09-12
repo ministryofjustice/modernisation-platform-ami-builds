@@ -31,7 +31,7 @@ imagebuilders = {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml"
+        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tmpl"
       ]
     }
 
