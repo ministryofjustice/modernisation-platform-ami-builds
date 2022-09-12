@@ -3,8 +3,8 @@ locals {
   name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
 
   core_shared_services = {
-    repo_tfstate = data.terraform_remote_state.core_shared_services_production
-    imagebuilder_mp_tfstate = data.terraform_remote_state.imagebuilder_mp
+    repo_tfstate            = data.terraform_remote_state.core_shared_services_production.outputs
+    imagebuilder_mp_tfstate = data.terraform_remote_state.imagebuilder_mp.outputs
   }
 
   components_custom_yaml = {
