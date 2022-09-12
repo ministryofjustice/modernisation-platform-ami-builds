@@ -50,7 +50,7 @@ locals {
   # NOTE: do not include branch name here as only underscore and alphanumeric allowed
   ami_name = join("_", flatten([
     local.name,
-    var.release_or_patch == "" ? [] : var.release_or_patch,
+    var.release_or_patch == "" ? [] : [var.release_or_patch],
     "{{ imagebuilder:buildDate }}"
   ]))
 
