@@ -49,7 +49,7 @@ locals {
 
   ami_name = join("_", flatten([
     [local.name],
-    var.release_or_patch == "" ? [] : ["$var.release_or_patch"]
+    var.release_or_patch == "" ? [] : [var.release_or_patch]
   ]))
 
   ami_tags = merge(local.tags, {
