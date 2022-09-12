@@ -47,7 +47,7 @@ env:
 
   # set branch to main on pull requests so plan changes are same as push-to-main
   TF_IN_AUTOMATION: true
-  TF_VAR_BRANCH_NAME: ${{ github.event_name == "pull_request" && "main" || (github.head_ref || github.ref_name) }}
+  TF_VAR_BRANCH_NAME: ${{ github.event_name == 'pull_request' && 'main' || (github.head_ref || github.ref_name) }}
   TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
   TF_ENV: production
 
