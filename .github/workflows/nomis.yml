@@ -237,7 +237,7 @@ jobs:
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
           echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
-          (( exitcode == 1 )) && exit 1
+          (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Create Plan PR message
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
@@ -334,7 +334,7 @@ jobs:
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
           echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
-          (( exitcode == 1 )) && exit 1
+          (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Apply
         if: ${{ steps.plan.outputs.exitcode == '2' }}
