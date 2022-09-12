@@ -1,6 +1,7 @@
 locals {
   name             = "${var.team_name}_${var.name}"
   name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
+  ami_name         = "${local.name}${var.ami_name_suffix}_{{ imagebuilder:buildDate }}"
 
   core_shared_services = {
     repo_tfstate            = data.terraform_remote_state.core_shared_services_production.outputs

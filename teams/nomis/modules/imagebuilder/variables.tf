@@ -13,6 +13,12 @@ variable "name" {
   description = "Name of the image, e.g. rhel79_base"
 }
 
+variable "ami_name_suffix" {
+  type        = string
+  description = "Optional suffix to include in the ami name, e.g. ${var.team_name}_${var.name}${var.ami_name_suffix}_{{ imagebuilder:buildDate }}"
+  default     = ""
+}
+
 variable "configuration_version" {
   type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
