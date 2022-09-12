@@ -44,10 +44,13 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  # set branch to main on pull requests so plan changes are same as push-to-main
   TF_IN_AUTOMATION: true
-  TF_VAR_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  TF_VAR_BRANCH_NAME: ${{ github.event_name == 'pull_request' && 'main' || (github.head_ref || github.ref_name) }}
   TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
   TF_ENV: production
+
   TEAM_DIR: teams/nomis
   PROJECT_DIR_DEPTH: 3
   DEFAULT_TERRAFORM_VERSION: 1.0.1
@@ -224,7 +227,7 @@ jobs:
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}"
+          terraform workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment
           ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
@@ -235,8 +238,9 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "exitcode=${exitcode}"
+          echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
+          (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Create Plan PR message
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
@@ -320,7 +324,7 @@ jobs:
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}"
+          terraform workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment
           ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
@@ -331,7 +335,9 @@ jobs:
         run: |
           exitcode=0
           ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          echo "terrafrom plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
+          (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Apply
         if: ${{ steps.plan.outputs.exitcode == '2' }}
