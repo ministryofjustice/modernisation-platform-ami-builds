@@ -1,48 +1,3 @@
-data "aws_imagebuilder_component" "this" {
-  for_each = toset(var.image_recipe.components_aws)
-  arn      = "arn:aws:imagebuilder:${var.region}:aws:component/${each.key}/x.x.x"
-}
-
-data "aws_ami" "parent" {
-  most_recent = true
-  owners      = [var.image_recipe.parent_image.owner]
-
-  filter {
-    name   = "name"
-    values = [var.image_recipe.parent_image.filter_name_value]
-  }
-}
-
-locals {
-  name             = "${var.team_name}_${var.name}"
-  name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
-
-  components_custom_yaml = {
-    for component_filename in var.image_recipe.components_custom :
-    component_filename => yamldecode(file(component_filename))
-  }
-
-  components_custom_versions = {
-    for component_filename, component_yaml in local.components_custom_yaml :
-    "${component_yaml.name}-version" => component_yaml.parameters[0].Version.default
-  }
-
-  components_aws_versions = {
-    for component_aws in var.image_recipe.components_aws :
-    "${component_aws}-version" => data.aws_imagebuilder_component.this[component_aws].version
-  }
-
-  component_version_tags = merge(local.components_custom_versions, local.components_aws_versions)
-
-  default_tags = {
-    image-pipeline               = local.name
-    image-recipe                 = join("/", [local.name, var.configuration_version])
-    infrastructure-configuration = join("/", [local.name, var.configuration_version])
-  }
-
-  tags = merge(local.default_tags, local.component_version_tags, var.tags)
-}
-
 resource "aws_imagebuilder_component" "this" {
   for_each = local.components_custom_yaml
 
@@ -108,18 +63,18 @@ resource "aws_imagebuilder_image_recipe" "this" {
 
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
   name                          = local.name_and_version
-  instance_profile_name         = var.core_shared_services.imagebuilder_mp_tfstate.image_builder_profile
+  instance_profile_name         = local.core_shared_services.imagebuilder_mp_tfstate.image_builder_profile
   description                   = var.description
   instance_types                = var.infrastructure_configuration.instance_types
-  security_group_ids            = [var.core_shared_services.repo_tfstate.image_builder_security_group_id]
-  subnet_id                     = var.core_shared_services.repo_tfstate.non_live_private_subnet_ids[0]
+  security_group_ids            = [local.core_shared_services.repo_tfstate.image_builder_security_group_id]
+  subnet_id                     = local.core_shared_services.repo_tfstate.non_live_private_subnet_ids[0]
   terminate_instance_on_failure = true
   tags                          = local.tags
   resource_tags                 = local.tags
 
   logging {
     s3_logs {
-      s3_bucket_name = var.core_shared_services.repo_tfstate.imagebuilder_log_bucket_id
+      s3_bucket_name = local.core_shared_services.repo_tfstate.imagebuilder_log_bucket_id
       s3_key_prefix  = var.team_name
     }
   }
