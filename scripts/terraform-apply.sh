@@ -11,16 +11,14 @@ set -e
 # are exposed via terraform apply.
 
 # Make redact-output.sh executable
-chmod +x ./scripts/redact-output.sh
+chmod +x $(dirname $0)/redact-output.sh
 
-if [ -z "$1" ]; then
+project_dir=$1
+shift
+
+if [ -z "$project_dir" ]; then
   echo "Unsure where to run terraform, exiting"
   exit 1
 fi
 
-if [ ! -z "$2" ]; then
-  options="$2"
-  terraform -chdir="$1" apply -input=false -no-color -auto-approve $options | ./scripts/redact-output.sh
-else
-  terraform -chdir="$1" apply -input=false -no-color -auto-approve | ./scripts/redact-output.sh  
-fi
+terraform -chdir="$project_dir" apply -input=false -no-color -auto-approve $@ | $(dirname $0)/redact-output.sh

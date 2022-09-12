@@ -1,58 +1,370 @@
 ---
 name: nomis
+
+# This pipeline works across multiple terraform projects within a team
+# directory with locking (turnstyle) and PR comment functionality.
+#
+# The init step figures out which projects to plan/apply
+# The plan/apply steps run across each project as a matrix
+#
+# It allow both plan/apply via manual dispatch.
+# For CI/CD, it runs a plan when PR raised and apply when merged.
+#
+# See teams/nomis/README.md for more details
+
 on:
-# New version coming soon .... setting to workflow_dispatch only while we sort this out
   workflow_dispatch:
+    inputs:
+      projects:
+        description: 'One or more project to plan/apply, space separated'
+        required: true
+        default: ''
+      action:
+        description: 'Set to plan or apply'
+        required: true
+        default: 'plan'
+
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+    branches:
+      - main
+    paths:
+      - teams/nomis/**
+
+  push:
+    branches:
+      - main
+    paths:
+      - teams/nomis/**
+
 env:
-  AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_IN_AUTOMATION: true
   TF_VAR_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
   TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
+  TF_ENV: production
+  TEAM_DIR: teams/nomis
+  PROJECT_DIR_DEPTH: 3
+  DEFAULT_TERRAFORM_VERSION: 1.0.1
+
 defaults:
   run:
     shell: bash
 
 jobs:
-  plan-nomis:
-    name: Plan - nomis pipelines
+  init:
+    runs-on: ubuntu-latest
+
+    outputs:
+      action: ${{ steps.parseinput.outputs.action }}
+      projects: ${{ steps.parseinput.outputs.projects }}
+      pr_number: ${{ steps.parseinput.outputs.pr_number }}
+      matrix: ${{ steps.setupproject.outputs.matrix }}
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      # get PR number on push v1.3.0
+      # security best practice: use specific version of public actions (v1.3.0)
+      - name: Get PR number on push
+        uses: jwalton/gh-find-current-pr@e12d66bc9ecc4fdcde07b0f70a3cb68ce7e4d807
+        id: get_pr_number
+        if: ${{ github.event_name == 'push' }}
+        with:
+          state: all
+
+      # for workflow dispatch, check valid project specified
+      - name: Validate workflow dispatch
+        id: projects_workflow_dispatch
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "Validate [projects=${{ github.event.inputs.projects }}] [action=${{ github.event.inputs.action }}]"
+          set +o pipefail
+          projects=${{ github.event.inputs.projects }}
+          if [[ ${projects} == "all" ]]; then
+            projects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          else
+            for project in ${{ github.event.inputs.projects }}; do
+              if [[ ! -e "${TEAM_DIR}/${project}/backend.tf" ]]; then
+                echo "Project not found ${TEAM_DIR}/${project}/backend.tf" >&2
+                exit 1
+              fi
+            done
+          fi
+          action=${{ github.event.inputs.action }}
+          if [[ $action != "plan" && $action != "apply" ]]; then
+            echo "Unexpected value for $action [$action], must be plan/apply" >&2
+            exit 1
+          fi
+          echo "action=[$action]; list of projects" [${projects}]
+          echo ::set-output name=projects::${projects}
+          echo ::set-output name=action::${action}
+
+      # security best practice: use specific version of public actions (v1)
+      - name: Get list of committed files
+        id: files
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
+        with:
+          format: 'space-delimited'
+
+      - name: Detect pull/push projects
+        id: projects_pull_push
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+        run: |
+          echo "Updated files: ${{ steps.files.outputs.all }}"
+          set +o pipefail
+          allprojects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
+          echo List of projects [${projects}]
+          echo ::set-output name=projects::${projects}
+
+      - name: Parse inputs
+        id: parseinput
+        run: |
+          echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
+          action="plan"
+          pr_number=""
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
+            action="${{ steps.projects_workflow_dispatch.outputs.action }}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            projects="${{ steps.projects_pull_push.outputs.projects }}"
+            pr_number="${{ github.event.pull_request.number }}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            projects="${{ steps.projects_pull_push.outputs.projects }}"
+            pr_number="${{ steps.get_pr_number.outputs.pr }}"
+            action="apply"
+          else
+            echo "Unsupported event ${GITHUB_EVENT_NAME}"
+            exit 1
+          fi
+          echo "Set action=${action} pr_number=${pr_number} project=${projects}"
+          echo ::set-output name=projects::${projects}
+          echo ::set-output name=action::${action}
+          echo ::set-output name=pr_number::${pr_number}
+
+      - name: Setup project matrix
+        id: setupproject
+        env:
+          projects: ${{ steps.parseinput.outputs.projects }}
+        run: |
+          echo "Setup ansible actions for projects [${projects}]"
+          echo -n "::set-output name=matrix::{\"include\":["
+          delimiter=""
+          for project in ${projects}; do
+            echo -n "${delimiter}"
+            echo -n '{"project":"'${project}'"}'
+            delimiter=","
+          done
+          echo "]}"
+
+      # security best practice: use specific version of public actions (v0.3.0)
+      - name: Hide previous PR comments
+        uses: int128/hide-comment-action@24848bfab99f16e129632e27397da999b9d1b2c0
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          authors: ""
+          starts-with: "**`${{ env.TEAM_DIR }}/"
+
+
+  plan:
+    needs: init
+    if: ${{ needs.init.outputs.projects != '' }}
+    strategy:
+      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2.3.4
-      - name: Load and Configure Terraform
-        uses: hashicorp/setup-terraform@v2.0.0
-        with:
-          terraform_version: 1.0.1
-          terraform_wrapper: false
-      - name: Terraform plan - nomis pipelines
-        run: |
-          echo "Terraform plan - ${TF_ENV}"
-          bash scripts/terraform-init.sh teams/nomis
-          terraform -chdir="teams/nomis" workspace select "core-shared-services-${TF_ENV}"
-          bash scripts/terraform-plan.sh teams/nomis
-        env:
-          TF_ENV: production
+      - name: Checkout the code
+        uses: actions/checkout@v3
 
-  deploy-nomis:
-    name: Deploy - nomis pipelines
-    needs: plan-nomis
+      - name: Get terraform version
+        id: discover
+        run: |
+          echo "Get terraform version for ${{ matrix.project }}"
+          set +o pipefail
+          required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+          if [[ -z "$required_version" ]]; then
+            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+            required_version="=${DEFAULT_TERRAFORM_VERSION}"
+          fi
+          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+            exit 1
+          fi
+          version=$(echo "$required_version" | cut -d= -f2)
+          echo "version=${version}"
+          echo ::set-output name=version::${version}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ steps.discover.outputs.version }}
+          terraform_wrapper: false
+
+      # security best practice: use specific version of public actions (v1)
+      - name: Turnstyle
+        id: turnstyle
+        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+        with:
+          same-branch-only: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Init and State Refresh
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
+          terraform workspace select "core-shared-services-${TF_ENV}"
+          # refresh as objects are often changed outside of Terraform
+          # suppress that from the plan PR comment
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
+
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          exitcode=0
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "exitcode=${exitcode}"
+          echo ::set-output name=exitcode::${exitcode}
+
+      - name: Create Plan PR message
+        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat tfplan.txt | wc -c)
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo
+            echo '```'
+            head -c 65476 tfplan.txt
+            echo
+            echo '```'
+            if [[ $len -gt 65476 ]]; then
+              echo "** Truncated output.  See $url for the rest **"
+            fi
+          }
+          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      # security best practice: use specific version of public actions (v1.3.0)
+      - name: Post Plan to PR
+        uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
+        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: "${{ env.TF_PLAN_OUT }}"
+          pr_number: "${{ needs.init.outputs.pr_number }}"
+
+  apply:
+    needs:
+      - init
+      - plan
+    if: ${{ needs.init.outputs.projects != '' && needs.init.outputs.action == 'apply' }}
+    strategy:
+      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
+      fail-fast: false
     runs-on: ubuntu-latest
     environment:
       name: core-shared-services
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2.3.4
-      - name: Load and Configure Terraform
-        uses: hashicorp/setup-terraform@v2.0.0
-        with:
-          terraform_version: 1.0.1
-          terraform_wrapper: false
-      - name: Terraform apply - nomis pipelines
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
+      - name: Get terraform version
+        id: discover
         run: |
-          echo "Terraform apply - ${TF_ENV}"
-          bash scripts/terraform-init.sh teams/nomis
-          terraform -chdir="teams/nomis" workspace select "core-shared-services-${TF_ENV}"
-          bash scripts/terraform-apply.sh teams/nomis
+          echo "Get terraform version for ${{ matrix.project }}"
+          set +o pipefail
+          required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+          if [[ -z "$required_version" ]]; then
+            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+            required_version="=${DEFAULT_TERRAFORM_VERSION}"
+          fi
+          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+            exit 1
+          fi
+          version=$(echo "$required_version" | cut -d= -f2)
+          echo "version=${version}"
+          echo ::set-output name=version::${version}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ steps.discover.outputs.version }}
+          terraform_wrapper: false
+
+      # security best practice: use specific version of public actions (v1)
+      - name: Turnstyle
+        id: turnstyle
+        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+        with:
+          same-branch-only: false
         env:
-          TF_ENV: production
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Init and State Refresh
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
+          terraform workspace select "core-shared-services-${TF_ENV}"
+          # refresh as objects are often changed outside of Terraform
+          # suppress that from the plan PR comment
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only
+
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          exitcode=0
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          echo ::set-output name=exitcode::${exitcode}
+
+      - name: Apply
+        if: ${{ steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
+
+      - name: Create Apply PR message
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat tfapply.txt | wc -c)
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo
+            echo '```'
+            head -c 65476 tfapply.txt
+            echo
+            echo '```'
+            if [[ $len -gt 65476 ]]; then
+              echo "** Truncated output.  See $url for the rest **"
+            fi
+          }
+          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      # security best practice: use specific version of public actions (v1.3.0)
+      - name: Post Apply to PR
+        uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: "${{ env.TF_APPLY_OUT }}"
+          pr_number: "${{ needs.init.outputs.pr_number }}"
