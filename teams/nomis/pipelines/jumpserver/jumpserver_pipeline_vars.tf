@@ -1,10 +1,10 @@
 locals {
   # Recipe's version:
-  jumpserver_recipe_version = "1.1.2"
+  jumpserver_recipe_version = "1.1.3"
 
   # Component's version:
-  prometheus_windows_exporter_component_version = "1.0.4"
-  jumpserver_component_version                  = "1.0.6"
+  prometheus_windows_exporter_component_version = "1.0.5"
+  jumpserver_component_version                  = "1.0.7"
 
   # Software's version:
   prometheus_windows_exporter_version = "0.19.0"
