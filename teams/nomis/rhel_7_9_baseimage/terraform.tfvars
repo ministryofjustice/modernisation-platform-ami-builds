@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.2.1"
+    configuration_version = "1.2.2"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -36,7 +36,7 @@ imagebuilders = {
     }
 
     infrastructure_configuration = {
-      instance_types = ["t2.large"]
+      instance_types = ["t3.medium"]
     }
 
     image_pipeline = {
@@ -50,10 +50,10 @@ imagebuilders = {
 distribution_target_account_names_by_branch = {
   main = [
     "core-shared-services-production",
-    "nomis-development"
+    "nomis-test"
   ]
   default = [
     "core-shared-services-production",
-    "nomis-development"
+    "nomis-test"
   ]
 }
