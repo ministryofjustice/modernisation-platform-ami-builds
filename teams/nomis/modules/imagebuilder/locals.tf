@@ -56,7 +56,6 @@ locals {
 
   ami_tags = merge(local.tags, {
     Name = local.ami_name
-    }
-  )
+  })
 }
 
