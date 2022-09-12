@@ -1,7 +1,6 @@
 locals {
   name             = "${var.team_name}_${var.name}"
   name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
-  ami_name         = "${local.name}${var.ami_name_suffix}_{{ imagebuilder:buildDate }}"
 
   core_shared_services = {
     repo_tfstate            = data.terraform_remote_state.core_shared_services_production.outputs
@@ -37,8 +36,27 @@ locals {
     image-pipeline               = local.name
     image-recipe                 = join("/", [local.name, var.configuration_version])
     infrastructure-configuration = join("/", [local.name, var.configuration_version])
+    github-branch                = var.branch
+    github-actor                 = var.gh_actor
+    release-or-patch             = var.release_or_patch
   }
 
-  tags = merge(local.default_tags, local.component_version_tags, var.tags)
+  tags = merge(
+    local.default_tags,
+    local.component_version_tags,
+    var.tags
+  )
+
+  ami_name = join("_", flatten(
+    [local.name],
+    var.release_or_patch == "" ? [] : ["$var.release_or_patch"],
+    (var.branch == "" || var.branch == "main") ? [] : ["$var.branch"],
+    ["{{ imagebuilder:buildDate }}"]
+  ))
+
+  ami_tags = merge(local.tags, {
+    Name = local.ami_name
+    }
+  )
 }
 

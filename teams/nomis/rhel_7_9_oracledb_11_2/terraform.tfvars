@@ -8,7 +8,7 @@ imagebuilders = {
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
     configuration_version = "0.0.4"
-    ami_name_suffix       = "_release" # or "_patch", see nomis AMI image building strategy doc
+    release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
     tags = {

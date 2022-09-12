@@ -13,9 +13,9 @@ variable "name" {
   description = "Name of the image, e.g. rhel79_base"
 }
 
-variable "ami_name_suffix" {
+variable "release_or_patch" {
   type        = string
-  description = "Optional suffix to include in the ami name, e.g. ${var.team_name}_${var.name}${var.ami_name_suffix}_{{ imagebuilder:buildDate }}"
+  description = "Set to patch or release as per AMI image building strategy, e.g. patch when minor component change, release when application version change"
   default     = ""
 }
 

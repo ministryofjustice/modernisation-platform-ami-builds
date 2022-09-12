@@ -112,6 +112,7 @@ module "imagebuilder" {
   name                         = each.key
   configuration_version        = each.value.configuration_version
   description                  = each.value.description
+  release_or_patch             = each.value.release_or_patch
   tags                         = merge(local.tags, each.value.tags)
   kms_key_id                   = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   account_ids_lookup           = local.environment_management.account_ids
