@@ -89,7 +89,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     ami_distribution_configuration {
-      name               = local.ami_name
+      name               = "${local.ami_name}_{{ imagebuilder:buildDate }}"
       description        = var.description
       kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", var.kms_key_id)
       target_account_ids = lookup(var.distribution_configuration.ami_distribution_configuration, "target_account_ids", null)
