@@ -13,6 +13,12 @@ variable "name" {
   description = "Name of the image, e.g. rhel79_base"
 }
 
+variable "release_or_patch" {
+  type        = string
+  description = "Set to patch or release as per AMI image building strategy, e.g. patch when minor component change, release when application version change"
+  default     = ""
+}
+
 variable "configuration_version" {
   type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
@@ -34,10 +40,15 @@ variable "kms_key_id" {
   default     = null
 }
 
+variable "account_ids_lookup" {
+  description = "A map of account names to account ids that can be used for image_recipe.parent_image.owner"
+  default     = {}
+}
+
 variable "image_recipe" {
   type = object({
     parent_image = object({
-      owner             = string
+      owner             = string # either an ID or a name which is a key in var.account_ids_lookup
       filter_name_value = string
     })
     user_data = optional(string)
@@ -75,15 +86,6 @@ variable "image_pipeline" {
     })
   })
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
-}
-
-variable "core_shared_services" {
-  # Set the tfstate variables to the corresponding data.terraform_remote_state output
-  # type = object({
-  #   repo_tfstate
-  #   imagebuilder_mp_tfstate
-  # })
-  description = "core-shared-services terraform state outputs"
 }
 
 variable "branch" {

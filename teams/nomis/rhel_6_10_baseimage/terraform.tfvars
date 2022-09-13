@@ -1,8 +1,11 @@
-locals {
+# following are passed in via pipeline
+# BRANCH_NAME =  
+# GH_ACTOR_NAME = 
+
+imagebuilders = {
+
   rhel_6_10_baseimage = {
-    gh_actor              = var.GH_ACTOR_NAME
-    branch                = var.BRANCH_NAME
-    configuration_version = "0.1.0"
+    configuration_version = "0.1.5"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -23,7 +26,7 @@ locals {
       ]
 
       components_custom = [
-        "components/rhel_6_10_baseimage.yml"
+        "../components/rhel_6_10_baseimage/rhel_6_10_baseimage.yml"
       ]
 
       components_aws = [] # rhel6.10 cannot use AWS components, these are supplied below
@@ -43,16 +46,21 @@ EOF
       instance_types = ["t2.large"]
     }
 
-    distribution_configuration = {
-      ami_distribution_configuration = {
-        target_account_ids = local.ami_share_accounts
-      }
-    }
-
     image_pipeline = {
       schedule = {
         schedule_expression = "cron(0 0 1 * ? *)"
       }
     }
   }
+}
+
+distribution_target_account_names_by_branch = {
+  main = [
+    "core-shared-services-production",
+    "nomis-test"
+  ]
+  default = [
+    "core-shared-services-production",
+    "nomis-test"
+  ]
 }

@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.0.7"
+      default: "1.0.8"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -14,26 +14,6 @@ parameters:
 phases:
   - name: build
     steps:
-      - name: InstallPackages
-        action: ExecuteBash
-        inputs:
-          commands:
-            - sudo yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel wget unzip screen git -y
-      - name: InstallPython3-9
-        action: ExecuteBash
-        inputs:
-          commands:
-            - |
-              set -e
-              cd /tmp
-
-              # install python 3.9
-              wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
-              tar xzf Python-3.9.6.tgz
-              rm -f Python-3.9.6.tgz
-              cd Python-3.9.6
-              ./configure --enable-optimizations
-              sudo make altinstall
       - name: InstallAndRunAnsible
         action: ExecuteBash
         inputs:

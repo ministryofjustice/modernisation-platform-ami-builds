@@ -1,12 +1,15 @@
-locals {
+# following are passed in via pipeline
+# BRANCH_NAME =  
+# GH_ACTOR_NAME = 
+
+imagebuilders = {
+
   rhel_7_9_baseimage = {
-    gh_actor              = var.GH_ACTOR_NAME
-    branch                = var.BRANCH_NAME
-    configuration_version = "1.2.0"
+    configuration_version = "1.2.2"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
-      os-version = "RHEL 7.9"
+      os-version = "rhel 7.9"
     }
 
     image_recipe = {
@@ -28,18 +31,12 @@ locals {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "components/rhel_7_9_baseimage.yml"
+        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tmpl"
       ]
     }
 
     infrastructure_configuration = {
-      instance_types = ["t2.large"]
-    }
-
-    distribution_configuration = {
-      ami_distribution_configuration = {
-        target_account_ids = local.ami_share_accounts
-      }
+      instance_types = ["t3.medium"]
     }
 
     image_pipeline = {
@@ -48,4 +45,15 @@ locals {
       }
     }
   }
+}
+
+distribution_target_account_names_by_branch = {
+  main = [
+    "core-shared-services-production",
+    "nomis-test"
+  ]
+  default = [
+    "core-shared-services-production",
+    "nomis-test"
+  ]
 }
