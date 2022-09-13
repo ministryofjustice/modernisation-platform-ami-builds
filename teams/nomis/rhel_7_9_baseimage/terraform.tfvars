@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.2.5"
+    configuration_version = "1.2.6"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -31,7 +31,7 @@ imagebuilders = {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tmpl"
+        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tftpl"
       ]
     }
 

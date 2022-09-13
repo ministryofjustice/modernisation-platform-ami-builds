@@ -8,15 +8,15 @@ locals {
   }
 
   component_template_args = {
-    BRANCH_NAME = var.branch == "" ? "main" : var.branch
+    branch = var.branch == "" ? "main" : var.branch
   }
 
   components_custom_yaml = {
     for component_filename in var.image_recipe.components_custom :
     component_filename => yamldecode(
-      length(regexall(".*tmpl", component_filename)) > 0 ?
-      templatefile("${component_filename}.tftpl", local.component_template_args) :
-      file("${component_filename}.deliberateerror")
+      length(regexall(".*tftpl", component_filename)) > 0 ?
+      templatefile(component_filename", local.component_template_args) :
+      file(component_filename)
     )
   }
 
