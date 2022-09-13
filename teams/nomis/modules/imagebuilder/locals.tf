@@ -15,7 +15,7 @@ locals {
     for component_filename in var.image_recipe.components_custom :
     component_filename => yamldecode(
       length(regexall(".*tftpl", component_filename)) > 0 ?
-      templatefile(component_filename", local.component_template_args) :
+      templatefile(component_filename, local.component_template_args) :
       file(component_filename)
     )
   }
