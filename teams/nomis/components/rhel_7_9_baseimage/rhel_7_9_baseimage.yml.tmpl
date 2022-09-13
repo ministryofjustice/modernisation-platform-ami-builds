@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.2"
+      default: "1.1.3"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -47,6 +47,8 @@ phases:
             - |
               set -e
               cd /tmp
+              echo ${BRANCH_NAME}
+              exit 0
 
               # install, create, activate virtual environment
               pip3.9 install virtualenv
