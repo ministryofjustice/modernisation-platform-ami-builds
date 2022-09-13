@@ -58,9 +58,11 @@ distribution_target_account_names_by_branch = {
   main = [
     "core-shared-services-production",
     "nomis-test"
+    "nomis-development"
   ]
   default = [
     "core-shared-services-production",
     "nomis-test"
+    "nomis-development"
   ]
 }
