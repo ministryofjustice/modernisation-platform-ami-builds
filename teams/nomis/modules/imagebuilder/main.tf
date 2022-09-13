@@ -89,7 +89,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     dynamic "ami_distribution_configuration" {
-      for_each = try(var.distribution_configuration.ami_distribution_configuration, null) != null ? [var.distribution_configuration.ami_distribution_configuration] : []
+      for_each = [var.distribution_configuration.ami_distribution_configuration]
       content {
         name               = local.ami_name
         description        = var.description

@@ -73,8 +73,12 @@ variable "infrastructure_configuration" {
 variable "distribution_configuration" {
   type = object({
     ami_distribution_configuration = object({
-      target_account_ids = list(string)
+      target_account_ids_or_names = list(string)
     })
+    launch_template_configuration = optional(object({
+      account_id_or_name = string
+      launch_template_id = string
+    }))
   })
   description = "Distribution configuration, see aws_imagebuilder_distribution_configuration documentation for details on the parameters"
 }
