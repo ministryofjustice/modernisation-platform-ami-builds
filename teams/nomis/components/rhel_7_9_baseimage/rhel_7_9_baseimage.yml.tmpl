@@ -47,8 +47,6 @@ phases:
             - |
               set -e
               cd /tmp
-              echo ${BRANCH_NAME}
-              exit 0
 
               # install, create, activate virtual environment
               pip3.9 install virtualenv
@@ -62,6 +60,7 @@ phases:
 
               # Download playbook
               mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
+              echo "Cloning using branch=${BRANCH_NAME}"
               git clone -b ${BRANCH_NAME} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
               cd modernisation-platform-ami-builds/ansible
 
@@ -80,5 +79,5 @@ phases:
 
               # Deactivate virtual env and cleanup
               deactivate
-              rm -r /tmp/python-venv
-              rm -r /tmp/node-exporter-ansible-playbook
+              rm -rf /tmp/python-venv
+              rm -rf /tmp/node-exporter-ansible-playbook
