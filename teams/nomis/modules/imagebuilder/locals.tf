@@ -11,18 +11,24 @@ locals {
     branch = var.branch == "" ? "main" : var.branch
   }
 
-  components_custom_yaml = {
+  components_custom_data = {
     for component_filename in var.image_recipe.components_custom :
-    component_filename => yamldecode(
-      length(regexall(".*tftpl", component_filename)) > 0 ?
-      templatefile(component_filename, local.component_template_args) :
-      file(component_filename)
-    )
+    component_filename => length(regexall(".*tftpl", component_filename)) > 0 ?
+    templatefile(component_filename, local.component_template_args) :
+    file(component_filename)
+  }
+
+  components_custom_yaml = {
+    for component_filename, data in local.components_custom_data :
+    component_filename => {
+      raw  = data
+      yaml = yamldecode(data)
+    }
   }
 
   components_custom_versions = {
-    for component_filename, component_yaml in local.components_custom_yaml :
-    "${component_yaml.name}-version" => component_yaml.parameters[0].Version.default
+    for component_filename, data in local.components_custom_yaml :
+    "${data.yaml.name}-version" => data.yaml.parameters[0].Version.default
   }
 
   components_aws_versions = {
