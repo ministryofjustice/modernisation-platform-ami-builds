@@ -95,6 +95,9 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
         description        = var.description
         kms_key_id         = var.kms_key_id
         target_account_ids = flatten([for name in ami_distribution_configuration.value.target_account_ids_or_names : try(var.account_ids_lookup[name], name)])
+        launch_permission {
+          user_ids = flatten([for name in ami_distribution_configuration.value.target_account_ids_or_names : try(var.account_ids_lookup[name], name)])
+        }
         ami_tags           = local.ami_tags
       }
     }
