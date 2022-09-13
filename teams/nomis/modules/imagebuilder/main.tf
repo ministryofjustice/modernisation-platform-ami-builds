@@ -88,12 +88,23 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
   distribution {
     region = var.region
 
-    ami_distribution_configuration {
-      name               = local.ami_name
-      description        = var.description
-      kms_key_id         = lookup(var.distribution_configuration.ami_distribution_configuration, "kms_key_id", var.kms_key_id)
-      target_account_ids = lookup(var.distribution_configuration.ami_distribution_configuration, "target_account_ids", null)
-      ami_tags           = local.ami_tags
+    dynamic "ami_distribution_configuration" {
+      for_each = try(var.distribution_configuration.ami_distribution_configuration, null) != null ? [var.distribution_configuration.ami_distribution_configuration] : []
+      content {
+        name               = local.ami_name
+        description        = var.description
+        kms_key_id         = var.kms_key_id
+        target_account_ids = flatten([for name in ami_distribution_configuration.value.target_account_ids_or_names : try(var.account_ids_lookup[name], name)])
+        ami_tags           = local.ami_tags
+      }
+    }
+
+    dynamic "launch_template_configuration" {
+      for_each = try(var.distribution_configuration.launch_template_configuration, null) != null ? [var.distribution_configuration.launch_template_configuration] : []
+      content {
+        account_id         = try(var.account_ids_lookup[launch_template_configuration.value.account_id_or_name], launch_template_configuration.value.account_id_or_name)
+        launch_template_id = launch_template_configuration.value.launch_template_id
+      }
     }
   }
 }

@@ -16,19 +16,8 @@ variable "imagebuilders" {
   description = "A map of imagebuilder configurations."
 }
 
-variable "distribution_target_account_names_by_branch" {
-  description = "A map of github branch to corresponding list of account names, e.g. nomis-production.  You must specify default as a key which is used if the github branch is not defined in the map, e.g. in the case of a feature branch"
-  # {
-  #   main = [
-  #     "core-shared-services-production",
-  #     "nomis-development",
-  #     "nomis-production"
-  #   ]
-  #   default = [
-  #     "core-shared-services-production",
-  #     "nomis-development"
-  #   ]
-  # }
+variable "distribution_configuration_by_branch" {
+  description = "A map of github branch to distribution_configuration.  See README for more details"
 }
 
 ### Core mod platform account stuff
@@ -78,29 +67,19 @@ locals {
   tags = {
     business-unit = "HMPPS"
     application   = upper(local.team_name)
-    branch        = var.BRANCH_NAME
+    branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
+    github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
     is-production = "${var.BRANCH_NAME == "main" ? "true" : "false"}"
     owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
 
-  # configure the distribution account ids.  Different config is allowed
-  # based on the github branch triggering the pipeline
-  distribution_target_account_names = try(
-    var.distribution_target_account_names_by_branch[var.BRANCH_NAME],
-    var.distribution_target_account_names_by_branch["default"]
+  # Different distribution config is allowed based on the github branch
+  # triggering the pipeline
+  distribution_configuration = try(
+    var.distribution_configuration_by_branch[var.BRANCH_NAME],
+    var.distribution_configuration_by_branch["default"]
   )
-
-  distribution_target_account_ids = distinct(flatten([
-    for key in local.distribution_target_account_names :
-    local.environment_management.account_ids[key]
-  ]))
-
-  distribution_configuration = {
-    ami_distribution_configuration = {
-      target_account_ids = local.distribution_target_account_ids
-    }
-  }
 }
 
 module "imagebuilder" {

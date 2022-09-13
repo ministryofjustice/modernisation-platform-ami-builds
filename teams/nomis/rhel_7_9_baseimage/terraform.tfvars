@@ -47,13 +47,29 @@ imagebuilders = {
   }
 }
 
-distribution_target_account_names_by_branch = {
-  main = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
-  default = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
+distribution_configuration_by_branch = {
+  # push to main branch
+  main = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+       ]
+    }
+  }
+
+  # push to any other branch / local run
+  default = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+      ]
+    }
+
+    launch_template_configuration = {
+      account_id_or_name = "nomis-test"
+      launch_template_id = "lt-0b4eec79084daf59f"
+    }
+  }
 }
