@@ -5,7 +5,8 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      description: Component version, set outside of this document. Update this in the pipeline variables, each time the file changes.
+      default: 1.0.8
+      description: Component version (update this each time the file changes)
   - Platform:
       type: string
       default: "Windows"
