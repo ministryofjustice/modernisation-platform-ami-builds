@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.1.5"
+    configuration_version = "0.1.6"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -57,10 +57,12 @@ EOF
 distribution_target_account_names_by_branch = {
   main = [
     "core-shared-services-production",
-    "nomis-test"
+    "nomis-test",
+    "nomis-development"
   ]
   default = [
     "core-shared-services-production",
-    "nomis-test"
+    "nomis-test",
+    "nomis-development"
   ]
 }

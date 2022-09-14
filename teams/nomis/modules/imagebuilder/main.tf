@@ -105,7 +105,9 @@ resource "aws_imagebuilder_image_pipeline" "this" {
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.this.arn
   tags                             = local.tags
-
+  image_tests_configuration {
+    image_tests_enabled = false
+  }
   schedule {
     schedule_expression = var.image_pipeline.schedule.schedule_expression
   }
