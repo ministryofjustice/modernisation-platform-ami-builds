@@ -80,7 +80,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/rhel_7_9_oracledb_11_2/database.yml.tmpl"
+        "../components/rhel_7_9_oracledb_11_2/database.yml.tftpl"
       ]
 
       components_aws = []

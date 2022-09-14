@@ -34,7 +34,8 @@ phases:
 
               # Download playbook
               mkdir /tmp/database-ansible-playbook && cd "$_"
-              git clone -b ${BRANCH_NAME} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              echo "Cloning using branch=${branch}"
+              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
               cd modernisation-platform-ami-builds/ansible
 
               # Install requirements in virtual env
