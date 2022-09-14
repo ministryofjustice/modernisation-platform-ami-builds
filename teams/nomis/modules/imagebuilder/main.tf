@@ -56,8 +56,11 @@ resource "aws_imagebuilder_image_recipe" "this" {
     create_before_destroy = true
   }
 
-  systems_manager_agent {
-    uninstall_after_build = false
+  dynamic "systems_manager_agent" {
+    for_each = data.aws_ami.parent.platform == "windows" ? [] : ["linux"]
+    content {
+      uninstall_after_build = false
+    }
   }
 }
 

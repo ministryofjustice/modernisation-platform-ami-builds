@@ -69,6 +69,7 @@ scaling down and up, will create a new EC2 instance using the new AMI
 
 Tips:
 
+- format code before submitting PR, e.g. use format.sh script
 - avoid multiple people working on the same image
 - pre-test ansible/scripts on the relevant parent image
 - create a branch, update version numbers, commit and push your changes
