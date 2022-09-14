@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.2.2"
+    configuration_version = "1.2.9"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -31,7 +31,7 @@ imagebuilders = {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tmpl"
+        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tftpl"
       ]
     }
 
@@ -47,13 +47,34 @@ imagebuilders = {
   }
 }
 
-distribution_target_account_names_by_branch = {
-  main = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
-  default = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
+distribution_configuration_by_branch = {
+  # push to main branch
+  main = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+      ]
+    }
+
+    launch_template_configuration = {
+      account_id_or_name = "nomis-test"
+      launch_template_id = "lt-05c9663f629ff1ba8"
+    }
+  }
+
+  # push to any other branch / local run
+  default = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+      ]
+    }
+
+    launch_template_configuration = {
+      account_id_or_name = "nomis-test"
+      launch_template_id = "lt-05c9663f629ff1ba8"
+    }
+  }
 }

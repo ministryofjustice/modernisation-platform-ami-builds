@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.0.5"
+    configuration_version = "0.0.6"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -80,7 +80,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/rhel_7_9_oracledb_11_2/database.yml.tmpl"
+        "../components/rhel_7_9_oracledb_11_2/database.yml.tftpl"
       ]
 
       components_aws = []
@@ -98,14 +98,25 @@ imagebuilders = {
   }
 }
 
-distribution_target_account_names_by_branch = {
-  main = [
-    "core-shared-services-production",
-    "nomis-test",
-    "nomis-production"
-  ]
-  default = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
+distribution_configuration_by_branch = {
+  # push to main branch
+  main = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test",
+        "nomis-production"
+      ]
+    }
+  }
+
+  # push to any other branch / local run
+  default = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+      ]
+    }
+  }
 }

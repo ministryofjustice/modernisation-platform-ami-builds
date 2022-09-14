@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "1.1.2"
+      default: "1.1.6"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -60,7 +60,8 @@ phases:
 
               # Download playbook
               mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
-              git clone -b ${BRANCH_NAME} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              echo "Cloning using branch=${branch}"
+              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
               cd modernisation-platform-ami-builds/ansible
 
               # Install requirements in virtual env
@@ -78,5 +79,5 @@ phases:
 
               # Deactivate virtual env and cleanup
               deactivate
-              rm -r /tmp/python-venv
-              rm -r /tmp/node-exporter-ansible-playbook
+              rm -rf /tmp/python-venv
+              rm -rf /tmp/node-exporter-ansible-playbook
