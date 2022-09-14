@@ -53,14 +53,25 @@ imagebuilders = {
   }
 }
 
-distribution_target_account_names_by_branch = {
-  main = [
-    "core-shared-services-production",
-    "nomis-test",
-    "nomis-production"
-  ]
-  default = [
-    "core-shared-services-production",
-    "nomis-test"
-  ]
+distribution_configuration_by_branch = {
+  # push to main branch
+  main = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test",
+        "nomis-production"
+      ]
+    }
+  }
+
+  # push to any other branch / local run
+  default = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test"
+      ]
+    }
+  }
 }

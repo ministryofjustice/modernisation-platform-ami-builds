@@ -54,7 +54,12 @@ distribution_configuration_by_branch = {
       target_account_ids_or_names = [
         "core-shared-services-production",
         "nomis-test"
-       ]
+      ]
+    }
+
+    launch_template_configuration = {
+      account_id_or_name = "nomis-test"
+      launch_template_id = "lt-05c9663f629ff1ba8"
     }
   }
 

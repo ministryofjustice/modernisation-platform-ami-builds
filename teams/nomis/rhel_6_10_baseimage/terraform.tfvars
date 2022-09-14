@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.1.6"
+    configuration_version = "0.1.7"
     description           = "nomis rhel 6.10 base image"
 
     tags = {
@@ -54,15 +54,26 @@ EOF
   }
 }
 
-distribution_target_account_names_by_branch = {
-  main = [
-    "core-shared-services-production",
-    "nomis-test",
-    "nomis-development"
-  ]
-  default = [
-    "core-shared-services-production",
-    "nomis-test",
-    "nomis-development"
-  ]
+distribution_configuration_by_branch = {
+  # push to main branch
+  main = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test",
+        "nomis-development"
+      ]
+    }
+  }
+
+  # push to any other branch / local run
+  default = {
+    ami_distribution_configuration = {
+      target_account_ids_or_names = [
+        "core-shared-services-production",
+        "nomis-test",
+        "nomis-development"
+      ]
+    }
+  }
 }
