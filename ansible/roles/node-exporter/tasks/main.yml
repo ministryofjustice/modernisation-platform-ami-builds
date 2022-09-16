@@ -63,29 +63,30 @@
     path: /opt/textfile_monitoring/misload_running.prom
   register: misload_running
 
-## Configuration steps for RHEL6
-## Need to be tested & verified before uncommenting
-#
-# - name: user fix rhel6
-#   ansible.builtin.lineinfile:
-#     path: /etc/default/node_exporter
-#     regexp: '^USER=.*$'
-#     line: 'USER=root'
-#     owner: root
-#     group: root
-#     mode: 0644
-#     state: present
-#   when: ansible_distribution_major_version == '6'
-#   notify: reload node_exporter
-#
-# - name: add initd service file
-#   ansible.builtin.copy:
-#     src: node_exporter
-#     dest: /etc/init.d/node_exporter
-#     owner: root
-#     group: root
-#     mode: 0755
-#   when: ansible_distribution_major_version == '6'
+# Configuration steps for RHEL6
+
+- name: user fix rhel6
+  ansible.builtin.lineinfile:
+    path: /etc/default/node_exporter
+    regexp: '^USER=.*$'
+    line: 'USER=root'
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+  when: ansible_distribution_major_version == '6'
+  notify: reload node_exporter
+
+- name: add initd service file
+  ansible.builtin.copy:
+    src: node_exporter
+    dest: /etc/init.d/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_distribution_major_version == '6'
+
+# Configuration steps for RHEL7 or RHEL8
 
 - name: node_exporter systemd metrics enabled rhel7 or rhel8 (misload absent)
   ansible.builtin.lineinfile:
