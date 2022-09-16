@@ -80,7 +80,7 @@ phases:
               # download playbook
               mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
               echo "Cloning using branch=${branch}"
-              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
+              git clone -b ${branch} "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
               cd modernisation-platform-ami-builds/ansible
 
               # install requirements in virtual env
