@@ -36,48 +36,60 @@ phases:
               tar xzf Python-3.9.6.tgz
               rm -f Python-3.9.6.tgz
               cd Python-3.9.6
+
+              # ensure zlib is enabled, required for some ansible modules
+              sed -i 's/^#zlib/zlib/' Modules/Setup
+
               ./configure --enable-optimizations
               sudo make altinstall
 
-      # Install node exporter agent with ansible
+
+      # Install node exporter agent with ansible roles
       - name: InstallAndRunAnsible
         action: ExecuteBash
         inputs:
           commands:
             - |
               set -e
-              cd /tmp
+              PATH=/usr/local/bin:$PATH
+              repo="modernisation-platform-ami-builds"
+              server_type="base"
+
+              # clone ansible roles and playbook
+              ansible_dir=$(mktemp -d)
+              echo "Cloning ${repo} into ${ansible_dir} using branch=${branch}"
+              cd ${ansible_dir}
+              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/${repo}.git"
+
+              # install python dependencies outside of virtual env so ansible
+              # can be executed remotely
+              cd ${ansible_dir}/${repo}/ansible
+              python3.9 -m pip install -r requirements.txt
 
               # install, create, activate virtual environment
-              pip3.9 install virtualenv
-              mkdir /tmp/python-venv && cd "$_"
-              python3.9 -m venv ansible
-              source ansible/bin/activate
-
-              # Install ansible modules in virtual env
-              python3.9 -m pip install --upgrade pip
-              python3.9 -m pip install ansible==6.0.0
-
-              # Download playbook
-              mkdir /tmp/node-exporter-ansible-playbook && cd "$_"
-              echo "Cloning using branch=${branch}"
-              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/modernisation-platform-ami-builds.git"
-              cd modernisation-platform-ami-builds/ansible
+              mkdir -p /var/lib/venv && cd "$_"
+              python3.9 -m pip install virtualenv
+              python3.9 -m venv ansible-6.0.0
+              source ansible-6.0.0/bin/activate
 
               # Install requirements in virtual env
-              python3.9 -m pip install -r requirements.txt
-              ansible-galaxy role install -r requirements.yml
-              ansible-galaxy collection install -r requirements.yml
+              cd ${ansible_dir}/${repo}/ansible
+              python3.9 -m pip install --upgrade pip
+              python3.9 -m pip install ansible==6.0.0
+              python3.9 -m pip install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.txt
+              ansible-galaxy role install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.yml
+              ansible-galaxy collection install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.yml
 
               # Get required extra vars and run ansible
               PY_INTERPRETER=$(which python3.9)
-              ansible-playbook ../teams/nomis/ansible/playbooks/node-exporter-install.yml \
+              ansible-playbook site.yml \
               --connection=local \
               --inventory localhost \
+              --extra-vars "target=localhost" \
               --extra-vars "ansible_python_interpreter=$PY_INTERPRETER" \
+              --extra-vars "@group_vars/server_type_${server_type//-/_}.yml" \
               --become
 
-              # Deactivate virtual env and cleanup
+              # Cleanup (keep ansible virtualenv as it will be used regularly)
               deactivate
-              rm -rf /tmp/python-venv
-              rm -rf /tmp/node-exporter-ansible-playbook
+              rm -rf /tmp/${ansible_dir}
