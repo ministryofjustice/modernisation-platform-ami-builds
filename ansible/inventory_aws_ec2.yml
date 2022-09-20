@@ -14,7 +14,15 @@ groups:
   windows: (platform is defined) and (platform in 'windows')
 
 keyed_groups:
-  - key: tags['Name']
+  - key: tags['business-unit']
+    prefix: business-unit
+  - key: tags['environment-name']
+    prefix: environment-name
+  - key: tags['application']
+    prefix: application
+  - key: tags['component']
+    prefix: component
+  - key: tags['server-type']
     prefix: server-type
 
 strict: no
