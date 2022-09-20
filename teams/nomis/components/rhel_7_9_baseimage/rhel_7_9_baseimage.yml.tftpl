@@ -57,13 +57,13 @@ phases:
 
               # clone ansible roles and playbook
               ansible_dir=$(mktemp -d)
-              echo "Cloning ${repo} into ${ansible_dir} using branch=${branch}"
-              cd ${ansible_dir}
-              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/${repo}.git"
+              echo "Cloning $repo into $ansible_dir using branch=${branch}"
+              cd $ansible_dir
+              git clone -b ${branch} --single-branch "https://github.com/ministryofjustice/$repo.git"
 
               # install python dependencies outside of virtual env so ansible
               # can be executed remotely
-              cd ${ansible_dir}/${repo}/ansible
+              cd $ansible_dir/$repo/ansible
               python3.9 -m pip install -r requirements.txt
 
               # install, create, activate virtual environment
@@ -73,12 +73,12 @@ phases:
               source ansible-6.0.0/bin/activate
 
               # Install requirements in virtual env
-              cd ${ansible_dir}/${repo}/ansible
+              cd $ansible_dir/$repo/ansible
               python3.9 -m pip install --upgrade pip
               python3.9 -m pip install ansible==6.0.0
-              python3.9 -m pip install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.txt
-              ansible-galaxy role install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.yml
-              ansible-galaxy collection install -r ${ansible_dir}/modernisation-platform-ami-builds/ansible/requirements.yml
+              python3.9 -m pip install -r $ansible_dir/modernisation-platform-ami-builds/ansible/requirements.txt
+              ansible-galaxy role install -r $ansible_dir/modernisation-platform-ami-builds/ansible/requirements.yml
+              ansible-galaxy collection install -r $ansible_dir/modernisation-platform-ami-builds/ansible/requirements.yml
 
               # Get required extra vars and run ansible
               PY_INTERPRETER=$(which python3.9)
@@ -87,9 +87,11 @@ phases:
               --inventory localhost \
               --extra-vars "target=localhost" \
               --extra-vars "ansible_python_interpreter=$PY_INTERPRETER" \
-              --extra-vars "@group_vars/server_type_${server_type//-/_}.yml" \
+              --extra-vars "@group_vars/server_type_$server_type.yml" \
               --become
 
               # Cleanup (keep ansible virtualenv as it will be used regularly)
               deactivate
-              rm -rf /tmp/${ansible_dir}
+              echo "Cleaning up $ansible_dir"
+              rm -rf $ansible_dir/$repo
+              rmdir $ansible_dir
