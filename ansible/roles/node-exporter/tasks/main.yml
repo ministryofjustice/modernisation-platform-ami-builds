@@ -65,17 +65,17 @@
 
 # Configuration steps for RHEL6
 
-# - name: user fix rhel6
-#   ansible.builtin.lineinfile:
-#     path: /etc/default/node_exporter
-#     regexp: '^USER=.*$'
-#     line: 'USER=root'
-#     owner: root
-#     group: root
-#     mode: 0644
-#     state: present
-#   when: ansible_distribution_major_version == '6'
-#   notify: reload node_exporter
+- name: user fix rhel6
+  ansible.builtin.lineinfile:
+    path: /etc/default/node_exporter
+    regexp: '^USER=.*$'
+    line: 'USER=root'
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+  when: ansible_distribution_major_version == '6'
+  notify: reload node_exporter
 
 - name: add initd service file
   ansible.builtin.copy:
