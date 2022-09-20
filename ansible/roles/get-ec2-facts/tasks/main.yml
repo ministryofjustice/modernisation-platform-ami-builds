@@ -6,6 +6,3 @@
     region: "{{ ansible_ec2_placement_region }}"
     resource: "{{ ansible_ec2_instance_id }}"
   register: ec2
-
-- debug:
-    var: ec2.tags.application
