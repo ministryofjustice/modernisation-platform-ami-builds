@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.2.4"
+    configuration_version = "0.2.5"
     description           = "nomis RHEL6.10 base image"
 
     tags = {
@@ -60,14 +60,14 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
-        "nomis-test" #, "nomis-development"
+        "nomis-test"
       ]
     }
 
-    launch_template_configuration = {
+    /* launch_template_configuration = {
       account_id_or_name = "nomis-test"
       launch_template_id = "lt-05c9663f629ff1ba8"
-    }
+    } */
   }
 
   # push to any other branch / local run
@@ -75,13 +75,13 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
-        "nomis-test" #, "nomis-development"
+        "nomis-test"
       ]
     }
 
-    launch_template_configuration = {
+    /* launch_template_configuration = {
       account_id_or_name = "nomis-test"
       launch_template_id = "lt-05c9663f629ff1ba8"
-    }
+    } */
   }
 }
