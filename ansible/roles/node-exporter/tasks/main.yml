@@ -17,7 +17,11 @@
     system: yes
     create_home: no
 
+# force this to run in check_mode otherwise other steps will fail
+# set changed_when to false as this change is not impacting
 - name: get node_exporter archive
+  check_mode: no
+  changed_when: false
   ansible.builtin.unarchive:
     src: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
     dest: /tmp/
@@ -31,9 +35,14 @@
     dest: /usr/bin/
     owner: root
     group: root
+    remote_src: yes
     mode: 0755
 
+# execute in check mode and set to changed_when false as this
+# set changed_when to false as this change is not impacting
 - name: clean up files
+  check_mode: no
+  changed_when: false
   ansible.builtin.file:
     path: "/tmp/{{ item }}"
     state: absent
