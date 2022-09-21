@@ -77,8 +77,8 @@
 - name: user fix rhel6
   ansible.builtin.lineinfile:
     path: /etc/default/node_exporter
-    regexp: '^USER=.*$'
-    line: 'USER=root'
+    regexp: "^USER=.*$"
+    line: "USER=root"
     owner: root
     group: root
     mode: 0644
