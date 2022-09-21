@@ -57,20 +57,20 @@ status() {
 
 }
 
-uninstall() {
+# uninstall() {
 
-  echo -n "Are you really sure you want to uninstall ${NAME}? That cannot be undone. [y$
-  local SURE
-  read SURE
-  if [ "$SURE" = "yes" ]; then
-    stop
-    rm -f "$PIDFILE"
-    echo "Notice: log file is not be removed: '$LOGFILE'" >&2
-    update-rc.d -f <NAME> remove
-    rm -fv "$0"
-  fi
+#   echo -n "Are you really sure you want to uninstall ${NAME}? That cannot be undone. [y$
+#   local SURE
+#   read SURE
+#   if [ "$SURE" = "yes" ]; then
+#     stop
+#     rm -f "$PIDFILE"
+#     echo "Notice: log file is not be removed: '$LOGFILE'" >&2
+#     update-rc.d -f <NAME> remove
+#     rm -fv "$0"
+#   fi
 
-}
+# }
 
 case "$1" in
   start)
@@ -78,9 +78,6 @@ case "$1" in
     ;;
   stop)
     stop
-    ;;
-  uninstall)
-    uninstall
     ;;
   restart)
     stop
@@ -90,5 +87,5 @@ case "$1" in
   status
   ;;
   *)
-    echo "Usage: $0 {start|stop|restart|uninstall}"
+    echo "Usage: $0 {start|stop|restart|status}"
 esac
