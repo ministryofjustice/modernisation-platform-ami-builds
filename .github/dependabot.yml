@@ -28,19 +28,27 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/modules/component_tags"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
     directory: "/teams/nomis/modules/imagebuilder"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/pipelines"
+    directory: "/teams/nomis/rhel_6_10_baseimage"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/pipelines/jumpserver"
+    directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_7_9_baseimage"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_7_9_oracledb_11_2"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/windows_server_2022_jumpserver"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
