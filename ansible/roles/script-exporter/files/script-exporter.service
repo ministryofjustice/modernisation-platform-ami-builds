@@ -1,0 +1,14 @@
+[Unit]
+
+Description=Prometheus exporter for script exit status and duration
+
+[Service]
+
+EnvironmentFile=/opt/script-exporter/script-exporter.env
+User=prometheus
+ExecStart=/usr/bin/script-exporter -web.listen-address=:9172 -config.file=/opt/script-exporter/config.yml
+Restart=always
+
+[Install]
+
+WantedBy=multi-user.target
