@@ -1,3 +1,5 @@
+# Systemd script-exporter service is run as a prometheus user
+
 - name: check prometheus user exists
   ansible.builtin.getent:
     database: passwd
@@ -69,7 +71,7 @@
     group: root
     mode: 0400
 
-- name: start & enable Service
+- name: start & enable service
   ansible.builtin.service:
     name: script-exporter
     state: started
