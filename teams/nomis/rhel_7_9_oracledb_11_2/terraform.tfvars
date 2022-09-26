@@ -1,13 +1,13 @@
 # following are passed in via pipeline
-# BRANCH_NAME =  
-# GH_ACTOR_NAME = 
+# BRANCH_NAME =
+# GH_ACTOR_NAME =
 
 imagebuilders = {
 
   # test configuration
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.0.6"
+    configuration_version = "0.0.7"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -80,7 +80,8 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/rhel_7_9_oracledb_11_2/database.yml.tftpl"
+        "../components/rhel_7_9_oracledb_11_2/database.yml.tftpl",
+        "../components/rhel_7_9_oracledb_11_2/prometheus_script_exporter.yml.tftpl"
       ]
 
       components_aws = []
