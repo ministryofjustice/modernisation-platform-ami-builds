@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.3.3"
+    configuration_version = "1.3.4"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -75,9 +75,9 @@ distribution_configuration_by_branch = {
       ]
     }
 
-    launch_template_configuration = {
+    /* launch_template_configuration = {
       account_id_or_name = "nomis-test"
       launch_template_id = "lt-05c9663f629ff1ba8"
-    }
+    } */
   }
 }
