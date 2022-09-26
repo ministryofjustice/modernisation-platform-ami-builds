@@ -22,7 +22,7 @@ phases:
               set -e
               cd /tmp
 
-              # download and build Python 3.6.3 
+              # download and build Python 3.6.3
               wget --no-check-certificate https://python.org/ftp/python/3.6.3/Python-3.6.3.tar.xz
               tar xf Python-3.6.3.tar.xz
               rm -f Python-3.6.3.tar.xz
