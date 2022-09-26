@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.4
+      default: 0.0.5
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -43,7 +43,14 @@ phases:
               $python -m venv ansible
               source ansible/bin/activate
               $python -m pip install --upgrade pip
-              $python -m pip install ansible==6.0.0
+              if [[ "$python" =~ 3.6 ]]; then
+                $python -m pip install wheel
+                $python -m pip install cryptography==2.3
+                export LC_ALL=en_US.UTF-8
+                $python -m pip install ansible-core==2.11.12
+              else
+                $python -m pip install ansible==6.0.0
+              fi
 
               # install requirements in virtual env
               cd $ansible_dir/$repo/ansible
