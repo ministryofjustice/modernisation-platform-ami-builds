@@ -9,7 +9,7 @@
 #
 # For example, for a NOMIS database, define a roles_list variable in
 #
-# group_vars/server_type_db_nomis.yml
+# group_vars/ami_rhel_7_9_oracledb_11_2
 # ---
 # roles_list:
 #  - time

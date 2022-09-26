@@ -8,6 +8,7 @@ locals {
   }
 
   component_template_args = {
+    ami    = local.name
     branch = var.branch == "" ? "main" : var.branch
   }
 

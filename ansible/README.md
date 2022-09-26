@@ -59,7 +59,7 @@ based of the following tags
 - environment-name
 - application
 - component
-- server-type
+- ami
 
 Ansible tasks are executed on ec2 instances via AWS Session Manager, so you must have [awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html#cliv2-mac-install-cmd) installed in addition to the Session Manager [plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos-signed). The target ec2 instance must also have [ssm-agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed. You do not need to have an account on the remote ec2 instance in order to connect.
 
@@ -75,7 +75,7 @@ export no_proxy='*'
 
 The Session Manager plugin requires that an S3 bucket is specified as one of the connection variables. Set this within an environment specific variable, for example [group_vars/environment_name_nomis_test.yml](/ansible/group_vars/environment_name_nomis_test.yml)
 
-Define the list of roles to run on each type of server under a server-type specific variable. For example [group_vars/server_type_base.yml](/ansible/group_vars/server_type_base.yml)
+Define the list of roles to run on each type of server under an ami specific variable. For example [group_vars/ami_nomis_rhel_6_10_baseimage.yml](/ansible/group_vars/ami_nomis_rhel_6_10_baseimage.yml)
 
 ```
 ---
