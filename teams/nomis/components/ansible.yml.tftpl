@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -44,7 +44,7 @@ phases:
               cd $ansible_dir/$repo/ansible
               $python -m pip install -r requirements.txt
               ansible-galaxy role install -r requirements.yml
-              ansible-galaxy collection install -r requirements.yml
+              ansible-galaxy collection install -r requirements.yml --force
 
               # run ansible
               ansible-playbook site.yml \
@@ -52,6 +52,7 @@ phases:
               --inventory localhost \
               --extra-vars "target=localhost" \
               --extra-vars "@group_vars/ami_$ami_tag.yml" \
+              --tags amibuild \
               --become
 
               # Cleanup
