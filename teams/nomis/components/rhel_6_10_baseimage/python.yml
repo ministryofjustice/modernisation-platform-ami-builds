@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "0.0.1"
+      default: "0.0.2"
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -29,7 +29,7 @@ phases:
               cd Python-3.6.3/
 
               # ensure zlib is enabled, required for some ansible modules
-              sed -i 's/^#zlib/zlib/' Modules/Setup
+              sed -i 's/^#zlib/zlib/' Modules/Setup.dist
 
               ./configure --enable-optimizations
               sudo make altinstall
