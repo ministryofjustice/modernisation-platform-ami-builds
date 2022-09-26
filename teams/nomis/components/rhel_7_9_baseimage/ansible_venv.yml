@@ -1,0 +1,34 @@
+---
+name: nomis_rhel_7_9_baseimage_ansible_venv
+description: rhel 7.9 base image component for installing ansible virtual environment
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "0.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      # Install ansible (6.0.0) in virtual env
+      - name: InstallAnsibleIntoVirtualEnv
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+
+              # install, create, activate virtual environment
+              mkdir -p /var/lib/venv && cd "$_"
+              python3.9 -m venv ansible
+              source ansible/bin/activate
+
+              # install ansible modules in virtual env
+              python3.9 -m pip install --upgrade pip
+              python3.9 -m pip install ansible==6.0.0
+
+              deactivate
