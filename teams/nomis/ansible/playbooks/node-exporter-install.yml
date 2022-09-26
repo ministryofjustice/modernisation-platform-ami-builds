@@ -1,9 +1,0 @@
-# The playbook is used when installing node exporter as a component
-# by the EC2 Image Builder.
-# It currently only supports RHEL 7 & still needs to be tested (and possibly modified)
-# to work on RHEL 6 and Windows.
-
-- name: node-exporter-install
-  hosts: localhost
-  roles:
-    - node-exporter

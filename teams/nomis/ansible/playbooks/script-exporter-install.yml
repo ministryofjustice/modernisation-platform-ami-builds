@@ -1,4 +1,0 @@
-- name: script-exporter-install
-  hosts: localhost
-  roles:
-    - script-exporter

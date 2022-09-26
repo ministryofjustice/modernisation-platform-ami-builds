@@ -34,11 +34,15 @@ imagebuilders = {
         }
       ]
 
+      components_aws = [
+        "update-linux",
+      ]
+
       components_custom = [
+        "../components/ansible.yml.tftpl",
         "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
       ]
 
-      components_aws = []
     }
 
     infrastructure_configuration = {
