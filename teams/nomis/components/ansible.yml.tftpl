@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.2
+      default: 0.0.3
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -35,10 +35,14 @@ phases:
               cd $ansible_dir/$repo/ansible
               python=$(grep ansible_python_interpreter group_vars/ami_$ami_tag.yml | cut -d: -f2 || true)
               [[ -z $python ]] && python=python
+              echo "python=$python"
               $python -m pip install -r requirements.txt
 
               # activate virtual environment
-              source /var/lib/venv/ansible/bin/activate
+              mkdir $ansible_dir/python-venv && cd "$_"
+              source ansible/bin/activate
+              $python -m pip install --upgrade pip
+              $python -m pip install ansible==6.0.0
 
               # install requirements in virtual env
               cd $ansible_dir/$repo/ansible
@@ -59,4 +63,5 @@ phases:
               deactivate
               echo "Cleaning up $ansible_dir"
               rm -rf $ansible_dir/$repo
+              rm -rf $ansible_dir/python-venv
               rmdir $ansible_dir
