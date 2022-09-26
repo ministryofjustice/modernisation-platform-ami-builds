@@ -1,11 +1,11 @@
 ---
-name: rhel_7_9_oracledb_11_2_database
-description: Install ansible roles for rhel_7_9_oracledb_11_2
+name: ${ami}_database
+description: Install database roles for ${ami}
 schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -22,7 +22,7 @@ phases:
             - |
               set -e
               repo="modernisation-platform-ami-builds"
-              ami_tag="rhel_7_9_oracledb_11_2"
+              ami_tag="${ami}"
 
               # clone ansible roles and playbook
               ansible_dir=$(mktemp -d)
