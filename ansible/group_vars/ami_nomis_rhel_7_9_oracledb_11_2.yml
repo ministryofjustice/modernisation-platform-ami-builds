@@ -1,0 +1,7 @@
+---
+ansible_python_interpreter: /usr/local/bin/python3.9
+roles_list:
+  - hugepages
+  - disks
+  - script-exporter
+  - oracle-11g

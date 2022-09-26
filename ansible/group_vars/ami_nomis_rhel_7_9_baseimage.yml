@@ -1,0 +1,5 @@
+---
+ansible_python_interpreter: /usr/local/bin/python3.9
+roles_list:
+  - time
+  - node-exporter
