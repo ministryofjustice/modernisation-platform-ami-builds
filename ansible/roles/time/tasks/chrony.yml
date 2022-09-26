@@ -1,0 +1,40 @@
+- name: Install chrony
+  yum:
+    name: chrony
+    state: present
+    lock_timeout: 60
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
+
+- name: Copy over chrony.conf
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  notify: Restart chrony
+
+- name: Remove ntp package
+  yum:
+    name: ntp
+    state: absent
+    lock_timeout: 60
+  register: yum_result
+  until: yum_result is success
+  retries: 3
+  delay: 10
+  notify: Restart chrony
+
+- name: Start chrony
+  service:
+    name: chronyd
+    state: started
+    enabled: yes
+
+- name: Set timezone
+  community.general.timezone:
+    name: Europe/London

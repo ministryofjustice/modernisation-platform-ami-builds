@@ -5,8 +5,12 @@
   import_role:
     name: common
     tasks_from: drive_map.yml
+  tags:
+  - amibuild
 
 - name: setup disks
   block:
     - import_tasks: configure_swap_disk.yml
     - import_tasks: configure_oracle_disk.yml
+  tags:
+  - amibuild

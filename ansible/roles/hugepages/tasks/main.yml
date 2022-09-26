@@ -10,10 +10,14 @@
 - name: disable transparent hugepages at boot
   ansible.builtin.command: grubby --update-kernel=/boot/vmlinuz-{{ ansible_kernel }} --args="transparent_hugepage=never"
   # when: kernel_args.rc != 0
+  tags:
+    - amibuild
 
 - name: check no transparent (AnonHugePages) huge pages in use
   ansible.builtin.command: awk '/^AnonHugePages/ {print $2}' /proc/meminfo
   register: anon_hugepages_total
+  tags:
+    - amibuild
 
 - name: check AnonHugePages is zero
   ansible.builtin.assert:
@@ -28,13 +32,19 @@
     regexp: "^vm.nr_hugepages"
     line: vm.nr_hugepages={{ pages }}
     create: yes
+  tags:
+    - amibuild
 
 - name: load new explicit huge page setting
   ansible.builtin.command: sysctl -p
+  tags:
+    - amibuild
 
 - name: check number of pages created
   ansible.builtin.command: awk '/^HugePages_Total/ {print $2}' /proc/meminfo # sed -rn 's/^(HugePages_Total:\s*)(.*)$/\2/p' /proc/meminfo
   register: hugepages_total
+  tags:
+    - amibuild
 
 - name: check expected number of pages created
   ansible.builtin.assert:
