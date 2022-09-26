@@ -27,6 +27,9 @@
 #   # Limit the hosts (2 ways of doing this)
 #   ansible-playbook site.yml --limit db-nomis
 #   ansible-playbook site.yml -e target=localhost
+#
+#   # Force a role to be applied even if not devined in roles_list
+#   ansible-playbook site.yml -e force_role=time
 
 - hosts: "{{ target | default('all') }}"
   tasks:
@@ -40,7 +43,9 @@
     - name: Set roles_to_run fact
       set_fact:
         roles_to_run: |
-          {% if role is not defined or role == "all" %}
+          {% if force_role is defined %}
+          {{ force_role.split(",") | map("trim") }}
+          {% elif role is not defined or role == "all" %}
           {# all defined roles #}
           {{ roles_defined }}
           {% elif role is defined and not role == "" %}
