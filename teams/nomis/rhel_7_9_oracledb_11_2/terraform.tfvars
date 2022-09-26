@@ -84,7 +84,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../rhel_7_9_oracledb_11_2/database.yml"
+        "../components/rhel_7_9_oracledb_11_2/database.yml"
       ]
     }
 
