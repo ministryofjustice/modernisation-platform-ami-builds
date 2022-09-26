@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.3
+      default: 0.0.4
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -40,6 +40,7 @@ phases:
 
               # activate virtual environment
               mkdir $ansible_dir/python-venv && cd "$_"
+              $python -m venv ansible
               source ansible/bin/activate
               $python -m pip install --upgrade pip
               $python -m pip install ansible==6.0.0
