@@ -33,14 +33,16 @@ phases:
               # install python dependencies outside of virtual env so ansible
               # can be executed remotely
               cd $ansible_dir/$repo/ansible
-              ${python} -m pip install -r requirements.txt
+              python=$(grep ansible_python_interpreter group_vars/ami_$ami_tag.yml | cut -d: -f2 || true)
+              [[ -z $python ]] && python=python
+              $python -m pip install -r requirements.txt
 
               # activate virtual environment
               source /var/lib/venv/ansible/bin/activate
 
               # install requirements in virtual env
               cd $ansible_dir/$repo/ansible
-              ${python} -m pip install -r requirements.txt
+              $python -m pip install -r requirements.txt
               ansible-galaxy role install -r requirements.yml
               ansible-galaxy collection install -r requirements.yml
 
