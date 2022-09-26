@@ -4,12 +4,14 @@
 # name to the NVMe name via the device serial number, which is consistent
 # See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html
 
+- name: get ec2 metadata facts
+  amazon.aws.ec2_metadata_facts:
+
 - name: gather ec2 facts # this step is only really required when running Ansible as a Packer provisioner, as dynamic inventory is not available
   amazon.aws.ec2_instance_info:
-    instance_ids: "{{ instance_id }}" # this is generally set in aws_ec2 group vars but can be set elsewhere, e.g. at command line when running Packer
+    instance_ids: "{{ ansible_ec2_instance_id }}" # this is generally set in aws_ec2 group vars but can be set elsewhere, e.g. at command line when running Packer
     region: eu-west-2
   register: ec2_info
-  delegate_to: localhost
   become: no # this is required when running with Packer
 
 - name: get ebs device names and volume ids
