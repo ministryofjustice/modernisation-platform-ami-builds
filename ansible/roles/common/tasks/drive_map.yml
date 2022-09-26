@@ -14,9 +14,6 @@
   register: ec2_info
   become: no # this is required when running with Packer
 
-- debug:
-    var: ec2_info
-
 - name: get ebs device names and volume ids
   ansible.builtin.set_fact:
     ebs_devices: "{{ ebs_devices | default({}) | combine({item.device_name: (item.volume_id | regex_replace('^(vol-)', 'vol')) }) }}"
