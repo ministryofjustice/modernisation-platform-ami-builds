@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.0.8"
+    configuration_version = "0.0.9"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -84,7 +84,7 @@ imagebuilders = {
       ]
 
       components_custom = [
-        "../components/ansible.yml.tftpl"
+        "../rhel_7_9_oracledb_11_2/database.yml"
       ]
     }
 

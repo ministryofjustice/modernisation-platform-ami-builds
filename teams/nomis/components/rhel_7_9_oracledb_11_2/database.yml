@@ -1,0 +1,64 @@
+---
+name: rhel_7_9_oracledb_11_2_database
+description: Install ansible roles for rhel_7_9_oracledb_11_2
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      # Install ansible roles
+      - name: InstallAndRunAnsible
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              repo="modernisation-platform-ami-builds"
+              ami_tag="rhel_7_9_oracledb_11_2"
+
+              # clone ansible roles and playbook
+              ansible_dir=$(mktemp -d)
+              echo "Cloning $repo into $ansible_dir using branch=${branch}"
+              cd $ansible_dir
+              git clone -b ${branch} "https://github.com/ministryofjustice/$repo.git"
+
+              # install python dependencies outside of virtual env so ansible
+              # can be executed remotely
+              cd $ansible_dir/$repo/ansible
+              python=$(grep ansible_python_interpreter group_vars/ami_$ami_tag.yml | cut -d: -f2 || true)
+              [[ -z $python ]] && python=python
+              $python -m pip install -r requirements.txt
+
+              # activate virtual environment
+              source /var/lib/venv/ansible/bin/activate
+
+              # install requirements in virtual env
+              cd $ansible_dir/$repo/ansible
+              $python -m pip install -r requirements.txt
+              ansible-galaxy role install -r requirements.yml
+              ansible-galaxy collection install -r requirements.yml
+
+              # run ansible
+              INSTANCE_ID=$(curl http://instance-data/latest/meta-data/instance-id)
+              ansible-playbook site.yml \
+              --connection=local \
+              --inventory localhost \
+              --extra-vars "target=localhost" \
+              --extra-vars "@group_vars/ami_$ami_tag.yml" \
+              --extra-vars "instance_id=$INSTANCE_ID" \
+              --tags "all,opatch,patch,deconfig" \
+              --become
+
+              # Cleanup
+              deactivate
+              echo "Cleaning up $ansible_dir"
+              rm -rf $ansible_dir/$repo
+              rmdir $ansible_dir
