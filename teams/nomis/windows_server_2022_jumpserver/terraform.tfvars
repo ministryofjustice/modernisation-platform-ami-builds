@@ -5,7 +5,7 @@
 imagebuilders = {
 
   windows_server_2022_jumpserver = {
-    configuration_version = "0.0.3"
+    configuration_version = "0.0.4"
     description           = "Windows Server 2022 jumpserver"
 
     tags = {
@@ -52,8 +52,10 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
+        "nomis-development",
         "nomis-test",
-        "nomis-production"
+        "nomis-production",
+        "nomis-preproduction"
       ]
     }
 
