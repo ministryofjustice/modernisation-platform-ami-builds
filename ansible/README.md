@@ -40,7 +40,7 @@ Please include a README.md for each role.
 
 ## Using ansible within a build
 
-See [example-component.yml](/teams/nomis/components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tftpl)
+See [example-component.yml](/teams/nomis/components/ansible.yml.tftpl)
 for an example. This
 
 - installs ansible within a virtual environment
@@ -51,7 +51,7 @@ for an example. This
 
 ## Running ansible against an EC2 instance post build
 
-A generic [site.yml](/ansible/site.yml) is provided with a dynamic inventory
+A generic [site.yml](/ansible/site.yml) is provided with a dynamic inventor
 [inventory_aws_ec2.yml](/ansible/inventory_aws_ec2.yml). This creates groups
 based of the following tags
 
@@ -60,6 +60,10 @@ based of the following tags
 - application
 - component
 - ami
+
+Use tags to differentiate between AMI build tasks and in-life operational
+tasks. The site.yml assumes "amibuild" tag will be used to signify
+AMI build ansible tasks.
 
 Ansible tasks are executed on ec2 instances via AWS Session Manager, so you must have [awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html#cliv2-mac-install-cmd) installed in addition to the Session Manager [plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos-signed). The target ec2 instance must also have [ssm-agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed. You do not need to have an account on the remote ec2 instance in order to connect.
 

@@ -28,8 +28,11 @@
 #   ansible-playbook site.yml --limit db-nomis
 #   ansible-playbook site.yml -e target=localhost
 #
-#   # Force a role to be applied even if not devined in roles_list
+#   # Force a role to be applied even if not defined in roles_list
 #   ansible-playbook site.yml -e force_role=time
+#
+#   # Run all tasks with amibuild tag
+#   ansible-playbook site.yml --tags amibuild
 
 - hosts: "{{ target | default('all') }}"
   tasks:
