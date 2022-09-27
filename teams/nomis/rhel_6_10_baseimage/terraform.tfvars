@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.2.5"
+    configuration_version = "0.3.1"
     description           = "nomis RHEL6.10 base image"
 
     tags = {
@@ -25,11 +25,16 @@ imagebuilders = {
         }
       ]
 
-      components_custom = [
-        "../components/rhel_6_10_baseimage/rhel_6_10_baseimage.yml.tftpl"
+      # rhel6.10 cannot use amazon-ssm-agent, this is installed via user_data
+      components_aws = [
+        "update-linux",
       ]
 
-      components_aws = [] # rhel6.10 cannot use AWS components, these are supplied below
+      components_custom = [
+        "../components/rhel_6_10_baseimage/packages.yml",
+        "../components/rhel_6_10_baseimage/python.yml",
+        "../components/ansible.yml.tftpl"
+      ]
 
       user_data = <<EOF
 #!/bin/bash
@@ -39,7 +44,6 @@ sudo start amazon-ssm-agent
 wget https://s3.eu-west-2.amazonaws.com/amazoncloudwatch-agent-eu-west-2/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
 EOF
-
     }
 
     infrastructure_configuration = {

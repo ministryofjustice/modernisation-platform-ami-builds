@@ -8,7 +8,9 @@ locals {
   }
 
   component_template_args = {
-    branch = var.branch == "" ? "main" : var.branch
+    ami     = local.name
+    version = var.configuration_version
+    branch  = var.branch == "" ? "main" : var.branch
   }
 
   components_custom_data = {

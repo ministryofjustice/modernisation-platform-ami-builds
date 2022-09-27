@@ -68,5 +68,6 @@
   args:
     chdir: "{{ grid_home }}"
   tags:
+    - amibuild
     - never
     - deconfig

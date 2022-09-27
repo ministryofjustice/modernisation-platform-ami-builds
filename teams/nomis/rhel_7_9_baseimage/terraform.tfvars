@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.3.2"
+    configuration_version = "1.3.7"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -31,7 +31,9 @@ imagebuilders = {
         "amazon-cloudwatch-agent-linux"
       ]
       components_custom = [
-        "../components/rhel_7_9_baseimage/rhel_7_9_baseimage.yml.tftpl"
+        "../components/rhel_7_9_baseimage/packages.yml",
+        "../components/rhel_7_9_baseimage/python.yml",
+        "../components/ansible.yml.tftpl"
       ]
     }
 
@@ -72,9 +74,9 @@ distribution_configuration_by_branch = {
       ]
     }
 
-    launch_template_configuration = {
+    /* launch_template_configuration = {
       account_id_or_name = "nomis-test"
       launch_template_id = "lt-05c9663f629ff1ba8"
-    }
+    } */
   }
 }

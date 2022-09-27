@@ -1,0 +1,8 @@
+---
+roles_list:
+  - time
+  - node-exporter
+  - hugepages
+  - disks
+  - script-exporter
+  - oracle-11g

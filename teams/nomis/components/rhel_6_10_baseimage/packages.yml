@@ -1,0 +1,22 @@
+---
+name: nomis_rhel_6_10_baseimage_packages
+description: rhel 6.10 base image component for installing standard packages.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "0.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo yum install wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel xz-devel expat-devel musl-devel libffi-devel xz -y
+            # libpcap-devel is not available in the default yum repos for RHEL 6.10 although it may be available in the EPEL repo.  We don't need it for our purposes so we'll skip it.

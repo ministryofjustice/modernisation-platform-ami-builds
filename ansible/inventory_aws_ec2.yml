@@ -22,7 +22,7 @@ keyed_groups:
     prefix: application
   - key: tags['component']
     prefix: component
-  - key: tags['server-type']
-    prefix: server-type
+  - key: tags['ami']
+    prefix: ami
 
 strict: no

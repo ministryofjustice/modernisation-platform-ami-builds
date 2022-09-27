@@ -1,0 +1,139 @@
+# This task has only been tested for RHEL 7
+# Steps for RHEL 6 still need to be tested before uncommenting in production
+
+- name: create the prometheus group
+  ansible.builtin.group:
+    name: prometheus
+    state: present
+    system: yes
+
+- name: create the prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    groups: prometheus
+    append: yes
+    shell: /usr/sbin/nologin
+    state: present
+    system: yes
+    create_home: no
+
+# force this to run in check_mode otherwise other steps will fail
+# set changed_when to false as this change is not impacting
+- name: get node_exporter archive
+  check_mode: no
+  changed_when: false
+  ansible.builtin.unarchive:
+    src: "https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz"
+    dest: /tmp/
+    remote_src: yes
+    list_files: yes
+  register: archive_contents
+
+- name: copy the binary into /usr/bin
+  ansible.builtin.copy:
+    src: "/tmp/{{ archive_contents.files[0] }}node_exporter"
+    dest: /usr/bin/
+    owner: root
+    group: root
+    remote_src: yes
+    mode: 0755
+
+# execute in check mode and set to changed_when false as this
+# set changed_when to false as this change is not impacting
+- name: clean up files
+  check_mode: no
+  changed_when: false
+  ansible.builtin.file:
+    path: "/tmp/{{ item }}"
+    state: absent
+  with_items:
+    - "{{ archive_contents.files[0].split('/')[0] }}.tar.gz"
+    - "{{ archive_contents.files[0].split('/')[0] }}"
+
+- name: create textfile_monitoring dir
+  ansible.builtin.file:
+    path: /opt/textfile_monitoring
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: 0775
+
+- name: check if we have a misload_running file for node_exporter to consume
+  ansible.builtin.stat:
+    path: /opt/textfile_monitoring/misload_running.prom
+  register: misload_running
+
+# Configuration steps for RHEL6
+
+- name: create file for node_exporter Config
+  ansible.builtin.file:
+    path: /etc/default/node_exporter
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution_major_version == "6"
+
+- name: user fix rhel6
+  ansible.builtin.lineinfile:
+    path: /etc/default/node_exporter
+    regexp: "^USER=.*$"
+    line: "USER=root"
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+  when: ansible_distribution_major_version == '6'
+
+- name: add initd service file
+  ansible.builtin.copy:
+    src: node_exporter
+    dest: /etc/init.d/node_exporter
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_distribution_major_version == '6'
+  notify: reload node_exporter
+
+# Configuration steps for RHEL7 or RHEL8
+
+- name: node_exporter systemd metrics enabled rhel7 or rhel8 (misload absent)
+  ansible.builtin.lineinfile:
+    path: /etc/default/node_exporter
+    regexp: "^NODE_EXPORTER_OPTS.*$"
+    line: 'NODE_EXPORTER_OPTS=--collector.systemd --collector.systemd.unit-whitelist ".+\.service"'
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+    create: yes
+  when: ansible_distribution_major_version == '7' and misload_running.stat.exists == false
+  notify: reload node_exporter
+
+- name: node_exporter systemd metrics enabled rhel7 or rhel8 (misload present)
+  ansible.builtin.lineinfile:
+    path: /etc/default/node_exporter
+    regexp: "^NODE_EXPORTER_OPTS.*$"
+    line: 'NODE_EXPORTER_OPTS=--collector.systemd --collector.systemd.unit-whitelist ".+\.service" --collector.textfile.directory=/opt/textfile_monitoring'
+    owner: root
+    group: root
+    mode: 0644
+    state: present
+    create: yes
+  when: ansible_distribution_major_version == '7' and misload_running.stat.exists == true
+  notify: reload node_exporter
+
+- name: add systemd service file
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution_major_version == '7'
+
+- name: start & enable service
+  ansible.builtin.service:
+    name: node_exporter
+    state: started
+    enabled: yes

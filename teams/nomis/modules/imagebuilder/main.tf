@@ -39,16 +39,16 @@ resource "aws_imagebuilder_image_recipe" "this" {
   }
 
   dynamic "component" {
-    for_each = toset(var.image_recipe.components_aws)
+    for_each = var.image_recipe.components_aws
     content {
-      component_arn = "arn:aws:imagebuilder:${var.region}:aws:component/${component.key}/x.x.x"
+      component_arn = "arn:aws:imagebuilder:${var.region}:aws:component/${component.value}/x.x.x"
     }
   }
 
   dynamic "component" {
-    for_each = toset(var.image_recipe.components_custom)
+    for_each = var.image_recipe.components_custom
     content {
-      component_arn = aws_imagebuilder_component.this[component.key].arn
+      component_arn = aws_imagebuilder_component.this[component.value].arn
     }
   }
 

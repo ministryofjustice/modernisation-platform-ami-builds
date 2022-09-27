@@ -1,0 +1,4 @@
+---
+roles_list:
+  - time
+  - node-exporter
