@@ -3,7 +3,7 @@
     name: common
     tasks_from: oracle_user.yml
   tags:
-   - amibuild
+    - amibuild
 
 - name: install asm, grid and database
   block:
