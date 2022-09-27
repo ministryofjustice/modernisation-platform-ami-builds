@@ -68,7 +68,10 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
-        "nomis-test"
+        "nomis-development",
+        "nomis-test",
+        "nomis-production",
+        "nomis-preproduction"
       ]
     }
 
