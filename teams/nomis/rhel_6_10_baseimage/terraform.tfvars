@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.2.9"
+    configuration_version = "0.3.0"
     description           = "nomis RHEL6.10 base image"
 
     tags = {
@@ -33,7 +33,6 @@ imagebuilders = {
       components_custom = [
         "../components/rhel_6_10_baseimage/packages.yml",
         "../components/rhel_6_10_baseimage/python.yml",
-        "../components/rhel_6_10_baseimage/ansible_venv.yml",
         "../components/ansible.yml.tftpl"
       ]
 

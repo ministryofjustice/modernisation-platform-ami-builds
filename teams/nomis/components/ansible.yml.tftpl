@@ -5,8 +5,8 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.5
-      description: Component version (update this each time the file changes)
+      default: ${version}
+      description: Uses the recipe version to avoid any issues with the branch template arg.
   - Platform:
       type: string
       default: "Linux"
@@ -30,12 +30,20 @@ phases:
               cd $ansible_dir
               git clone -b ${branch} "https://github.com/ministryofjustice/$repo.git"
 
+              # set python version
+              if [[ $(which python3.9) ]]; then
+                python=$(which python3.9)
+              elif [[ $(which python3.6) ]]; then
+                python=$(which python3.6)
+              else
+                echo "Python3.9/3.6 not found"
+                exit 1
+              fi
+              echo "python: $python"
+
               # install python dependencies outside of virtual env so ansible
               # can be executed remotely
               cd $ansible_dir/$repo/ansible
-              python=$(grep ansible_python_interpreter group_vars/ami_$ami_tag.yml | cut -d: -f2 || true)
-              [[ -z $python ]] && python=python
-              echo "python=$python"
               $python -m pip install -r requirements.txt
 
               # activate virtual environment
@@ -62,6 +70,7 @@ phases:
               ansible-playbook site.yml \
               --connection=local \
               --inventory localhost \
+              --extra-vars "ansible_python_interpreter=$python" \
               --extra-vars "target=localhost" \
               --extra-vars "@group_vars/ami_$ami_tag.yml" \
               --tags amibuild \
