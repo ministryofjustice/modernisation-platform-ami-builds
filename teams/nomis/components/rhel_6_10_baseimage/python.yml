@@ -28,7 +28,7 @@ phases:
               rm -f Python-3.6.3.tar.xz
               cd Python-3.6.3/
 
-              # ensure zlib is enabled, required for some ansible modules
+              # ensure zlib is enabled, required for some ansible modules
               sed -i 's/^#zlib/zlib/' Modules/Setup.dist
 
               ./configure --enable-optimizations

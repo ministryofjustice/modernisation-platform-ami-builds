@@ -2,3 +2,4 @@
 roles_list:
   - time
   - node-exporter
+  - message-of-the-day

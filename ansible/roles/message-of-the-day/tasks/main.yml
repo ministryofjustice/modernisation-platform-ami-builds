@@ -1,0 +1,3 @@
+- import_tasks: message-of-the-day.yml
+  tags:
+    - amibuild
