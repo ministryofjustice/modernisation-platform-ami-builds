@@ -112,17 +112,13 @@ jobs:
           echo ::set-output name=projects::${projects}
           echo ::set-output name=action::${action}
 
-      # # security best practice: use specific version of public actions (v1)
-      # - name: Get list of committed files
-      #   id: files
-      #   if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
-      #   uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
-      #   with:
-      #     format: 'space-delimited'
-
+      # security best practice: use specific version of public actions (v1)
       - name: Get list of committed files
         id: files
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+        uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
+        with:
+          format: 'space-delimited'
 
       - name: Detect pull/push projects
         id: projects_pull_push
