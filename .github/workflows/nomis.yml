@@ -373,7 +373,6 @@ jobs:
           comment >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      # security best practice: use specific version of public actions (v1.3.0)
       - name: Post Apply to PR
         run: |
           curl -X POST \
