@@ -1,0 +1,36 @@
+---
+- name: Create install files directories
+  ansible.builtin.file:
+    owner: oracle
+    group: oinstall
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  check_mode: no
+  loop:
+    - "{{ osw_installfiles_dir }}"
+    - "{{ osw_install_dir }}"
+
+- name: Get install files
+  amazon.aws.aws_s3:
+    bucket: "{{ s3_bucket }}"
+    object: "oracle-secure-web/{{ item }}"
+    dest: "{{ osw_installfiles_dir }}/{{ item }}"
+    mode: get
+    overwrite: latest
+  check_mode: no
+  changed_when: true
+  loop:
+    - jdk-7u80-linux-x64.tar.gz
+    - osbws_installer.zip
+
+- name: Unpack install files
+  ansible.builtin.unarchive:
+    owner: oracle
+    group: oinstall
+    src: "{{ osw_installfiles_dir }}/{{ item }}"
+    dest: "{{ osw_install_dir }}"
+    remote_src: yes
+  loop:
+    - jdk-7u80-linux-x64.tar.gz
+    - osbws_installer.zip

@@ -7,3 +7,4 @@ roles_list:
   - disks
   - script-exporter
   - oracle-11g
+  - oracle-secure-web

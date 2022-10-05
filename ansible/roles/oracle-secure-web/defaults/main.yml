@@ -1,0 +1,7 @@
+---
+s3_bucket: ec2-image-builder-nomis20220314103938567000000001
+artefact_dir: /u02
+stage: "{{ artefact_dir }}/stage"
+temp: "{{ artefact_dir }}/temp"
+osw_installfiles_dir: "{{ temp }}/osbws"
+osw_install_dir: "{{ stage }}/osbws"
