@@ -21,7 +21,7 @@ jobs:
     if: github.event_name != 'workflow_dispatch' && github.event_name != 'schedule'
     steps:
     - name: Checkout
-      uses: actions/checkout@v3.0.2
+      uses: actions/checkout@v3.1.0
       with:
         fetch-depth: 0
     - name: Run Analysis
@@ -38,7 +38,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     steps:
     - name: Checkout
-      uses: actions/checkout@v3.0.2
+      uses: actions/checkout@v3.1.0
       with:
         fetch-depth: 0
     - name: Run Analysis
@@ -54,7 +54,7 @@ jobs:
     if: github.event_name == 'schedule'
     steps:
     - name: Checkout
-      uses: actions/checkout@v3.0.2
+      uses: actions/checkout@v3.1.0
       with:
         fetch-depth: 0
     - name: Run Analysis

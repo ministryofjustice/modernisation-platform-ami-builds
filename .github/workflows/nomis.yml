@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.1.0
 
       # get PR number on push
       - name: Get PR number on push
@@ -191,7 +191,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.1.0
 
       - name: Get terraform version
         id: discover
@@ -290,7 +290,7 @@ jobs:
       name: core-shared-services
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.1.0
 
       - name: Get terraform version
         id: discover
