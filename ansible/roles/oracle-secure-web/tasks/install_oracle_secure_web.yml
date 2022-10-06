@@ -13,7 +13,7 @@
 
 - name: Get install files
   amazon.aws.aws_s3:
-    bucket: "{{ s3_bucket }}"
+    bucket: "{{ osw_installfiles_s3_bucket }}"
     object: "oracle-secure-web/{{ item }}"
     dest: "{{ osw_installfiles_dir }}/{{ item }}"
     mode: get
