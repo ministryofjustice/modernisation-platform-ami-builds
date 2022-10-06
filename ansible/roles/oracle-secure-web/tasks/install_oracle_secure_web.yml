@@ -28,6 +28,11 @@
   ansible.builtin.command:
     cmd: /usr/local/bin/aws s3 cp s3://{{ osw_installfiles_s3_bucket }}/oracle-secure-web/{{ item }}  .
     chdir: "{{ osw_installfiles_dir }}"
+  check_mode: no
+  changed_when: true
+  loop:
+    - jdk-7u80-linux-x64.tar.gz
+    - osbws_installer.zip
 
 - name: Unpack install files
   ansible.builtin.unarchive:
