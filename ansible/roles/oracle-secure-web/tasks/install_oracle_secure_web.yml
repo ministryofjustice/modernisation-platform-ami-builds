@@ -14,7 +14,7 @@
 - name: Get install files
   amazon.aws.aws_s3:
     bucket: "{{ osw_installfiles_s3_bucket }}"
-    object: "oracle-secure-web/{{ item }}"
+    object: "{{ osw_installfiles_s3_path }}/{{ item }}"
     dest: "{{ osw_installfiles_dir }}/{{ item }}"
     mode: get
     overwrite: latest
