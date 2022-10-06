@@ -54,7 +54,8 @@ distribution_configuration_by_branch = {
   main = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
-        "nomis-development"
+        "nomis-development",
+        "nomis-test"
       ]
     }
 
@@ -68,7 +69,8 @@ distribution_configuration_by_branch = {
   default = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
-        "nomis-development"
+        "nomis-development",
+        "nomis-test"
       ]
     }
 
