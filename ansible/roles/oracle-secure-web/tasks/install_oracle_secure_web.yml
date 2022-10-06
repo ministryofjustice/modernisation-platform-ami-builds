@@ -11,18 +11,23 @@
     - "{{ osw_installfiles_dir }}"
     - "{{ osw_install_dir }}"
 
+#- name: Get install files
+#  amazon.aws.aws_s3:
+#    bucket: "{{ osw_installfiles_s3_bucket }}"
+#    object: "oracle-secure-web/{{ item }}"
+#    dest: "{{ osw_installfiles_dir }}/{{ item }}"
+#    mode: get
+#    overwrite: latest
+#  check_mode: no
+#  changed_when: true
+#  loop:
+#    - jdk-7u80-linux-x64.tar.gz
+#    - osbws_installer.zip
+
 - name: Get install files
-  amazon.aws.aws_s3:
-    bucket: "{{ osw_installfiles_s3_bucket }}"
-    object: "oracle-secure-web/{{ item }}"
-    dest: "{{ osw_installfiles_dir }}/{{ item }}"
-    mode: get
-    overwrite: latest
-  check_mode: no
-  changed_when: true
-  loop:
-    - jdk-7u80-linux-x64.tar.gz
-    - osbws_installer.zip
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ osw_installfiles_s3_bucket }}/oracle-secure-web/{{ item }}  .
+    chdir: "{{ osw_installfiles_dir }}"
 
 - name: Unpack install files
   ansible.builtin.unarchive:
