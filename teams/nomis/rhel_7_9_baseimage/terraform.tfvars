@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.3.9"
+    configuration_version = "1.4.0"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -54,6 +54,7 @@ distribution_configuration_by_branch = {
   main = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
+        "core-shared-services-production"
         "nomis-development",
         "nomis-test"
       ]
@@ -69,6 +70,7 @@ distribution_configuration_by_branch = {
   default = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
+        "core-shared-services-production"
         "nomis-development",
         "nomis-test"
       ]
