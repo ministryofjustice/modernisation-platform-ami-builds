@@ -40,10 +40,12 @@ resource "aws_iam_role" "image_builder_role" {
             Action = [
               "s3:PutObject",
               "s3:GetObject",
+              "s3:ListBucket",
             ]
             Effect = "Allow"
             Resource = [
               "arn:aws:s3:::ec2-image-builder-*/*",
+              "arn:aws:s3:::ec2-image-builder-*",
             ]
           },
           {
