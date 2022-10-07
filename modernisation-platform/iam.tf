@@ -56,7 +56,16 @@ resource "aws_iam_role" "image_builder_role" {
             "Resource" : [
               "arn:aws:ec2:eu-west-2::image/*"
             ]
-          }
+          },
+          {
+            "Action" : [
+              "kms: Decrypt",
+            ],
+            "Effect" : "Allow",
+            "Resource" : [
+              "arn:aws:kms:eu-west-2:612659970365:alias/aws/s3"
+            ]
+          },
         ]
         Version = "2012-10-17"
       }
