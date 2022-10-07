@@ -11,7 +11,12 @@
     - "{{ osw_installfiles_dir }}"
     - "{{ osw_install_dir }}"
 
-- name: Get install files # this relies on the remote machine having correct IAM Role assigned
+# Use aws s3 cp instead of amazon.aws.aws_s3 which appears to need more permissions
+# This bucket is defined in a separate account (nomis-test).  Ensure objects
+# are encrypted with Amazon S3-managed keys (SSE-S3).
+# Thie cross-account-s3-access-for-image-builder policy in nomis-test provides
+# relevant access.
+- name: Get install files
   ansible.builtin.command:
     cmd: /usr/local/bin/aws s3 cp s3://{{ osw_installfiles_s3_bucket }}/{{ osw_installfiles_s3_path }}/{{ item }} .
     creates: "{{ item }}"
