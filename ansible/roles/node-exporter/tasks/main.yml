@@ -1,3 +1,4 @@
 - import_tasks: node-exporter.yml
   tags:
     - amibuild
+    - ec2patch

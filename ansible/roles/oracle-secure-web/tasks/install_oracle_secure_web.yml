@@ -1,0 +1,38 @@
+---
+- name: Create install files directories
+  ansible.builtin.file:
+    owner: oracle
+    group: oinstall
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  check_mode: no
+  loop:
+    - "{{ osw_installfiles_dir }}"
+    - "{{ osw_install_dir }}"
+
+# Use aws s3 cp instead of amazon.aws.aws_s3 which appears to need more permissions
+# This bucket is defined in a separate account (nomis-test).  Ensure objects
+# are encrypted with Amazon S3-managed keys (SSE-S3).
+# Thie cross-account-s3-access-for-image-builder policy in nomis-test provides
+# relevant access.
+- name: Get install files
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ osw_installfiles_s3_bucket }}/{{ osw_installfiles_s3_path }}/{{ item }} .
+    creates: "{{ item }}"
+    chdir: "{{ osw_installfiles_dir }}"
+  check_mode: no
+  loop:
+    - jdk-7u80-linux-x64.tar.gz
+    - osbws_installer.zip
+
+- name: Unpack install files
+  ansible.builtin.unarchive:
+    owner: oracle
+    group: oinstall
+    src: "{{ osw_installfiles_dir }}/{{ item }}"
+    dest: "{{ osw_install_dir }}"
+    remote_src: yes
+  loop:
+    - jdk-7u80-linux-x64.tar.gz
+    - osbws_installer.zip

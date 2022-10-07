@@ -1,0 +1,5 @@
+---
+osw_installfiles_s3_bucket: "ec2-image-builder-nomis20220314103938567000000001"
+osw_installfiles_s3_path: "oracle-secure-web"
+osw_installfiles_dir: "/u02/temp/osbws"
+osw_install_dir: "/u02/stage/osbws"

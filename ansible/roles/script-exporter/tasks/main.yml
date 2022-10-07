@@ -1,3 +1,4 @@
 - import_tasks: script-exporter.yml
   tags:
     - amibuild
+    - ec2patch
