@@ -42,6 +42,7 @@
         roles_defined: "{{ roles_list | default([]) }}"
       tags:
         - amibuild
+        - ec2patch
 
     # The actual roles to run is intersection of requested role arg and roles_defined.
     # Special value "all" in role parameter means to run all defined roles.
@@ -60,6 +61,7 @@
           {% endif %}
       tags:
         - amibuild
+        - ec2patch
 
     - name: Execute roles
       include_role:
@@ -69,3 +71,4 @@
         loop_var: role_to_run
       tags:
         - amibuild
+        - ec2patch
