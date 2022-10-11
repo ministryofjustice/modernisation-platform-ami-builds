@@ -120,6 +120,12 @@ jobs:
         with:
           format: 'space-delimited'
 
+      # Just testing displaying the output from the previous step
+      - name: Output list of commited files
+        id: list_of_files
+        run: |
+          echo "{{ steps.files.outputs.all }}"
+
       - name: Detect pull/push projects
         id: projects_pull_push
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
