@@ -124,7 +124,7 @@ jobs:
       - name: Output list of commited files
         id: list_of_files
         run: |
-          echo "{{ steps.files.outputs.all }}"
+          echo "${{ steps.files.outputs.all }}"
 
       - name: Detect pull/push projects
         id: projects_pull_push
