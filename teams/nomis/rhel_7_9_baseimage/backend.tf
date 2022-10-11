@@ -12,3 +12,5 @@ terraform {
     workspace_key_prefix = "environments/accounts/core-shared-services" # This will store the object as environments/core-shared-services/${workspace}/imagebuilder-[team name].tfstate
   }
 }
+
+# This is a test. Please ignore.
