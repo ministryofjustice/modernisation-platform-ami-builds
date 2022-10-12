@@ -126,15 +126,13 @@ jobs:
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          response=$(\
-          curl \
+          response=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/ministryofjustice/dso-useful-stuff/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
-          | jq .[].filename \
-          | sed 's/"//g' \
-          | tr '\n' ' ' \
-          )
+          | jq .[].filename \ # Fetch filenames only from the JSON response.
+          | sed 's/"//g' \    # Remove the double quotes.
+          | tr '\n' ' ')      # Replace newlines with spaces.
           echo ::set-output name=file_list::${response}
 
       # Temp step. Displays the list of files from the previous step.
