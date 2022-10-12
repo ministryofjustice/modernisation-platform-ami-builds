@@ -85,6 +85,13 @@ jobs:
           echo ::set-output name=pr::${pr_number}
         # if: ${{ github.event_name == 'push' }}
 
+      # TEST STEP
+      # ---------
+      - name: PR test
+        id: pr_test
+        run: |
+          echo "${{ steps.get_pr_number.outputs.pr }}"
+
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
         id: projects_workflow_dispatch
@@ -128,13 +135,14 @@ jobs:
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          response=$(curl \
+          # response=$(curl \
+          curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
-          | jq .[].filename \
-          | sed 's/"//g' \
-          | tr '\n' ' ')
+          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files
+          # | jq .[].filename \
+          # | sed 's/"//g' \
+          # | tr '\n' ' ')
           echo ::set-output name=file_list::${response}
 
       # TEST STEP
