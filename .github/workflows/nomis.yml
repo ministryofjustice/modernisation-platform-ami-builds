@@ -120,6 +120,8 @@ jobs:
       #   with:
       #     format: 'space-delimited'
 
+      # GET FILES
+      # ---------
       # Uses cURL to get a list of files associated with the pull request. The
       # list of files are assigned to output file_list for use in step
       # projects_pull_push.
@@ -129,13 +131,15 @@ jobs:
           response=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/ministryofjustice/dso-useful-stuff/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
+          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
           | jq .[].filename \
           | sed 's/"//g' \
           | tr '\n' ' ')
           echo ::set-output name=file_list::${response}
 
-      # Temp step. Displays the list of files from the previous step.
+      # TEST STEP
+      # ---------
+      # Displays the list of files from the previous step.
       - name: Output list of commited files
         id: list_of_files
         run: |
