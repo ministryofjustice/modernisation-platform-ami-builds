@@ -77,11 +77,12 @@ jobs:
       - name: Get PR number on push
         id: get_pr_number
         run: |
-          pr_number=$(curl \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls \
-            | jq -r '.[0].number')
+          # pr_number=$(curl \
+          curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls
+          # | jq -r '.[0].number')
           echo ::set-output name=pr::${pr_number}
         # if: ${{ github.event_name == 'push' }}
 
@@ -135,14 +136,13 @@ jobs:
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          # response=$(curl \
-          curl \
+          response=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files
-          # | jq .[].filename \
-          # | sed 's/"//g' \
-          # | tr '\n' ' ')
+          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
+          | jq .[].filename \
+          | sed 's/"//g' \
+          | tr '\n' ' ')
           echo ::set-output name=file_list::${response}
 
       # TEST STEP
