@@ -1,9 +1,11 @@
 plugin: amazon.aws.aws_ec2
 regions:
   - eu-west-2
-
+exclude_filters:
+  - tag:aws:autoscaling:groupName:
+    - '*'
 hostnames:
-  - tag:Name
+  - 'tag:Name'
 
 compose:
   ansible_host: instance_id # private_ip_address - use ip address if need to go through bastion
@@ -14,14 +16,8 @@ groups:
   windows: (platform is defined) and (platform in 'windows')
 
 keyed_groups:
-  - key: tags['business-unit']
-    prefix: business-unit
   - key: tags['environment-name']
     prefix: environment-name
-  - key: tags['application']
-    prefix: application
-  - key: tags['component']
-    prefix: component
   - key: tags['ami']
     prefix: ami
 

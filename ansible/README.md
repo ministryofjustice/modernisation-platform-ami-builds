@@ -51,20 +51,20 @@ for an example. This
 
 ## Running ansible against an EC2 instance post build
 
-A generic [site.yml](/ansible/site.yml) is provided with a dynamic inventor
-[inventory_aws_ec2.yml](/ansible/inventory_aws_ec2.yml). This creates groups
-based of the following tags
+A generic [site.yml](/ansible/site.yml) is provided with a dynamic inventories
+under [hosts/](/ansible/hosts/) folder. This creates groups based of the following
+tags:
 
-- business-unit
 - environment-name
-- application
-- component
 - ami
 
+There are separate inventories depending on whether the EC2 is stood up
+as part of an autoscaling group or as an individual instance. In an autoscaling
+group, all instances will have the same tags, so the instance id is used as the
+hostname rather than the Name tag.
+
 Use tags to differentiate between AMI build tasks and in-life operational
-tasks. The site.yml assumes "amibuild" tag will be used to signify
-AMI build ansible tasks. Whereas "ec2patch" tag can be used when running
-the roles against operational ec2 instances.
+tasks. For example, "amibuild" and "ec2patch" respectively.
 
 Ansible tasks are executed on ec2 instances via AWS Session Manager, so you must have [awscli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html#cliv2-mac-install-cmd) installed in addition to the Session Manager [plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html#install-plugin-macos-signed). The target ec2 instance must also have [ssm-agent](https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html) installed. You do not need to have an account on the remote ec2 instance in order to connect.
 
@@ -93,11 +93,14 @@ Run ansible
 
 ```
 # Run against all hosts in check mode
-ansible-playbook site.yml -i inventory_aws_ec2.yml --check
+ansible-playbook site.yml --check
 
-# Limit to a particular server
-ansible-playbook site.yml -i inventory_aws_ec2.yml --check --limit bastion
+# Limit to a particular host/group
+ansible-playbook site.yml --limit bastion
 
 # Limit to a particular role
-ansible-playbook site.yml -i inventory_aws_ec2.yml --check --limit bastion -e "role=node-exporter"
+ansible-playbook site.yml -e "role=node-exporter"
+
+# Run locally (the comma after localhost is important)
+ansible-playbook site.yml --connection=local -i localhost, -e "target=localhost" -e "@group_vars/ami_nomis_rhel_7_9_baseimage.yml" --check
 ```
