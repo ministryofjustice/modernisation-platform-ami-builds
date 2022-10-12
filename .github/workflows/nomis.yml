@@ -81,7 +81,8 @@ jobs:
           curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls
+          https://api.github.com/repos/${{ github.repository }}/commits/acfec3a74fc33c731451b65a7e30ff3b2468c4ea/pulls
+          # https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls
           # | jq -r '.[0].number')
           # echo ::set-output name=pr::${pr_number}
         # if: ${{ github.event_name == 'push' }}
