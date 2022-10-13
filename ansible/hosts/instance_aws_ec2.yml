@@ -3,9 +3,9 @@ regions:
   - eu-west-2
 exclude_filters:
   - tag:aws:autoscaling:groupName:
-    - '*'
+      - "*"
 hostnames:
-  - 'tag:Name'
+  - "tag:Name"
 
 compose:
   ansible_host: instance_id # private_ip_address - use ip address if need to go through bastion
