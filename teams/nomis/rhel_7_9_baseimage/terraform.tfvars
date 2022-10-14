@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.4.0"
+    configuration_version = "1.4.1"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -55,14 +55,13 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
-        "nomis-development",
-        "nomis-test"
+        "nomis-development"
       ]
     }
 
     launch_template_configuration = {
-      account_id_or_name = "nomis-test"
-      launch_template_id = "lt-05c9663f629ff1ba8"
+      account_id_or_name = "nomis-development"
+      launch_template_id = "lt-0ffc91d476d458bbc"
     }
   }
 
@@ -71,14 +70,13 @@ distribution_configuration_by_branch = {
     ami_distribution_configuration = {
       target_account_ids_or_names = [
         "core-shared-services-production",
-        "nomis-development",
-        "nomis-test"
+        "nomis-development"
       ]
     }
 
-    /* launch_template_configuration = {
-      account_id_or_name = "nomis-test"
-      launch_template_id = "lt-05c9663f629ff1ba8"
-    } */
+    launch_template_configuration = {
+      account_id_or_name = "nomis-development"
+      launch_template_id = "lt-0ffc91d476d458bbc"
+    }
   }
 }
