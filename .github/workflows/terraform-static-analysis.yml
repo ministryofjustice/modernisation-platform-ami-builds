@@ -28,7 +28,7 @@ jobs:
       with:
         scan_type: changed
         checkov_exclude: CKV_AWS_180
-        tflint_exclude: terraform_unused_declarations,terraform_required_version,terraform_required_providers
+        tflint_exclude: terraform_unused_declarations,terraform_required_version
 
   terraform-static-analysis-full-scan:
     name: Terraform Static Analysis - scan all directories
@@ -45,4 +45,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         scan_type: full
-        tflint_exclude: terraform_unused_declarations,terraform_required_version,terraform_required_providers
+        tflint_exclude: terraform_unused_declarations,terraform_required_version
