@@ -43,6 +43,7 @@ variable "kms_key_id" {
 variable "account_ids_lookup" {
   description = "A map of account names to account ids that can be used for image_recipe.parent_image.owner"
   default     = {}
+  type        = map(string)
 }
 
 variable "image_recipe" {
