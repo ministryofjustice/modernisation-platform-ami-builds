@@ -26,7 +26,7 @@ locals {
   }
 
   ami_share_accounts = [
-    "${local.environment_management.account_ids["core-shared-services-production"]}"
+    local.environment_management.account_ids["core-shared-services-production"]
   ]
 
 }

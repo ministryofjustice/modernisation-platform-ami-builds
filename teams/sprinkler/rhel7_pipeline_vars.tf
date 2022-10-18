@@ -26,7 +26,7 @@ locals {
       instance_types     = ["t3.medium"]
       name               = join("", [local.team_name, "_rhel7"])
       security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
-      subnet_id          = "${data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]}"
+      subnet_id          = data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]
       terminate_on_fail  = true
     }
 
