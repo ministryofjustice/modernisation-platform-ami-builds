@@ -14,10 +14,12 @@ variable "GH_ACTOR_NAME" {
 
 variable "imagebuilders" {
   description = "A map of imagebuilder configurations."
+  type        = string
 }
 
 variable "distribution_configuration_by_branch" {
   description = "A map of github branch to distribution_configuration.  See README for more details"
+  type        = string
 }
 
 ### Core mod platform account stuff
@@ -69,7 +71,7 @@ locals {
     application   = upper(local.team_name)
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
     github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
-    is-production = "${var.BRANCH_NAME == "main" ? "true" : "false"}"
+    is-production = var.BRANCH_NAME == "main" ? "true" : "false"
     owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
