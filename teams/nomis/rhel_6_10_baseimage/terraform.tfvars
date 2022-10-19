@@ -68,10 +68,10 @@ distribution_configuration_by_branch = {
       ]
     }
 
-    /* launch_template_configuration = {
-      account_id_or_name = "nomis-test"
-      launch_template_id = "lt-05c9663f629ff1ba8"
-    } */
+    launch_template_configuration = {
+      account_id_or_name = "nomis-development"
+      launch_template_id = "lt-04af9b9914ae9a578"
+    }
   }
 
   # push to any other branch / local run
@@ -83,9 +83,9 @@ distribution_configuration_by_branch = {
       ]
     }
 
-    /* launch_template_configuration = {
-      account_id_or_name = "nomis-test"
-      launch_template_id = "lt-05c9663f629ff1ba8"
-    } */
+    launch_template_configuration = {
+      account_id_or_name = "nomis-development"
+      launch_template_id = "lt-04af9b9914ae9a578"
+    }
   }
 }
