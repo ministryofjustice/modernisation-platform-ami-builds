@@ -14,12 +14,12 @@ variable "GH_ACTOR_NAME" {
 
 variable "imagebuilders" {
   description = "A map of imagebuilder configurations."
-  type        = map
+  type        = map(any)
 }
 
 variable "distribution_configuration_by_branch" {
   description = "A map of github branch to distribution_configuration.  See README for more details"
-  type        = map
+  type        = map(any)
 }
 
 ### Core mod platform account stuff
