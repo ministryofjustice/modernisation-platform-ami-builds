@@ -72,8 +72,6 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3.1.0
-        # with:
-        #   ref: ${{ github.event.pull_request.head.sha }}
 
       # get PR number on push
       - name: Get PR number on push
