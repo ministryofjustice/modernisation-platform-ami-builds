@@ -75,7 +75,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
-      # get PR number on push
+      # Get PR number on push.
       - name: Get PR number on push
         id: get_pr_number
         if: ${{ github.event_name == 'push' }}
