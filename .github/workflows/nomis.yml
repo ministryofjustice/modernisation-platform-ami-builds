@@ -137,7 +137,7 @@ jobs:
           curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/$GITHUB_SHA/pulls
+          https://api.github.com/repos/${{ github.repository }}/commits/d38b78a91669d98107314a45c53631cbc2232d42/pulls
 
         # echo "List of files: "
         # curl \
