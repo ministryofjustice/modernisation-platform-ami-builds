@@ -1,0 +1,21 @@
+---
+name: oasys_rhel_7_9_baseimage_packages
+description: rhel 7.9 base image component for installing standard packages.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "0.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - sudo yum install wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel libffi-devel  -y
