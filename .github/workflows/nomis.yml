@@ -124,17 +124,16 @@ jobs:
           | jq .[].filename \
           | sed 's/"//g' \
           | tr '\n' ' ')
-          echo $pr_files
           echo ::set-output name=file_list::${pr_files}
 
       - name: Detect pull/push projects
         id: projects_pull_push
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         run: |
-          echo "Updated files: ${{ steps.files.outputs.all }}"
+          echo "Updated files: ${{ steps.files.outputs.file_list }}"
           set +o pipefail
           allprojects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
-          changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo ::set-output name=projects::${projects}
