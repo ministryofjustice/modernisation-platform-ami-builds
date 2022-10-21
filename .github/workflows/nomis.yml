@@ -136,11 +136,11 @@ jobs:
           response=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/$GITHUB_SHA/files \
-          | jq .[].filename \
-          | sed 's/"//g' \
-          | tr '\n' ' ')
-          echo ::set-output name=file_list::${response}
+          https://api.github.com/repos/${{ github.repository }}/pulls/$GITHUB_SHA/files
+          # | jq .[].filename \
+          # | sed 's/"//g' \
+          # | tr '\n' ' ')
+          # echo ::set-output name=file_list::${response}
 
       # --- Test step ---
       # Displays the list of files from the previous step.
