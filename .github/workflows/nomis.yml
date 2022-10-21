@@ -116,6 +116,7 @@ jobs:
 
       - name: Get list of committed files
         id: files
+        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         run: |
           pr_files=$(curl \
           -H "Accept: application/vnd.github+json" \
