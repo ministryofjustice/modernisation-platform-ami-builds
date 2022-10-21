@@ -124,6 +124,7 @@ jobs:
           | jq .[].filename \
           | sed 's/"//g' \
           | tr '\n' ' ')
+          echo $pr_files
           echo ::set-output name=file_list::${pr_files}
 
       - name: Detect pull/push projects
