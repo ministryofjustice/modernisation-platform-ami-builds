@@ -142,16 +142,14 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/commits/$the_ref/pulls \
           | jq .[].number)
-          echo $pr_num
 
-        # echo "List of files: "
-        # curl \
-        # -H "Accept: application/vnd.github+json" \
-        # -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-        # https://api.github.com/repos/${{ github.repository }}/pulls/110/files \
-        # | jq .[].filename \
-        # | sed 's/"//g' \
-        # | tr '\n' ' '
+          curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/pulls/$pr_num/files \
+          | jq .[].filename \
+          | sed 's/"//g' \
+          | tr '\n' ' '
 
       # --- Test step ---
       # Displays the list of files from the previous step.
