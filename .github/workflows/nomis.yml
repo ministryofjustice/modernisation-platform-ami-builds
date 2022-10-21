@@ -137,10 +137,12 @@ jobs:
         id: files
         run: |
           the_ref=$(git rev-parse --verify HEAD)
-          curl \
+          pr_num=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/$the_ref/pulls
+          https://api.github.com/repos/${{ github.repository }}/commits/$the_ref/pulls \
+          | jq .[].number)
+          echo $pr_num
 
         # echo "List of files: "
         # curl \
