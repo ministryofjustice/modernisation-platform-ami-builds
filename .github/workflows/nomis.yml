@@ -85,12 +85,11 @@ jobs:
           # | jq -r '.[0].number')
           # echo ::set-output name=pr::${pr_number}
 
-      # TEST STEP
-      # ---------
+      # --- Test step ---
       - name: PR test
         id: pr_test
         run: |
-          echo "${{ steps.get_pr_number.outputs.pr }}"
+          echo "$GITHUB_SHA"
 
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
@@ -127,8 +126,7 @@ jobs:
       #   with:
       #     format: 'space-delimited'
 
-      # GET FILES
-      # ---------
+      # --- Get files ---
       # Uses cURL to get a list of files associated with the pull request. The
       # list of files are assigned to output file_list for use in step
       # projects_pull_push.
@@ -144,8 +142,7 @@ jobs:
           | tr '\n' ' ')
           echo ::set-output name=file_list::${response}
 
-      # TEST STEP
-      # ---------
+      # --- Test step ---
       # Displays the list of files from the previous step.
       - name: Output list of commited files
         id: list_of_files
