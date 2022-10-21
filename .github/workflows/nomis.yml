@@ -140,7 +140,7 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/pulls/110/files \
           | jq .[].filename \
           | sed 's/"//g' \
-          | tr '\n' ' ')
+          | tr '\n' ' '
           # echo ::set-output name=file_list::${response}
 
       # --- Test step ---
