@@ -79,13 +79,12 @@ jobs:
       - name: Get PR number on push
         id: get_pr_number
         run: |
-          # pr_number=$(curl \
-          curl \
+          pr_number=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/$GITHUB_SHA/pulls
-          # | jq -r '.[0].number')
-          # echo ::set-output name=pr::${pr_number}
+          https://api.github.com/repos/${{ github.repository }}/commits/${{ github.head_ref }}/pulls \
+          | jq .[].number)
+          echo ::set-output name=pr::${pr_number}
 
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
@@ -114,39 +113,17 @@ jobs:
           echo ::set-output name=projects::${projects}
           echo ::set-output name=action::${action}
 
-      # # security best practice: use specific version of public actions (v1)
-      # - name: Get list of committed files
-      #   id: files
-      #   if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
-      #   uses: jitterbit/get-changed-files@b17fbb00bdc0c0f63fcf166580804b4d2cdc2a42
-      #   with:
-      #     format: 'space-delimited'
-
-      - name: Get the pull request number
-        id: get_the_pull_request_number
-        run: |
-          pr_num=$(curl \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/${{ github.head_ref }}/pulls \
-          | jq .[].number)
-          echo ::set-output name=num::${pr_num}
-
-      # GET FILES
-      #
-      # Uses cURL to get a list of files associated with the pull request. The
-      # list of files are assigned to output file_list for use in step
-      # projects_pull_push.
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          curl \
+          pr_files=$(curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_the_pull_request_number.outputs.num }}/files \
+          https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.get_pr_number.outputs.pr }}/files \
           | jq .[].filename \
           | sed 's/"//g' \
-          | tr '\n' ' '
+          | tr '\n' ' ')
+          echo ::set-output name=file_list::${pr_files}
 
       - name: Detect pull/push projects
         id: projects_pull_push
