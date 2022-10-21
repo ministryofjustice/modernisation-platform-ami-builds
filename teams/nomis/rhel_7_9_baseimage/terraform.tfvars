@@ -80,5 +80,3 @@ distribution_configuration_by_branch = {
     }
   }
 }
-
-# This is a test. Please ignore.
