@@ -133,7 +133,8 @@ jobs:
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          response=$(curl \
+          # response=$(
+          curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/pulls/$GITHUB_SHA/files
