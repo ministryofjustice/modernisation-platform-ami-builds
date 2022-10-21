@@ -34,7 +34,7 @@ jobs:
       - name: Load and Configure Terraform
         uses: hashicorp/setup-terraform@v2.0.2
         with:
-          terraform_version: 1.0.1
+          terraform_version: 1.3.3
           terraform_wrapper: false
       - name: Terraform plan - example pipelines
         run: |
@@ -57,7 +57,7 @@ jobs:
       - name: Load and Configure Terraform
         uses: hashicorp/setup-terraform@v2.0.2
         with:
-          terraform_version: 1.0.1
+          terraform_version: 1.3.3
           terraform_wrapper: false
       - name: Terraform apply - example pipelines
         run: |
