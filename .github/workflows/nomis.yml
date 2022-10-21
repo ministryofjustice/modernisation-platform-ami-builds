@@ -133,7 +133,7 @@ jobs:
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          the_ref=$(git rev-parse HEAD~)
+          the_ref=$(git rev-parse --verify HEAD)
           echo "$the_ref"
           curl \
           -H "Accept: application/vnd.github+json" \
