@@ -72,6 +72,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3.1.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       # get PR number on push
       - name: Get PR number on push
@@ -85,11 +87,11 @@ jobs:
           # | jq -r '.[0].number')
           # echo ::set-output name=pr::${pr_number}
 
-      # --- Test step ---
+      # TEST STEP
       - name: PR test
         id: pr_test
         run: |
-          echo "$GITHUB_SHA"
+          echo "${{ github.sha }}"
 
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
@@ -126,19 +128,18 @@ jobs:
       #   with:
       #     format: 'space-delimited'
 
-      # --- Get files ---
+      # GET FILES
+      #
       # Uses cURL to get a list of files associated with the pull request. The
       # list of files are assigned to output file_list for use in step
       # projects_pull_push.
       - name: Get list of files associated with the pull request
         id: files
         run: |
-          the_ref=$(git rev-parse --verify HEAD)
-          echo "$the_ref"
           curl \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/commits/$the_ref/pulls
+          https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls
 
         # echo "List of files: "
         # curl \
