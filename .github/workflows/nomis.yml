@@ -91,7 +91,7 @@ jobs:
       - name: PR test
         id: pr_test
         run: |
-          echo "${{ github.sha }}"
+          echo "$(git rev-parse --verify HEAD)"
 
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
