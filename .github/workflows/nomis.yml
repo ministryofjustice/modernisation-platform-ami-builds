@@ -139,14 +139,14 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }}/commits/$GITHUB_SHA/pulls
 
-          echo "List of files: "
-          curl \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/pulls/110/files \
-          | jq .[].filename \
-          | sed 's/"//g' \
-          | tr '\n' ' '
+          # echo "List of files: "
+          # curl \
+          # -H "Accept: application/vnd.github+json" \
+          # -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          # https://api.github.com/repos/${{ github.repository }}/pulls/110/files \
+          # | jq .[].filename \
+          # | sed 's/"//g' \
+          # | tr '\n' ' '
 
       # --- Test step ---
       # Displays the list of files from the previous step.
