@@ -5,14 +5,14 @@ locals {
     main = {
       ami_distribution_configuration = {
         target_account_ids_or_names = [
-          "core-shared-services-production",
-          "oasys-development"
+          #"core-shared-services-production",
+          "oasys-test"
         ]
       }
 
       launch_template_configuration = {
-        account_id_or_name = "oasys-development"
-        launch_template_id = data.aws_launch_template.base_rhel_7_9.id
+        account_id_or_name = "oasys-test"
+        launch_template_id = data.aws_launch_template.rhel_7_9_baseimage.id
       }
     }
 
@@ -20,14 +20,14 @@ locals {
     default = {
       ami_distribution_configuration = {
         target_account_ids_or_names = [
-          "core-shared-services-production",
-          "oasys-development"
+          #"core-shared-services-production",
+          "oasys-test"
         ]
       }
 
       launch_template_configuration = {
-        account_id_or_name = "oasys-development"
-        launch_template_id = data.aws_launch_template.base_rhel_7_9.id
+        account_id_or_name = "oasys-test"
+        launch_template_id = data.aws_launch_template.rhel_7_9_baseimage.id
       }
     }
   }

@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.0.0"
+    configuration_version = "0.0.1"
     description           = "oasys RHEL7.9 base image"
 
     tags = {
@@ -20,7 +20,7 @@ imagebuilders = {
       block_device_mappings_ebs = [
         {
           device_name = "/dev/sda1" # root volume
-          volume_size = 30
+          volume_size = 2
           volume_type = "gp3"
         }
       ]
