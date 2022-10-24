@@ -1,0 +1,26 @@
+# SYMLINK THIS TO DIRECTORIES
+
+locals {
+  team_name        = "oasys"
+  application_name = "core-shared-services"
+  environment      = trimprefix(terraform.workspace, "core-shared-services-")
+  provider_name    = "core-vpc-development"
+
+  # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
+  tags = {
+    business-unit = "HMPPS"
+    application   = upper(local.team_name)
+    branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
+    github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
+    is-production = var.BRANCH_NAME == "main" ? "true" : "false"
+    owner         = "DSO: digital-studio-operations-team@digital.justice.gov.uk"
+    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/oasys"
+  }
+
+  # Different distribution config is allowed based on the github branch
+  # triggering the pipeline
+  distribution_configuration = try(
+    var.distribution_configuration_by_branch[var.BRANCH_NAME],
+    var.distribution_configuration_by_branch["default"]
+  )
+}
