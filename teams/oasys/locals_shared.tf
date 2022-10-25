@@ -1,4 +1,3 @@
-# SYMLINK THIS TO DIRECTORIES
 
 locals {
   team_name        = "oasys"
@@ -23,4 +22,6 @@ locals {
     var.distribution_configuration_by_branch[var.BRANCH_NAME],
     var.distribution_configuration_by_branch["default"]
   )
+
+  environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
 }
