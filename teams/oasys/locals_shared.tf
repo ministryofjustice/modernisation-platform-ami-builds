@@ -1,4 +1,3 @@
-
 locals {
   team_name        = "oasys"
   application_name = "core-shared-services"
