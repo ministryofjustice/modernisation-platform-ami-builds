@@ -18,8 +18,8 @@ locals {
   # Different distribution config is allowed based on the github branch
   # triggering the pipeline
   distribution_configuration = try(
-    var.distribution_configuration_by_branch[var.BRANCH_NAME],
-    var.distribution_configuration_by_branch["default"]
+    local.distribution_configuration_by_branch[var.BRANCH_NAME],
+    local.distribution_configuration_by_branch["default"]
   )
 
   environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
