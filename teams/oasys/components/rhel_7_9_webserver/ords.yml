@@ -17,7 +17,6 @@ phases:
     steps:
       - name: UpdateOS
         action: UpdateOS
-      
       - name: OrdsInstall
         action: ExecuteBash
         inputs:

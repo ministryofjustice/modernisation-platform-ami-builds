@@ -14,8 +14,3 @@ variable "imagebuilders" {
   description = "A map of imagebuilder configurations."
   type        = map(any)
 }
-
-variable "distribution_configuration_by_branch" {
-  description = "A map of github branch to distribution_configuration.  See README for more details"
-  type        = map(any)
-}
