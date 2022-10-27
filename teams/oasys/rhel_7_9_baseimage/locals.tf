@@ -6,12 +6,12 @@ locals {
       ami_distribution_configuration = { # which accounts to distibute the ami
         target_account_ids_or_names = [
           #"core-shared-services-production",
-          "oasys-test"
+          "oasys-development"
         ]
       }
 
       # launch_template_configuration = { # this block creates a launch template
-      #   account_id_or_name = "oasys-test"
+      #   account_id_or_name = "oasys-development"
       #   launch_template_id = data.aws_launch_template.rhel_7_9_baseimage.id
       # }
     }
@@ -21,12 +21,12 @@ locals {
       ami_distribution_configuration = { # which accounts to distibute the ami
         target_account_ids_or_names = [
           #"core-shared-services-production",
-          "oasys-test"
+          "oasys-development"
         ]
       }
 
       # launch_template_configuration = { # this block creates a launch template
-      #   account_id_or_name = "oasys-test"
+      #   account_id_or_name = "oasys-development"
       #   launch_template_id = data.aws_launch_template.rhel_7_9_baseimage.id
       # }
     }
