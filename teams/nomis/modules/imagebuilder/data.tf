@@ -24,7 +24,7 @@ data "aws_imagebuilder_component" "this" {
 data "aws_ami" "parent" {
   count       = var.image_recipe.parent_image.filter_name_value != null ? 1 : 0
   most_recent = true
-  owners      = local.ami_parent_id
+  owners      = [local.ami_parent_id]
 
   filter {
     name   = "name"
