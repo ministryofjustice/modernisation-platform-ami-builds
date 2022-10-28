@@ -27,7 +27,7 @@ variable "parent_image" {
 }
 
 variable "user_data" {
-  type = string
+  type    = string
   default = null
 }
 
