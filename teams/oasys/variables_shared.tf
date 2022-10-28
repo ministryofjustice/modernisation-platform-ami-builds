@@ -11,11 +11,11 @@ variable "GH_ACTOR_NAME" {
 }
 
 variable "configuration_version" { type = string }
-variable "description"           { type = string }
+variable "description" { type = string }
 
-variable "tags"                         { type = map(any) }
+variable "tags" { type = map(any) }
 variable "infrastructure_configuration" { type = map(any) }
-variable "image_pipeline"               { type = map(any) }
+variable "image_pipeline" { type = map(any) }
 
 variable "launch_template_exists" { type = bool }
 
