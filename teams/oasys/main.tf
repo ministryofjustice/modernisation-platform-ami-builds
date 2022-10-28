@@ -3,7 +3,7 @@ module "imagebuilder" {
 
   region                       = local.region
   team_name                    = local.team_name
-  ami_base_name                = var.ami_base_name
+  ami_base_name                = local.ami_base_name
   configuration_version        = var.configuration_version
   description                  = var.description
   release_or_patch             = lookup(each.value, "release_or_patch", "")
