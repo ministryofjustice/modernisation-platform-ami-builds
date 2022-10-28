@@ -1,6 +1,10 @@
 locals {
-  name             = "${var.team_name}_${var.name}"
-  name_and_version = replace("${local.name}_${var.configuration_version}", ".", "_")
+  # NOTE: do not include branch name here as only underscore and alphanumeric allowed
+  ami_name = join("_", flatten([
+    var.ami_base_name,
+    var.release_or_patch == "" ? [] : [var.release_or_patch],
+    "{{ imagebuilder:buildDate }}"
+  ]))
 
   core_shared_services = {
     repo_tfstate            = data.terraform_remote_state.core_shared_services_production.outputs
@@ -8,7 +12,7 @@ locals {
   }
 
   component_template_args = {
-    ami     = local.name
+    ami     = var.ami_base_name
     version = var.configuration_version
     branch  = var.branch == "" ? "main" : var.branch
   }
@@ -41,9 +45,9 @@ locals {
   component_version_tags = merge(local.components_custom_versions, local.components_aws_versions)
 
   default_tags = {
-    image-pipeline               = local.name
-    image-recipe                 = join("/", [local.name, var.configuration_version])
-    infrastructure-configuration = join("/", [local.name, var.configuration_version])
+    image-pipeline               = var.ami_base_name
+    image-recipe                 = join("/", [var.ami_base_name, var.configuration_version])
+    infrastructure-configuration = join("/", [var.ami_base_name, var.configuration_version])
     release-or-patch             = var.release_or_patch == "" ? "n/a" : var.release_or_patch
   }
 
@@ -52,13 +56,6 @@ locals {
     local.component_version_tags,
     var.tags
   )
-
-  # NOTE: do not include branch name here as only underscore and alphanumeric allowed
-  ami_name = join("_", flatten([
-    local.name,
-    var.release_or_patch == "" ? [] : [var.release_or_patch],
-    "{{ imagebuilder:buildDate }}"
-  ]))
 
   ami_tags = merge(local.tags, {
     Name = local.ami_name

@@ -1,8 +1,7 @@
 locals {
-  team_name        = "oasys"
-  application_name = "core-shared-services"
-  environment      = trimprefix(terraform.workspace, "core-shared-services-")
-  provider_name    = "core-vpc-development"
+  team_name        = regex("/teams/(.+)/",path.cwd)[0]
+  ami_base_name    = regex("/teams/${local.team_name}/(.+)",path.cwd)[0]
+  region           = "eu-west-2"
 
   # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
   tags = {
@@ -17,9 +16,9 @@ locals {
 
   # Different distribution config is allowed based on the github branch
   # triggering the pipeline
-  distribution_configuration = try(
-    local.distribution_configuration_by_branch[var.BRANCH_NAME],
-    local.distribution_configuration_by_branch["default"]
+  accounts_to_distribute_ami = try(
+    local.accounts_to_distribute_ami_by_branch[var.BRANCH_NAME],
+    local.accounts_to_distribute_ami_by_branch["default"]
   )
 
   environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)

@@ -8,9 +8,9 @@ variable "team_name" {
   description = "Name of the team used to prefix resources, e.g. nomis"
 }
 
-variable "name" {
+variable "ami_base_name" {
   type        = string
-  description = "Name of the image, e.g. rhel79_base"
+  description = "Name of the image, e.g. rhel_7_9_baseimage"
 }
 
 variable "release_or_patch" {
@@ -71,17 +71,15 @@ variable "infrastructure_configuration" {
   description = "Infrastructure configuration, see aws_imagebuilder_infrastructure_configuration documentation for details on the parameters"
 }
 
-variable "distribution_configuration" {
-  type = object({
-    ami_distribution_configuration = object({
-      target_account_ids_or_names = list(string)
-    })
-    launch_template_configuration = optional(object({
-      account_id_or_name = string
-      launch_template_id = string
-    }))
-  })
-  description = "Distribution configuration, see aws_imagebuilder_distribution_configuration documentation for details on the parameters"
+variable "accounts_to_distribute_ami" {
+  type = list(string)
+  description = "List of accounts to distribute the ami"
+}
+
+variable "launch_template_exists" {
+  type        = string
+  description = "Whether the launch template exists, assumed to be the same as ami_base_name"
+  default     = false
 }
 
 variable "image_pipeline" {

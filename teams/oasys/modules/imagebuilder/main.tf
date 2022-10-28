@@ -15,7 +15,7 @@ resource "aws_imagebuilder_component" "this" {
 }
 
 resource "aws_imagebuilder_image_recipe" "this" {
-  name             = local.name
+  name             = var.ami_base_name
   parent_image     = data.aws_ami.parent.id
   version          = var.configuration_version
   description      = var.description
@@ -65,7 +65,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
 }
 
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
-  name                          = local.name_and_version
+  name                          = replace("${var.ami_base_name}_${var.configuration_version}", ".", "_")
   instance_profile_name         = local.core_shared_services.imagebuilder_mp_tfstate.image_builder_profile
   description                   = var.description
   instance_types                = var.infrastructure_configuration.instance_types
@@ -84,7 +84,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "this" {
 }
 
 resource "aws_imagebuilder_distribution_configuration" "this" {
-  name        = local.name
+  name        = var.ami_base_name
   description = var.description
   tags        = local.tags
 
@@ -92,31 +92,31 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     dynamic "ami_distribution_configuration" {
-      for_each = [var.distribution_configuration.ami_distribution_configuration]
+      for_each = toset([var.accounts_to_distribute_ami])
       content {
         name               = local.ami_name
         description        = var.description
         kms_key_id         = var.kms_key_id
-        target_account_ids = flatten([for name in ami_distribution_configuration.value.target_account_ids_or_names : try(var.account_ids_lookup[name], name)])
+        target_account_ids = try(var.account_ids_lookup[each.key], each.key)
         launch_permission {
-          user_ids = flatten([for name in ami_distribution_configuration.value.target_account_ids_or_names : try(var.account_ids_lookup[name], name)])
+          user_ids = try(var.account_ids_lookup[each.key], each.key)
         }
         ami_tags = local.ami_tags
       }
     }
 
     dynamic "launch_template_configuration" {
-      for_each = try(var.distribution_configuration.launch_template_configuration, null) != null ? [var.distribution_configuration.launch_template_configuration] : []
+      for_each = var.launch_template_exists ? toset([var.accounts_to_distribute_ami]) : {}
       content {
-        account_id         = try(var.account_ids_lookup[launch_template_configuration.value.account_id_or_name], launch_template_configuration.value.account_id_or_name)
-        launch_template_id = launch_template_configuration.value.launch_template_id
+        account_id         = try(var.account_ids_lookup[each.key], each.key)
+        launch_template_id = data.aws_launch_template.id
       }
     }
   }
 }
 
 resource "aws_imagebuilder_image_pipeline" "this" {
-  name                             = local.name
+  name                             = var.ami_base_name
   description                      = var.description
   image_recipe_arn                 = aws_imagebuilder_image_recipe.this.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
