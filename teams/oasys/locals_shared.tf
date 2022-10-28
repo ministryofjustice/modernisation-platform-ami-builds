@@ -4,7 +4,7 @@ locals {
   region        = "eu-west-2"
 
   # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
-  tags = {
+  shared_tags = {
     business-unit = "HMPPS"
     application   = upper(local.team_name)
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
