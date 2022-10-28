@@ -49,8 +49,9 @@ variable "account_ids_lookup" {
 variable "image_recipe" {
   type = object({
     parent_image = object({
-      owner             = string # either an ID or a name which is a key in var.account_ids_lookup
-      filter_name_value = string
+      owner             = string           # either an ID or a name which is a key in var.account_ids_lookup
+      filter_name_value = optional(string) # either lookup via AMI name
+      arn_resource_id   = optional(string) # or specify an AMI ARN directly (the last part of ARN after arm:aws:imagebuilder:{region}:{account-id}:image/)
     })
     user_data = optional(string)
     block_device_mappings_ebs = list(object({
@@ -60,6 +61,9 @@ variable "image_recipe" {
     }))
     components_aws    = list(string)
     components_custom = list(string)
+    systems_manager_agent = optional(object({
+      uninstall_after_build = bool
+    }))
   })
   description = "Details of image builder recipe, see aws_imagebuilder_image_recipe documentation for details on the parameters"
 }
