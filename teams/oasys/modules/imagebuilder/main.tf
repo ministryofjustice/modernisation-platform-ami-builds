@@ -106,7 +106,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     }
 
     dynamic "launch_template_configuration" {
-      for_each = var.launch_template_exists ? toset(var.accounts_to_distribute_ami) : {}
+      for_each = var.launch_template_exists ? var.accounts_to_distribute_ami : {}
       content {
         account_id         = try(var.account_ids_lookup[each.key], each.key)
         launch_template_id = data.aws_launch_template.id
