@@ -28,7 +28,7 @@ components_aws = [
   "aws-cli-version-2-linux",
   "amazon-cloudwatch-agent-linux"
 ]
-  
+
 components_custom = [
   "../components/rhel_7_9_baseimage/packages.yml",
   "../components/rhel_7_9_baseimage/python.yml",
