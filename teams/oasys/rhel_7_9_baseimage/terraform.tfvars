@@ -22,6 +22,8 @@ block_device_mappings_ebs = [
   }
 ]
 
+user_data = null
+
 components_aws = [
   "update-linux",
   "stig-build-linux-medium",

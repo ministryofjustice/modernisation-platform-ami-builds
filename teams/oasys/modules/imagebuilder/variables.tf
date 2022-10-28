@@ -54,6 +54,11 @@ variable "components_aws" {
   type = list(string)
 }
 
+variable "user_data" {
+  type    = string
+  default = null
+}
+
 variable "block_device_mappings_ebs" {
   type = list(object({
     device_name = string
