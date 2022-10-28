@@ -5,7 +5,7 @@
 imagebuilders = {
 
   windows_server_2022_jumpserver = {
-    configuration_version = "0.0.4"
+    configuration_version = "0.0.5"
     description           = "Windows Server 2022 jumpserver"
 
     tags = {
@@ -15,7 +15,7 @@ imagebuilders = {
     image_recipe = {
       parent_image = {
         owner             = "core-shared-services-production"
-        filter_name_value = "mp_WindowsServer2022_*"
+        arn_resource_id   = "mp-windowsserver2022/x.x.x"
       }
       block_device_mappings_ebs = [
         {

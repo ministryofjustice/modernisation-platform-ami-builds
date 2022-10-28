@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.4.1"
+    configuration_version = "1.4.2"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -35,6 +35,9 @@ imagebuilders = {
         "../components/rhel_7_9_baseimage/python.yml",
         "../components/ansible.yml.tftpl"
       ]
+      systems_manager_agent = {
+        uninstall_after_build = false
+      }
     }
 
     infrastructure_configuration = {

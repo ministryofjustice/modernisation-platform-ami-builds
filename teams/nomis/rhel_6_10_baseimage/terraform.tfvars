@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.3.3"
+    configuration_version = "0.3.4"
     description           = "nomis RHEL6.10 base image"
 
     tags = {
@@ -44,6 +44,10 @@ sudo start amazon-ssm-agent
 wget https://s3.eu-west-2.amazonaws.com/amazoncloudwatch-agent-eu-west-2/redhat/amd64/latest/amazon-cloudwatch-agent.rpm
 sudo rpm -U ./amazon-cloudwatch-agent.rpm
 EOF
+
+      systems_manager_agent = {
+        uninstall_after_build = false
+      }
     }
 
     infrastructure_configuration = {
