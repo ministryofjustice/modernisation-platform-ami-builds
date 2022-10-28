@@ -10,7 +10,10 @@ module "imagebuilder" {
   tags                           = merge(local.tags, each.value.tags)
   kms_key_id                     = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   account_ids_lookup             = local.environment_management.account_ids
-  image_recipe                   = var.image_recipe
+  parent_image                   = var.parent_image
+  block_device_mappings_ebs      = var.block_device_mappings_ebs
+  components_aws                 = var.components_aws
+  components_custom              = var.components_custom
   infrastructure_configuration   = var.infrastructure_configuration
   accounts_to_distribute_ami     = local.accounts_to_distribute_ami
   launch_template_exists         = var.launch_template_exists

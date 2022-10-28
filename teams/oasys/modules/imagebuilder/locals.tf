@@ -18,7 +18,7 @@ locals {
   }
 
   components_custom_data = {
-    for component_filename in var.image_recipe.components_custom :
+    for component_filename in var.components_custom :
     component_filename => length(regexall(".*tftpl", component_filename)) > 0 ?
     templatefile(component_filename, local.component_template_args) :
     file(component_filename)
@@ -38,7 +38,7 @@ locals {
   }
 
   components_aws_versions = {
-    for component_aws in var.image_recipe.components_aws :
+    for component_aws in var.components_aws :
     "${component_aws}-version" => data.aws_imagebuilder_component.this[component_aws].version
   }
 

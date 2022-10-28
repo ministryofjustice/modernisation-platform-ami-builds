@@ -41,27 +41,32 @@ variable "kms_key_id" {
 }
 
 variable "account_ids_lookup" {
-  description = "A map of account names to account ids that can be used for image_recipe.parent_image.owner"
+  description = "A map of account names to account ids that can be used for parent_image.owner"
   default     = {}
   type        = map(string)
 }
 
-variable "image_recipe" {
+variable "components_custom" {
+  type = list(string)
+}
+
+variable "components_aws" {
+  type = list(string)
+}
+
+variable "block_device_mappings_ebs" {
+  type = list(object({
+    device_name = string
+    volume_size = number
+    volume_type = string
+  }))
+}
+
+variable "parent_image" {
   type = object({
-    parent_image = object({
-      owner             = string # either an ID or a name which is a key in var.account_ids_lookup
-      filter_name_value = string
-    })
-    user_data = optional(string)
-    block_device_mappings_ebs = list(object({
-      device_name = string
-      volume_size = number
-      volume_type = string
-    }))
-    components_aws    = list(string)
-    components_custom = list(string)
+    owner             = string # either an ID or a name which is a key in var.account_ids_lookup
+    filter_name_value = string
   })
-  description = "Details of image builder recipe, see aws_imagebuilder_image_recipe documentation for details on the parameters"
 }
 
 variable "infrastructure_configuration" {

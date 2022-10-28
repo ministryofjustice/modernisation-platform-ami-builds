@@ -17,17 +17,17 @@ data "terraform_remote_state" "imagebuilder_mp" {
 }
 
 data "aws_imagebuilder_component" "this" {
-  for_each = toset(var.image_recipe.components_aws)
+  for_each = toset(var.components_aws)
   arn      = "arn:aws:imagebuilder:${var.region}:aws:component/${each.key}/x.x.x"
 }
 
 data "aws_ami" "parent" {
   most_recent = true
-  owners      = flatten([try(var.account_ids_lookup[var.image_recipe.parent_image.owner], var.image_recipe.parent_image.owner)])
+  owners      = flatten([try(var.account_ids_lookup[var.parent_image.owner], var.parent_image.owner)])
 
   filter {
     name   = "name"
-    values = [var.image_recipe.parent_image.filter_name_value]
+    values = [var.parent_image.filter_name_value]
   }
 }
 
