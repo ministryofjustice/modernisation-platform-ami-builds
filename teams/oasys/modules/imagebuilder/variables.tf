@@ -72,7 +72,7 @@ variable "infrastructure_configuration" {
 }
 
 variable "accounts_to_distribute_ami" {
-  type = list(string)
+  type        = list(string)
   description = "List of accounts to distribute the ami"
 }
 

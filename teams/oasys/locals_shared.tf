@@ -1,7 +1,7 @@
 locals {
-  team_name        = regex("/teams/(.+)/",path.cwd)[0]
-  ami_base_name    = regex("/teams/${local.team_name}/(.+)",path.cwd)[0]
-  region           = "eu-west-2"
+  team_name     = regex("/teams/(.+)/", path.cwd)[0]
+  ami_base_name = regex("/teams/${local.team_name}/(.+)", path.cwd)[0]
+  region        = "eu-west-2"
 
   # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
   tags = {
