@@ -53,7 +53,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   }
 
   dynamic "systems_manager_agent" {
-    for_each = var.image_recipe.systems_manager_agent != null ? ["systems_manager_agent"] : []
+    for_each = var.image_recipe.systems_manager_agent != null ? [var.image_recipe.systems_manager_agent] : []
     content {
       uninstall_after_build = systems_manager_agent.value.uninstall_after_build
     }
