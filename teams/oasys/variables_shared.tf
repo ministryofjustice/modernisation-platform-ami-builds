@@ -10,12 +10,6 @@ variable "GH_ACTOR_NAME" {
   description = "GH username triggering Github action"
 }
 
-variable "ami_base_name"         { 
-  type        = string
-  description = "Main part of the ami name, before pre/suffixes.
-                 Should be the same as this dir name
-                 Needs a launch template created in https://github.com/ministryofjustice/modernisation-platform-environments with the same name."
-}
 variable "configuration_version" { type = string }
 variable "description"           { type = string }
 
