@@ -33,7 +33,7 @@ data "aws_ami" "parent" {
 
   dynamic "filter" {
     for_each = var.image_recipe.parent_image.filter_others
-    content = {
+    content {
       name   = filter.key
       values = filter.value
     }
