@@ -104,3 +104,8 @@ module "imagebuilder" {
   branch                       = var.BRANCH_NAME
   gh_actor                     = var.GH_ACTOR_NAME
 }
+
+output "parent_ami" {
+  value       = module.imagebuilder.parent_ami
+  description = "parent AMI details, useful if looked up by a filter"
+}
