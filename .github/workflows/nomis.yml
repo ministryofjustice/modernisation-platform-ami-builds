@@ -36,11 +36,11 @@ on:
         #      - teams/nomis/**
 
   push:
-    branches:
-      - main
-      - nomis/DSOS-1524/pipeline-fix
-    paths:
-      - teams/nomis/**
+    #    branches:
+    #      - main
+    #      - nomis/DSOS-1524/pipeline-fix
+    #    paths:
+    #      - teams/nomis/**
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
