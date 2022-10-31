@@ -73,7 +73,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3.1.0
 
-      # get PR number: for posting PR comments and figuring out changed
+      # get PR number: for posting PR comments and figuring out changed files
       - name: Get PR number on push
         id: get_pr_number
         if: ${{ github.event_name == 'push' }}
