@@ -18,10 +18,9 @@ imagebuilders = {
     image_recipe = {
       parent_image = {
         owner             = "core-shared-services-production"
-        filter_name_value = "nomis-rhel*"
+        filter_name_value = "nomis_rhel*"
         filter_others = {
-          "tag:os-version"      = ["rhel 6.10"]
-          "virtualization-type" = ["hvm"]
+          "tag:os-version" = ["rhel 6.10"]
         }
         # arn_resource_id = "nomis-rhel-6-10-baseimage/x.x.x"
       }
