@@ -14,8 +14,8 @@ imagebuilders = {
 
     image_recipe = {
       parent_image = {
-        owner             = "core-shared-services-production"
-        arn_resource_id   = "mp-windowsserver2022/x.x.x"
+        owner           = "core-shared-services-production"
+        arn_resource_id = "mp-windowsserver2022/x.x.x"
       }
       block_device_mappings_ebs = [
         {
