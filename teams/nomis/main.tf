@@ -106,6 +106,6 @@ module "imagebuilder" {
 }
 
 output "parent_ami" {
-  value       = module.imagebuilder.parent_ami
+  value       = { for k in var.imagebuilders : k => module.imagebuilder[k].parent_ami }
   description = "parent AMI details, useful if looked up by a filter"
 }
