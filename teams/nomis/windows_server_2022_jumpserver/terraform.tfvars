@@ -5,7 +5,7 @@
 imagebuilders = {
 
   windows_server_2022_jumpserver = {
-    configuration_version = "0.0.5"
+    configuration_version = "0.0.6"
     description           = "Windows Server 2022 jumpserver"
 
     tags = {
