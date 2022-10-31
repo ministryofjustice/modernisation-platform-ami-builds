@@ -14,9 +14,8 @@ imagebuilders = {
 
     image_recipe = {
       parent_image = {
-        owner = "309956199498" # Redhat
-        # filter_name_value = "RHEL-7.9_HVM-*"
-        arn_resource_id = "RHEL-7.9_HVM-20220512-x86_64-1-Hourly2-GP2/x.x.x"
+        owner             = "309956199498" # Redhat
+        filter_name_value = "RHEL-7.9_HVM-*"
       }
       block_device_mappings_ebs = [
         {
