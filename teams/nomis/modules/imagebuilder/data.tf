@@ -30,4 +30,12 @@ data "aws_ami" "parent" {
     name   = "name"
     values = [var.image_recipe.parent_image.filter_name_value]
   }
+
+  dynamic "filter" {
+    for_each = var.image_recipe.parent_image.filter_others
+    content = {
+      name   = filter.key
+      values = filter.value
+    }
+  }
 }
