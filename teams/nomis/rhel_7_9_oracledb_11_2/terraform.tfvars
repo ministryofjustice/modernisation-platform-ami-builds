@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.2.1"
+    configuration_version = "0.2.3"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -15,8 +15,8 @@ imagebuilders = {
 
     image_recipe = {
       parent_image = {
-        owner             = "core-shared-services-production"
-        filter_name_value = "nomis_rhel_7_9_baseimage_*"
+        owner           = "core-shared-services-production"
+        arn_resource_id = "nomis-rhel-7-9-baseimage/x.x.x"
       }
 
       block_device_mappings_ebs = [
@@ -84,6 +84,10 @@ imagebuilders = {
       components_custom = [
         "../components/ansible.yml.tftpl"
       ]
+
+      systems_manager_agent = {
+        uninstall_after_build = false
+      }
     }
 
     infrastructure_configuration = {

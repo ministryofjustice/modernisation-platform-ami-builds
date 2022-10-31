@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.4.1"
+    configuration_version = "1.4.3"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -14,6 +14,9 @@ imagebuilders = {
 
     image_recipe = {
       parent_image = {
+        # NOTE: this picks up the latest RHEL image at the time the terraform
+        # is run.  Increment version number and re-run the pipeline when a new
+        # version is released by RedHat.
         owner             = "309956199498" # Redhat
         filter_name_value = "RHEL-7.9_HVM-*"
       }
@@ -35,6 +38,9 @@ imagebuilders = {
         "../components/rhel_7_9_baseimage/python.yml",
         "../components/ansible.yml.tftpl"
       ]
+      systems_manager_agent = {
+        uninstall_after_build = false
+      }
     }
 
     infrastructure_configuration = {

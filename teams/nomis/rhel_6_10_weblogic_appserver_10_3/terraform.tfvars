@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_6_10_weblogic_appserver_10_3 = {
-    configuration_version = "0.1.1"
+    configuration_version = "0.1.3"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 6.10 weblogic appserver image"
 
@@ -17,8 +17,8 @@ imagebuilders = {
 
     image_recipe = {
       parent_image = {
-        owner             = "core-shared-services-production"
-        filter_name_value = "nomis_rhel_6_10_baseimage_*"
+        owner           = "core-shared-services-production"
+        arn_resource_id = "nomis-rhel-6-10-baseimage/x.x.x"
       }
 
       block_device_mappings_ebs = [
@@ -43,6 +43,9 @@ imagebuilders = {
         "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
       ]
 
+      systems_manager_agent = {
+        uninstall_after_build = false
+      }
     }
 
     infrastructure_configuration = {
