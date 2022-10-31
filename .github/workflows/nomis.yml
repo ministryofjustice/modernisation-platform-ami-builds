@@ -38,6 +38,7 @@ on:
   push:
     branches:
       - main
+      - nomis/DSOS-1524/pipeline-fix
     paths:
       - teams/nomis/**
 
@@ -164,7 +165,11 @@ jobs:
           elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ steps.get_pr_number.outputs.pr }}"
-            action="apply"
+            if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+              action="apply"
+            else
+              action="plan"
+            fi
           else
             echo "Unsupported event ${GITHUB_EVENT_NAME}"
             exit 1
