@@ -24,16 +24,16 @@ on:
         required: true
         default: 'plan'
 
-  pull_request:
-    types:
-      - opened
-      - edited
-      - synchronize
-      - reopened
-    branches:
-      - main
-    paths:
-      - teams/nomis/**
+        #  pull_request:
+        #    types:
+        #      - opened
+        #      - edited
+        #      - synchronize
+        #      - reopened
+        #    branches:
+        #      - main
+        #    paths:
+        #      - teams/nomis/**
 
   push:
     branches:
