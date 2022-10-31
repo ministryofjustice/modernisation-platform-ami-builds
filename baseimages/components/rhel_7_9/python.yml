@@ -1,0 +1,47 @@
+---
+name: rhel_7_9_baseimage_python
+description: rhel 7.9 base image component for installing python
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: "0.0.1"
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallPython3-9
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+
+              # install python 3.9
+              wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
+              tar xzf Python-3.9.6.tgz
+              rm -f Python-3.9.6.tgz
+              cd Python-3.9.6
+
+              # ensure zlib is enabled, required for some ansible modules
+              sed -i 's/^#zlib/zlib/' Modules/Setup
+
+              ./configure --enable-optimizations
+              sudo make altinstall
+
+      # Install pip for Python 3.9
+      - name: InstallPipAndVirtualenv
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+
+              # install pip and virtualenv
+              python3.9 -m pip install --upgrade pip
+              python3.9 -m pip install virtualenv
