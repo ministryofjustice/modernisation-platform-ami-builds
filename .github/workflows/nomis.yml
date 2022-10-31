@@ -77,6 +77,8 @@ jobs:
       - name: Get PR number on push
         id: get_pr_number
         run: |
+          echo "${{ github.repository }}"
+          echo "${{ github.head_ref }}"
           pr_number=$(curl \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
