@@ -19,7 +19,7 @@ imagebuilders = {
         # version is released by RedHat.
         owner = "309956199498" # Redhat
         ami_search_filters = {
-          "name" = ["RHEL-6.10_HVM-*"]
+          name = ["RHEL-6.10_HVM-*"]
         }
       }
       block_device_mappings_ebs = [
