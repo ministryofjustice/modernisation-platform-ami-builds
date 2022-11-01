@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_oracledb_11_2 = {
-    configuration_version = "0.2.3"
+    configuration_version = "0.2.4"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -106,7 +106,10 @@ distribution_configuration_by_branch = {
   # push to main branch
   main = {
     ami_distribution_configuration = {
-      target_account_ids_or_names = [
+      target_account_names = [
+        "core-shared-services-production"
+      ]
+      launch_permission_account_names = [
         "core-shared-services-production",
         "nomis-development",
         "nomis-test",
@@ -119,7 +122,10 @@ distribution_configuration_by_branch = {
   # push to any other branch / local run
   default = {
     ami_distribution_configuration = {
-      target_account_ids_or_names = [
+      target_account_names = [
+        "core-shared-services-production"
+      ]
+      launch_permission_account_names = [
         "core-shared-services-production",
         "nomis-development",
         "nomis-test"
