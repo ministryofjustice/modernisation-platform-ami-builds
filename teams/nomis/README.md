@@ -12,7 +12,9 @@ relevant image directory to trigger the run. Don't forget to update
 the component version when there is a change to the component as well.
 
 You can manually plan and apply terraform prior to raising a PR. This is
-not recommended if multiple people are working on the same image.
+not recommended if multiple people are working on the same image. If
+you do create an image from a branched pipeline, then `_test` will be
+appended to the AMI name.
 
 Please make sure your branch is at the head of the repo before creating
 a PR.
