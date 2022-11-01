@@ -1,0 +1,84 @@
+---
+name: ${ami}_ansible
+description: Install ansible roles for ${ami}
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: ${version}
+      description: Uses the recipe version to avoid any issues with the branch template arg.
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      # Install ansible roles
+      - name: InstallAndRunAnsible
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              repo="modernisation-platform-ami-builds"
+              ami_tag="${ami}"
+
+              # clone ansible roles and playbook
+              ansible_dir=$(mktemp -d)
+              echo "Cloning $repo into $ansible_dir using branch=${branch}"
+              cd $ansible_dir
+              git clone -b ${branch} "https://github.com/ministryofjustice/$repo.git"
+
+              # set python version
+              if [[ $(which python3.9) ]]; then
+                python=$(which python3.9)
+              elif [[ $(which python3.6) ]]; then
+                python=$(which python3.6)
+              else
+                echo "Python3.9/3.6 not found"
+                exit 1
+              fi
+              echo "python: $python"
+
+              # install python dependencies outside of virtual env so ansible
+              # can be executed remotely
+              cd $ansible_dir/$repo/ansible
+              $python -m pip install -r requirements.txt
+
+              # activate virtual environment
+              mkdir $ansible_dir/python-venv && cd "$_"
+              $python -m venv ansible
+              source ansible/bin/activate
+              $python -m pip install --upgrade pip
+              if [[ "$python" =~ 3.6 ]]; then
+                $python -m pip install wheel
+                $python -m pip install cryptography==2.3
+                export LC_ALL=en_US.UTF-8
+                $python -m pip install ansible-core==2.11.12
+              else
+                $python -m pip install ansible==6.0.0
+              fi
+
+              # install requirements in virtual env
+              cd $ansible_dir/$repo/ansible
+              $python -m pip install -r requirements.txt
+              ansible-galaxy role install -r requirements.yml
+              ansible-galaxy collection install -r requirements.yml --force
+
+              # run ansible (note comma after localhost is deliberate)
+              ansible-playbook site.yml \
+              --connection=local \
+              --inventory localhost, \
+              --extra-vars "ansible_python_interpreter=$python" \
+              --extra-vars "target=localhost" \
+              --extra-vars "@group_vars/ami_$ami_tag.yml" \
+              --tags amibuild \
+              --become
+
+              # Cleanup
+              deactivate
+              echo "Cleaning up $ansible_dir"
+              rm -rf $ansible_dir/$repo
+              rm -rf $ansible_dir/python-venv
+              rmdir $ansible_dir
