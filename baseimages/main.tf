@@ -1,9 +1,9 @@
 module "imagebuilder" {
   source = "../../modules//imagebuilder"
 
-  region                       = local.region
+  region                       = var.region
   team_name                    = local.team_name
-  ami_base_name                = local.ami_base_name
+  ami_base_name                = var.ami_base_name
   configuration_version        = var.configuration_version
   description                  = var.description
   release_or_patch             = try(each.value, "release_or_patch", "")

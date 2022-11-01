@@ -2,7 +2,7 @@ remote_state {
   backend = "s3"
   config = {
     bucket               = "modernisation-platform-terraform-state"
-    key                  = "ami-baseimages/${ami_base_name}.tfstate"
+    key                  = "ami-baseimages/${var.ami_base_name}.tfstate"
     region               = "eu-west-2"
     encrypt              = true
     acl                  = "bucket-owner-full-control"

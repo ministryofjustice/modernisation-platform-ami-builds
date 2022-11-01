@@ -1,5 +1,5 @@
 ---
-name: rhel_7_9_baseimage_python
+name: baseimage_rhel_7_9_python
 description: rhel 7.9 base image component for installing python
 schemaVersion: 1.0
 parameters:
