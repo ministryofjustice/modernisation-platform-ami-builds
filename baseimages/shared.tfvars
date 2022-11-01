@@ -1,5 +1,5 @@
 
-region        = "eu-west-2"
+region = "eu-west-2"
 
 block_device_mappings_ebs = [
   {
