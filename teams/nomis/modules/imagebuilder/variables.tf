@@ -78,10 +78,11 @@ variable "infrastructure_configuration" {
 variable "distribution_configuration" {
   type = object({
     ami_distribution_configuration = object({
-      target_account_ids_or_names = list(string)
+      target_account_names            = list(string)
+      launch_permission_account_names = list(string)
     })
     launch_template_configuration = optional(object({
-      account_id_or_name = string
+      account_name       = string
       launch_template_id = string
     }))
   })
