@@ -271,7 +271,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}]('${url}')'
             echo
             echo '```'
             head -c 65476 tfplan.txt
@@ -285,14 +285,17 @@ jobs:
           comment >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      # security best practice: use specific version of public actions (v1.3.0)
       - name: Post Plan to PR
-        uses: thollander/actions-comment-pull-request@ca435e7cdbb9ea1b90c4c2af8db208fd9f9b6620
-        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
           message: "${{ env.TF_PLAN_OUT }}"
           pr_number: "${{ needs.init.outputs.pr_number }}"
+        run: |
+          escaped_message=$(echo "$message" | jq -Rsa .)
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
+            -d '{"body":'"${escaped_message}"'}'
 
   apply:
     needs:
@@ -376,7 +379,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfapply.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}]('${url}')'
             echo
             echo '```'
             head -c 65476 tfapply.txt
@@ -391,13 +394,14 @@ jobs:
           echo 'EOF' >> $GITHUB_ENV
 
       - name: Post Apply to PR
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments \
-            -d '{"body":'\"${message}\"'}'
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
         env:
           message: "${{ env.TF_APPLY_OUT }}"
           pr_number: "${{ needs.init.outputs.pr_number }}"
+        run: |
+          escaped_message=$(echo "$message" | jq -Rsa .)
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
+            -d '{"body":'"${escaped_message}"'}'
