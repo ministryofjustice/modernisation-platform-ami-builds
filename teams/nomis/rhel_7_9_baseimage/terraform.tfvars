@@ -10,6 +10,7 @@ imagebuilders = {
 
     tags = {
       os-version = "rhel 7.9"
+      dummy-tag  = "delete me"
     }
 
     image_recipe = {
