@@ -22,17 +22,12 @@ data "aws_imagebuilder_component" "this" {
 }
 
 data "aws_ami" "parent" {
-  count       = var.image_recipe.parent_image.filter_name_value != null ? 1 : 0
+  count       = var.image_recipe.parent_image.ami_search_filters != null ? 1 : 0
   most_recent = true
   owners      = [local.ami_parent_id]
 
-  filter {
-    name   = "name"
-    values = [var.image_recipe.parent_image.filter_name_value]
-  }
-
   dynamic "filter" {
-    for_each = var.image_recipe.parent_image.filter_others
+    for_each = var.image_recipe.parent_image.ami_search_filters
     content {
       name   = filter.key
       values = filter.value

@@ -49,10 +49,9 @@ variable "account_ids_lookup" {
 variable "image_recipe" {
   type = object({
     parent_image = object({
-      owner             = string                      # either an ID or a name which is a key in var.account_ids_lookup
-      filter_name_value = optional(string)            # either lookup via AMI name
-      filter_others     = optional(map(list(string))) # additional filters where the map key is the filter name
-      arn_resource_id   = optional(string)            # or specify an AMI ARN directly (the last part of ARN after arm:aws:imagebuilder:{region}:{account-id}:image/)
+      owner              = string                      # either an ID or a name which is a key in var.account_ids_lookup
+      ami_search_filters = optional(map(list(string))) # search for an ami, where the map key is the filter name and the map value is the filter values
+      arn_resource_id    = optional(string)            # or specify an AMI ARN directly (the last part of ARN after arm:aws:imagebuilder:{region}:{account-id}:image/)
     })
     user_data = optional(string)
     block_device_mappings_ebs = list(object({

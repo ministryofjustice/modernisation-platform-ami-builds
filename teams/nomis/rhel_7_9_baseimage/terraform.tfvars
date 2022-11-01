@@ -17,8 +17,10 @@ imagebuilders = {
         # NOTE: this picks up the latest RHEL image at the time the terraform
         # is run.  Increment version number and re-run the pipeline when a new
         # version is released by RedHat.
-        owner             = "309956199498" # Redhat
-        filter_name_value = "RHEL-7.9_HVM-*"
+        owner = "309956199498" # Redhat
+        ami_search_filters = {
+          "name" = ["RHEL-7.9_HVM-*"]
+        }
       }
       block_device_mappings_ebs = [
         {
