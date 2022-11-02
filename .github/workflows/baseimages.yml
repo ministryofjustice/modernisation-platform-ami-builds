@@ -397,17 +397,3 @@ jobs:
   #       env:
   #         message: "${{ env.TF_APPLY_OUT }}"
   #         pr_number: "${{ needs.init.outputs.pr_number }}"
-
-Updated files: .github/CODEOWNERS .github/workflows/baseimages.yml ansible/group_vars/ami_baseimage_rhel_7_9.yml baseimages/components/ansible.yml.tftpl baseimages/components/rhel_7_9/packages.yml baseimages/components/rhel_7_9/python.yml baseimages/data.tf baseimages/locals.tf baseimages/main.tf baseimages/rhel_7_9/terraform.tfvars baseimages/rhel_7_9/terragrunt.hcl baseimages/shared.tfvars baseimages/terragrunt.hcl baseimages/variables.tf baseimages/versions.tf modules/imagebuilder/README.md modules/imagebuilder/data.tf modules/imagebuilder/locals.tf modules/imagebuilder/main.tf modules/imagebuilder/variables.tf modules/imagebuilder/versions.tf
-baseimages
-rhel_7_9
-.github
-baseimages
-components
-group_vars
-imagebuilder
-rhel_7_9
-workflows
-baseimages
-rhel_7_9
-List of projects [baseimages rhel_7_9]
