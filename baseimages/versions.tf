@@ -1,4 +1,5 @@
 terraform {
+  backend "s3" {}
   experiments = [module_variable_optional_attrs]
   required_providers {
     aws = {
@@ -15,7 +16,7 @@ provider "aws" {
 }
 
 # AWS provider for the workspace you're working in (every resource will default to using this, unless otherwise specified)
-provider "aws" { # PUT THIS IN PROVIDER FILE AND SYMLINK TO DIRS
+provider "aws" {
   region = "eu-west-2"
   assume_role {
     role_arn = "arn:aws:iam::${local.environment_management.account_ids[terraform.workspace]}:role/ModernisationPlatformAccess"

@@ -1,5 +1,6 @@
 .env
 .terraform
+.terragrunt-cache
 *.tfstate*
 .DS_Store
 tmp/
