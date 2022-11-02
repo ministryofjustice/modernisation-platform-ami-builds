@@ -1,4 +1,4 @@
-locals = {
+locals {
   ami_base_name = path_relative_to_include()
 }
 
