@@ -2,7 +2,7 @@ locals {
   # these are all based on https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html#tags-you-should-use
   shared_tags = {
     business-unit = "HMPPS"
-    application   = upper(local.team_name)
+    application   = "n/a"
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
     github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
     is-production = var.BRANCH_NAME == "main" ? "true" : "false"

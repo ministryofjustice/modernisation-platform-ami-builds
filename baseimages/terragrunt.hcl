@@ -1,8 +1,12 @@
+locals = {
+  ami_base_name = path_relative_to_include()
+}
+
 remote_state {
   backend = "s3"
   config = {
     bucket               = "modernisation-platform-terraform-state"
-    key                  = "ami-baseimages/${ami_base_name}.tfstate"
+    key                  = "ami-baseimages/${local.ami_base_name}.tfstate"
     region               = "eu-west-2"
     encrypt              = true
     acl                  = "bucket-owner-full-control"
