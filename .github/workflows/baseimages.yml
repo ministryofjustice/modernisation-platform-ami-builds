@@ -56,7 +56,7 @@ env:
   TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
   TF_ENV: production
 
-  TEAM_DIR: baseimages
+  BASE_DIR: baseimages
   PROJECT_DIR_DEPTH: 2
   DEFAULT_TERRAFORM_VERSION: 1.3.3
 
@@ -96,11 +96,11 @@ jobs:
           set +o pipefail
           projects=${{ github.event.inputs.projects }}
           if [[ ${projects} == "all" ]]; then
-            projects=$(find "${TEAM_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+            projects=$(find "${BASE_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
           else
             for project in ${{ github.event.inputs.projects }}; do
-              if [[ ! -e "${TEAM_DIR}/${project}/terragrunt.hcl" ]]; then
-                echo "Project not found ${TEAM_DIR}/${project}/terragrunt.hcl" >&2
+              if [[ ! -e "${BASE_DIR}/${project}/terragrunt.hcl" ]]; then
+                echo "Project not found ${BASE_DIR}/${project}/terragrunt.hcl" >&2
                 exit 1
               fi
             done
@@ -127,14 +127,12 @@ jobs:
         run: |
           echo "Updated files: ${{ steps.files.outputs.all }}"
           set +o pipefail
-          allprojects=$(find "${TEAM_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
-          echo "${allprojects[@]}"
-          changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
-          echo "${changed[@]}"
+          allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r 's;${BASE_DIR}/([^/]+)/.+;\1;' | sort -u)
+          echo "all projects: ${allprojects[@]}"
+          changed=$(echo "${{ steps.files.outputs.all }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
-          echo "${projects[@]}"
           echo List of projects [${projects}]
-  #        echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
 
   #     - name: Parse inputs
   #       id: parseinput
@@ -187,7 +185,7 @@ jobs:
   #       with:
   #         token: ${{ secrets.GITHUB_TOKEN }}
   #         authors: ""
-  #         starts-with: "**`${{ env.TEAM_DIR }}/"
+  #         starts-with: "**`${{ env.BASE_DIR }}/"
 
 
   # plan:
@@ -206,7 +204,7 @@ jobs:
   #       run: |
   #         echo "Get terraform version for ${{ matrix.project }}"
   #         set +o pipefail
-  #         required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+  #         required_version=$(grep ^terraform "${BASE_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
   #         if [[ -z "$required_version" ]]; then
   #           echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
   #           required_version="=${DEFAULT_TERRAFORM_VERSION}"
@@ -239,7 +237,7 @@ jobs:
   #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   #     - name: Init and State Refresh
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         terragrunt init
   #         terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
@@ -251,7 +249,7 @@ jobs:
 
   #     - name: Plan
   #       id: plan
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         exitcode=0
   #         terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
@@ -261,12 +259,12 @@ jobs:
 
   #     - name: Create Plan PR message
   #       if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         comment() {
   #           url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
   #           len=$(cat tfplan.txt | wc -c)
-  #           echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+  #           echo '**`${{ env.BASE_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
   #           echo
   #           echo '```'
   #           head -c 65476 tfplan.txt
@@ -308,7 +306,7 @@ jobs:
   #       run: |
   #         echo "Get terraform version for ${{ matrix.project }}"
   #         set +o pipefail
-  #         required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+  #         required_version=$(grep ^terraform "${BASE_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
   #         if [[ -z "$required_version" ]]; then
   #           echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
   #           required_version="=${DEFAULT_TERRAFORM_VERSION}"
@@ -341,7 +339,7 @@ jobs:
   #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   #     - name: Init and State Refresh
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         terragrunt init
   #         terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
@@ -353,7 +351,7 @@ jobs:
       
   #     - name: Plan
   #       id: plan
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         exitcode=0
   #         terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
@@ -363,18 +361,18 @@ jobs:
 
   #     - name: Apply
   #       if: ${{ steps.plan.outputs.exitcode == '2' }}
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         terragrunt apply . tf.plan | tee tfapply.txt
 
   #     - name: Create Apply PR message
   #       if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
   #       run: |
   #         comment() {
   #           url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
   #           len=$(cat tfapply.txt | wc -c)
-  #           echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+  #           echo '**`${{ env.BASE_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
   #           echo
   #           echo '```'
   #           head -c 65476 tfapply.txt
@@ -400,3 +398,16 @@ jobs:
   #         message: "${{ env.TF_APPLY_OUT }}"
   #         pr_number: "${{ needs.init.outputs.pr_number }}"
 
+Updated files: .github/CODEOWNERS .github/workflows/baseimages.yml ansible/group_vars/ami_baseimage_rhel_7_9.yml baseimages/components/ansible.yml.tftpl baseimages/components/rhel_7_9/packages.yml baseimages/components/rhel_7_9/python.yml baseimages/data.tf baseimages/locals.tf baseimages/main.tf baseimages/rhel_7_9/terraform.tfvars baseimages/rhel_7_9/terragrunt.hcl baseimages/shared.tfvars baseimages/terragrunt.hcl baseimages/variables.tf baseimages/versions.tf modules/imagebuilder/README.md modules/imagebuilder/data.tf modules/imagebuilder/locals.tf modules/imagebuilder/main.tf modules/imagebuilder/variables.tf modules/imagebuilder/versions.tf
+baseimages
+rhel_7_9
+.github
+baseimages
+components
+group_vars
+imagebuilder
+rhel_7_9
+workflows
+baseimages
+rhel_7_9
+List of projects [baseimages rhel_7_9]
