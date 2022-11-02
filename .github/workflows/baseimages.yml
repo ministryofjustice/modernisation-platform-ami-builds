@@ -128,272 +128,275 @@ jobs:
           echo "Updated files: ${{ steps.files.outputs.all }}"
           set +o pipefail
           allprojects=$(find "${TEAM_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          echo "${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          echo "${changed[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
+          echo "${projects[@]}"
           echo List of projects [${projects}]
-          echo "projects=${projects}" >> $GITHUB_OUTPUT
+  #        echo "projects=${projects}" >> $GITHUB_OUTPUT
 
-      - name: Parse inputs
-        id: parseinput
-        run: |
-          echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
-          action="plan"
-          pr_number=""
-          plan_args=""
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
-            action="${{ steps.projects_workflow_dispatch.outputs.action }}"
-          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
-            projects="${{ steps.projects_pull_push.outputs.projects }}"
-            pr_number="${{ github.event.pull_request.number }}"
-            plan_args="-no-color"  # as we will post plan to PR
-          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
-            projects="${{ steps.projects_pull_push.outputs.projects }}"
-            pr_number="${{ steps.get_pr_number.outputs.pr }}"
-            plan_args="-no-color"  # as we will post plan to PR
-            action="apply"
-          else
-            echo "Unsupported event ${GITHUB_EVENT_NAME}"
-            exit 1
-          fi
-          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
-          echo "projects=${projects}" >> $GITHUB_OUTPUT
-          echo "action=${action}" >> $GITHUB_OUTPUT
-          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
-          echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
+  #     - name: Parse inputs
+  #       id: parseinput
+  #       run: |
+  #         echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
+  #         action="plan"
+  #         pr_number=""
+  #         plan_args=""
+  #         if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+  #           projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
+  #           action="${{ steps.projects_workflow_dispatch.outputs.action }}"
+  #         elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+  #           projects="${{ steps.projects_pull_push.outputs.projects }}"
+  #           pr_number="${{ github.event.pull_request.number }}"
+  #           plan_args="-no-color"  # as we will post plan to PR
+  #         elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+  #           projects="${{ steps.projects_pull_push.outputs.projects }}"
+  #           pr_number="${{ steps.get_pr_number.outputs.pr }}"
+  #           plan_args="-no-color"  # as we will post plan to PR
+  #           action="apply"
+  #         else
+  #           echo "Unsupported event ${GITHUB_EVENT_NAME}"
+  #           exit 1
+  #         fi
+  #         echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
+  #         echo "projects=${projects}" >> $GITHUB_OUTPUT
+  #         echo "action=${action}" >> $GITHUB_OUTPUT
+  #         echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
+  #         echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
 
-      - name: Setup project matrix
-        id: setupproject
-        env:
-          projects: ${{ steps.parseinput.outputs.projects }}
-        run: |
-          echo "Setup ansible actions for projects [${projects}]"
-          echo -n "matrix={\"include\":["  >> $GITHUB_OUTPUT
-          delimiter=""
-          for project in ${projects}; do
-            echo -n "${delimiter}"  >> $GITHUB_OUTPUT
-            echo -n '{"project":"'${project}'"}'  >> $GITHUB_OUTPUT
-            delimiter=","
-          done
-          echo "]}"  >> $GITHUB_OUTPUT
+  #     - name: Setup project matrix
+  #       id: setupproject
+  #       env:
+  #         projects: ${{ steps.parseinput.outputs.projects }}
+  #       run: |
+  #         echo "Setup ansible actions for projects [${projects}]"
+  #         echo -n "matrix={\"include\":["  >> $GITHUB_OUTPUT
+  #         delimiter=""
+  #         for project in ${projects}; do
+  #           echo -n "${delimiter}"  >> $GITHUB_OUTPUT
+  #           echo -n '{"project":"'${project}'"}'  >> $GITHUB_OUTPUT
+  #           delimiter=","
+  #         done
+  #         echo "]}"  >> $GITHUB_OUTPUT
 
-      # security best practice: use specific version of public actions (v0.3.0)
-      - name: Hide previous PR comments
-        uses: int128/hide-comment-action@v1.16.0
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          authors: ""
-          starts-with: "**`${{ env.TEAM_DIR }}/"
+  #     # security best practice: use specific version of public actions (v0.3.0)
+  #     - name: Hide previous PR comments
+  #       uses: int128/hide-comment-action@v1.16.0
+  #       if: ${{ github.event_name == 'pull_request' }}
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         authors: ""
+  #         starts-with: "**`${{ env.TEAM_DIR }}/"
 
 
-  plan:
-    needs: init
-    if: ${{ needs.init.outputs.projects != '' }}
-    strategy:
-      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
-      fail-fast: false
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3.1.0
+  # plan:
+  #   needs: init
+  #   if: ${{ needs.init.outputs.projects != '' }}
+  #   strategy:
+  #     matrix: ${{ fromJson(needs.init.outputs.matrix) }}
+  #     fail-fast: false
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout the code
+  #       uses: actions/checkout@v3.1.0
 
-      - name: Get terraform version
-        id: discover
-        run: |
-          echo "Get terraform version for ${{ matrix.project }}"
-          set +o pipefail
-          required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
-          if [[ -z "$required_version" ]]; then
-            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
-            required_version="=${DEFAULT_TERRAFORM_VERSION}"
-          fi
-          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
-            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
-            exit 1
-          fi
-          version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}" >> $GITHUB_OUTPUT
+  #     - name: Get terraform version
+  #       id: discover
+  #       run: |
+  #         echo "Get terraform version for ${{ matrix.project }}"
+  #         set +o pipefail
+  #         required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+  #         if [[ -z "$required_version" ]]; then
+  #           echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+  #           required_version="=${DEFAULT_TERRAFORM_VERSION}"
+  #         fi
+  #         if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+  #           echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+  #           exit 1
+  #         fi
+  #         version=$(echo "$required_version" | cut -d= -f2)
+  #         echo "version=${version}" >> $GITHUB_OUTPUT
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.2
-        with:
-          terraform_version: ${{ steps.discover.outputs.version }}
-          terraform_wrapper: false
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v2.0.2
+  #       with:
+  #         terraform_version: ${{ steps.discover.outputs.version }}
+  #         terraform_wrapper: false
 
-      - name: Setup Terragrunt
-        uses: autero1/action-terragrunt@1.2.0
-        with:
-          terragrunt_version: 0.36.1
+  #     - name: Setup Terragrunt
+  #       uses: autero1/action-terragrunt@1.2.0
+  #       with:
+  #         terragrunt_version: 0.36.1
 
-      # security best practice: use specific version of public actions (v1)
-      - name: Turnstyle
-        id: turnstyle
-        uses: softprops/turnstyle@v1
-        with:
-          same-branch-only: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     # security best practice: use specific version of public actions (v1)
+  #     - name: Turnstyle
+  #       id: turnstyle
+  #       uses: softprops/turnstyle@v1
+  #       with:
+  #         same-branch-only: false
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Init and State Refresh
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          terragrunt init
-          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          terragrunt apply . -refresh-only || true
+  #     - name: Init and State Refresh
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         terragrunt init
+  #         terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+  #         # refresh as objects are often changed outside of Terraform
+  #         # suppress that from the plan PR comment.  I've seen this fail
+  #         # in some rare circumstances - this shouldn't affect the remaining
+  #         # plan/apply so continue anyway if error here.
+  #         terragrunt apply . -refresh-only || true
 
-      - name: Plan
-        id: plan
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          exitcode=0
-          terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "terragrunt plan exit code = $exitcode"
-          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
-          (( exitcode == 1 )) && exit 1 || exit 0
+  #     - name: Plan
+  #       id: plan
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         exitcode=0
+  #         terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+  #         echo "terragrunt plan exit code = $exitcode"
+  #         echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+  #         (( exitcode == 1 )) && exit 1 || exit 0
 
-      - name: Create Plan PR message
-        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          comment() {
-            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-            echo
-            echo '```'
-            head -c 65476 tfplan.txt
-            echo
-            echo '```'
-            if [[ $len -gt 65476 ]]; then
-              echo "** Truncated output.  See $url for the rest **"
-            fi
-          }
-          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+  #     - name: Create Plan PR message
+  #       if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         comment() {
+  #           url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  #           len=$(cat tfplan.txt | wc -c)
+  #           echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+  #           echo
+  #           echo '```'
+  #           head -c 65476 tfplan.txt
+  #           echo
+  #           echo '```'
+  #           if [[ $len -gt 65476 ]]; then
+  #             echo "** Truncated output.  See $url for the rest **"
+  #           fi
+  #         }
+  #         echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
+  #         comment >> $GITHUB_ENV
+  #         echo 'EOF' >> $GITHUB_ENV
 
-      - name: Post Plan to PR
-        uses: thollander/actions-comment-pull-request@v1.5.0
-        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          message: "${{ env.TF_PLAN_OUT }}"
-          pr_number: "${{ needs.init.outputs.pr_number }}"
+  #     - name: Post Plan to PR
+  #       uses: thollander/actions-comment-pull-request@v1.5.0
+  #       if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+  #       with:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         message: "${{ env.TF_PLAN_OUT }}"
+  #         pr_number: "${{ needs.init.outputs.pr_number }}"
 
-  apply:
-    needs:
-      - init
-      - plan
-    if: ${{ needs.init.outputs.projects != '' && needs.init.outputs.action == 'apply' }}
-    strategy:
-      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
-      fail-fast: false
-    runs-on: ubuntu-latest
-    environment:
-      name: core-shared-services
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3.1.0
+  # apply:
+  #   needs:
+  #     - init
+  #     - plan
+  #   if: ${{ needs.init.outputs.projects != '' && needs.init.outputs.action == 'apply' }}
+  #   strategy:
+  #     matrix: ${{ fromJson(needs.init.outputs.matrix) }}
+  #     fail-fast: false
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: core-shared-services
+  #   steps:
+  #     - name: Checkout the code
+  #       uses: actions/checkout@v3.1.0
 
-      - name: Get terraform version
-        id: discover
-        run: |
-          echo "Get terraform version for ${{ matrix.project }}"
-          set +o pipefail
-          required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
-          if [[ -z "$required_version" ]]; then
-            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
-            required_version="=${DEFAULT_TERRAFORM_VERSION}"
-          fi
-          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
-            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
-            exit 1
-          fi
-          version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}" >> $GITHUB_OUTPUT
+  #     - name: Get terraform version
+  #       id: discover
+  #       run: |
+  #         echo "Get terraform version for ${{ matrix.project }}"
+  #         set +o pipefail
+  #         required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+  #         if [[ -z "$required_version" ]]; then
+  #           echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+  #           required_version="=${DEFAULT_TERRAFORM_VERSION}"
+  #         fi
+  #         if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+  #           echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+  #           exit 1
+  #         fi
+  #         version=$(echo "$required_version" | cut -d= -f2)
+  #         echo "version=${version}" >> $GITHUB_OUTPUT
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.2
-        with:
-          terraform_version: ${{ steps.discover.outputs.version }}
-          terraform_wrapper: false
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v2.0.2
+  #       with:
+  #         terraform_version: ${{ steps.discover.outputs.version }}
+  #         terraform_wrapper: false
 
-      - name: Setup Terragrunt
-        uses: autero1/action-terragrunt@1.2.0
-        with:
-          terragrunt_version: 0.36.1
+  #     - name: Setup Terragrunt
+  #       uses: autero1/action-terragrunt@1.2.0
+  #       with:
+  #         terragrunt_version: 0.36.1
 
-      # security best practice: use specific version of public actions (v1)
-      - name: Turnstyle
-        id: turnstyle
-        uses: softprops/turnstyle@v1
-        with:
-          same-branch-only: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     # security best practice: use specific version of public actions (v1)
+  #     - name: Turnstyle
+  #       id: turnstyle
+  #       uses: softprops/turnstyle@v1
+  #       with:
+  #         same-branch-only: false
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Init and State Refresh
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          terragrunt init
-          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          terragrunt apply . -refresh-only || true
+  #     - name: Init and State Refresh
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         terragrunt init
+  #         terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+  #         # refresh as objects are often changed outside of Terraform
+  #         # suppress that from the plan PR comment.  I've seen this fail
+  #         # in some rare circumstances - this shouldn't affect the remaining
+  #         # plan/apply so continue anyway if error here.
+  #         terragrunt apply . -refresh-only || true
       
-      - name: Plan
-        id: plan
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          exitcode=0
-          terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
-          echo "terragrunt plan exit code = $exitcode"
-          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
-          (( exitcode == 1 )) && exit 1 || exit 0
+  #     - name: Plan
+  #       id: plan
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         exitcode=0
+  #         terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+  #         echo "terragrunt plan exit code = $exitcode"
+  #         echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+  #         (( exitcode == 1 )) && exit 1 || exit 0
 
-      - name: Apply
-        if: ${{ steps.plan.outputs.exitcode == '2' }}
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          terragrunt apply . tf.plan | tee tfapply.txt
+  #     - name: Apply
+  #       if: ${{ steps.plan.outputs.exitcode == '2' }}
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         terragrunt apply . tf.plan | tee tfapply.txt
 
-      - name: Create Apply PR message
-        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          comment() {
-            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfapply.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-            echo
-            echo '```'
-            head -c 65476 tfapply.txt
-            echo
-            echo '```'
-            if [[ $len -gt 65476 ]]; then
-              echo "** Truncated output.  See $url for the rest **"
-            fi
-          }
-          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+  #     - name: Create Apply PR message
+  #       if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+  #       run: |
+  #         comment() {
+  #           url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+  #           len=$(cat tfapply.txt | wc -c)
+  #           echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+  #           echo
+  #           echo '```'
+  #           head -c 65476 tfapply.txt
+  #           echo
+  #           echo '```'
+  #           if [[ $len -gt 65476 ]]; then
+  #             echo "** Truncated output.  See $url for the rest **"
+  #           fi
+  #         }
+  #         echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
+  #         comment >> $GITHUB_ENV
+  #         echo 'EOF' >> $GITHUB_ENV
 
-      - name: Post Apply to PR
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments \
-            -d '{"body":'\"${message}\"'}'
-        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        env:
-          message: "${{ env.TF_APPLY_OUT }}"
-          pr_number: "${{ needs.init.outputs.pr_number }}"
+  #     - name: Post Apply to PR
+  #       run: |
+  #         curl -X POST \
+  #           -H "Accept: application/vnd.github+json" \
+  #           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+  #           https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments \
+  #           -d '{"body":'\"${message}\"'}'
+  #       if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+  #       env:
+  #         message: "${{ env.TF_APPLY_OUT }}"
+  #         pr_number: "${{ needs.init.outputs.pr_number }}"
 
