@@ -128,7 +128,7 @@ jobs:
           echo "Updated files: ${{ steps.files.outputs.all }}"
           set +o pipefail
           allprojects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
-          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo ::set-output name=projects::${projects}
@@ -139,23 +139,27 @@ jobs:
           echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
           action="plan"
           pr_number=""
+          plan_args=""
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
             action="${{ steps.projects_workflow_dispatch.outputs.action }}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ github.event.pull_request.number }}"
+            plan_args="-no-color"  # as we will post plan to PR
           elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ steps.get_pr_number.outputs.pr }}"
+            plan_args="-no-color"  # as we will post plan to PR
             action="apply"
           else
             echo "Unsupported event ${GITHUB_EVENT_NAME}"
             exit 1
           fi
-          echo "Set action=${action} pr_number=${pr_number} project=${projects}"
+          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
           echo ::set-output name=projects::${projects}
           echo ::set-output name=action::${action}
+          echo ::set-output name=plan_args::${plan_args}
           echo ::set-output name=pr_number::${pr_number}
 
       - name: Setup project matrix
@@ -175,7 +179,7 @@ jobs:
 
       # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@24848bfab99f16e129632e27397da999b9d1b2c0
+        uses: int128/hide-comment-action@1.16.0
         if: ${{ github.event_name == 'pull_request' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -218,10 +222,15 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@1.2.0
+        with:
+          terragrunt_version: 0.36.1
+
       # security best practice: use specific version of public actions (v1)
       - name: Turnstyle
         id: turnstyle
-        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+        uses: softprops/turnstyle@v1
         with:
           same-branch-only: false
         env:
@@ -230,21 +239,21 @@ jobs:
       - name: Init and State Refresh
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+          terragrunt init
+          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment.  I've seen this fail
           # in some rare circumstances - this shouldn't affect the remaining
           # plan/apply so continue anyway if error here.
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only || true
+          terragrunt apply . -refresh-only || true
 
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "terrafrom plan exit code = $exitcode"
+          terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "terragrunt plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
           (( exitcode == 1 )) && exit 1 || exit 0
 
@@ -255,7 +264,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
             head -c 65476 tfplan.txt
@@ -269,9 +278,8 @@ jobs:
           comment >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      # security best practice: use specific version of public actions (v1.3.0)
       - name: Post Plan to PR
-        uses: thollander/actions-comment-pull-request@ca435e7cdbb9ea1b90c4c2af8db208fd9f9b6620
+        uses: thollander/actions-comment-pull-request@v1.5.0
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -317,10 +325,15 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@1.2.0
+        with:
+          terragrunt_version: 0.36.1
+
       # security best practice: use specific version of public actions (v1)
       - name: Turnstyle
         id: turnstyle
-        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+        uses: softprops/turnstyle@v1
         with:
           same-branch-only: false
         env:
@@ -329,21 +342,21 @@ jobs:
       - name: Init and State Refresh
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+          terragrunt init
+          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
           # refresh as objects are often changed outside of Terraform
           # suppress that from the plan PR comment.  I've seen this fail
           # in some rare circumstances - this shouldn't affect the remaining
           # plan/apply so continue anyway if error here.
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only || true
-
+          terragrunt apply . -refresh-only || true
+      
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
-          echo "terrafrom plan exit code = $exitcode"
+          terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          echo "terragrunt plan exit code = $exitcode"
           echo ::set-output name=exitcode::${exitcode}
           (( exitcode == 1 )) && exit 1 || exit 0
 
@@ -351,7 +364,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
+          terragrunt apply . tf.plan | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
@@ -386,232 +399,3 @@ jobs:
           message: "${{ env.TF_APPLY_OUT }}"
           pr_number: "${{ needs.init.outputs.pr_number }}"
 
-
-
-
-
-
-
-##############################################################################
-
-
-
-      - name: Detect pull/push projects
-        id: projects_pull_push
-        if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
-        run: |
-          echo "Updated files: ${{ steps.files.outputs.all }}"
-          projects=$(terragrunt/src/terraform-projects-requiring-update.sh "terragrunt/${PROJECT_ENV_DIR}" "${{ steps.files.outputs.all }}")
-          projects=$(echo "$projects" | sort -u | grep -v -e '^$' | cut -d/ -f3- || true)
-          echo List of projects [${projects}]
-          echo ::set-output name=projects::${projects}
-
-      - name: Parse inputs
-        id: parseinput
-        run: |
-          echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
-          action="plan"
-          plan_args=""
-          pr_number=""
-          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
-            projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
-            action="${{ steps.projects_workflow_dispatch.outputs.action }}"
-          elif [[ "${GITHUB_EVENT_NAME}" == "schedule" ]]; then
-            cron_time="${{ github.event.schedule }}"
-            if [[ "${cron_time}" == '0 6 * * 1-5' ]]; then
-              projects="resource_locks"
-              action="apply"
-            elif [[ "${cron_time}" == '0 9 * * 1-5' ]]; then
-              projects=$(find "terragrunt/${PROJECT_ENV_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f3-)
-              action="driftcheck"
-            else
-              echo "Unexpected CRON job time found: [${cron_time}]"
-              exit 1
-            fi
-          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
-            projects="${{ steps.projects_pull_push.outputs.projects }}"
-            plan_args="-no-color"  # as we will post plan to PR
-            pr_number="${{ github.event.pull_request.number }}"
-          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
-            projects="${{ steps.projects_pull_push.outputs.projects }}"
-            plan_args="-no-color"  # as we will post plan to PR
-            pr_number="${{ steps.get_pr_number.outputs.pr }}"
-            action="apply"
-          else
-            echo "Unsupported event ${GITHUB_EVENT_NAME}"
-            exit 1
-          fi
-          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
-          echo ::set-output name=projects::${projects}
-          echo ::set-output name=action::${action}
-          echo ::set-output name=plan_args::${plan_args}
-          echo ::set-output name=pr_number::${pr_number}
-
-      - name: Setup project matrix
-        id: setupproject
-        env:
-          projects: ${{ steps.parseinput.outputs.projects }}
-        run: |
-          echo "Setup ansible actions for projects [${projects}]"
-          echo -n "::set-output name=matrix::{\"include\":["
-          delimiter=""
-          for project in ${projects}; do
-            echo -n "${delimiter}"
-            echo -n '{"project":"'${project}'"}'
-            delimiter=","
-          done
-          echo "]}"
-
-      # security best practice: use specific version of public actions (v0.3.0)
-      - name: Hide previous PR comments
-        uses: int128/hide-comment-action@24848bfab99f16e129632e27397da999b9d1b2c0
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          authors: ""
-          starts-with: "**`${{ env.PROJECT_ENV_DIR }}/"
-
-
-  terragrunt:
-    needs: init
-    if: ${{ needs.init.outputs.projects != '' }}
-    strategy:
-      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
-      fail-fast: false
-    runs-on:
-      - self-hosted
-      - aks-runner
-      - devtest
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3
-
-      - name: Get terraform version
-        id: discover
-        run: |
-          echo "Get terraform version for ${{ matrix.project }}"
-          version=$(terragrunt/src/terraform-get-required-version.sh "terragrunt/${PROJECT_ENV_DIR}/${{ matrix.project }}")
-          echo "version=${version}"
-          echo ::set-output name=version::${version}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: ${{ steps.discover.outputs.version }}
-          terraform_wrapper: false
-
-      # security best practice: use specific version of public actions (1.1.1)
-      - name: Setup Terragrunt
-        uses: autero1/action-terragrunt@e8f93f8d057bb039ed9c213bdf77ed8821bf241e
-        with:
-          terragrunt_version: 0.36.1
-
-      - name: Setup GitHub credential helper for terraform
-        uses: fusion-engineering/setup-git-credentials@v2
-        with:
-          credentials: https://${{ env.GITHUB_USERNAME }}:${{ env.GITHUB_TOKEN }}@github.com
-
-      # security best practice: use specific version of public actions (v1)
-      - name: Turnstyle
-        id: turnstyle
-        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
-        with:
-          same-branch-only: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: State Refresh
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        run: |
-          terragrunt refresh
-
-      - name: Plan Drift Check
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        if: ${{ needs.init.outputs.action == 'driftcheck' }}
-        run: |
-          set -o pipefail
-          exitcode=0
-          terragrunt plan -out=tf.plan -refresh=false -detailed-exitcode ${{ needs.init.outputs.plan_args }} | tee tfplan.txt || exitcode=$?
-          if [[ $exitcode == 2 ]]; then
-            echo
-            echo "DANGER: plan drift detected, please resolve this ASAP"
-            echo "Delete this pipeline run to clear any Grafana alerts"
-          fi
-          exit $exitcode
-
-      - name: Plan
-        id: plan
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        if: ${{ needs.init.outputs.action != 'driftcheck' }}
-        run: |
-          set -o pipefail
-          exitcode=0
-          terragrunt plan -out=tf.plan -refresh=false -detailed-exitcode ${{ needs.init.outputs.plan_args }} | tee tfplan.txt || exitcode=$?
-          echo ::set-output name=exitcode::${exitcode}
-
-      - name: Create Plan PR message
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-        run: |
-          comment() {
-            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-            echo
-            echo '```'
-            head -c 65476 tfplan.txt
-            echo
-            echo '```'
-            if [[ $len -gt 65476 ]]; then
-              echo "** Truncated output.  See $url for the rest **"
-            fi
-          }
-          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      # security best practice: use specific version of public actions (v1.3.0)
-      - name: Post Plan to PR
-        uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
-        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          message: "${{ env.TF_PLAN_OUT }}"
-          pr_number: "${{ needs.init.outputs.pr_number }}"
-
-      - name: Apply
-        if: ${{ needs.init.outputs.action == 'apply' }}
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        run: |
-          set -o pipefail
-          terragrunt apply tf.plan ${{ needs.init.outputs.plan_args }} | tee tfapply.txt
-
-      - name: Create Apply PR message
-        if: ${{ needs.init.outputs.action == 'apply' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        working-directory: "terragrunt/${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}"
-        run: |
-          comment() {
-            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfapply.txt | wc -c)
-            echo '**`${{ env.PROJECT_ENV_DIR }}/${{ matrix.project }}`** terragrunt apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-            echo
-            echo '```'
-            head -c 65476 tfapply.txt
-            echo
-            echo '```'
-            if [[ $len -gt 65476 ]]; then
-              echo "** Truncated output.  See $url for the rest **"
-            fi
-          }
-          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      # security best practice: use specific version of public actions (v1.3.0)
-      - name: Post Apply to PR
-        uses: thollander/actions-comment-pull-request@686ab1cab89e0f715a44a0d04b9fdfdd4f33d751
-        if: ${{ needs.init.outputs.action == 'apply' && github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          message: "${{ env.TF_APPLY_OUT }}"
-          pr_number: "${{ needs.init.outputs.pr_number }}"
