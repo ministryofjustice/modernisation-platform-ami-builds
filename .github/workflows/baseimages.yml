@@ -127,7 +127,7 @@ jobs:
         run: |
           echo "Updated files: ${{ steps.files.outputs.all }}"
           set +o pipefail
-          allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r 's;${BASE_DIR}/([^/]+)/.+;\1;' | sort -u)
+          allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r "s;${BASE_DIR}/([^/]+)/.+;\1;" | sort -u)
           echo "all projects: ${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.all }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
