@@ -1,5 +1,5 @@
 module "imagebuilder" {
-  source = "../../modules//imagebuilder"
+  source = "../modules//imagebuilder"
 
   region                       = var.region
   team_name                    = local.team_name
