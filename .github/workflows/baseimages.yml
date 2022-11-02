@@ -111,8 +111,8 @@ jobs:
             exit 1
           fi
           echo "action=[$action]; list of projects" [${projects}]
-          echo ::set-output name=projects::${projects}
-          echo ::set-output name=action::${action}
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "action=${action}" >> $GITHUB_OUTPUT
 
       - name: Get list of committed files
         id: files
@@ -131,7 +131,7 @@ jobs:
           changed=$(echo "${{ steps.files.outputs.all }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
-          echo ::set-output name=projects::${projects}
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
 
       - name: Parse inputs
         id: parseinput
@@ -157,10 +157,10 @@ jobs:
             exit 1
           fi
           echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
-          echo ::set-output name=projects::${projects}
-          echo ::set-output name=action::${action}
-          echo ::set-output name=plan_args::${plan_args}
-          echo ::set-output name=pr_number::${pr_number}
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "action=${action}" >> $GITHUB_OUTPUT
+          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
+          echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
 
       - name: Setup project matrix
         id: setupproject
@@ -168,14 +168,14 @@ jobs:
           projects: ${{ steps.parseinput.outputs.projects }}
         run: |
           echo "Setup ansible actions for projects [${projects}]"
-          echo -n "::set-output name=matrix::{\"include\":["
+          echo -n "matrix={\"include\":["  >> $GITHUB_OUTPUT
           delimiter=""
           for project in ${projects}; do
-            echo -n "${delimiter}"
-            echo -n '{"project":"'${project}'"}'
+            echo -n "${delimiter}"  >> $GITHUB_OUTPUT
+            echo -n '{"project":"'${project}'"}'  >> $GITHUB_OUTPUT
             delimiter=","
           done
-          echo "]}"
+          echo "]}"  >> $GITHUB_OUTPUT
 
       # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
@@ -213,8 +213,7 @@ jobs:
             exit 1
           fi
           version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}"
-          echo ::set-output name=version::${version}
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
@@ -254,7 +253,7 @@ jobs:
           exitcode=0
           terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
-          echo ::set-output name=exitcode::${exitcode}
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Create Plan PR message
@@ -316,8 +315,7 @@ jobs:
             exit 1
           fi
           version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}"
-          echo ::set-output name=version::${version}
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.2
@@ -357,7 +355,7 @@ jobs:
           exitcode=0
           terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
-          echo ::set-output name=exitcode::${exitcode}
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Apply
