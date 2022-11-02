@@ -1,6 +1,9 @@
 locals {
   ami_base_name = path_relative_to_include()
 }
+inputs {
+  ami_base_name = local.ami_base_name
+}
 
 remote_state {
   backend = "s3"
