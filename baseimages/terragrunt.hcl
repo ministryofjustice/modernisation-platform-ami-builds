@@ -1,7 +1,7 @@
 locals {
   ami_base_name = path_relative_to_include()
 }
-inputs {
+inputs = { # pass vars to terraform
   ami_base_name = local.ami_base_name
 }
 
