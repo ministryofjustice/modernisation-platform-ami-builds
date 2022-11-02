@@ -6,5 +6,5 @@ terraform {
 }
 
 inputs = {
-  ami_base_name = path_relative_to_include
+  ami_base_name = path_relative_to_include()
 }
