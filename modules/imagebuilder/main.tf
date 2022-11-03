@@ -92,7 +92,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     region = var.region
 
     dynamic "ami_distribution_configuration" {
-      for_each = toset(var.accounts_to_distribute_ami)
+      for_each = var.accounts_to_distribute_ami
       content {
         name               = local.ami_name
         description        = var.description
