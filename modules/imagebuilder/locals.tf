@@ -1,7 +1,7 @@
 locals {
   # NOTE: do not include branch name here as only underscore and alphanumeric allowed
   team_ami_base_name = join("_", [var.team_name, var.ami_base_name])
-  
+
   ami_name = join("_", flatten([
     var.team_ami_base_name,
     var.release_or_patch == "" ? [] : [var.release_or_patch],
