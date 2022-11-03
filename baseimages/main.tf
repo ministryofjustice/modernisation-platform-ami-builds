@@ -2,7 +2,7 @@ module "imagebuilder" {
   source = "../modules//imagebuilder"
 
   region                       = var.region
-  team_name                    = local.team_name
+  team_name                    = var.team_name
   ami_base_name                = var.ami_base_name
   configuration_version        = var.configuration_version
   description                  = var.description
