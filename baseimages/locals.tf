@@ -9,12 +9,5 @@ locals {
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/baseimages/${var.ami_base_name}"
   }
 
-  # Different distribution config is allowed based on the github branch
-  # triggering the pipeline
-  accounts_to_distribute_ami = try(
-    var.accounts_to_distribute_ami_by_branch[var.BRANCH_NAME],
-    var.accounts_to_distribute_ami_by_branch["default"]
-  )
-
   environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
 }

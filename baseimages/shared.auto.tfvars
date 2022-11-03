@@ -26,11 +26,12 @@ image_pipeline = {
   }
 }
 
-accounts_to_distribute_ami_by_branch = {
-  main = [
-    "core-shared-services-production"
-  ]
-  default = [
-    "core-shared-services-production"
-  ]
-}
+account_to_distribute_ami = "core-shared-services-production"
+
+launch_permission_account_names = [
+  "core-shared-services-production",
+  "nomis-development",
+  "nomis-test",
+  "oasys-development",
+  "oasys-test"
+]

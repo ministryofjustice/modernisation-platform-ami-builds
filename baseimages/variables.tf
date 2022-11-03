@@ -38,11 +38,12 @@ variable "configuration_version" { type = string }
 variable "description" { type = string }
 variable "ami_base_name" { type = string }
 variable "team_name" { type = string }
+variable "account_to_distribute_ami" { type = string }
 
 variable "tags" { type = map(any) }
 variable "infrastructure_configuration" { type = map(any) }
 variable "image_pipeline" { type = map(any) }
-variable "accounts_to_distribute_ami_by_branch" { type = map(any) }
+
 
 variable "block_device_mappings_ebs" {
   type = list(object({
@@ -54,3 +55,4 @@ variable "block_device_mappings_ebs" {
 
 variable "components_aws" { type = list(string) }
 variable "components_custom" { type = list(string) }
+variable "launch_permission_account_names" { type = list(string) }

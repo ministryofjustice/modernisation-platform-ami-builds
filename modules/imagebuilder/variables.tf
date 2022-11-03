@@ -81,9 +81,9 @@ variable "infrastructure_configuration" {
   description = "Infrastructure configuration, see aws_imagebuilder_infrastructure_configuration documentation for details on the parameters"
 }
 
-variable "accounts_to_distribute_ami" {
-  type        = list(string)
-  description = "List of accounts to distribute the ami"
+variable "account_to_distribute_ami" {
+  type        = string
+  description = "Account to distribute the ami"
 }
 
 variable "launch_template_exists" {
@@ -99,6 +99,11 @@ variable "image_pipeline" {
     })
   })
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
+}
+
+variable "launch_permission_account_names" {
+  type = list(string)
+  description = "List of accounts that can launch the image"
 }
 
 variable "branch" {
