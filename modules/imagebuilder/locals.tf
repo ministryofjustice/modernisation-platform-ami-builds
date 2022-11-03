@@ -62,5 +62,8 @@ locals {
   ami_tags = merge(local.tags, {
     Name = local.ami_name
   })
+
+  ami_parent_id  = try(var.account_ids_lookup[var.parent_image.owner], var.parent_image.owner)
+  ami_parent_arn = try("arn:aws:imagebuilder:${var.region}:${local.ami_parent_id}:image/${var.parent_image.arn_resource_id}", null)
 }
 

@@ -16,7 +16,7 @@ resource "aws_imagebuilder_component" "this" {
 
 resource "aws_imagebuilder_image_recipe" "this" {
   name             = local.team_ami_base_name
-  parent_image     = data.aws_ami.parent.id
+  parent_image     = try(data.aws_ami.parent.id, local.ami_parent_arn)
   version          = var.configuration_version
   description      = var.description
   user_data_base64 = try(base64encode(var.user_data), null)
@@ -52,15 +52,15 @@ resource "aws_imagebuilder_image_recipe" "this" {
     }
   }
 
-  lifecycle {
-    create_before_destroy = true
+  dynamic "systems_manager_agent" {
+    for_each = var.systems_manager_agent != null ? [var.systems_manager_agent] : []
+    content {
+      uninstall_after_build = systems_manager_agent.value.uninstall_after_build
+    }
   }
 
-  dynamic "systems_manager_agent" {
-    for_each = data.aws_ami.parent.platform == "windows" ? [] : ["linux"]
-    content {
-      uninstall_after_build = false
-    }
+  lifecycle {
+    create_before_destroy = true
   }
 }
 

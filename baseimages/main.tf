@@ -6,7 +6,7 @@ module "imagebuilder" {
   ami_base_name                   = var.ami_base_name
   configuration_version           = var.configuration_version
   description                     = var.description
-  release_or_patch                = var.release_or_patch
+  release_or_patch                = var.BRANCH_NAME != "main" ? "test" : var.release_or_patch
   tags                            = merge(local.shared_tags, var.tags)
   kms_key_id                      = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   account_ids_lookup              = local.environment_management.account_ids
@@ -20,6 +20,7 @@ module "imagebuilder" {
   launch_permission_account_names = var.launch_permission_account_names
   launch_template_exists          = var.launch_template_exists
   image_pipeline                  = var.image_pipeline
+  systems_manager_agent           = var.systems_manager_agent
   branch                          = var.BRANCH_NAME
   gh_actor                        = var.GH_ACTOR_NAME
 }

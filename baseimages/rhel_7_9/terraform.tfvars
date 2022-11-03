@@ -13,7 +13,9 @@ tags = {
 
 parent_image = {
   owner             = "309956199498" # Redhat
-  filter_name_value = "RHEL-7.9_HVM-*"
+  ami_search_filters = {
+    name = ["RHEL-7.9_HVM-*"]
+  }
 }
 
 components_custom = [
@@ -23,3 +25,7 @@ components_custom = [
 ]
 
 launch_template_exists = false
+
+systems_manager_agent = {
+  uninstall_after_build = false
+}
