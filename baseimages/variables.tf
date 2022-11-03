@@ -33,6 +33,7 @@ variable "launch_template_exists" {
 variable "configuration_version" { type = string }
 variable "description" { type = string }
 variable "ami_base_name" { type = string }
+variable "team_name" { type = string }
 
 variable "tags" { type = map(any) }
 variable "infrastructure_configuration" { type = map(any) }
