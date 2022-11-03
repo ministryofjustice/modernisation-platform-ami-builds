@@ -24,7 +24,7 @@ variable "release_or_patch" {
 
 variable "parent_image" {
   type = object({
-    owner              = string # either an ID or a name which is a key in var.account_ids_lookup
+    owner              = string                      # either an ID or a name which is a key in var.account_ids_lookup
     ami_search_filters = optional(map(list(string))) # search for an ami, where the map key is the filter name and the map value is the filter values
     arn_resource_id    = optional(string)
   })

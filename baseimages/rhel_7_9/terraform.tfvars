@@ -12,7 +12,7 @@ tags = {
 }
 
 parent_image = {
-  owner             = "309956199498" # Redhat
+  owner = "309956199498" # Redhat
   ami_search_filters = {
     name = ["RHEL-7.9_HVM-*"]
   }

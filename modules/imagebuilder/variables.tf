@@ -69,14 +69,14 @@ variable "block_device_mappings_ebs" {
 
 variable "parent_image" {
   type = object({
-    owner              = string # either an ID or a name which is a key in var.account_ids_lookup
+    owner              = string                      # either an ID or a name which is a key in var.account_ids_lookup
     ami_search_filters = optional(map(list(string))) # search for an ami, where the map key is the filter name and the map value is the filter values
   })
 }
 
 variable "systems_manager_agent" {
   type = optional(object({
-      uninstall_after_build = bool
+    uninstall_after_build = bool
   }))
 }
 
