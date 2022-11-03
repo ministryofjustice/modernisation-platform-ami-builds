@@ -3,7 +3,7 @@ locals {
   team_ami_base_name = join("_", [var.team_name, var.ami_base_name])
 
   ami_name = join("_", flatten([
-    var.team_ami_base_name,
+    local.team_ami_base_name,
     var.release_or_patch == "" ? [] : [var.release_or_patch],
     "{{ imagebuilder:buildDate }}"
   ]))
@@ -14,7 +14,7 @@ locals {
   }
 
   component_template_args = {
-    ami     = var.team_ami_base_name
+    ami     = local.team_ami_base_name
     version = var.configuration_version
     branch  = var.branch == "" ? "main" : var.branch
   }
@@ -47,9 +47,9 @@ locals {
   component_version_tags = merge(local.components_custom_versions, local.components_aws_versions)
 
   default_tags = {
-    image-pipeline               = var.team_ami_base_name
-    image-recipe                 = join("/", [var.team_ami_base_name, var.configuration_version])
-    infrastructure-configuration = join("/", [var.team_ami_base_name, var.configuration_version])
+    image-pipeline               = local.team_ami_base_name
+    image-recipe                 = join("/", [local.team_ami_base_name, var.configuration_version])
+    infrastructure-configuration = join("/", [local.team_ami_base_name, var.configuration_version])
     release-or-patch             = var.release_or_patch == "" ? "n/a" : var.release_or_patch
   }
 
