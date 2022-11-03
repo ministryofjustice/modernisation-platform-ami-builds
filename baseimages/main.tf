@@ -6,7 +6,7 @@ module "imagebuilder" {
   ami_base_name                = var.ami_base_name
   configuration_version        = var.configuration_version
   description                  = var.description
-  release_or_patch             = try(each.value, "release_or_patch", "")
+  release_or_patch             = var.release_or_patch
   tags                         = merge(local.shared_tags, var.tags)
   kms_key_id                   = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   account_ids_lookup           = local.environment_management.account_ids

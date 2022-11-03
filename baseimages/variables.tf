@@ -17,6 +17,10 @@ variable "user_data" {
   type    = string
   default = null
 }
+variable "release_or_patch" {
+  type = string
+  default = ""
+}
 
 variable "parent_image" {
   type = object({

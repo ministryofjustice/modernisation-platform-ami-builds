@@ -236,23 +236,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Init and State Refresh
+      - name: Init
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          terragrunt apply . -refresh-only || true
 
       - name: Plan
         id: plan
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          terragrunt plan -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          terragrunt plan -detailed-exitcode | tee tfplan.txt || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
@@ -338,23 +333,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Init and State Refresh
+      - name: Init
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          terragrunt apply . -refresh-only || true
       
       - name: Plan
         id: plan
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          terragrunt plan -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
+          terragrunt plan -detailed-exitcode -out=tf.plan || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
