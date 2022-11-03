@@ -15,7 +15,7 @@ resource "aws_imagebuilder_component" "this" {
 }
 
 resource "aws_imagebuilder_image_recipe" "this" {
-  name             = var.team_ami_base_name
+  name             = local.team_ami_base_name
   parent_image     = data.aws_ami.parent.id
   version          = var.configuration_version
   description      = var.description
@@ -65,7 +65,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
 }
 
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
-  name                          = replace("${var.team_ami_base_name}_${var.configuration_version}", ".", "_")
+  name                          = replace("${local.team_ami_base_name}_${var.configuration_version}", ".", "_")
   instance_profile_name         = local.core_shared_services.imagebuilder_mp_tfstate.image_builder_profile
   description                   = var.description
   instance_types                = var.infrastructure_configuration.instance_types
@@ -84,7 +84,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "this" {
 }
 
 resource "aws_imagebuilder_distribution_configuration" "this" {
-  name        = var.team_ami_base_name
+  name        = local.team_ami_base_name
   description = var.description
   tags        = local.tags
 
@@ -113,7 +113,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
 }
 
 resource "aws_imagebuilder_image_pipeline" "this" {
-  name                             = var.team_ami_base_name
+  name                             = local.team_ami_base_name
   description                      = var.description
   image_recipe_arn                 = aws_imagebuilder_image_recipe.this.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
