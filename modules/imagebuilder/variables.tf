@@ -102,7 +102,7 @@ variable "image_pipeline" {
 }
 
 variable "launch_permission_account_names" {
-  type = list(string)
+  type        = list(string)
   description = "List of accounts that can launch the image"
 }
 
