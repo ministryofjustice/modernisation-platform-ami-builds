@@ -18,7 +18,7 @@ variable "user_data" {
   default = null
 }
 variable "release_or_patch" {
-  type = string
+  type    = string
   default = ""
 }
 
