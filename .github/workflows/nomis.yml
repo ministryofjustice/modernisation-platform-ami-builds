@@ -234,15 +234,15 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      # security best practice: use specific version of public actions (v1)
-      - name: Turnstyle
-        id: turnstyle
-        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
-        with:
-          same-branch-only: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+#      # security best practice: use specific version of public actions (v1)
+#      - name: Turnstyle
+#        id: turnstyle
+#        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+#        with:
+#          same-branch-only: false
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
       - name: Init and State Refresh
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
@@ -336,15 +336,15 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      # security best practice: use specific version of public actions (v1)
-      - name: Turnstyle
-        id: turnstyle
-        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
-        with:
-          same-branch-only: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+#      # security best practice: use specific version of public actions (v1)
+#      - name: Turnstyle
+#        id: turnstyle
+#        uses: softprops/turnstyle@8db075d65b19bf94e6e8687b504db69938dc3c65
+#        with:
+#          same-branch-only: false
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
       - name: Init and State Refresh
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
