@@ -4,7 +4,7 @@
 
 
 configuration_version = "0.0.1"
-description           = ""
+description           = "shared rhel 7.9 base image"
 
 tags = {
   os-version = "rhel 7.9"
