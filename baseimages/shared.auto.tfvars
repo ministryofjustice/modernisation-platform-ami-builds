@@ -1,4 +1,6 @@
 
+team_name = "baseimage"
+
 block_device_mappings_ebs = [
   {
     device_name = "/dev/sda1" # root volume
