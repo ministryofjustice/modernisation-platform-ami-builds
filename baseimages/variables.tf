@@ -9,8 +9,8 @@ variable "GH_ACTOR_NAME" {
   description = "GH username triggering Github action"
 }
 
-variable "region" { 
-  type = string
+variable "region" {
+  type    = string
   default = "eu-west-2"
 }
 variable "user_data" {
@@ -26,7 +26,7 @@ variable "parent_image" {
 }
 
 variable "launch_template_exists" {
-  type = bool
+  type    = bool
   default = false
 }
 
