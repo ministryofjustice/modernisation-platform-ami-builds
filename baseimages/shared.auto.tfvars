@@ -1,6 +1,4 @@
 
-region = "eu-west-2"
-
 block_device_mappings_ebs = [
   {
     device_name = "/dev/sda1" # root volume
@@ -8,8 +6,6 @@ block_device_mappings_ebs = [
     volume_type = "gp3"
   }
 ]
-
-user_data = null
 
 components_aws = [
   "update-linux",

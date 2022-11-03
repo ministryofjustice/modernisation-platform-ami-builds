@@ -3,24 +3,20 @@ variable "BRANCH_NAME" {
   default     = "main"
   description = "Github actions running branch"
 }
-
 variable "GH_ACTOR_NAME" {
   type        = string
   default     = ""
   description = "GH username triggering Github action"
 }
 
-variable "configuration_version" { type = string }
-variable "description" { type = string }
-variable "ami_base_name" { type = string }
-variable "region" { type = string }
-
-variable "tags" { type = map(any) }
-variable "infrastructure_configuration" { type = map(any) }
-variable "image_pipeline" { type = map(any) }
-variable "accounts_to_distribute_ami_by_branch" { type = map(any) }
-
-variable "launch_template_exists" { type = bool }
+variable "region" { 
+  type = string
+  default = "eu-west-2"
+}
+variable "user_data" {
+  type    = string
+  default = null
+}
 
 variable "parent_image" {
   type = object({
@@ -29,10 +25,19 @@ variable "parent_image" {
   })
 }
 
-variable "user_data" {
-  type    = string
-  default = null
+variable "launch_template_exists" {
+  type = bool
+  default = false
 }
+
+variable "configuration_version" { type = string }
+variable "description" { type = string }
+variable "ami_base_name" { type = string }
+
+variable "tags" { type = map(any) }
+variable "infrastructure_configuration" { type = map(any) }
+variable "image_pipeline" { type = map(any) }
+variable "accounts_to_distribute_ami_by_branch" { type = map(any) }
 
 variable "block_device_mappings_ebs" {
   type = list(object({
