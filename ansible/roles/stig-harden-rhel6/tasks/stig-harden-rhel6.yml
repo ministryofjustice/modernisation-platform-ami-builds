@@ -1,0 +1,11 @@
+- include_vars:
+    file: rhel6-stig.yml
+
+- name: install stig packages
+  import_role: 
+    name: mindpointgroup.stig_rhel6
+  vars:
+    rhel6stig_cat1: yes
+    rhel6stig_cat2: yes
+    rhel6stig_cat3: no
+

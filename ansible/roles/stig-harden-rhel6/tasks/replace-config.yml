@@ -1,0 +1,6 @@
+---
+- name: replace stig module config
+  ansible.builtin.copy:
+    src: config.yml
+    dest: ../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml
+    force: yes

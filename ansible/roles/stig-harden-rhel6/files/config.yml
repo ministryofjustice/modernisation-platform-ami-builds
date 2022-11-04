@@ -1,0 +1,32 @@
+# Commented out on purpose as these assertions are not supported by Ansible verion > 2.3
+# - name: Check OS version and family
+#   assert:
+#       that: ansible_os_family == 'RedHat' and ansible_distribution_major_version is version_compare('6', '==')
+#       msg: "This role can only be run against RHEL/CENTOS 6. {{ ansible_distribution }} {{ ansible_distribution_major_version }} is not supported."
+#   tags:
+#       - always
+
+# - name: Check ansible version
+#   assert:
+#       that: ansible_version.full is version_compare(rhel6stig_min_ansible_version, '>=')
+#       msg: You must use Ansible {{ rhel6stig_min_ansible_version }} or greater
+#   tags:
+#       - always
+- include: prelim.yml
+  become: yes
+  tags:
+      - prelim_tasks
+      - always
+
+- include: cat1.yml
+  when: rhel6stig_cat1 | bool
+
+- include: cat2.yml
+  when: rhel6stig_cat2 | bool
+
+- include: cat3.yml
+  when: rhel6stig_cat3 | bool
+
+- include: post.yml
+  tags:
+      - post_tasks

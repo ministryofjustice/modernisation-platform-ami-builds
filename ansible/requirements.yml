@@ -1,5 +1,7 @@
 # from Galaxy
 roles:
+  - name: mindpointgroup.stig_rhel6
+    version: 0.9.7
 
 collections:
   - name: community.general

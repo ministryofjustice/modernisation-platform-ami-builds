@@ -1,0 +1,8 @@
+---
+- name: run_stig_rhel6_hardening
+  hosts: localhost
+
+  tasks:
+  - name: run the role
+    import_role: 
+      name: stig-harden-rhel6
