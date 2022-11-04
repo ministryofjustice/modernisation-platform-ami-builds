@@ -263,7 +263,8 @@ jobs:
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          terragrunt plan -no-color -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terragrunt plan -no-color -detailed-exitcode | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
@@ -355,7 +356,8 @@ jobs:
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          terragrunt plan -detailed-exitcode -no-color -out=tf.plan || exitcode=$?
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
@@ -364,7 +366,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt apply . tf.plan -no-color | tee tfapply.txt
+          terragrunt apply . tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
