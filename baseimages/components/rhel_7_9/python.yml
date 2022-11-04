@@ -22,11 +22,14 @@ phases:
               set -e
               cd /tmp
 
-              # install python 3.9
-              wget https://www.python.org/ftp/python/3.9.6/Python-3.9.6.tgz
-              tar xzf Python-3.9.6.tgz
-              rm -f Python-3.9.6.tgz
-              cd Python-3.9.6
+              py_version=3.9.6
+              py_filename=Python-${py_version}
+
+              # install python
+              wget https://www.python.org/ftp/python/${py_version}/${py_filename}.tgz
+              tar xzf ${py_filename}.tgz
+              rm -f ${py_filename}.tgz
+              cd ${py_filename}
 
               # ensure zlib is enabled, required for some ansible modules
               sed -i 's/^#zlib/zlib/' Modules/Setup
