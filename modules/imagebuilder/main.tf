@@ -16,7 +16,7 @@ resource "aws_imagebuilder_component" "this" {
 
 resource "aws_imagebuilder_image_recipe" "this" {
   name             = local.team_ami_base_name
-  parent_image     = try(data.aws_ami.parent.id, local.ami_parent_arn)
+  parent_image     = try(data.aws_ami.parent[0].id, local.ami_parent_arn)
   version          = var.configuration_version
   description      = var.description
   user_data_base64 = try(base64encode(var.user_data), null)
