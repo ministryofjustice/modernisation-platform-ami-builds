@@ -75,9 +75,9 @@ variable "parent_image" {
 }
 
 variable "systems_manager_agent" {
-  type = optional(object({
+  type = object({
     uninstall_after_build = bool
-  }))
+  })
 }
 
 variable "infrastructure_configuration" {
