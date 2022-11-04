@@ -11,10 +11,6 @@ name: baseimages
 # For CI/CD, it runs a plan when PR raised and apply when merged.
 #
 
-
-# matrix works when baseimages/<some_os>/ changes.
-# modules folder changes, and baseimages/<files> won't create a plan etc. Fix in next release
-
 on:
   workflow_dispatch:
     inputs:
