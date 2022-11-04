@@ -12,14 +12,17 @@ variable "GH_ACTOR_NAME" {
 variable "region" {
   type    = string
   default = "eu-west-2"
+  description = "Infrastructure AWS region - only one region supported with current module design"
 }
 variable "user_data" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Ec2 user data"
 }
 variable "release_or_patch" {
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
+  description = "Set to patch or release as per AMI image building strategy, e.g. patch when minor component change, release when application version change"
 }
 
 variable "parent_image" {
@@ -28,22 +31,49 @@ variable "parent_image" {
     ami_search_filters = optional(map(list(string))) # search for an ami, where the map key is the filter name and the map value is the filter values
     arn_resource_id    = optional(string)
   })
+  description = "The image this ami will be based on"
 }
 
 variable "launch_template_exists" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Whether the launch template exists or not"
 }
 
-variable "configuration_version" { type = string }
-variable "description" { type = string }
-variable "ami_base_name" { type = string }
-variable "team_name" { type = string }
-variable "account_to_distribute_ami" { type = string }
+variable "configuration_version" {
+  type = string
+  description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
+}
+variable "description" { 
+  type = string
+  description = "Description of the image"
+}
+variable "ami_base_name" {
+  type = string
+  description = "e.g. for baseimages rhel_7_9, for team images: rhel_7_9_webserver"
+}
+variable "team_name" {
+  type = string
+  description = "the prefix to the ami name"
+  default = "baseimage"
+}
+variable "account_to_distribute_ami" {
+  type = string
+  description = "Account that you will distribute the ami to"
+}
 
-variable "tags" { type = map(any) }
-variable "infrastructure_configuration" { type = map(any) }
-variable "image_pipeline" { type = map(any) }
+variable "tags" {
+  type = map(any)
+  description = "The tags for the ami"
+}
+variable "infrastructure_configuration" {
+  type = map(any)
+  description = "Infrastructure configuration, see aws_imagebuilder_infrastructure_configuration documentation for details on the parameters"
+}
+variable "image_pipeline" {
+  type = map(any)
+  description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
+}
 
 
 variable "block_device_mappings_ebs" {
@@ -52,14 +82,25 @@ variable "block_device_mappings_ebs" {
     volume_size = number
     volume_type = string
   }))
+  description = "the block device mappings"
 }
 
 variable "systems_manager_agent" {
   type = object({
     uninstall_after_build = bool
   })
+  description = "systems manager agent config"
 }
 
-variable "components_aws" { type = list(string) }
-variable "components_custom" { type = list(string) }
-variable "launch_permission_account_names" { type = list(string) }
+variable "components_aws" {
+  type = list(string)
+  description = "The aws components used to build the ami"
+}
+variable "components_custom" {
+  type = list(string)
+  description = "The custom components used to build the ami"
+}
+variable "launch_permission_account_names" {
+  type = list(string)
+  description = "The list of accounts to give launch permissions to"
+}

@@ -48,15 +48,18 @@ variable "account_ids_lookup" {
 
 variable "components_custom" {
   type = list(string)
+  description = "The custom components used to build the ami"
 }
 
 variable "components_aws" {
   type = list(string)
+  description = "The aws components used to build the ami"
 }
 
 variable "user_data" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
+  description = "Ec2 user data"
 }
 
 variable "block_device_mappings_ebs" {
@@ -65,6 +68,7 @@ variable "block_device_mappings_ebs" {
     volume_size = number
     volume_type = string
   }))
+  description = "the block device mappings"
 }
 
 variable "parent_image" {
@@ -72,12 +76,14 @@ variable "parent_image" {
     owner              = string                      # either an ID or a name which is a key in var.account_ids_lookup
     ami_search_filters = optional(map(list(string))) # search for an ami, where the map key is the filter name and the map value is the filter values
   })
+  description = "The image this ami will be based on"
 }
 
 variable "systems_manager_agent" {
   type = object({
     uninstall_after_build = bool
   })
+  description = "systems manager agent config"
 }
 
 variable "infrastructure_configuration" {
