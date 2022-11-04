@@ -154,6 +154,7 @@ jobs:
           allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r "s;${BASE_DIR}/([^/]+)/.+;\1;" | sort -u)
           echo "all projects: ${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.all }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
+          echo "changed: ${changed[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo "projects=${projects}" >> $GITHUB_OUTPUT
