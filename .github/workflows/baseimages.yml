@@ -149,11 +149,11 @@ jobs:
         id: projects_pull_push
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         run: |
-          echo "Updated files: ${{ steps.files.outputs.all }}"
+          echo "Updated files: ${{ steps.files.outputs.file_list }}"
           set +o pipefail
           allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r "s;${BASE_DIR}/([^/]+)/.+;\1;" | sort -u)
           echo "all projects: ${allprojects[@]}"
-          changed=$(echo "${{ steps.files.outputs.all }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
+          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
           echo "changed: ${changed[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
