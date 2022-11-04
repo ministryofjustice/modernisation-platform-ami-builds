@@ -10,8 +10,8 @@ variable "GH_ACTOR_NAME" {
 }
 
 variable "region" {
-  type    = string
-  default = "eu-west-2"
+  type        = string
+  default     = "eu-west-2"
   description = "Infrastructure AWS region - only one region supported with current module design"
 }
 variable "user_data" {
@@ -41,37 +41,37 @@ variable "launch_template_exists" {
 }
 
 variable "configuration_version" {
-  type = string
+  type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
 }
-variable "description" { 
-  type = string
+variable "description" {
+  type        = string
   description = "Description of the image"
 }
 variable "ami_base_name" {
-  type = string
+  type        = string
   description = "e.g. for baseimages rhel_7_9, for team images: rhel_7_9_webserver"
 }
 variable "team_name" {
-  type = string
+  type        = string
   description = "the prefix to the ami name"
-  default = "baseimage"
+  default     = "baseimage"
 }
 variable "account_to_distribute_ami" {
-  type = string
+  type        = string
   description = "Account that you will distribute the ami to"
 }
 
 variable "tags" {
-  type = map(any)
+  type        = map(any)
   description = "The tags for the ami"
 }
 variable "infrastructure_configuration" {
-  type = map(any)
+  type        = map(any)
   description = "Infrastructure configuration, see aws_imagebuilder_infrastructure_configuration documentation for details on the parameters"
 }
 variable "image_pipeline" {
-  type = map(any)
+  type        = map(any)
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
 }
 
@@ -93,14 +93,14 @@ variable "systems_manager_agent" {
 }
 
 variable "components_aws" {
-  type = list(string)
+  type        = list(string)
   description = "The aws components used to build the ami"
 }
 variable "components_custom" {
-  type = list(string)
+  type        = list(string)
   description = "The custom components used to build the ami"
 }
 variable "launch_permission_account_names" {
-  type = list(string)
+  type        = list(string)
   description = "The list of accounts to give launch permissions to"
 }

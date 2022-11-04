@@ -47,12 +47,12 @@ variable "account_ids_lookup" {
 }
 
 variable "components_custom" {
-  type = list(string)
+  type        = list(string)
   description = "The custom components used to build the ami"
 }
 
 variable "components_aws" {
-  type = list(string)
+  type        = list(string)
   description = "The aws components used to build the ami"
 }
 
