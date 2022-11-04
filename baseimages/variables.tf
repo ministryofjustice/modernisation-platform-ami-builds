@@ -54,6 +54,12 @@ variable "block_device_mappings_ebs" {
   }))
 }
 
+variable "systems_manager_agent" {
+  type = object({
+    uninstall_after_build = bool
+  })
+}
+
 variable "components_aws" { type = list(string) }
 variable "components_custom" { type = list(string) }
 variable "launch_permission_account_names" { type = list(string) }
