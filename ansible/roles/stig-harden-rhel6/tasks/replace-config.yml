@@ -12,3 +12,4 @@
     src: config.yml
     dest: "{{ playbook_dir }}/../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml"
     force: yes
+    remote_src: yes
