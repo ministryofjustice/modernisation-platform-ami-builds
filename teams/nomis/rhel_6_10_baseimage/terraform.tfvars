@@ -39,7 +39,7 @@ imagebuilders = {
         "../components/rhel_6_10_baseimage/packages.yml",
         "../components/rhel_6_10_baseimage/python.yml",
         "../components/ansible.yml.tftpl",
-        "../components/rhel_6_10_baseimage/stig_rhel6_ansible.yml"
+        "../components/rhel_6_10_baseimage/stig_rhel6_ansible.yml.tftpl"
       ]
 
       # SSM agent must be installed via user_data prior to components being run
