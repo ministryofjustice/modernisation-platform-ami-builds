@@ -1,6 +1,14 @@
 ---
+- name: get playbook dir
+  ansible.builtin.debug:
+    var: playbook_dir
+
+- name: get role_path dir
+  ansible.builtin.debug:
+    var: role_path
+
 - name: replace stig module config
   ansible.builtin.copy:
     src: config.yml
-    dest: ../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml
+    dest: "{{ role_path }}/../../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml"
     force: yes
