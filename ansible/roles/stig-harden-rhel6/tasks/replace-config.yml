@@ -17,5 +17,5 @@
   delegate_to: localhost
   ansible.builtin.copy:
     src: config.yml
-    dest: mindpointgroup.stig_rhel6/tasks/main.yml
+    dest: "{{ role_path }}/../../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml"
     force: yes

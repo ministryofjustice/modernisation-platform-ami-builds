@@ -2,7 +2,7 @@
     file: rhel6-stig.yml
 
 - name: install stig packages
-  import_role: 
+  include_role: 
     name: mindpointgroup.stig_rhel6
   vars:
     rhel6stig_cat1: yes

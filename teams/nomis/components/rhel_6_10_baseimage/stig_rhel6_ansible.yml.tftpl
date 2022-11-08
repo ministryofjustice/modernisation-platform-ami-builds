@@ -67,7 +67,7 @@ phases:
               ansible-galaxy collection install -r requirements.yml --force
 
               # run ansible (note comma after localhost is deliberate)
-              ansible-playbook -vv playbooks/stig_rhel6.yml \
+              ansible-playbook -vvvvv playbooks/stig_rhel6.yml \
               --connection=local \
               --inventory localhost, \
               --extra-vars "ansible_python_interpreter=$python" \
