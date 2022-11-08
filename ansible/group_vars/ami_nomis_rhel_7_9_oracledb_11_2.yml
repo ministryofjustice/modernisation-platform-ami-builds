@@ -4,6 +4,8 @@ roles_list:
   - time
   - node-exporter
   - message-of-the-day
+  - amazon-ssm-agent
+  - amazon-cloudwatch-agent
   - hugepages
   - disks
   - script-exporter
