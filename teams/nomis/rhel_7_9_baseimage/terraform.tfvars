@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_7_9_baseimage = {
-    configuration_version = "1.4.4"
+    configuration_version = "1.4.5"
     description           = "nomis RHEL7.9 base image"
 
     tags = {
@@ -32,8 +32,7 @@ imagebuilders = {
       components_aws = [
         "update-linux",
         "stig-build-linux-medium",
-        "aws-cli-version-2-linux",
-        "amazon-cloudwatch-agent-linux"
+        "aws-cli-version-2-linux"
       ]
       components_custom = [
         "../components/rhel_7_9_baseimage/packages.yml",
