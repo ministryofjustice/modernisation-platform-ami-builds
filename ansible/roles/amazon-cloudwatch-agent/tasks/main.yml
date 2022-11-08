@@ -1,5 +1,6 @@
 ---
 - import_tasks: install-rhel.yml
   tags:
+    - amibuild
     - ec2patch
   when: ansible_distribution == 'RedHat'
