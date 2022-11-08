@@ -1,8 +1,8 @@
 ---
-- include_tasks: replace-config.yml
+- import_tasks: replace-config.yml
   tags: 
     - amibuild
 
-- include_tasks: stig-harden-rhel6.yml
+- import_tasks: stig-harden-rhel6.yml
   tags:
     - amibuild

@@ -4,5 +4,5 @@
 
   tasks:
   - name: run the role
-    import_role: 
+    include_role: 
       name: stig-harden-rhel6
