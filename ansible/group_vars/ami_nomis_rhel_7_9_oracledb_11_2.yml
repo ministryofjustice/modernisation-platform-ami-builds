@@ -6,6 +6,7 @@ roles_list:
   - message-of-the-day
   - amazon-ssm-agent
   - amazon-cloudwatch-agent
+  - amazon-cli
   - hugepages
   - disks
   - script-exporter
