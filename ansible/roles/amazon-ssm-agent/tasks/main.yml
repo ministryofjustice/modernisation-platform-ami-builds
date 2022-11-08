@@ -5,8 +5,9 @@
   tags:
     - always
 
+# SSM agent installed as part of AMI build process.
+# Role included in case we want to patch via ansible
 - import_tasks: install-rhel.yml
   tags:
-    - amibuild
     - ec2patch
   when: ansible_distribution == 'RedHat'
