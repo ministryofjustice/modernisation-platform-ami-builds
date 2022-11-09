@@ -1,4 +1,7 @@
 ---
+# Avoid re-installing everytime this role is called by doing a HEAD request
+# on the URL and only triggering the install if Last Modified has changed
+
 - name: Retrieve awscli zip stats
   ansible.builtin.uri:
     method: "HEAD"
