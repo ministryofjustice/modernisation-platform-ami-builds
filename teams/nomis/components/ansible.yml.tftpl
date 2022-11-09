@@ -85,6 +85,6 @@ phases:
                 rm -rf $ansible_dir/python-venv
                 rmdir $ansible_dir
               }
-              echo "ansible start" | logger -p local3.info -t ami-component
+              echo "ansible ${ami} start" | logger -p local3.info -t ami-component
               run_ansible 2>&1 | logger -p local3.info -t ami-component
-              echo "ansible end" | logger -p local3.info -t ami-component
+              echo "ansible ${ami} end" | logger -p local3.info -t ami-component
