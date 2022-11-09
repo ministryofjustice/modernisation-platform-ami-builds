@@ -1,0 +1,9 @@
+---
+- name: Install amazon-cloudwatch-agent
+  ansible.builtin.yum:
+    name: "https://s3.eu-west-2.amazonaws.com/amazoncloudwatch-agent-eu-west-2/redhat/amd64/latest/amazon-cloudwatch-agent.rpm"
+# No point enabling as there is nothing configured yet
+#- name: Enable amazon-cloudwatch-agent service
+#  service:
+#    name: amazon-cloudwatch-agent
+#    enabled: yes

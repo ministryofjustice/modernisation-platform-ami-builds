@@ -1,0 +1,20 @@
+---
+- name: Create installation directory
+  ansible.builtin.file:
+    path: "{{ awscli_installer_dir }}"
+    state: directory
+
+- name: Download aws cli installer
+  ansible.builtin.unarchive:
+    src: "{{ awscli_installer_url }}"
+    dest: "{{ awscli_installer_dir }}"
+    remote_src: true
+
+- name: Run aws cli installer
+  shell: |
+    {{ awscli_installer_dir }}/aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+
+- name: Cleanup installer files
+  ansible.builtin.file:
+    path: "{{ awscli_installer_dir }}"
+    state: absent

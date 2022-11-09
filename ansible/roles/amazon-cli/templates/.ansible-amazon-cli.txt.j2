@@ -1,0 +1,5 @@
+# Used by ansible amazon-cli role to determine if CLI is updated
+# curl -I {{ awscli_installer_url }}
+etag: {{ awscli_zip.etag }}
+last_modified: {{ awscli_zip.last_modified }}
+content_length: {{ awscli_zip.content_length}}

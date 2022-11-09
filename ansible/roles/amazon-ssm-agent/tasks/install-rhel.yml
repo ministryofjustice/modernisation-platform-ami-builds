@@ -1,0 +1,16 @@
+---
+# Need a fixed version for RHEL6 as later versions are not supported by the OS
+- name: Install amazon-ssm-agent on RHEL 6
+  ansible.builtin.yum:
+    name: "https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm"
+  when: ansible_distribution_major_version == "6"
+
+- name: Install amazon-ssm-agent on RHEL 7 or 8
+  ansible.builtin.yum:
+    name: "https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/latest/linux_amd64/amazon-ssm-agent.rpm"
+  when: ansible_distribution_major_version == "7" or ansible_distribution_major_version == "8"
+
+- name: Enable amazon-ssm-agent service
+  service:
+    name: amazon-ssm-agent
+    enabled: yes
