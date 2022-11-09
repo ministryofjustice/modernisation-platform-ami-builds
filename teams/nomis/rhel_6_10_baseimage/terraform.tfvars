@@ -5,11 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-<<<<<<< main
     configuration_version = "0.5.2"
-=======
-    configuration_version = "0.4.9"
->>>>>>> use include (dynamic) instead of import for roles and tasks
     description           = "nomis RHEL6.10 base image"
 
     tags = {
