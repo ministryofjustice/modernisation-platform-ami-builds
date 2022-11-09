@@ -7,7 +7,7 @@ imagebuilders = {
   # test configuration
   # needs EBS and components adding
   rhel_6_10_weblogic_appserver_10_3 = {
-    configuration_version = "0.1.4"
+    configuration_version = "0.1.5"
     release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
     description           = "nomis rhel 6.10 weblogic appserver image"
 
