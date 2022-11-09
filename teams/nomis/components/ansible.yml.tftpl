@@ -20,6 +20,7 @@ phases:
         inputs:
           commands:
             - |
+              # do not set -u as it breaks on RedHat 6
               set -e
               run_ansible() {
                 repo="modernisation-platform-ami-builds"
@@ -50,9 +51,6 @@ phases:
                 # activate virtual environment
                 mkdir $ansible_dir/python-venv && cd "$_"
                 $python -m venv ansible
-
-                # activate script fails on RHEL6 if set -u
-                set +u
                 source ansible/bin/activate
                 $python -m pip install --upgrade pip
                 if [[ "$python" =~ 3.6 ]]; then
