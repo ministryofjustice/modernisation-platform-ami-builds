@@ -41,8 +41,7 @@ imagebuilders = {
         "../components/ansible.yml.tftpl"
       ]
 
-      # SSM agent must be installed via user_data.
-      # Later versions are not supported by RHEL6
+      # SSM agent must be installed via user_data prior to components being run
       user_data = <<EOF
 #!/bin/bash
 install_ssm_agent() {
