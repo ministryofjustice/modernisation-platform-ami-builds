@@ -9,7 +9,7 @@
   check_mode: no
   register: awscli_zip
 
-- name: Write awscli zip stats 
+- name: Write awscli zip stats
   ansible.builtin.template:
     src: .ansible-amazon-cli.txt.j2
     dest: "~/.ansible-amazon-cli.txt"
