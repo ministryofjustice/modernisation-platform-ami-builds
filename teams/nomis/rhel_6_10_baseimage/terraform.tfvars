@@ -5,7 +5,7 @@
 imagebuilders = {
 
   rhel_6_10_baseimage = {
-    configuration_version = "0.5.2"
+    configuration_version = "0.5.8"
     description           = "nomis RHEL6.10 base image"
 
     tags = {
@@ -38,7 +38,8 @@ imagebuilders = {
       components_custom = [
         "../components/rhel_6_10_baseimage/packages.yml",
         "../components/rhel_6_10_baseimage/python.yml",
-        "../components/ansible.yml.tftpl"
+        "../components/ansible.yml.tftpl",
+        "../components/rhel_6_10_baseimage/stig_rhel6_ansible.yml.tftpl"
       ]
 
       # SSM agent must be installed via user_data prior to components being run

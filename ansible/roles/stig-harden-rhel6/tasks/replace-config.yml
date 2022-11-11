@@ -1,0 +1,21 @@
+---
+- name: get role_path dir
+  ansible.builtin.debug:
+    var: role_path
+
+- name: check path exists
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ role_path }}/../../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml"
+  register: config_file
+
+- name: get debug
+  debug:
+    msg: "{{ config_file }}"
+
+- name: replace stig module config
+  delegate_to: localhost
+  ansible.builtin.copy:
+    src: config.yml
+    dest: "{{ role_path }}/../../roles-galaxy/mindpointgroup.stig_rhel6/tasks/main.yml"
+    force: yes
