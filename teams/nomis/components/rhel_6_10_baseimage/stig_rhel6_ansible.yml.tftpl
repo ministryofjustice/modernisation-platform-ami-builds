@@ -67,13 +67,13 @@ phases:
               ansible-galaxy collection install -r requirements.yml --force
 
               # run ansible (note comma after localhost is deliberate)
-              ansible-playbook -vvvv playbooks/stig_rhel6.yml \
+              ansible-playbook -vvv playbooks/stig_rhel6.yml \
               --connection=local \
               --inventory localhost, \
               --extra-vars "ansible_python_interpreter=$python" \
               --extra-vars "target=localhost" \
               --tags "amibuild,prelim,cat1,cat2" \
-              --skip-tags "low,V-38484,V-38497,V-38518,V-38519,V-38585,V-38623,V-51337" \
+              --skip-tags "low,aide,V-38484,V-38497,V-38518,V-38519,V-38585,V-38623,V-51337" \
               --become
 
               # Cleanup
