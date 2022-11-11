@@ -15,8 +15,8 @@
 - include: prelim.yml
   become: yes
   tags:
-      - prelim_tasks
-      - always
+    - prelim_tasks
+    - always
 
 - include: cat1.yml
   when: rhel6stig_cat1 | bool
@@ -29,4 +29,4 @@
 
 - include: post.yml
   tags:
-      - post_tasks
+    - post_tasks

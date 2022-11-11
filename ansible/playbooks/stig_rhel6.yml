@@ -3,8 +3,8 @@
   hosts: localhost
 
   tasks:
-  - name: run the role
-    include_role: 
-      name: stig-harden-rhel6
-    tags:
-      - amibuild
+    - name: run the role
+      include_role:
+        name: stig-harden-rhel6
+      tags:
+        - amibuild
