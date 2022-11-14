@@ -18,9 +18,9 @@ parent_image = {
 }
 
 components_custom = [
-  "../baseimages/components/rhel_7_9/packages.yml",
-  "../baseimages/components/rhel_7_9/python.yml",
-  "../baseimages/components/ansible.yml.tftpl"
+  "../base/components/rhel_7_9/packages.yml",
+  "../base/components/rhel_7_9/python.yml",
+  "../base/components/ansible.yml.tftpl"
 ]
 
 launch_template_exists = false

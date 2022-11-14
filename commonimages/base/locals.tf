@@ -6,7 +6,7 @@ locals {
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
     github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
     is-production = var.BRANCH_NAME == "main" ? "true" : "false"
-    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/baseimages/${var.ami_base_name}"
+    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/commonimages/base/${var.ami_base_name}"
   }
 
   environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
