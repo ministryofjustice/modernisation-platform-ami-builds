@@ -22,7 +22,7 @@ phases:
         action: ExecuteBash
         inputs:
           commands:    
-            - Fn::Base64: !Sub |
+            - !Sub |
               set -e
               cd /tmp
 
