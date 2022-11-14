@@ -1,7 +1,7 @@
 ---
 name: base
 
-# This pipeline works across multiple terragrunt projects within a team
+# This pipeline works across multiple terraform projects within a team
 # directory with locking (turnstyle) and PR comment functionality.
 #
 # The init step figures out which projects to plan/apply
@@ -59,7 +59,6 @@ env:
   BASE_DIR: commonimages/base
   PROJECT_DIR_DEPTH: 2
   DEFAULT_TERRAFORM_VERSION: 1.3.3
-  TERRAGRUNT_VERSION: v0.36.1
 
 defaults:
   run:
@@ -105,11 +104,11 @@ jobs:
           set +o pipefail
           projects=${{ github.event.inputs.projects }}
           if [[ ${projects} == "all" ]]; then
-            projects=$(find "${BASE_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+            projects=$(find "${BASE_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
           else
             for project in ${{ github.event.inputs.projects }}; do
-              if [[ ! -e "${BASE_DIR}/${project}/terragrunt.hcl" ]]; then
-                echo "Project not found ${BASE_DIR}/${project}/terragrunt.hcl" >&2
+              if [[ ! -e "${BASE_DIR}/${project}/backend.tf" ]]; then
+                echo "Project not found ${BASE_DIR}/${project}/backend.tf" >&2
                 exit 1
               fi
             done
@@ -151,10 +150,8 @@ jobs:
         run: |
           echo "Updated files: ${{ steps.files.outputs.file_list }}"
           set +o pipefail
-          allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r "s;${BASE_DIR}/([^/]+)/.+;\1;" | sort -u)
-          echo "all projects: ${allprojects[@]}"
-          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
-          echo "changed: ${changed[@]}"
+          allprojects=$(find "${BASE_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo "projects=${projects}" >> $GITHUB_OUTPUT
@@ -247,25 +244,19 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      - name: Setup Terragrunt
-        run: |
-          wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
-          chmod u+x /usr/local/bin/terragrunt
-
       - name: Init
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt init
-          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+          terraform init
+          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
 
       - name: Plan
         id: plan
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terragrunt plan -no-color -detailed-exitcode | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt || exitcode=$?
-          echo "terragrunt plan exit code = $exitcode"
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "terrafrom plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
@@ -276,7 +267,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.BASE_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo '**`${{ env.BASE_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
             head -c 65476 tfplan.txt
@@ -340,16 +331,11 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      - name: Setup Terragrunt
-        run: |
-          wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
-          chmod u+x /usr/local/bin/terragrunt
-
       - name: Init
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt init
-          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+          terraform init
+          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
       
       - name: Plan
         id: plan
@@ -357,8 +343,8 @@ jobs:
         run: |
           exitcode=0
           chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
-          echo "terragrunt plan exit code = $exitcode"
+          terraform plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          echo "terraform plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
@@ -366,7 +352,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt apply . tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
+          terraform apply . tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
