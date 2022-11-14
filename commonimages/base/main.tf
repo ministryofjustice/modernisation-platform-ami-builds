@@ -1,5 +1,5 @@
 module "imagebuilder" {
-  source = "../../modules//imagebuilder"
+  source = "../modules//imagebuilder"
 
   region                          = var.region
   ami_name_prefix                 = var.ami_name_prefix
