@@ -1,5 +1,5 @@
 ---
-name: baseimages
+name: base
 
 # This pipeline works across multiple terragrunt projects within a team
 # directory with locking (turnstyle) and PR comment functionality.
@@ -32,18 +32,18 @@ on:
     branches:
       - main
     paths:
-      - baseimages/**
+      - commonimages/base/**
       - modules/imagebuilder/**
-      - .github/workflows/baseimages.yml
+      - .github/workflows/base.yml
       - ansible/**
 
   push:
     branches:
       - main
     paths:
-      - baseimages/**
+      - commonimages/base/**
       - modules/imagebuilder/**
-      - .github/workflows/baseimages.yml
+      - .github/workflows/base.yml
       - ansible/**
 
 env:
@@ -56,7 +56,7 @@ env:
   TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
   TF_ENV: production
 
-  BASE_DIR: baseimages
+  BASE_DIR: commonimages/base
   PROJECT_DIR_DEPTH: 2
   DEFAULT_TERRAFORM_VERSION: 1.3.3
   TERRAGRUNT_VERSION: v0.36.1

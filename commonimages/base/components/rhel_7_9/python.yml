@@ -11,25 +11,28 @@ parameters:
       type: string
       default: "Linux"
       description: Platform.
+  - PythonVersion:
+      type: string
+      default: "3.9.6"
+      description: Python version.
 phases:
   - name: build
     steps:
       - name: InstallPython3-9
         action: ExecuteBash
         inputs:
-          commands:
-            - |
+          commands:    
+            - Fn::Base64: !Sub |
               set -e
               cd /tmp
 
-              py_version=3.9.6
-              py_filename=Python-${py_version}
+              py_filename=Python-${PythonVersion}
 
               # install python
-              wget https://www.python.org/ftp/python/${py_version}/${py_filename}.tgz
-              tar xzf ${py_filename}.tgz
-              rm -f ${py_filename}.tgz
-              cd ${py_filename}
+              wget https://www.python.org/ftp/python/${PythonVersion}/${!py_filename}.tgz
+              tar xzf ${!py_filename}.tgz
+              rm -f ${!py_filename}.tgz
+              cd ${!py_filename}
 
               # ensure zlib is enabled, required for some ansible modules
               sed -i 's/^#zlib/zlib/' Modules/Setup

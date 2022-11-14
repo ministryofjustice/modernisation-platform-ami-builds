@@ -1,5 +1,5 @@
 
-team_name = "baseimage"
+ami_name_prefix = "base"
 
 block_device_mappings_ebs = [
   {

@@ -1,8 +1,8 @@
 module "imagebuilder" {
-  source = "../modules//imagebuilder"
+  source = "../../modules//imagebuilder"
 
   region                          = var.region
-  team_name                       = var.team_name
+  ami_name_prefix                 = var.ami_name_prefix
   ami_base_name                   = var.ami_base_name
   configuration_version           = var.configuration_version
   description                     = var.description

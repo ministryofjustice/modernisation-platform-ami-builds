@@ -50,9 +50,9 @@ variable "description" {
 }
 variable "ami_base_name" {
   type        = string
-  description = "e.g. for baseimages rhel_7_9, for team images: rhel_7_9_webserver"
+  description = "e.g. rhel_7_9"
 }
-variable "team_name" {
+variable "ami_name_prefix" {
   type        = string
   description = "the prefix to the ami name"
   default     = "baseimage"
