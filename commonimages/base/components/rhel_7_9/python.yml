@@ -21,7 +21,7 @@ phases:
       - name: InstallPython3-9
         action: ExecuteBash
         inputs:
-          commands:    
+          commands:
             - !Sub |
               set -e
               cd /tmp
