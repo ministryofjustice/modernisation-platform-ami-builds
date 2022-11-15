@@ -5,6 +5,8 @@
 configuration_version = "0.0.1"
 description           = "shared rhel 7.9 base image"
 
+ami_base_name   = "rhel_7_9"
+
 tags = {
   os-version = "rhel 7.9"
   owner      = "digital-studio-operations-team@digital.justice.gov.uk"

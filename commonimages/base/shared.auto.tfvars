@@ -1,6 +1,6 @@
 
 ami_name_prefix = "base"
-ami_base_name   = "rhel_7_9"
+
 
 block_device_mappings_ebs = [
   {
