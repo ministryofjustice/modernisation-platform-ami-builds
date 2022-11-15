@@ -2,7 +2,7 @@ module "imagebuilder" {
   source = "../../../modules//imagebuilder"
 
   region                          = var.region
-  ami_name_prefix                 = var.ami_name_prefix
+  team_name                       = var.ami_name_prefix # would be best to rename team_name -> ami_name_prefix for all, leave for later PR
   ami_base_name                   = var.ami_base_name
   configuration_version           = var.configuration_version
   description                     = var.description
