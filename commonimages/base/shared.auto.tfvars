@@ -12,9 +12,7 @@ block_device_mappings_ebs = [
 
 components_aws = [
   "update-linux",
-  "stig-build-linux-medium",
-  "aws-cli-version-2-linux",
-  "amazon-cloudwatch-agent-linux"
+  "stig-build-linux-medium"
 ]
 
 infrastructure_configuration = {
