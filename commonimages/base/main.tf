@@ -14,6 +14,7 @@ module "imagebuilder" {
   block_device_mappings_ebs       = var.block_device_mappings_ebs
   components_aws                  = var.components_aws
   components_custom               = var.components_custom
+  component_template_args         = local.component_template_args
   user_data                       = var.user_data
   infrastructure_configuration    = var.infrastructure_configuration
   account_to_distribute_ami       = var.account_to_distribute_ami

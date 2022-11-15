@@ -51,6 +51,12 @@ variable "components_custom" {
   description = "The custom components used to build the ami"
 }
 
+variable "component_template_args" {
+  default     = {}
+  type        = map(string)
+  description = "A map of args for the custom component templates"
+}
+
 variable "components_aws" {
   type        = list(string)
   description = "The aws components used to build the ami"

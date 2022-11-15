@@ -13,16 +13,10 @@ locals {
     imagebuilder_mp_tfstate = data.terraform_remote_state.imagebuilder_mp.outputs
   }
 
-  component_template_args = {
-    ami     = local.team_ami_base_name
-    version = var.configuration_version
-    branch  = var.branch == "" ? "main" : var.branch
-  }
-
   components_custom_data = {
     for component_filename in var.components_custom :
     component_filename => length(regexall(".*tftpl", component_filename)) > 0 ?
-    templatefile(component_filename, local.component_template_args) :
+    templatefile(component_filename, var.component_template_args) :
     file(component_filename)
   }
 

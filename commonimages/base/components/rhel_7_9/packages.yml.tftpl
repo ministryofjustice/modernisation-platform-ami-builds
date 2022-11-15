@@ -1,11 +1,11 @@
 ---
-name: baseimage_rhel_7_9_packages
-description: rhel 7.9 base image component for installing standard packages.
+name: ${ami}_packages
+description: ${ami} component for installing standard packages.
 schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: "0.0.1"
+      default: ${version}
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
