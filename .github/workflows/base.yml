@@ -352,7 +352,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terraform apply . tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
