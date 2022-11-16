@@ -17,20 +17,37 @@ on:
       - '.github/workflows/modernisation-platform.yml'
   workflow_dispatch:
 env:
-  AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: "eu-west-2"
+  ENVIRONMENT_MANAGEMENT: ${{ secrets.MODERNISATION_PLATFORM_ENVIRONMENTS }}
   TF_IN_AUTOMATION: true
+
+permissions: {}
+
 defaults:
   run:
     shell: bash
 
 jobs:
   plan-modernisation-platform:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
     name: Plan - modernisation-platform pipelines
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3.1.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Load and Configure Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
@@ -45,7 +62,10 @@ jobs:
         env:
           TF_ENV: production
 
-  deploy-modernisation-platform-:
+  deploy-modernisation-platform:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read # This is required for actions/checkout
     name: Deploy - modernisation-platform pipelines
     needs: plan-modernisation-platform
     runs-on: ubuntu-latest
@@ -54,6 +74,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3.1.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Load and Configure Terraform
         uses: hashicorp/setup-terraform@v2.0.3
         with:
