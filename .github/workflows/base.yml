@@ -148,11 +148,18 @@ jobs:
         id: projects_pull_push
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         run: |
-          echo "Updated files: ${{ steps.files.outputs.file_list }}"
+          updated_files="${{ steps.files.outputs.file_list }}"
+          echo "Updated files: ${updated_files[@]}"
           set +o pipefail
           allprojects=$(find "${BASE_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          echo "all projects: ${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
-          projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
+          workflow_path=.github/workflows/${GITHUB_WORKFLOW}.yml
+          if [[ " ${updated_files[*]} " =~ " ${workflow_path} " ]]; then
+            projects=${allprojects[@]}
+          else
+            projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
+          fi
           echo List of projects [${projects}]
           echo "projects=${projects}" >> $GITHUB_OUTPUT
 
@@ -352,7 +359,7 @@ jobs:
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
-          terraform apply . tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
