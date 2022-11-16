@@ -151,7 +151,10 @@ jobs:
           echo "Updated files: ${{ steps.files.outputs.file_list }}"
           set +o pipefail
           allprojects=$(find "${BASE_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+          echo "${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          #if 
+
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           echo List of projects [${projects}]
           echo "projects=${projects}" >> $GITHUB_OUTPUT
