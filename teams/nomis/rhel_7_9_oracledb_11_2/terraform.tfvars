@@ -16,7 +16,7 @@ imagebuilders = {
     image_recipe = {
       parent_image = {
         owner           = "core-shared-services-production"
-        arn_resource_id = "nomis-rhel-7-9-baseimage/x.x.x"
+        arn_resource_id = "base-rhel-7-9/x.x.x"
       }
 
       block_device_mappings_ebs = [
