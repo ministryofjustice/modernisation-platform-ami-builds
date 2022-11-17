@@ -12,7 +12,19 @@ updates:
   # a dependabot configuration, so we need to add all directories individually
   # See: github.com/dependabot/dependabot-core/issues/2178
   - package-ecosystem: "terraform"
+    directory: "/commonimages/base"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_7_9"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/modernisation-platform"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/modules/imagebuilder"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
@@ -37,10 +49,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis/rhel_7_9_baseimage"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
