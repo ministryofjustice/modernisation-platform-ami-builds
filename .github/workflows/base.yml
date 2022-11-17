@@ -77,7 +77,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
 
       # get PR number: for posting PR comments and figuring out changed files
       - name: Get PR number on push
@@ -209,7 +209,7 @@ jobs:
 
       # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@v1.16.0
+        uses: int128/hide-comment-action@dc916edd97f54d45bf0c2430935df2fa2e1a9857 # v1.16.0
         if: ${{ github.event_name == 'pull_request' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -226,7 +226,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
 
       - name: Get terraform version
         id: discover
@@ -246,7 +246,7 @@ jobs:
           echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.3
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
         with:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
@@ -313,7 +313,7 @@ jobs:
       name: core-shared-services
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
 
       - name: Get terraform version
         id: discover
@@ -333,7 +333,7 @@ jobs:
           echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.3
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
         with:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
