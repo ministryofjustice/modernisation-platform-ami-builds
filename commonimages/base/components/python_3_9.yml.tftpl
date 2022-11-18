@@ -1,0 +1,46 @@
+---
+name: install_python_3_9
+description: component for installing python 3.9
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallPython
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+
+              # install python
+              wget https://www.python.org/ftp/python/${python_version}/Python-${python_version}.tgz
+              tar xzf Python-${python_version}.tgz
+              rm -f Python-${python_version}.tgz
+              cd Python-${python_version}
+
+              # ensure zlib is enabled, required for some ansible modules
+              sed -i 's/^#zlib/zlib/' Modules/Setup
+
+              ./configure --enable-optimizations
+              sudo make altinstall
+
+      # Install pip
+      - name: InstallPipAndVirtualenv
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              # install pip and virtualenv
+              python${ regex("^[0-9]+.[0-9]+", python_version) } -m pip install --upgrade pip
+              python${ regex("^[0-9]+.[0-9]+", python_version) } -m pip install virtualenv
