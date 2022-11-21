@@ -43,7 +43,7 @@ on:
 
 env:
   AWS_REGION: "eu-west-2"
-  ENVIRONMENT_MANAGEMENT: ${{ secrets.MODERNISATION_PLATFORM_ENVIRONMENTS }}
+  ENVIRONMENT_MANAGEMENT: ${{ secrets.CLOUD_PLATFORM_ENVIRONMENTS }}
 
   # set branch to main on pull requests so plan changes are same as push-to-main
   TF_IN_AUTOMATION: true
