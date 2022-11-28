@@ -291,6 +291,13 @@ jobs:
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
+      - name: some output for testing
+        id: plan
+        working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
+        run: |
+          components_to_abandon=( $(terraform plan -no-color | grep '# .*aws_imagebuilder_component\.[^\.]*\[.*\] must be replaced' | sed 's/# \(.*\) must be replaced/\1/g') )
+          echo "components_to_abandon: ${components_to_abandon[@]}"
+
       - name: Create Plan PR message
         if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
@@ -377,6 +384,15 @@ jobs:
         run: |
           terraform init
           terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+
+      - name: Abandon old image builder components in state
+        working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
+        if: github.ref == 'refs/heads/main'
+        run: |
+          components_to_abandon=( $(terraform plan -no-color | grep '# .*aws_imagebuilder_component\.[^\.]*\[.*\] must be replaced' | sed 's/# \(.*\) must be replaced/\1/g') )
+          # for comp in "${components_to_delete[@]}" ; do
+          #   terraform state rm $comp
+          # done
       
       - name: Plan
         id: plan

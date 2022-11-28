@@ -22,11 +22,13 @@ phases:
               set -e
               cd /tmp
 
+              py_version=3.9.6
+
               # install python
-              wget https://www.python.org/ftp/python/${python_version}/Python-${python_version}.tgz
-              tar xzf Python-${python_version}.tgz
-              rm -f Python-${python_version}.tgz
-              cd Python-${python_version}
+              wget https://www.python.org/ftp/python/$py_version/Python-$py_version.tgz
+              tar xzf Python-$py_version.tgz
+              rm -f Python-$py_version.tgz
+              cd Python-$py_version
 
               # ensure zlib is enabled, required for some ansible modules
               sed -i 's/^#zlib/zlib/' Modules/Setup
@@ -42,5 +44,5 @@ phases:
             - |
               set -e
               # install pip and virtualenv
-              python${ regex("^[0-9]+.[0-9]+", python_version) } -m pip install --upgrade pip
-              python${ regex("^[0-9]+.[0-9]+", python_version) } -m pip install virtualenv
+              python3.9 -m pip install --upgrade pip
+              python3.9 -m pip install virtualenv
