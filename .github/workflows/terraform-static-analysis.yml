@@ -11,8 +11,13 @@ on:
       - 'teams/team1/**'
       - '.github/workflows/terraform-static-analysis.yml'
 
+permissions:
+  contents: read
+
 jobs:
   terraform-static-analysis:
+    permissions:
+      pull-requests: write
     name: Terraform Static Analysis
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch'
@@ -22,7 +27,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Run Analysis
-      uses: ministryofjustice/github-actions/terraform-static-analysis@main
+      uses: ministryofjustice/github-actions/terraform-static-analysis@bffeddf62d99a7486979d9c3afff86913a9abe1a # v8
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -31,6 +36,8 @@ jobs:
         tflint_exclude: terraform_unused_declarations
 
   terraform-static-analysis-full-scan:
+    permissions:
+      pull-requests: write
     name: Terraform Static Analysis - scan all directories
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
@@ -40,7 +47,7 @@ jobs:
       with:
         fetch-depth: 0
     - name: Run Analysis
-      uses: ministryofjustice/github-actions/terraform-static-analysis@main
+      uses: ministryofjustice/github-actions/terraform-static-analysis@bffeddf62d99a7486979d9c3afff86913a9abe1a # v8
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
