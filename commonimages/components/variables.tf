@@ -15,7 +15,3 @@ variable "region" {
   description = "Infrastructure AWS region - only one region supported with current module design"
 }
 
-variable "tags" {
-  type        = map(any)
-  description = "The tags for the ami"
-}
