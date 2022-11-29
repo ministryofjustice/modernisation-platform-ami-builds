@@ -47,7 +47,7 @@ variable "account_ids_lookup" {
 }
 
 variable "components_custom" {
-  type        = list({
+  type        = list(object{
     path = string
     parameters = list(object({
       name = string
