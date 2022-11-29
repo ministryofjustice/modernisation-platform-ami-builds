@@ -7,7 +7,7 @@ locals {
     for component_filename in fileset("templates", "*") :
     component_filename => length(regexall(".*tftpl", component_filename)) > 0 ?
     templatefile(component_filename, local.component_template_args) :
-    file(component_filename)
+    file("templates/${component_filename}")
   }
 
   components_yaml = {
