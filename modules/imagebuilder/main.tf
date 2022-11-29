@@ -53,7 +53,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
       dynamic "parameter" {
         for_each = component.value[parameters]
         content {
-          name = parameter.name
+          name  = parameter.name
           value = parameter.value
         }
       }

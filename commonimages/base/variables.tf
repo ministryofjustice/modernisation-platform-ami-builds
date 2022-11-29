@@ -97,10 +97,10 @@ variable "components_aws" {
   description = "The aws components used to build the ami"
 }
 variable "components_custom" {
-  type        = list(object({
+  type = list(object({
     path = string
     parameters = list(optional(object({
-      name = string
+      name  = string
       value = string
     })))
   }))
