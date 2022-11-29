@@ -53,7 +53,7 @@ variable "components_custom" {
       name = string
       value = string
     }))
-  })
+  }))
   description = "The custom components used to build the ami"
 }
 
