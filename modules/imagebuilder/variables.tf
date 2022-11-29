@@ -47,10 +47,10 @@ variable "account_ids_lookup" {
 }
 
 variable "components_custom" {
-  type        = list(object({
+  type = list(object({
     path = string
     parameters = list(object({
-      name = string
+      name  = string
       value = string
     }))
   }))
