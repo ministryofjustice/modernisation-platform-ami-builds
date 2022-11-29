@@ -48,7 +48,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   dynamic "component" {
     for_each = var.components_custom
     content {
-      component_arn = aws_imagebuilder_component.this[component.value[path]].arn
+      component_arn = aws_imagebuilder_component.this[component.path].arn
 
       dynamic "parameter" {
         for_each = component.parameters
