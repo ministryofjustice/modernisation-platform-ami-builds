@@ -97,7 +97,13 @@ variable "components_aws" {
   description = "The aws components used to build the ami"
 }
 variable "components_custom" {
-  type        = list(string)
+  type = list(object({
+    path = string
+    parameters = list(object({
+      name  = string
+      value = string
+    }))
+  }))
   description = "The custom components used to build the ami"
 }
 variable "launch_permission_account_names" {

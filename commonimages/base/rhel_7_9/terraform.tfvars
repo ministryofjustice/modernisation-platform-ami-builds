@@ -20,9 +20,16 @@ parent_image = {
 }
 
 components_custom = [
-  "../components/rhel_7_9/packages.yml.tftpl",
-  "../components/rhel_7_9/python.yml.tftpl",
-  "../components/ansible.yml.tftpl"
+  {
+    path       = "../components/rhel_7_9/packages.yml.tftpl"
+    parameters = []
+    }, {
+    path       = "../components/rhel_7_9/python.yml.tftpl"
+    parameters = []
+    }, {
+    path       = "../components/ansible.yml.tftpl"
+    parameters = []
+  }
 ]
 
 launch_template_exists = false

@@ -47,7 +47,13 @@ variable "account_ids_lookup" {
 }
 
 variable "components_custom" {
-  type        = list(string)
+  type = list(object({
+    path = string
+    parameters = list(object({
+      name  = string
+      value = string
+    }))
+  }))
   description = "The custom components used to build the ami"
 }
 
