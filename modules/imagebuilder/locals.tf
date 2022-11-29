@@ -14,17 +14,17 @@ locals {
   }
 
   components_custom_data = {
-    for component_filename in var.components_custom :
-    component_filename => length(regexall(".*tftpl", component_filename)) > 0 ?
-    templatefile(component_filename, var.component_template_args) :
-    file(component_filename)
+    for component in var.components_custom :
+    component_filename => length(regexall(".*tftpl", component.path)) > 0 ?
+    templatefile(component.path, var.component_template_args) :
+    file(component.path)
   }
 
   components_custom_yaml = {
     for component_filename, data in local.components_custom_data :
     component_filename => {
       raw  = data
-      yaml = yamldecode(data)
+      yaml = yamldecode(replace(data, "!Ref ", "")) # stop yamldecode breaking from cloudformation specific syntax. Not trusted cf.
     }
   }
 
