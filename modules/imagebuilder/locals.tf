@@ -15,9 +15,9 @@ locals {
 
   components_custom_data = {
     for component in var.components_custom :
-    component_filename => length(regexall(".*tftpl", component.value.path)) > 0 ?
-    templatefile(component.value.path, var.component_template_args) :
-    file(component.value.path)
+    component.path => length(regexall(".*tftpl", component.path)) > 0 ?
+    templatefile(component.path, var.component_template_args) :
+    file(component.path)
   }
 
   components_custom_yaml = {
