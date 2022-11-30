@@ -208,7 +208,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           go build ${GITHUB_WORKSPACE}/scripts/minimise-comments/
-          ${GITHUB_WORKSPACE}/scripts/minimise-comments/minimist-comments
+          ${GITHUB_WORKSPACE}/scripts/minimise-comments/minimise-comments
 
   plan:
     needs: init
