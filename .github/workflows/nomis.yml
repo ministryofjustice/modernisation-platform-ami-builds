@@ -302,6 +302,8 @@ jobs:
             -d '{"body":'"${escaped_message}"'}'
       
       - name: Minimise comments test (DSOS-1525)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           go run ${GITHUB_WORKSPACE}/scripts/minimise-comments/main.go
 
