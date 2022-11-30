@@ -1,5 +1,5 @@
 module "imagebuilder" {
-  source = "./../../modules//imagebuilder" # this works "./../modulestest2//imagebuilder"
+  source = "./../..//modules/imagebuilder" # this works "./../modulestest2//imagebuilder"
 
   region                          = var.region
   team_name                       = var.ami_name_prefix # would be best to rename team_name -> ami_name_prefix for all, leave for later PR
