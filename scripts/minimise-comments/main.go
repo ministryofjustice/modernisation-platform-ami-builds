@@ -37,26 +37,15 @@ type graphqlQueryNode struct {
 	Minimized bool   `json:"isMinimized"`
 }
 
-// JSON response structure from GraphQL mutation
-// type graphqlMutation struct {
-// 	Data graphqlMutationData `json:"data"`
-// }
-
-// type graphqlMutationData struct {
-// 	Comment graphqlMutationComment `json:"minimizeComment"`
-// }
-
-// type graphqlMutationComment struct {
-// 	Id string `json:"clientMutationId"`
-// }
-
 func main() {
-	// GraphQL query
+	// Query
 	queryResult := postHttp(createQuery())
-	printQueryResults(queryResult)
+	queryUnmarshalled := unmarshalQuery(queryResult)
+	idsToMinimise := commentIdsToMinimise(queryUnmarshalled)
+	minimiseComments(idsToMinimise)
 
-	// GraphQL mutation
-	postHttp(createMutation())
+	// Mutation
+	// postHttp(createMutation())
 }
 
 // Assemble GraphQL query
@@ -65,7 +54,7 @@ func createQuery() []byte {
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
 	githubRepo := githubOwnerRepoList[1]
-	githubPr := "107"
+	githubPr := "107" // TODO: Grab the PR number from the GitHub Actions workflow.
 
 	queryValue := fmt.Sprintf(`
 		query {
@@ -80,8 +69,7 @@ func createQuery() []byte {
 					}
 				}
 			}
-		}
-	`, githubOwner, githubRepo, githubPr)
+		}`, githubOwner, githubRepo, githubPr)
 
 	queryData := map[string]string{
 		"query": queryValue,
@@ -97,15 +85,16 @@ func createQuery() []byte {
 }
 
 // Assemble GraphQL mutation
-func createMutation() []byte {
+func createMutation(commentId string) []byte {
+	mutationValue := fmt.Sprintf(`
+		mutation {
+			minimizeComment(input: {classifier: OUTDATED, subjectId: "%+v"}) {
+			  	clientMutationId
+			}
+	  	}`, commentId)
+
 	mutationData := map[string]string{
-		"query": `
-			mutation {
-				minimizeComment(input: {classifier: OUTDATED, subjectId: "IC_kwDOGDHVyM5Mh8d0"}) {
-			  		clientMutationId
-				}
-		  	}
-		`,
+		"query": mutationValue,
 	}
 
 	// Encode into JSON
@@ -151,7 +140,25 @@ func postHttp(postData []byte) []byte {
 	return data
 }
 
-func printQueryResults(results []byte) {
+func commentIdsToMinimise(response graphqlQuery) []string {
+
+	numberOfComments := len(response.Data.Repo.Pr.Comments.Node)
+	teamDir := os.Getenv("TEAM_DIR")
+	teamDirWithSlashes := "/" + teamDir + "/"
+
+	var idsToMinimize []string
+
+	for i := 0; i < numberOfComments; i++ {
+		if strings.Contains(response.Data.Repo.Pr.Comments.Node[i].Body, teamDirWithSlashes) {
+			idsToMinimize = append(idsToMinimize, response.Data.Repo.Pr.Comments.Node[i].Id)
+		}
+	}
+
+	return idsToMinimize
+}
+
+func unmarshalQuery(results []byte) graphqlQuery {
+
 	var response graphqlQuery
 
 	err := json.Unmarshal(results, &response)
@@ -159,21 +166,15 @@ func printQueryResults(results []byte) {
 		fmt.Println(err)
 	}
 
-	fmt.Println("Query:", response.Data.Repo.Pr.Comments.Node[0].Id)
+	return response
 }
 
-// func printMutationResults(results []byte) {
-// 	raw := string(results)
-// 	fmt.Println("Mutation results (raw):", raw)
+func minimiseComments(commentIds []string) {
+	numberOfIds := len(commentIds)
 
-// 	var response graphqlMutation
+	for i := 0; i < numberOfIds; i++ {
+		postHttp(createMutation(commentIds[i]))
+		fmt.Println("Minimised:", commentIds[i])
+	}
 
-// 	fmt.Println("Empty interface:", response)
-
-// 	err := json.Unmarshal(results, &response)
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-
-// 	fmt.Println("Mutation:", response.Data.Comment.Id)
-// }
+}
