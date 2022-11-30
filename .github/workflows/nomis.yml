@@ -206,8 +206,8 @@ jobs:
       - name: Minimise comments test (DSOS-1525)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-          TEAM_DIR: ${{ env.TEAM_DIR }}
+          # GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
+          # TEAM_DIR: ${{ env.TEAM_DIR }}
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
           go build
