@@ -207,6 +207,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          go mod init github.com/ministryofjustice/modernisation-platform-ami-builds/scripts/minimise-comments
           go build ${GITHUB_WORKSPACE}/scripts/minimise-comments/
           ${GITHUB_WORKSPACE}/scripts/minimise-comments/minimise-comments
 
