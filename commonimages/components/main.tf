@@ -3,8 +3,8 @@ resource "aws_imagebuilder_component" "this" {
 
   name        = each.value.yaml.name
   description = each.value.yaml.description
-  platform    = each.value.yaml.metadata.Platform
-  version     = each.value.yaml.metadata.Version
+  platform    = each.value.yaml.parameters[1].Platform.default
+  version     = each.value.yaml.parameters[0].Version.default
   data        = each.value.raw
   kms_key_id  = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   tags        = local.tags

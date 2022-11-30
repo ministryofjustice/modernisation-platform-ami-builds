@@ -2,9 +2,15 @@
 name: install_python_3_6
 description: component for installing python 3.6
 schemaVersion: 1.0
-metadata:
-  Version: 0.0.1 # update this each time the file changes
-  Platform: "Linux"
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
 phases:
   - name: build
     steps:
