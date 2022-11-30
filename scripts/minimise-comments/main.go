@@ -113,6 +113,5 @@ func getJSON() {
 	}
 
 	// Print results
-	fmt.Println("ID:", message.Data.Repo.Pr.Comments.Node[0].Id)
-	fmt.Println("Minimised:", message.Data.Repo.Pr.Comments.Node[0].Minimized)
+	fmt.Println(message)
 }
