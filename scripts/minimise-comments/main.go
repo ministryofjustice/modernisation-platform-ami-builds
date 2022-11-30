@@ -39,6 +39,7 @@ type GqlNode struct {
 func main() {
 
 	getJSON()
+	minimiseComment()
 }
 
 func getJSON() {
@@ -104,13 +105,10 @@ func getJSON() {
 		fmt.Println(newerr)
 	}
 
-	// GitHub token ok?
-	if token != "" {
-		fmt.Println("Got the token.")
-	} else {
-		fmt.Println("Not got the token.")
-	}
-
 	// Print results
-	fmt.Println(message)
+	fmt.Println(message.Data.Repo.Pr.Comments.Node[0].Id)
+}
+
+func minimiseComment() {
+	
 }
