@@ -1,0 +1,47 @@
+---
+name: install_python_3_6
+description: component for installing python 3.6
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Linux"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallPython
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+              py_version=3.6.3
+              py_file=Python-$py_version
+              py_tar=$py_file.tar.xz
+              # download and build Python
+              wget --no-check-certificate https://python.org/ftp/python/$py_version/$py_tar
+              tar xf $py_tar
+              rm -f $py_tar
+              cd $py_file/
+              # ensure zlib is enabled, required for some ansible modules
+              sed -i 's/^#zlib/zlib/' Modules/Setup.dist
+              ./configure --enable-optimizations
+              sudo make altinstall
+      - name: InstallPipAndVirtualenv
+        action: ExecuteBash
+        inputs:
+          commands:
+            - |
+              set -e
+              cd /tmp
+              # install pip and virtualenv
+              wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+              python3.6 get-pip.py
+              python3.6 -m pip install --upgrade pip
+              python3.6 -m pip install virtualenv
