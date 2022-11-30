@@ -203,12 +203,12 @@ jobs:
           authors: ""
           starts-with: "**`${{ env.TEAM_DIR }}/"
 
-      # DSOS-1525
       - name: Minimise comments test (DSOS-1525)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          go run ${GITHUB_WORKSPACE}/scripts/minimise-comments/main.go
+          go build ${GITHUB_WORKSPACE}/scripts/minimise-comments/
+          ${GITHUB_WORKSPACE}/scripts/minimise-comments/minimist-comments
 
   plan:
     needs: init
