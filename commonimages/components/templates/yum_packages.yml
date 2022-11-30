@@ -1,0 +1,20 @@
+---
+name: yum_packages
+description: component for installing yum packages.
+schemaVersion: 1.0
+metadata:
+  Version: 0.0.1 # update this each time the file changes
+  Platform: "Linux"
+parameters:
+  - Packages:
+      type: string
+      default: ""
+      description: Yum packages to install
+phases:
+  - name: build
+    steps:
+      - name: InstallPackages
+        action: ExecuteBash
+        inputs:
+          commands:
+            - !Sub "sudo yum install -y ${Packages}"

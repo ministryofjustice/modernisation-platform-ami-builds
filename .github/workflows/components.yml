@@ -1,0 +1,328 @@
+---
+name: components
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Set to plan or apply'
+        required: true
+        default: 'plan'
+
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+    branches:
+      - main
+    paths:
+      - commonimages/components/**
+      - .github/workflows/components.yml
+
+  push:
+    branches:
+      - main
+    paths:
+      - commonimages/components/**
+      - .github/workflows/components.yml
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+env:
+  AWS_REGION: "eu-west-2"
+  ENVIRONMENT_MANAGEMENT: ${{ secrets.MODERNISATION_PLATFORM_ENVIRONMENTS }}
+
+  # set branch to main on pull requests so plan changes are same as push-to-main
+  TF_IN_AUTOMATION: true
+  TF_VAR_BRANCH_NAME: ${{ github.event_name == 'pull_request' && 'main' || (github.head_ref || github.ref_name) }}
+  TF_VAR_GH_ACTOR_NAME: ${{ github.actor}}
+  TF_ENV: production
+
+  BASE_DIR: commonimages/components
+  DEFAULT_TERRAFORM_VERSION: 1.3.3
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+
+    outputs:
+      action: ${{ steps.parseinput.outputs.action }}
+      # plan_args: ${{ steps.parseinput.outputs.plan_args }} ????
+      pr_number: ${{ steps.parseinput.outputs.pr_number }}
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
+      # get PR number: for posting PR comments and figuring out changed files
+      - name: Get PR number on push
+        id: get_pr_number
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          pr_number=$(curl -sS \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/pulls \
+            | jq -r '.[0].number')
+          if [[ $pr_number == "null" ]]; then
+            echo "Could not find PR number for commit=${{ github.sha }}"
+            exit 1
+          fi
+          echo "pr=${pr_number}" >> $GITHUB_OUTPUT
+
+      - name: Validate workflow dispatch
+        id: projects_workflow_dispatch
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo "Validate [action=${{ github.event.inputs.action }}]"
+          set +o pipefail
+          action=${{ github.event.inputs.action }}
+          if [[ $action != "plan" && $action != "apply" && $action != "driftcheck" ]]; then
+            echo "Unexpected value for $action [$action], must be plan/apply/driftcheck" >&2
+            exit 1
+          fi
+          echo "action=${action}" >> $GITHUB_OUTPUT
+
+      - name: Parse inputs
+        id: parseinput
+        run: |
+          echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
+          action="plan"
+          pr_number=""
+          plan_args=""
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            action="${{ steps.projects_workflow_dispatch.outputs.action }}"
+          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            pr_number="${{ github.event.pull_request.number }}"
+            plan_args="-no-color"  # as we will post plan to PR
+          elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            pr_number="${{ steps.get_pr_number.outputs.pr }}"
+            plan_args="-no-color"  # as we will post plan to PR
+            action="apply"
+          else
+            echo "Unsupported event ${GITHUB_EVENT_NAME}"
+            exit 1
+          fi
+          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args}"
+          echo "action=${action}" >> $GITHUB_OUTPUT
+          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
+          echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
+
+      # security best practice: use specific version of public actions (v0.3.0)
+      - name: Hide previous PR comments
+        uses: int128/hide-comment-action@dc916edd97f54d45bf0c2430935df2fa2e1a9857 # v1.16.0
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          authors: ""
+          starts-with: "**`${{ env.BASE_DIR }}/"
+
+
+  plan:
+    needs: init
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get terraform version
+        id: discover
+        run: |
+          echo "Get terraform version"
+          set +o pipefail
+          required_version=$(grep ^terraform "${BASE_DIR}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+          if [[ -z "$required_version" ]]; then
+            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+            required_version="=${DEFAULT_TERRAFORM_VERSION}"
+          fi
+          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+            exit 1
+          fi
+          version=$(echo "$required_version" | cut -d= -f2)
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ steps.discover.outputs.version }}
+          terraform_wrapper: false
+
+      - name: Init
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          terraform init
+          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          exitcode=0
+          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
+          echo "terrafrom plan exit code = $exitcode"
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+          (( exitcode == 1 )) && exit 1 || exit 0
+
+      - name: Create Plan PR message
+        if: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat tfplan.txt | wc -c)
+            echo '**`${{ env.BASE_DIR }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo
+            echo '```'
+            head -c 65476 tfplan.txt
+            echo
+            echo '```'
+            if [[ $len -gt 65476 ]]; then
+              echo "** Truncated output.  See $url for the rest **"
+            fi
+          }
+          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Post Plan to PR
+        env:
+          message: "${{ env.TF_PLAN_OUT }}"
+          pr_number: "${{ needs.init.outputs.pr_number }}"
+        run: |
+          escaped_message=$(echo "$message" | jq -Rsa .)
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
+            -d '{"body":'"${escaped_message}"'}'
+
+  apply:
+    needs:
+      - init
+      - plan
+    if: ${{ needs.init.outputs.action == 'apply' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: core-shared-services
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get terraform version
+        id: discover
+        run: |
+          echo "Get terraform version"
+          set +o pipefail
+          required_version=$(grep ^terraform "${BASE_DIR}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+          if [[ -z "$required_version" ]]; then
+            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+            required_version="=${DEFAULT_TERRAFORM_VERSION}"
+          fi
+          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+            exit 1
+          fi
+          version=$(echo "$required_version" | cut -d= -f2)
+          echo "version=${version}" >> $GITHUB_OUTPUT
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ steps.discover.outputs.version }}
+          terraform_wrapper: false
+
+      - name: Init
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          terraform init
+          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+      
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          exitcode=0
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terraform plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          echo "terraform plan exit code = $exitcode"
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+          (( exitcode == 1 )) && exit 1 || exit 0
+
+      - name: Apply
+        if: ${{ steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
+
+      - name: Create Apply PR message
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.BASE_DIR }}"
+        run: |
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat tfapply.txt | wc -c)
+            echo '**`${{ env.BASE_DIR }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo
+            echo '```'
+            head -c 65476 tfapply.txt
+            echo
+            echo '```'
+            if [[ $len -gt 65476 ]]; then
+              echo "** Truncated output.  See $url for the rest **"
+            fi
+          }
+          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+
+      - name: Post Apply to PR
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        env:
+          message: "${{ env.TF_APPLY_OUT }}"
+          pr_number: "${{ needs.init.outputs.pr_number }}"
+        run: |
+          escaped_message=$(echo "$message" | jq -Rsa .)
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
+            -d '{"body":'"${escaped_message}"'}'
