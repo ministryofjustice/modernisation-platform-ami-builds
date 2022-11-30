@@ -387,6 +387,14 @@ jobs:
       - name: Init
         working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
         run: |
+          echo 'ls'
+          ls
+          echo 'ls ..'
+          ls ..
+          echo 'ls ../..'
+          ls ../..
+          echo 'ls ../../..'
+          ls ../../..
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
       
