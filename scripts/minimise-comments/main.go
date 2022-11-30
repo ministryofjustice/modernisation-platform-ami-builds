@@ -97,19 +97,18 @@ func getJSON() {
 		panic(err)
 	}
 
-	isValid := json.Valid(data)
-
-	if isValid {
-		fmt.Println("It's valid!")
-	} else {
-		fmt.Println("It's not valid")
-	}
-
 	var message GqlTop
 
 	newerr := json.Unmarshal(data, &message)
 	if newerr != nil {
 		fmt.Println(newerr)
+	}
+
+	// GitHub token ok?
+	if token != "" {
+		fmt.Println("Got the token.")
+	} else {
+		fmt.Println("Not got the token.")
 	}
 
 	// Print results
