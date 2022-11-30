@@ -9,46 +9,59 @@ import (
 	"os"
 )
 
-// Create structure for returned JSON.
-type GqlTop struct {
-	Data GqlData `json:"data"`
+// JSON reponse structure from GraphQL query
+type graphqlQuery struct {
+	Data graphqlQueryData `json:"data"`
 }
 
-type GqlData struct {
-	Repo GqlRepo `json:"repository"`
+type graphqlQueryData struct {
+	Repo graphqlQueryRepo `json:"repository"`
 }
 
-type GqlRepo struct {
-	Pr GqlPR `json:"pullRequest"`
+type graphqlQueryRepo struct {
+	Pr graphqlQueryPr `json:"pullRequest"`
 }
 
-type GqlPR struct {
-	Comments GqlComments `json:"comments"`
+type graphqlQueryPr struct {
+	Comments graphqlQueryComments `json:"comments"`
 }
 
-type GqlComments struct {
-	Node []GqlNode `json:"nodes"`
+type graphqlQueryComments struct {
+	Node []graphqlQueryNode `json:"nodes"`
 }
 
-type GqlNode struct {
+type graphqlQueryNode struct {
 	Id        string `json:"id"`
 	Body      string `json:"body"`
 	Minimized bool   `json:"isMinimized"`
 }
 
-func main() {
-	// Query
-	queryResult := postHttp(createQuery())
-	printResults(queryResult)
-
-// 	// Mutation
-// 	postHttp(createMutation())
-// 	printResults(httpPost)
+// JSON response structure from GraphQL mutation
+type graphqlMutation struct {
+	Data graphqlMutationData `json:"data"`
 }
 
-// Assemble the GraphQL query to fetch comments on a PR.
+type graphqlMutationData struct {
+	Comment graphqlMutationComment `json:"minimizeComment"`
+}
+
+type graphqlMutationComment struct {
+	Id string `json:"clientMutationId"`
+}
+
+func main() {
+	// GraphQL query
+	queryResult := postHttp(createQuery())
+	printQueryResults(queryResult)
+
+	// GraphQL mutation
+	mutationResult := postHttp(createMutation())
+	printMutationResults(mutationResult)
+}
+
+// Assemble GraphQL query
 func createQuery() []byte {
-	jsonData := map[string]string{
+	queryData := map[string]string{
 		"query": `
 			query {
 				repository(owner: "ministryofjustice", name: "modernisation-platform-ami-builds") {
@@ -66,8 +79,8 @@ func createQuery() []byte {
 		`,
 	}
 
-	// Encode GraphQL query into JSON
-	jsonValue, err := json.Marshal(jsonData)
+	// Encode into JSON
+	jsonValue, err := json.Marshal(queryData)
 	if err != nil {
 		panic(err)
 	}
@@ -75,23 +88,31 @@ func createQuery() []byte {
 	return jsonValue
 }
 
-// Assemble the GraphQL mutation to minimise comments on a PR.
-// func createMutation() {
-// 	mutationData := map[string]string{
-// 		"mutation": `
-// 			mutation minimizeComment(IC_kwDOGDHVyM5Mh8d0: ID!) {
-// 				minimizeComment(input: { classifier: OUTDATED, subjectId: IC_kwDOGDHVyM5Mh8d0 }) {
-// 		  			clientMutationId
-// 				}
-// 	  	}
-// `,
-// 	}
-// }
+// Assemble GraphQL mutation
+func createMutation() []byte {
+	mutationData := map[string]string{
+		"mutation": `
+			mutation {
+				minimizeComment(input: {classifier: OUTDATED, subjectId: "IC_kwDOGDHVyM5Mh8d0"}) {
+			  		clientMutationId
+				}
+		  	}
+
+		`,
+	}
+
+	// Encode into JSON
+	jsonValue, err := json.Marshal(mutationData)
+	if err != nil {
+		panic(err)
+	}
+
+	return jsonValue
+}
 
 func postHttp(postData []byte) []byte {
 	// Get environment variables
 	githubToken := os.Getenv("GITHUB_TOKEN")
-
 
 	// HTTP request
 	request, err := http.NewRequest("POST", "https://api.github.com/graphql", bytes.NewBuffer(postData))
@@ -123,15 +144,24 @@ func postHttp(postData []byte) []byte {
 	return data
 }
 
+func printQueryResults(results []byte) {
+	var response graphqlQuery
 
-
-func printResults(results []byte) {
-	var message GqlTop
-
-	newerr := json.Unmarshal(results, &message)
-	if newerr != nil {
-		fmt.Println(newerr)
+	err := json.Unmarshal(results, &response)
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	fmt.Println(message.Data.Repo.Pr.Comments.Node[0].Id)
+	fmt.Println("Query:", response.Data.Repo.Pr.Comments.Node[0].Id)
+}
+
+func printMutationResults(results []byte) {
+	var response graphqlMutation
+
+	err := json.Unmarshal(results, &response)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Mutation:", response)
 }
