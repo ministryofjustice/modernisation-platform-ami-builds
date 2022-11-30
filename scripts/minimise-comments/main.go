@@ -144,12 +144,11 @@ func commentIdsToMinimise(response graphqlQuery) []string {
 
 	numberOfComments := len(response.Data.Repo.Pr.Comments.Node)
 	teamDir := os.Getenv("TEAM_DIR")
-	teamDirWithSlashes := "/" + teamDir + "/"
 
 	var idsToMinimize []string
 
 	for i := 0; i < numberOfComments; i++ {
-		if strings.Contains(response.Data.Repo.Pr.Comments.Node[i].Body, teamDirWithSlashes) {
+		if strings.Contains(response.Data.Repo.Pr.Comments.Node[i].Body, teamDir) {
 			idsToMinimize = append(idsToMinimize, response.Data.Repo.Pr.Comments.Node[i].Id)
 		}
 	}
