@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 )
 
 // JSON reponse structure from GraphQL query
@@ -37,17 +38,17 @@ type graphqlQueryNode struct {
 }
 
 // JSON response structure from GraphQL mutation
-type graphqlMutation struct {
-	Data graphqlMutationData `json:"data"`
-}
+// type graphqlMutation struct {
+// 	Data graphqlMutationData `json:"data"`
+// }
 
-type graphqlMutationData struct {
-	Comment graphqlMutationComment `json:"minimizeComment"`
-}
+// type graphqlMutationData struct {
+// 	Comment graphqlMutationComment `json:"minimizeComment"`
+// }
 
-type graphqlMutationComment struct {
-	Id string `json:"clientMutationId"`
-}
+// type graphqlMutationComment struct {
+// 	Id string `json:"clientMutationId"`
+// }
 
 func main() {
 	// GraphQL query
@@ -55,28 +56,35 @@ func main() {
 	printQueryResults(queryResult)
 
 	// GraphQL mutation
-	mutationResult := postHttp(createMutation())
-	printMutationResults(mutationResult)
+	postHttp(createMutation())
 }
 
 // Assemble GraphQL query
 func createQuery() []byte {
-	queryData := map[string]string{
-		"query": `
-			query {
-				repository(owner: "ministryofjustice", name: "modernisation-platform-ami-builds") {
-					pullRequest(number: 107) {
-						comments(last: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
-							nodes {
-								id
-								body
-								isMinimized
-							}
+	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
+	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
+	githubOwner := githubOwnerRepoList[0]
+	githubRepo := githubOwnerRepoList[1]
+	githubPr := "107"
+
+	queryValue := fmt.Sprintf(`
+		query {
+			repository(owner: "%+v", name: "%+v") {
+				pullRequest(number: %+v) {
+					comments(last: 100, orderBy: { field: UPDATED_AT, direction: DESC }) {
+						nodes {
+							id
+							body
+							isMinimized
 						}
 					}
 				}
 			}
-		`,
+		}
+	`, githubOwner, githubRepo, githubPr)
+
+	queryData := map[string]string{
+		"query": queryValue,
 	}
 
 	// Encode into JSON
@@ -91,13 +99,12 @@ func createQuery() []byte {
 // Assemble GraphQL mutation
 func createMutation() []byte {
 	mutationData := map[string]string{
-		"mutation": `
+		"query": `
 			mutation {
 				minimizeComment(input: {classifier: OUTDATED, subjectId: "IC_kwDOGDHVyM5Mh8d0"}) {
 			  		clientMutationId
 				}
 		  	}
-
 		`,
 	}
 
@@ -155,13 +162,18 @@ func printQueryResults(results []byte) {
 	fmt.Println("Query:", response.Data.Repo.Pr.Comments.Node[0].Id)
 }
 
-func printMutationResults(results []byte) {
-	var response graphqlMutation
+// func printMutationResults(results []byte) {
+// 	raw := string(results)
+// 	fmt.Println("Mutation results (raw):", raw)
 
-	err := json.Unmarshal(results, &response)
-	if err != nil {
-		fmt.Println(err)
-	}
+// 	var response graphqlMutation
 
-	fmt.Println("Mutation:", response)
-}
+// 	fmt.Println("Empty interface:", response)
+
+// 	err := json.Unmarshal(results, &response)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+
+// 	fmt.Println("Mutation:", response.Data.Comment.Id)
+// }
