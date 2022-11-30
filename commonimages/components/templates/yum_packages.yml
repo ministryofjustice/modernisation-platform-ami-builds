@@ -22,4 +22,4 @@ phases:
         action: ExecuteBash
         inputs:
           commands:
-            - !Sub "sudo yum install -y ${Packages}"
+            - sudo yum install -y {{ Packages }}

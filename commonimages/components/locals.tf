@@ -14,7 +14,7 @@ locals {
     for component_filename, data in local.components_data :
     component_filename => {
       raw  = data
-      yaml = yamldecode(replace(data, "!Sub ", "")) # stop yamldecode breaking from cloudformation specific syntax. Not trusted cf.
+      yaml = yamldecode(data)
     }
   }
 
