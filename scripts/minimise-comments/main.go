@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-// Create structs
+// Create structure for returned JSON.
 type GqlTop struct {
 	Data GqlData `json:"data"`
 }
@@ -37,16 +37,17 @@ type GqlNode struct {
 }
 
 func main() {
+	// Query
+	queryResult := postHttp(createQuery())
+	printResults(queryResult)
 
-	getJSON()
-	minimiseComment()
+// 	// Mutation
+// 	postHttp(createMutation())
+// 	printResults(httpPost)
 }
 
-func getJSON() {
-	// Get environment variables
-	token := os.Getenv("GITHUB_TOKEN")
-
-	// GraphQL query
+// Assemble the GraphQL query to fetch comments on a PR.
+func createQuery() []byte {
 	jsonData := map[string]string{
 		"query": `
 			query {
@@ -71,8 +72,29 @@ func getJSON() {
 		panic(err)
 	}
 
+	return jsonValue
+}
+
+// Assemble the GraphQL mutation to minimise comments on a PR.
+// func createMutation() {
+// 	mutationData := map[string]string{
+// 		"mutation": `
+// 			mutation minimizeComment(IC_kwDOGDHVyM5Mh8d0: ID!) {
+// 				minimizeComment(input: { classifier: OUTDATED, subjectId: IC_kwDOGDHVyM5Mh8d0 }) {
+// 		  			clientMutationId
+// 				}
+// 	  	}
+// `,
+// 	}
+// }
+
+func postHttp(postData []byte) []byte {
+	// Get environment variables
+	githubToken := os.Getenv("GITHUB_TOKEN")
+
+
 	// HTTP request
-	request, err := http.NewRequest("POST", "https://api.github.com/graphql", bytes.NewBuffer(jsonValue))
+	request, err := http.NewRequest("POST", "https://api.github.com/graphql", bytes.NewBuffer(postData))
 	if err != nil {
 		panic(err)
 	}
@@ -80,7 +102,7 @@ func getJSON() {
 	client := &http.Client{}
 
 	// HTTP headers
-	tokenHeader := "bearer " + token
+	tokenHeader := "bearer " + githubToken
 	request.Header.Add("content-type", "application/json")
 	request.Header.Add("Authorization", tokenHeader)
 
@@ -98,17 +120,18 @@ func getJSON() {
 		panic(err)
 	}
 
+	return data
+}
+
+
+
+func printResults(results []byte) {
 	var message GqlTop
 
-	newerr := json.Unmarshal(data, &message)
+	newerr := json.Unmarshal(results, &message)
 	if newerr != nil {
 		fmt.Println(newerr)
 	}
 
-	// Print results
 	fmt.Println(message.Data.Repo.Pr.Comments.Node[0].Id)
-}
-
-func minimiseComment() {
-	
 }
