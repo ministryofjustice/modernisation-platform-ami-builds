@@ -204,7 +204,7 @@ jobs:
           starts-with: "**`${{ env.TEAM_DIR }}/"
 
       - name: Hide previous PR comments (DSOS-1525)
-        # if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
