@@ -74,7 +74,10 @@ jobs:
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
       matrix: ${{ steps.setupproject.outputs.matrix }}
 
-    permissions: write-all
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout the code
@@ -197,11 +200,12 @@ jobs:
           echo "]}"
 
       - name: Hide previous PR comments
-        if: ${{ github.event_name == 'pull_request' }}
+        # if: ${{ github.event_name == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
-          PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
+          # PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
+          PR_NUMBER: "107"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
           go build
