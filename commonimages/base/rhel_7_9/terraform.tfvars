@@ -39,7 +39,7 @@ components_common = [
 
 components_custom = [
   {
-    path = "../components/ansible.yml.tftpl"
+    path = "./components/ansible.yml.tftpl"
     parameters = []
   }
 ]
