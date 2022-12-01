@@ -49,10 +49,7 @@ func main() {
 func createQuery() []byte {
 	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
 	fmt.Println("GITHUB_REPOSITORY:", githubOwnerRepo) // TODO: Remove after testing
-
 	githubPr := os.Getenv("PR_NUMBER")
-	fmt.Println("PR_NUMBER:", githubPr) // TODO: Remove after testing
-	
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
 	githubRepo := githubOwnerRepoList[1]
@@ -148,7 +145,6 @@ func commentIdsToMinimise(response graphqlQuery) []string {
 
 	numberOfComments := len(response.Data.Repo.Pr.Comments.Node)
 	commentBodyContains := os.Getenv("COMMENT_BODY_CONTAINS")
-	fmt.Println("COMMENT_BODY_CONTAINS:", commentBodyContains) // TODO: Remove after testing
 
 	var idsToMinimize []string
 
