@@ -29,6 +29,7 @@ imagebuilders = {
         "ec2launch-v2-windows"
       ]
       components_custom = [
+        "../components/windows_server_2022_jumpserver/powershell_core.yml",
         "../components/windows_server_2022_jumpserver/prometheus_windows_exporter.yml",
         "../components/windows_server_2022_jumpserver/jumpserver.yml"
       ]
