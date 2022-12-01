@@ -10,10 +10,6 @@ block_device_mappings_ebs = [
   }
 ]
 
-components_aws = [
-  "update-linux",
-  "stig-build-linux-medium"
-]
 
 infrastructure_configuration = {
   instance_types = ["t3.medium"]
