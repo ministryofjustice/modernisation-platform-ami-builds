@@ -26,12 +26,12 @@ components_aws = [
 
 components_common = [
   {
-    name       = "yum_packages"
+    name = "yum_packages"
     parameters = [{
       name  = "Packages"
       value = "wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel xz-devel expat-devel musl-devel libffi-devel xz"
     }]
-  }, {
+    }, {
     name       = "python_3_6"
     parameters = []
   }
