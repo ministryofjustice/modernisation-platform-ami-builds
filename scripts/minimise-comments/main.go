@@ -38,7 +38,6 @@ type graphqlQueryNode struct {
 }
 
 func main() {
-	// Query
 	queryResult := postHttp(createQuery())
 	queryUnmarshalled := unmarshalQuery(queryResult)
 	idsToMinimise := commentIdsToMinimise(queryUnmarshalled)
@@ -48,7 +47,6 @@ func main() {
 // Assemble GraphQL query
 func createQuery() []byte {
 	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
-	fmt.Println("GITHUB_REPOSITORY:", githubOwnerRepo) // TODO: Remove after testing
 	githubPr := os.Getenv("PR_NUMBER")
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
@@ -177,5 +175,4 @@ func minimiseComments(commentIds []string) {
 		responseString := string(responseBytes)
 		fmt.Println("HTTP repsonse for", commentIds[i], ":", responseString)
 	}
-
 }

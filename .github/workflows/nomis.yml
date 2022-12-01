@@ -196,22 +196,12 @@ jobs:
           done
           echo "]}"
 
-      # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@24848bfab99f16e129632e27397da999b9d1b2c0
         if: ${{ github.event_name == 'pull_request' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          authors: ""
-          starts-with: "**`${{ env.TEAM_DIR }}/"
-
-      - name: Hide previous PR comments (DSOS-1525)
-        # if: ${{ github.event_name == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
-          # PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
-          PR_NUMBER: "107"
+          PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
           go build
