@@ -176,7 +176,7 @@ jobs:
             projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           fi
           echo List of projects [ ${projects} ]
-          echo "projects=[ ${projects} ]" >> $GITHUB_OUTPUT
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
 
       - name: Parse inputs
         id: parseinput
