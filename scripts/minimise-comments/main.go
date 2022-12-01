@@ -48,11 +48,14 @@ func main() {
 // Assemble GraphQL query
 func createQuery() []byte {
 	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
-	fmt.Println("GITHUB_REPOSITORY:", githubOwnerRepo)
+	fmt.Println("GITHUB_REPOSITORY:", githubOwnerRepo) // TODO: Remove after testing
+
+	githubPr := os.Getenv("PR_NUMBER")
+	fmt.Println("PR_NUMBER:", githubPr) // TODO: Remove after testing
+	
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
 	githubRepo := githubOwnerRepoList[1]
-	githubPr := "107" // TODO: Grab the PR number from the GitHub Actions workflow.
 
 	queryValue := fmt.Sprintf(`
 		query {
@@ -138,7 +141,6 @@ func postHttp(postData []byte) []byte {
 		panic(err)
 	}
 
-
 	return data
 }
 
@@ -146,7 +148,7 @@ func commentIdsToMinimise(response graphqlQuery) []string {
 
 	numberOfComments := len(response.Data.Repo.Pr.Comments.Node)
 	commentBodyContains := os.Getenv("COMMENT_BODY_CONTAINS")
-	fmt.Println("COMMENT_BODY_CONTAINS:", commentBodyContains)
+	fmt.Println("COMMENT_BODY_CONTAINS:", commentBodyContains) // TODO: Remove after testing
 
 	var idsToMinimize []string
 
