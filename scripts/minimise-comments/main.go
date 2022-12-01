@@ -178,6 +178,6 @@ func minimiseComments(commentIds []string) {
 	for i := 0; i < numberOfIds; i++ {
 		responseBytes := postHttp(createMutation(commentIds[i]))
 		responseString := string(responseBytes)
-		fmt.Println("HTTP repsonse for", commentIds[i], ":", responseString)
+		fmt.Println("HTTP repsonse for comment ID", commentIds[i], ":", responseString)
 	}
 }
