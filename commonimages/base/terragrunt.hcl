@@ -1,8 +1,15 @@
+locals {
+  ami_base_name = path_relative_to_include()
+}
+inputs = { # pass vars to terraform
+  ami_base_name = local.ami_base_name
+}
 
-terraform {
-  backend "s3" {
+remote_state {
+  backend = "s3"
+  config = {
     bucket               = "modernisation-platform-terraform-state"
-    key                  = "ami-commonimages/rhel_7_9.tfstate"
+    key                  = "ami-commonimages/${local.ami_base_name}.tfstate"
     region               = "eu-west-2"
     encrypt              = true
     acl                  = "bucket-owner-full-control"
