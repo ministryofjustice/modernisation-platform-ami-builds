@@ -24,15 +24,22 @@ components_aws = [
   "stig-build-linux-medium"
 ]
 
+components_common = [
+  {
+    name       = "yum_packages"
+    parameters = [{
+      name  = "Packages"
+      value = "wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel libffi-devel"
+    }]
+  }, {
+    name       = "python_3_9"
+    parameters = []
+  }
+]
+
 components_custom = [
   {
-    path       = "./components/rhel_7_9/packages.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/rhel_7_9/python.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/ansible.yml.tftpl"
+    path = "../components/ansible.yml.tftpl"
     parameters = []
   }
 ]
@@ -41,4 +48,8 @@ launch_template_exists = false
 
 systems_manager_agent = {
   uninstall_after_build = false
+}
+
+infrastructure_configuration = {
+  instance_types = ["t3.medium"]
 }
