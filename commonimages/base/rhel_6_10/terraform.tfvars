@@ -39,7 +39,10 @@ components_common = [
 
 components_custom = [
   {
-    path       = "./components/stig_rhel6_ansible.yml.tftpl"
+    path       = "./components/rhel_6_10/stig_rhel6_ansible.yml.tftpl"
+    parameters = []
+  }, {
+    path       = "./components/ansible.yml.tftpl"
     parameters = []
   }
 ]
