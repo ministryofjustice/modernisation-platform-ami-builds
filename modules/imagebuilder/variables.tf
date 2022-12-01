@@ -46,6 +46,18 @@ variable "account_ids_lookup" {
   type        = map(string)
 }
 
+variable "components_common" {
+  type = list(object({
+    name = string
+    parameters = list(object({
+      name  = string
+      value = string
+    }))
+  }))
+  default     = []
+  description = "The common components used to build the ami"
+}
+
 variable "components_custom" {
   type = list(object({
     path = string

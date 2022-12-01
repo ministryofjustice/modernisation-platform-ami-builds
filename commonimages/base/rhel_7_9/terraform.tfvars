@@ -19,6 +19,11 @@ parent_image = {
   }
 }
 
+components_aws = [
+  "update-linux",
+  "stig-build-linux-medium"
+]
+
 components_custom = [
   {
     path       = "./components/rhel_7_9/packages.yml.tftpl"
