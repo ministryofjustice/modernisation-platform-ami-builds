@@ -37,17 +37,22 @@ type graphqlQueryNode struct {
 	Minimized bool   `json:"isMinimized"`
 }
 
+var githubPr string = os.Getenv("PR_NUMBER")
+
 func main() {
-	queryResult := postHttp(createQuery())
-	queryUnmarshalled := unmarshalQuery(queryResult)
-	idsToMinimise := commentIdsToMinimise(queryUnmarshalled)
-	minimiseComments(idsToMinimise)
+	if githubPr == "" {
+		fmt.Println("Environment variable PR_NUMBER is an empty string.")
+	} else {
+		queryResult := postHttp(createQuery())
+		queryUnmarshalled := unmarshalQuery(queryResult)
+		idsToMinimise := commentIdsToMinimise(queryUnmarshalled)
+		minimiseComments(idsToMinimise)
+	}
 }
 
 // Assemble GraphQL query
 func createQuery() []byte {
 	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
-	githubPr := os.Getenv("PR_NUMBER")
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
 	githubRepo := githubOwnerRepoList[1]
