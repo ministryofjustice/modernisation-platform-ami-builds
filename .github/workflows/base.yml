@@ -134,7 +134,7 @@ jobs:
             exit 1
           fi
           echo "action=[$action]; list of projects" [${projects}]
-          echo "projects=[${projects}]" >> $GITHUB_OUTPUT
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
           echo "action=${action}" >> $GITHUB_OUTPUT
 
       - name: Get list of committed files
@@ -167,16 +167,16 @@ jobs:
           echo "Updated files: ${updated_files[@]}"
           set +o pipefail
           allprojects=$(find ${BASE_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${BASE_DIR}/terragrunt.hcl" | sed -r "s;${BASE_DIR}/([^/]+)/.+;\1;" | sort -u)
-          echo "all projects: [${allprojects[@]}]"
+          echo "all projects: ${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.file_list }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
           workflow_path=.github/workflows/${GITHUB_WORKFLOW}.yml
           if [[ " ${updated_files[*]} " =~ " ${workflow_path} " ]]; then
-            projects=[${allprojects[@]}]
+            projects=${allprojects[@]}
           else
-            projects=[$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))]
+            projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           fi
-          echo List of projects [${projects}]
-          echo "projects=[${projects}]" >> $GITHUB_OUTPUT
+          echo List of projects [ ${projects} ]
+          echo "projects=[ ${projects} ]" >> $GITHUB_OUTPUT
 
       - name: Parse inputs
         id: parseinput
@@ -202,7 +202,7 @@ jobs:
             exit 1
           fi
           echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
-          echo "projects=[${projects}]" >> $GITHUB_OUTPUT
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
           echo "action=${action}" >> $GITHUB_OUTPUT
           echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
           echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
@@ -215,7 +215,7 @@ jobs:
           echo "Setup ansible actions for projects [${projects}]"
           echo -n "matrix={\"include\":["  >> $GITHUB_OUTPUT
           delimiter=""
-          for project in [${projects}]; do
+          for project in ${projects}; do
             echo -n "${delimiter}"  >> $GITHUB_OUTPUT
             echo -n '{"project":"'${project}'"}'  >> $GITHUB_OUTPUT
             delimiter=","
