@@ -43,14 +43,12 @@ func main() {
 	queryUnmarshalled := unmarshalQuery(queryResult)
 	idsToMinimise := commentIdsToMinimise(queryUnmarshalled)
 	minimiseComments(idsToMinimise)
-
-	// Mutation
-	// postHttp(createMutation())
 }
 
 // Assemble GraphQL query
 func createQuery() []byte {
 	githubOwnerRepo := os.Getenv("GITHUB_REPOSITORY")
+	fmt.Println("GITHUB_REPOSITORY:", githubOwnerRepo)
 	githubOwnerRepoList := strings.Split(githubOwnerRepo, "/")
 	githubOwner := githubOwnerRepoList[0]
 	githubRepo := githubOwnerRepoList[1]
@@ -137,18 +135,20 @@ func postHttp(postData []byte) []byte {
 		panic(err)
 	}
 
+
 	return data
 }
 
 func commentIdsToMinimise(response graphqlQuery) []string {
 
 	numberOfComments := len(response.Data.Repo.Pr.Comments.Node)
-	teamDir := os.Getenv("TEAM_DIR")
+	commentBodyContains := os.Getenv("COMMENT_BODY_CONTAINS")
+	fmt.Println("COMMENT_BODY_CONTAINS:", commentBodyContains)
 
 	var idsToMinimize []string
 
 	for i := 0; i < numberOfComments; i++ {
-		if strings.Contains(response.Data.Repo.Pr.Comments.Node[i].Body, teamDir) {
+		if strings.Contains(response.Data.Repo.Pr.Comments.Node[i].Body, commentBodyContains) {
 			idsToMinimize = append(idsToMinimize, response.Data.Repo.Pr.Comments.Node[i].Id)
 		}
 	}
@@ -172,8 +172,9 @@ func minimiseComments(commentIds []string) {
 	numberOfIds := len(commentIds)
 
 	for i := 0; i < numberOfIds; i++ {
-		postHttp(createMutation(commentIds[i]))
-		fmt.Println("Minimised:", commentIds[i])
+		responseBytes := postHttp(createMutation(commentIds[i]))
+		responseString := string(responseBytes)
+		fmt.Println("HTTP repsonse for", commentIds[i], ":", responseString)
 	}
 
 }
