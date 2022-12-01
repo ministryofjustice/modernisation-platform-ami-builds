@@ -87,7 +87,10 @@ func createMutation(commentId string) []byte {
 	mutationValue := fmt.Sprintf(`
 		mutation {
 			minimizeComment(input: {classifier: OUTDATED, subjectId: "%+v"}) {
-			  	clientMutationId
+				minimizedComment {
+					minimizedReason
+					isMinimized
+				}
 			}
 	  	}`, commentId)
 
