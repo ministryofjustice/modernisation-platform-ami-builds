@@ -5,7 +5,7 @@
 configuration_version = "0.0.1"
 description           = "shared rhel 6.10 base image"
 
-ami_base_name = "rhel_7_9"
+ami_base_name = "rhel_6_10"
 
 tags = {
   os-version = "rhel 6.10"
@@ -27,25 +27,19 @@ components_aws = [
 components_common = [
   {
     name       = "yum_packages"
-    parameters = []
-    }, {
+    parameters = [{
+      name  = "Packages"
+      value = "wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel xz-devel expat-devel musl-devel libffi-devel xz"
+    }]
+  }, {
     name       = "python_3_6"
-    parameters = []
-    }, {
-    name       = "./components/ansible.yml.tftpl"
     parameters = []
   }
 ]
 
 components_custom = [
   {
-    path       = "./components/rhel_7_9/packages.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/rhel_7_9/python.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/ansible.yml.tftpl"
+    path       = "components/stig_rhel6_ansible.yml.tftpl"
     parameters = []
   }
 ]
@@ -56,22 +50,7 @@ systems_manager_agent = {
   uninstall_after_build = false
 }
 
-
-
-
-
-
-      
-
-      components_custom = [
-        "../components/rhel_6_10_baseimage/packages.yml",
-        "../components/rhel_6_10_baseimage/python.yml",
-        "../components/ansible.yml.tftpl",
-        "../components/rhel_6_10_baseimage/stig_rhel6_ansible.yml.tftpl"
-      ]
-
-      # SSM agent must be installed via user_data prior to components being run
-      user_data = <<EOF
+user_data = <<EOF
 #!/bin/bash
 install_ssm_agent() {
   sudo yum install -y https://s3.eu-west-2.amazonaws.com/amazon-ssm-eu-west-2/3.0.1390.0/linux_amd64/amazon-ssm-agent.rpm
@@ -82,41 +61,8 @@ install_ssm_agent 2>&1 | logger -p local3.info -t user-data
 echo "install_ssm_agent end" | logger -p local3.info -t user-data
 EOF
 
-      systems_manager_agent = {
-        uninstall_after_build = false
-      }
-    }
 
-    infrastructure_configuration = {
-      instance_types = ["t2.large"]
-    }
-
-    image_pipeline = {
-      schedule = {
-        schedule_expression = "cron(0 0 1 * ? *)"
-      }
-    }
-  }
+infrastructure_configuration = {
+  instance_types = ["t2.large"]
 }
 
-distribution_configuration_by_branch = {
-  default = {
-    ami_distribution_configuration = {
-      target_account_names = [
-        "core-shared-services-production"
-      ]
-      launch_permission_account_names = [
-        "core-shared-services-production",
-        "nomis-development",
-        "nomis-test",
-        "oasys-development",
-        "oasys-test"
-      ]
-    }
-
-    launch_template_configuration = {
-      account_name       = "nomis-development"
-      launch_template_id = "lt-04af9b9914ae9a578"
-    }
-  }
-}
