@@ -74,6 +74,11 @@ jobs:
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
       matrix: ${{ steps.setupproject.outputs.matrix }}
 
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
     steps:
       - name: Checkout the code
         uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8 # v3.1.0
@@ -194,15 +199,16 @@ jobs:
           done
           echo "]}"
 
-      # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@24848bfab99f16e129632e27397da999b9d1b2c0
         if: ${{ github.event_name == 'pull_request' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          authors: ""
-          starts-with: "**`${{ env.TEAM_DIR }}/"
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
+          PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
+        run: |
+          cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
+          go build
+          ./minimise-comments
 
   plan:
     needs: init
@@ -300,7 +306,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
             -d '{"body":'"${escaped_message}"'}'
-
+      
   apply:
     needs:
       - init
