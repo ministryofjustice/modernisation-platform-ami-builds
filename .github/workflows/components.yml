@@ -128,7 +128,7 @@ jobs:
 
       # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@dc916edd97f54d45bf0c2430935df2fa2e1a9857 # v1.16.0
+        uses: int128/hide-comment-action@2fc43f925c1b8699f949e439d0af8bfc8544476b # v1.18.0
         if: ${{ github.event_name == 'pull_request' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
