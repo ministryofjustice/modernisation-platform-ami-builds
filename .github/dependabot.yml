@@ -20,6 +20,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/commonimages/components"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/modernisation-platform"
     schedule:
       interval: "daily"
