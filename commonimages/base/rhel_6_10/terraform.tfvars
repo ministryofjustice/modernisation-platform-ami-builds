@@ -24,25 +24,9 @@ components_aws = [
   "update-linux",
 ]
 
-components_common = [
-  {
-    name = "yum_packages"
-    parameters = [{
-      name  = "Packages"
-      value = "wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel xz-devel expat-devel musl-devel libffi-devel xz"
-    }]
-    }, {
-    name       = "python_3_6"
-    parameters = []
-  }
-]
-
 components_custom = [
   {
     path       = "./components/rhel_6_10/stig_rhel6_ansible.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/ansible.yml.tftpl"
     parameters = []
   }
 ]

@@ -24,25 +24,7 @@ components_aws = [
   "stig-build-linux-medium"
 ]
 
-components_common = [
-  {
-    name = "yum_packages"
-    parameters = [{
-      name  = "Packages"
-      value = "wget curl unzip git nc ca-certificates gcc screen zlib-devel bzip2-devel openssl-devel libffi-devel"
-    }]
-    }, {
-    name       = "python_3_9"
-    parameters = []
-  }
-]
-
-components_custom = [
-  {
-    path       = "./components/ansible.yml.tftpl"
-    parameters = []
-  }
-]
+components_custom = []
 
 launch_template_exists = false
 
