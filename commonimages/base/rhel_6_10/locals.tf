@@ -15,13 +15,13 @@ locals {
       }, {
       name       = "python_3_6"
       parameters = []
-    }, {
-      name       = "ansible"
-      parameters = [{
-        name = "Ami"
-        value = join("_", [var.ami_name_prefix, var.ami_base_name])
       }, {
-        name = "Branch"
+      name = "ansible"
+      parameters = [{
+        name  = "Ami"
+        value = join("_", [var.ami_name_prefix, var.ami_base_name])
+        }, {
+        name  = "Branch"
         value = var.BRANCH_NAME == "" ? "main" : var.BRANCH_NAME
       }]
     }
