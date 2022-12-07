@@ -176,14 +176,7 @@ jobs:
             projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           fi
           echo List of projects [ ${projects} ]
-          echo -n "projects=["  >> $GITHUB_OUTPUT
-          delimiter=""
-          for project in ${projects[@]}; do
-            echo -n "${delimiter}"  >> $GITHUB_OUTPUT
-            echo -n '\"${project}\"'  >> $GITHUB_OUTPUT
-            delimiter=","
-          done
-          echo "]"  >> $GITHUB_OUTPUT
+          echo ::set-output name=projects::${projects}
 
       - name: Parse inputs
         id: parseinput
