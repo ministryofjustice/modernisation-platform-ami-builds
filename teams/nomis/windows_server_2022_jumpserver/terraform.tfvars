@@ -5,7 +5,7 @@
 imagebuilders = {
 
   windows_server_2022_jumpserver = {
-    configuration_version = "0.0.7"
+    configuration_version = "0.1.0"
     description           = "Windows Server 2022 jumpserver"
 
     tags = {
@@ -29,6 +29,7 @@ imagebuilders = {
         "ec2launch-v2-windows"
       ]
       components_custom = [
+        "../components/windows_server_2022_jumpserver/powershell_core.yml",
         "../components/windows_server_2022_jumpserver/prometheus_windows_exporter.yml",
         "../components/windows_server_2022_jumpserver/jumpserver.yml"
       ]
