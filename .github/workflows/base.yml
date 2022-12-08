@@ -175,7 +175,7 @@ jobs:
           common_files+=("${workflow_path}") # add workflow to common files
           echo "common files: ${common_files[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
-          for file in ${common_files}; do
+          for file in ${common_files[@]}; do
             if [[ " ${updated_files[*]} " =~ " ${file} " ]]; then
               projects=${allprojects[@]}
             fi
