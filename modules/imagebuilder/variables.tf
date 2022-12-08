@@ -8,6 +8,11 @@ variable "team_name" {
   description = "Name of the team used to prefix resources, e.g. nomis"
 }
 
+variable "account_id" {
+  type        = string
+  description = "current account id"
+}
+
 variable "ami_base_name" {
   type        = string
   description = "Name of the image, e.g. rhel_7_9_baseimage"
