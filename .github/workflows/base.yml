@@ -170,11 +170,16 @@ jobs:
           echo "all projects: ${allprojects[@]}"
           changed=$(echo "${{ steps.files.outputs.file_list }}" | tr "[:space:]" "\n" | grep -v "${BASE_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${BASE_DIR}/" | sed -r "s;${BASE_DIR}/([^/]+);\1;g" | sort -u)
           workflow_path=.github/workflows/${GITHUB_WORKFLOW}.yml
-          if [[ " ${updated_files[*]} " =~ " ${workflow_path} " ]]; then
-            projects=${allprojects[@]}
-          else
-            projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
-          fi
+          common_files=( $(ls -p ${BASE_DIR} | grep -v /) ) # base dir files
+          common_files=( "${common_files[@]/#/${BASE_DIR}\/}" ) # prefix with base dir
+          common_files+=("${workflow_path}") # add workflow to common files
+          echo "common files: ${common_files[@]}"
+          projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
+          for file in ${common_files[@]}; do
+            if [[ " ${updated_files[*]} " =~ " ${file} " ]]; then
+              projects=${allprojects[@]}
+            fi
+          done
           echo List of projects [ ${projects} ]
           echo ::set-output name=projects::${projects}
 
