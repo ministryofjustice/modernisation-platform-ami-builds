@@ -53,7 +53,8 @@ variable "account_ids_lookup" {
 
 variable "components_common" {
   type = list(object({
-    name = string
+    name    = string
+    version = string
     parameters = list(object({
       name  = string
       value = string
