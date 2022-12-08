@@ -46,6 +46,20 @@ resource "aws_imagebuilder_image_recipe" "this" {
   }
 
   dynamic "component" {
+    for_each = var.components_common
+    content {
+      component_arn = "arn:aws:imagebuilder:${var.region}:aws:component/${component.value["name"]}/x.x.x"
+      dynamic "parameter" {
+        for_each = component.value["parameters"]
+        content {
+          name  = parameter.value["name"]
+          value = parameter.value["value"]
+        }
+      }
+    }
+  }
+
+  dynamic "component" {
     for_each = var.components_custom
     content {
       component_arn = aws_imagebuilder_component.this[component.value["path"]].arn
@@ -53,8 +67,8 @@ resource "aws_imagebuilder_image_recipe" "this" {
       dynamic "parameter" {
         for_each = component.value["parameters"]
         content {
-          name  = parameter.name
-          value = parameter.value
+          name  = parameter.value["name"]
+          value = parameter.value["value"]
         }
       }
 

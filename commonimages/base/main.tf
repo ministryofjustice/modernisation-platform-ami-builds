@@ -13,6 +13,7 @@ module "imagebuilder" {
   parent_image                    = var.parent_image
   block_device_mappings_ebs       = var.block_device_mappings_ebs
   components_aws                  = var.components_aws
+  components_common               = local.components_common
   components_custom               = var.components_custom
   component_template_args         = local.component_template_args
   user_data                       = var.user_data

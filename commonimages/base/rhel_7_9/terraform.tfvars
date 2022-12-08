@@ -19,21 +19,19 @@ parent_image = {
   }
 }
 
-components_custom = [
-  {
-    path       = "./components/rhel_7_9/packages.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/rhel_7_9/python.yml.tftpl"
-    parameters = []
-    }, {
-    path       = "./components/ansible.yml.tftpl"
-    parameters = []
-  }
+components_aws = [
+  "update-linux",
+  "stig-build-linux-medium"
 ]
+
+components_custom = []
 
 launch_template_exists = false
 
 systems_manager_agent = {
   uninstall_after_build = false
+}
+
+infrastructure_configuration = {
+  instance_types = ["t3.medium"]
 }
