@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Uses the recipe version to avoid any issues with the branch template arg.
   - Platform:
       type: string
@@ -16,7 +16,7 @@ parameters:
       description: AMI to build.
   - Branch:
       type: string
-      description: AMI to build.
+      description: Git branch to use
 phases:
   - name: build
     steps:

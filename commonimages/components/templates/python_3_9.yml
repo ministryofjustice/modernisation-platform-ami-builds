@@ -1,5 +1,5 @@
 ---
-name: install_python_3_9
+name: python_3_9
 description: component for installing python 3.9
 schemaVersion: 1.0
 parameters:
