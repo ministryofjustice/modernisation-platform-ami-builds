@@ -2,6 +2,9 @@
 # BRANCH_NAME =
 # GH_ACTOR_NAME =
 
+
+region = "eu-west-2"
+ami_name_prefix = "nomis"
 imagebuilders = {
 
   rhel_7_9_oracledb_11_2 = {
