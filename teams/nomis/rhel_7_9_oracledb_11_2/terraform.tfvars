@@ -14,8 +14,10 @@ tags = {
 }
 
 parent_image = {
-  owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-7-9/x.x.x"
+  owner = "core-shared-services-production" # Redhat
+  ami_search_filters = {
+    name = ["base_rhel_7_9_*"]
+  }
 }
 
 block_device_mappings_ebs = [
