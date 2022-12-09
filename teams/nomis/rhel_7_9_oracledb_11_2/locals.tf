@@ -17,13 +17,6 @@ locals {
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/nomis"
   }
 
-  # Different distribution config is allowed based on the github branch
-  # triggering the pipeline
-  distribution_configuration = try(
-    var.distribution_configuration_by_branch[var.BRANCH_NAME],
-    var.distribution_configuration_by_branch["default"]
-  )
-
   components_common = [
     {
       name    = "ansible"
