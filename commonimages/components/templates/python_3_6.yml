@@ -1,5 +1,5 @@
 ---
-name: install_python_3_6
+name: python_3_6
 description: component for installing python 3.6
 schemaVersion: 1.0
 parameters:

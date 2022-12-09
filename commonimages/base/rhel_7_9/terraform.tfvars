@@ -1,7 +1,7 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.2"
+configuration_version = "0.0.3"
 description           = "shared rhel 7.9 base image"
 
 ami_base_name = "rhel_7_9"
