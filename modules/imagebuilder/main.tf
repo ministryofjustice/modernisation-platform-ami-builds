@@ -48,7 +48,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   dynamic "component" {
     for_each = var.components_common
     content {
-      component_arn = "arn:aws:imagebuilder:${var.region}:${var.account_id}:component/${component.value["name"]}/${component.value["version"]}/1"
+      component_arn = "arn:aws:imagebuilder:${var.region}:${var.account_id}:component/${replace(component.value["name"], "_", "-")}/${component.value["version"]}"
       dynamic "parameter" {
         for_each = component.value["parameters"]
         content {

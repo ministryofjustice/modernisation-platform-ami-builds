@@ -173,6 +173,7 @@ jobs:
           common_files=( $(ls -p ${BASE_DIR} | grep -v /) ) # base dir files
           common_files=( "${common_files[@]/#/${BASE_DIR}\/}" ) # prefix with base dir
           common_files+=("${workflow_path}") # add workflow to common files
+          common_files+=("modules/imagebuilder/.+")
           echo "common files: ${common_files[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
           for file in ${common_files[@]}; do
