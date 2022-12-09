@@ -38,7 +38,10 @@ components_aws = [
 ]
 
 components_custom = [
-  "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
+  {
+    path       = "../components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
+    parameters = []
+  }
 ]
 
 systems_manager_agent = {
@@ -55,71 +58,24 @@ image_pipeline = {
   }
 }
 
-distribution_configuration_by_branch = {
-  # push to main branch
-  main = {
-    ami_distribution_configuration = {
-      target_account_names = [
-        "core-shared-services-production"
-      ]
-      launch_permission_account_names = [
-        "core-shared-services-production",
-        "nomis-development",
-        "nomis-test",
-        "nomis-preproduction",
-        "nomis-production"
-      ]
-    }
-  }
-
-  # push to any other branch / local run
-  default = {
-    ami_distribution_configuration = {
-      target_account_names = [
-        "core-shared-services-production"
-      ]
-      launch_permission_account_names = [
-        "core-shared-services-production",
-        "nomis-development",
-        "nomis-test"
-      ]
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-components_custom = []
-
-systems_manager_agent = {
-  uninstall_after_build = false
-}
-
-infrastructure_configuration = {
-  instance_types = ["t3.medium"]
-}
-
-image_pipeline = {
-  schedule = {
-    schedule_expression = "cron(0 0 2 * ? *)"
-  }
-}
+launch_template_exists = false
 
 account_to_distribute_ami = "core-shared-services-production"
 
-launch_permission_account_names = [
-  "core-shared-services-production",
-  "nomis-development",
-  "nomis-test",
-  "oasys-development",
-  "oasys-test"
-]
+launch_permission_accounts_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "nomis-preproduction",
+    "nomis-production"
+  ]
 
-launch_template_exists = false
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test"
+  ]
+}

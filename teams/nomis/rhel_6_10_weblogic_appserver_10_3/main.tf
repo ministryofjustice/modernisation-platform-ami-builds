@@ -20,7 +20,7 @@ module "imagebuilder" {
   user_data                       = var.user_data
   infrastructure_configuration    = var.infrastructure_configuration
   account_to_distribute_ami       = var.account_to_distribute_ami
-  launch_permission_account_names = var.launch_permission_account_names
+  launch_permission_account_names = local.launch_permission_account_names
   launch_template_exists          = var.launch_template_exists
   image_pipeline                  = var.image_pipeline
   systems_manager_agent           = var.systems_manager_agent

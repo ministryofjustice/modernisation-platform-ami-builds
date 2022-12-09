@@ -32,4 +32,11 @@ locals {
   ]
 
   component_template_args = {}
+
+  # Different distribution config is allowed based on the github branch
+  # triggering the pipeline
+  launch_permission_account_names = try(
+    var.launch_permission_accounts_by_branch[var.BRANCH_NAME],
+    var.launch_permission_accounts_by_branch["default"]
+  )
 }
