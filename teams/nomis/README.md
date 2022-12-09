@@ -81,3 +81,4 @@ Tips:
 - test the image using the ASG
 - when fully tested, increment version number again and create a PR
 - once PR merged, manually run the pipeline. The image will then be available in the configured environments
+
