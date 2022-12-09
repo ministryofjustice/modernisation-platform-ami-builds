@@ -14,7 +14,7 @@ tags = {
 }
 
 parent_image = {
-  owner = "core-shared-services-production" # Redhat
+  owner = "core-shared-services-production"
   ami_search_filters = {
     name = ["base_rhel_7_9_*"]
   }
