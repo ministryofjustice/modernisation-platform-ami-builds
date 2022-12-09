@@ -15,7 +15,7 @@ locals {
       parameters = []
       }, {
       name    = "ansible"
-      version = "0.0.1"
+      version = "0.0.2"
       parameters = [{
         name  = "Ami"
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
