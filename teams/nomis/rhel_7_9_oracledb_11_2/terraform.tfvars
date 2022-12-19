@@ -100,12 +100,24 @@ image_pipeline = {
 
 account_to_distribute_ami = "core-shared-services-production"
 
-launch_permission_account_names = [
-  "core-shared-services-production",
-  "nomis-development",
-  "nomis-test",
-  "oasys-development",
-  "oasys-test"
-]
+launch_permission_accounts_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "oasys-development",
+    "oasys-test"
+  ]
+
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "oasys-development",
+    "oasys-test"
+  ]
+}
 
 launch_template_exists = false
