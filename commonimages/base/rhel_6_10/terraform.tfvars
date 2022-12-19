@@ -52,4 +52,3 @@ EOF
 infrastructure_configuration = {
   instance_types = ["t2.large"]
 }
-
