@@ -1,0 +1,1 @@
+../locals_shared.tf
