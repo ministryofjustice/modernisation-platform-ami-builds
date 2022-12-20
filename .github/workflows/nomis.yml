@@ -1,8 +1,8 @@
 ---
 name: nomis
 
-# This pipeline works across multiple terraform projects within a team
-# directory with PR comment functionality.
+# This pipeline works across multiple terragrunt projects within a team
+# directory with locking (turnstyle) and PR comment functionality.
 #
 # The init step figures out which projects to plan/apply
 # The plan/apply steps run across each project as a matrix
@@ -10,7 +10,6 @@ name: nomis
 # It allow both plan/apply via manual dispatch.
 # For CI/CD, it runs a plan when PR raised and apply when merged.
 #
-# See teams/nomis/README.md for more details
 
 on:
   workflow_dispatch:
@@ -34,12 +33,22 @@ on:
       - main
     paths:
       - teams/nomis/**
+      - modules/imagebuilder/**
+      - .github/workflows/nomis.yml
+      - ansible/**
 
   push:
     branches:
       - main
     paths:
       - teams/nomis/**
+      - modules/imagebuilder/**
+      - .github/workflows/nomis.yml
+      - ansible/**
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
 
 env:
   AWS_REGION: "eu-west-2"
@@ -54,6 +63,7 @@ env:
   TEAM_DIR: teams/nomis
   PROJECT_DIR_DEPTH: 3
   DEFAULT_TERRAFORM_VERSION: 1.3.3
+  TERRAGRUNT_VERSION: v0.36.1
 
 
 permissions:
@@ -70,6 +80,7 @@ jobs:
 
     outputs:
       action: ${{ steps.parseinput.outputs.action }}
+      plan_args: ${{ steps.parseinput.outputs.plan_args }}
       projects: ${{ steps.parseinput.outputs.projects }}
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
       matrix: ${{ steps.setupproject.outputs.matrix }}
@@ -82,6 +93,16 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
 
       # get PR number: for posting PR comments and figuring out changed files
       - name: Get PR number on push
@@ -97,7 +118,7 @@ jobs:
             echo "Could not find PR number for commit=${{ github.sha }}"
             exit 1
           fi
-          echo ::set-output name=pr::${pr_number}
+          echo "pr=${pr_number}" >> $GITHUB_OUTPUT
 
       # for workflow dispatch, check valid project specified
       - name: Validate workflow dispatch
@@ -108,23 +129,23 @@ jobs:
           set +o pipefail
           projects=${{ github.event.inputs.projects }}
           if [[ ${projects} == "all" ]]; then
-            projects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
+            projects=$(find "${TEAM_DIR}" -name terragrunt.hcl | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
           else
             for project in ${{ github.event.inputs.projects }}; do
-              if [[ ! -e "${TEAM_DIR}/${project}/backend.tf" ]]; then
-                echo "Project not found ${TEAM_DIR}/${project}/backend.tf" >&2
+              if [[ ! -e "${TEAM_DIR}/${project}/terragrunt.hcl" ]]; then
+                echo "Project not found ${TEAM_DIR}/${project}/terragrunt.hcl" >&2
                 exit 1
               fi
             done
           fi
           action=${{ github.event.inputs.action }}
-          if [[ $action != "plan" && $action != "apply" ]]; then
-            echo "Unexpected value for $action [$action], must be plan/apply" >&2
+          if [[ $action != "plan" && $action != "apply" && $action != "driftcheck" ]]; then
+            echo "Unexpected value for $action [$action], must be plan/apply/driftcheck" >&2
             exit 1
           fi
           echo "action=[$action]; list of projects" [${projects}]
-          echo ::set-output name=projects::${projects}
-          echo ::set-output name=action::${action}
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "action=${action}" >> $GITHUB_OUTPUT
 
       - name: Get list of committed files
         id: files
@@ -138,6 +159,7 @@ jobs:
             echo "Unexpected github event name ${GITHUB_EVENT_NAME}"
             exit 1
           fi
+          echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
           pr_files=$(curl -sS \
           -H "Accept: application/vnd.github+json" \
           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
@@ -145,18 +167,31 @@ jobs:
           | jq .[].filename \
           | sed 's/"//g' \
           | tr '\n' ' ')
-          echo ::set-output name=file_list::${pr_files}
+          echo "file_list=${pr_files}" >> $GITHUB_OUTPUT
 
       - name: Detect pull/push projects
         id: projects_pull_push
         if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
         run: |
-          echo "Updated files: ${{ steps.files.outputs.file_list }}"
+          updated_files="${{ steps.files.outputs.file_list }}"
+          echo "Updated files: ${updated_files[@]}"
           set +o pipefail
-          allprojects=$(find "${TEAM_DIR}" -name backend.tf | grep -v '/.terra' | sed -r 's|/[^/]+$||' | cut -d/ -f${PROJECT_DIR_DEPTH}- | sort -u)
-          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr -s "[:space:]" | tr "[:space:]" "\n" | sed -r  's|/[^/]+$||' |  cut -d/  -f${PROJECT_DIR_DEPTH} | sort -u | sed '/^$/d')
+          allprojects=$(find ${TEAM_DIR} -name terragrunt.hcl | grep -v '/.terra' | grep -v "${TEAM_DIR}/terragrunt.hcl" | sed -r "s;${TEAM_DIR}/([^/]+)/.+;\1;" | sort -u)
+          echo "all projects: ${allprojects[@]}"
+          changed=$(echo "${{ steps.files.outputs.file_list }}" | tr "[:space:]" "\n" | grep -v "${TEAM_DIR}/components/" | sed -r  's|/[^/]+$||' | grep "${TEAM_DIR}/" | sed -r "s;${TEAM_DIR}/([^/]+);\1;g" | sort -u)
+          workflow_path=.github/workflows/${GITHUB_WORKFLOW}.yml
+          common_files=( $(ls -p ${TEAM_DIR} | grep -v /) ) # base dir files
+          common_files=( "${common_files[@]/#/${TEAM_DIR}\/}" ) # prefix with base dir
+          common_files+=("${workflow_path}") # add workflow to common files
+          common_files+=("modules/imagebuilder/.+")
+          echo "common files: ${common_files[@]}"
           projects=$(comm -12 <(echo "${changed}") <(echo "${allprojects}"))
-          echo List of projects [${projects}]
+          for file in ${common_files[@]}; do
+            if [[ " ${updated_files[*]} " =~ " ${file} " ]]; then
+              projects=${allprojects[@]}
+            fi
+          done
+          echo List of projects [ ${projects} ]
           echo ::set-output name=projects::${projects}
 
       - name: Parse inputs
@@ -165,24 +200,28 @@ jobs:
           echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
           action="plan"
           pr_number=""
+          plan_args=""
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
             action="${{ steps.projects_workflow_dispatch.outputs.action }}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ github.event.pull_request.number }}"
+            plan_args="-no-color"  # as we will post plan to PR
           elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ steps.get_pr_number.outputs.pr }}"
+            plan_args="-no-color"  # as we will post plan to PR
             action="apply"
           else
             echo "Unsupported event ${GITHUB_EVENT_NAME}"
             exit 1
           fi
-          echo "Set action=${action} pr_number=${pr_number} project=${projects}"
-          echo ::set-output name=projects::${projects}
-          echo ::set-output name=action::${action}
-          echo ::set-output name=pr_number::${pr_number}
+          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
+          echo "projects=${projects}" >> $GITHUB_OUTPUT
+          echo "action=${action}" >> $GITHUB_OUTPUT
+          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
+          echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
 
       - name: Setup project matrix
         id: setupproject
@@ -190,14 +229,14 @@ jobs:
           projects: ${{ steps.parseinput.outputs.projects }}
         run: |
           echo "Setup ansible actions for projects [${projects}]"
-          echo -n "::set-output name=matrix::{\"include\":["
+          echo -n "matrix={\"include\":["  >> $GITHUB_OUTPUT
           delimiter=""
           for project in ${projects}; do
-            echo -n "${delimiter}"
-            echo -n '{"project":"'${project}'"}'
+            echo -n "${delimiter}"  >> $GITHUB_OUTPUT
+            echo -n '{"project":"'${project}'"}'  >> $GITHUB_OUTPUT
             delimiter=","
           done
-          echo "]}"
+          echo "]}"  >> $GITHUB_OUTPUT
 
       - name: Hide previous PR comments
         if: ${{ github.event_name == 'pull_request' }}
@@ -220,6 +259,7 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+
       - name: Set Account Number
         run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
 
@@ -229,6 +269,7 @@ jobs:
           role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
           role-session-name: githubactionsrolesession
           aws-region: ${{ env.AWS_REGION }}
+
       - name: Get terraform version
         id: discover
         run: |
@@ -244,8 +285,7 @@ jobs:
             exit 1
           fi
           version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}"
-          echo ::set-output name=version::${version}
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
@@ -253,25 +293,26 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      - name: Init and State Refresh
+      - name: Setup Terragrunt
+        run: |
+          wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+          chmod u+x /usr/local/bin/terragrunt
+
+      - name: Init
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only || true
+          terragrunt init
+          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
 
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "terrafrom plan exit code = $exitcode"
-          echo ::set-output name=exitcode::${exitcode}
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terragrunt plan -no-color -detailed-exitcode | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt || exitcode=$?
+          echo "terragrunt plan exit code = $exitcode"
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Create Plan PR message
@@ -281,7 +322,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfplan.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}]('${url}')'
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terragrunt plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
             head -c 65476 tfplan.txt
@@ -306,7 +347,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
             -d '{"body":'"${escaped_message}"'}'
-      
+
   apply:
     needs:
       - init
@@ -321,6 +362,7 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+
       - name: Set Account Number
         run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
 
@@ -346,8 +388,7 @@ jobs:
             exit 1
           fi
           version=$(echo "$required_version" | cut -d= -f2)
-          echo "version=${version}"
-          echo ::set-output name=version::${version}
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
@@ -355,32 +396,33 @@ jobs:
           terraform_version: ${{ steps.discover.outputs.version }}
           terraform_wrapper: false
 
-      - name: Init and State Refresh
+      - name: Setup Terragrunt
+        run: |
+          wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+          chmod u+x /usr/local/bin/terragrunt
+
+      - name: Init
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-init.sh .
-          terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
-          # refresh as objects are often changed outside of Terraform
-          # suppress that from the plan PR comment.  I've seen this fail
-          # in some rare circumstances - this shouldn't affect the remaining
-          # plan/apply so continue anyway if error here.
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . -refresh-only || true
-
+          terragrunt init
+          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+      
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode -out=tf.plan || exitcode=$?
-          echo "terrafrom plan exit code = $exitcode"
-          echo ::set-output name=exitcode::${exitcode}
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          echo "terragrunt plan exit code = $exitcode"
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Apply
         if: ${{ steps.plan.outputs.exitcode == '2' }}
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          ${GITHUB_WORKSPACE}/scripts/terraform-apply.sh . tf.plan | tee tfapply.txt
+          terragrunt apply tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
 
       - name: Create Apply PR message
         if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
@@ -389,7 +431,7 @@ jobs:
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             len=$(cat tfapply.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}]('${url}')'
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
             head -c 65476 tfapply.txt
