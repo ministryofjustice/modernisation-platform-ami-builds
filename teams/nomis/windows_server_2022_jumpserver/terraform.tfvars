@@ -46,10 +46,6 @@ components_custom = [
   }
 ]
 
-systems_manager_agent = {
-  uninstall_after_build = false
-}
-
 infrastructure_configuration = {
   instance_types = ["t3.medium"]
 }
