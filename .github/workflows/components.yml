@@ -187,8 +187,9 @@ jobs:
         working-directory: "${{ env.BASE_DIR }}"
         run: |
           exitcode=0
-          ${GITHUB_WORKSPACE}/scripts/terraform-plan.sh . -refresh=false -detailed-exitcode | tee tfplan.txt || exitcode=$?
-          echo "terrafrom plan exit code = $exitcode"
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terraform plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          echo "terraform plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
 
@@ -198,11 +199,11 @@ jobs:
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfplan.txt | wc -c)
+            len=$(cat tf.plan | wc -c)
             echo '**`${{ env.BASE_DIR }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
-            head -c 65476 tfplan.txt
+            head -c 65476 tf.plan
             echo
             echo '```'
             if [[ $len -gt 65476 ]]; then
@@ -275,6 +276,14 @@ jobs:
         run: |
           terraform init
           terraform workspace select "core-shared-services-${TF_ENV}" || terraform workspace new "core-shared-services-${TF_ENV}"
+
+      - name: Abandon old image builder components in state
+        working-directory: "${{ env.BASE_DIR }}/${{ matrix.project }}"
+        run: |
+          components_to_abandon=( $(terraform plan -no-color | grep '# aws_imagebuilder_component\.this\["[^"]*"] must be replaced' | sed 's/# \(.*\) must be replaced/\1/g') ) || components_to_abandon=()
+          for comp in "${components_to_abandon[@]}" ; do
+            terraform state rm $comp
+          done
       
       - name: Plan
         id: plan
