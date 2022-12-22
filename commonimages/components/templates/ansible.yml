@@ -5,18 +5,35 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.2
-      description: Uses the recipe version to avoid any issues with the branch template arg.
+      default: 0.0.3
+      description: Component version, increment if you make changes.
   - Platform:
       type: string
       default: "Linux"
       description: Platform.
   - Ami:
       type: string
-      description: AMI to build.
+      description: Name of AMI. There must be a group_vars/ami_$Ami file in the repo.
   - Branch:
       type: string
-      description: Git branch to use
+      default: main
+      description: Git branch to use when cloning the ansible repo
+  - AnibleRepo:
+      type: string
+      default: modernisation-platform-ami-builds
+      description: The ansible github repo to clone
+  - AnsibleRepoDir:
+      type: string
+      default: ansible
+      description: The directory in the repo where the ansible code is found
+  - AnsibleTags:
+      type: string
+      default: amibuild
+      description: The tags to run ansible with
+  - AnsibleArgs:
+      type: string
+      default: ""
+      description: Any other additional arguments to pass into ansible
 phases:
   - name: build
     steps:
@@ -29,8 +46,10 @@ phases:
               # do not set -u as it breaks on RedHat 6
               set -e
               run_ansible() {
-                repo="modernisation-platform-ami-builds"
+                repo="{{ AnsibleRepo }}"
                 ami_tag="{{ Ami }}"
+                ansible_repo_dir="{{ AnsibleRepoDir }}"
+                ansible_tags="{{ AnsibleTags }}"
 
                 # clone ansible roles and playbook
                 ansible_dir=$(mktemp -d)
@@ -51,7 +70,7 @@ phases:
 
                 # install python dependencies outside of virtual env so ansible
                 # can be executed remotely
-                cd $ansible_dir/$repo/ansible
+                cd $ansible_dir/$repo/$ansible_repo_dir
                 $python -m pip install -r requirements.txt
 
                 # activate virtual environment
@@ -69,7 +88,7 @@ phases:
                 fi
 
                 # install requirements in virtual env
-                cd $ansible_dir/$repo/ansible
+                cd $ansible_dir/$repo/$ansible_repo_dir
                 $python -m pip install -r requirements.txt
                 ansible-galaxy role install -r requirements.yml
                 ansible-galaxy collection install -r requirements.yml --force
@@ -81,8 +100,8 @@ phases:
                 --extra-vars "ansible_python_interpreter=$python" \
                 --extra-vars "target=localhost" \
                 --extra-vars "@group_vars/ami_$ami_tag.yml" \
-                --tags amibuild \
-                --become
+                --tags "$ansible_tags" \
+                --become {{ AnsibleArgs }}
 
                 # Cleanup
                 deactivate
