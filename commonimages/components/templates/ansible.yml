@@ -6,7 +6,7 @@ parameters:
   - Version:
       type: string
       default: 0.0.3
-      description: Component version, increment if you make changes.
+      description: "Component version, increment if you make changes."
   - Platform:
       type: string
       default: "Linux"
