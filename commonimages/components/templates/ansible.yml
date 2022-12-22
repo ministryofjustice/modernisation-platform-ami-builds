@@ -18,7 +18,7 @@ parameters:
       type: string
       default: main
       description: Git branch to use when cloning the ansible repo
-  - AnibleRepo:
+  - AnsibleRepo:
       type: string
       default: modernisation-platform-ami-builds
       description: The ansible github repo to clone
