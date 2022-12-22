@@ -13,7 +13,7 @@ parameters:
       description: Platform.
   - Ami:
       type: string
-      description: Name of AMI. There must be a group_vars/ami_$Ami file in the repo.
+      description: "Name of AMI. There must be a group_vars/ami_$Ami file in the repo."
   - Branch:
       type: string
       default: main
