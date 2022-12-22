@@ -38,10 +38,6 @@ components_aws = [
 ]
 
 components_custom = [
-  {
-    path       = "./components/rhel_6_10_weblogic_appserver_10_3/weblogic.yml"
-    parameters = []
-  }
 ]
 
 systems_manager_agent = {
