@@ -22,9 +22,8 @@ a PR.
 Structure:
 
 ```
-ansible/    - playbooks
 modules/    - the imagebuilder module
-components/ - custom components, e.g. install ansible
+components/ - image specific custom components
 imagedir1/  - example image directory
 imagedir2/  - example image directory
 main.tf     - common terraform symbolic linked by each image dir
