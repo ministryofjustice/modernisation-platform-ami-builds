@@ -1,10 +1,7 @@
-Currently, components are built by the imagebuilder module at the same
-time as the pipeline.
+For shared components, see `../../../commonimages/components/`.
+Those components are built by a separate pipeline and support versioning.
 
-Therefore, a component can only be built by a single pipeline. This
-is why the components are placed in sub-directories, with the same name
-as the associated image.
-
-If components are intended to be shared across multiple images, then
-this folder probably should contain some terraform to build those
-shared components and the imagebuilder updated appropriately.
+Components that are only ever used by a single image can be placed
+here. Since they are only used by one image, the version number is kept
+in sync with that image, and previous versions of the component
+are deleted when the terraform applies.
