@@ -14,8 +14,10 @@ tags = {
 }
 
 parent_image = {
-  owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-6-10-baseimage/x.x.x"
+  owner = "core-shared-services-production"
+  ami_search_filters = {
+    name = ["base_rhel_6_10_*"]
+  }
 }
 
 block_device_mappings_ebs = [
