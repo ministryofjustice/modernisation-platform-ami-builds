@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "rhel_6_10_weblogic_appserver_10_3"
-configuration_version = "0.2.1"
+configuration_version = "0.2.2"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis rhel 6.10 weblogic appserver image"
 
@@ -14,10 +14,8 @@ tags = {
 }
 
 parent_image = {
-  owner = "core-shared-services-production"
-  ami_search_filters = {
-    name = ["base_rhel_6_10_*"]
-  }
+  owner           = "core-shared-services-production"
+  arn_resource_id = "base-rhel-6-10-baseimage/x.x.x"
 }
 
 block_device_mappings_ebs = [
