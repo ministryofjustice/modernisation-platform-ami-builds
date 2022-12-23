@@ -22,7 +22,7 @@ locals {
 
   components_custom_yaml = {
     for component_filename, data in local.components_custom_data :
-    component_filename => {
+    basename(component_filename) => {
       raw  = data
       yaml = yamldecode(replace(data, "!Ref ", "")) # stop yamldecode breaking from cloudformation specific syntax. Not trusted cf.
     }
