@@ -343,112 +343,112 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
             -d '{"body":'"${escaped_message}"'}'
 
-  # apply:
-  #   needs:
-  #     - init
-  #     - plan
-  #   if: ${{ needs.init.outputs.projects != '' && needs.init.outputs.action == 'apply' }}
-  #   strategy:
-  #     matrix: ${{ fromJson(needs.init.outputs.matrix) }}
-  #     fail-fast: false
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: core-shared-services
-  #   steps:
-  #     - name: Checkout the code
-  #       uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
+  apply:
+    needs:
+      - init
+      - plan
+    if: ${{ needs.init.outputs.projects != '' && needs.init.outputs.action == 'apply' }}
+    strategy:
+      matrix: ${{ fromJson(needs.init.outputs.matrix) }}
+      fail-fast: false
+    runs-on: ubuntu-latest
+    environment:
+      name: core-shared-services
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@755da8c3cf115ac066823e79a1e1788f8940201b # v3.2.0
 
-  #     - name: Set Account Number
-  #       run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
+      - name: Set Account Number
+        run: echo "ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)" >> $GITHUB_ENV
 
-  #     - name: Configure AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
-  #       with:
-  #         role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
-  #         role-session-name: githubactionsrolesession
-  #         aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@67fbcbb121271f7775d2e7715933280b06314838 # v1.7.0
+        with:
+          role-to-assume: "arn:aws:iam::${{ env.ACCOUNT_NUMBER }}:role/github-actions"
+          role-session-name: githubactionsrolesession
+          aws-region: ${{ env.AWS_REGION }}
 
-  #     - name: Get terraform version
-  #       id: discover
-  #       run: |
-  #         echo "Get terraform version for ${{ matrix.project }}"
-  #         set +o pipefail
-  #         required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
-  #         if [[ -z "$required_version" ]]; then
-  #           echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
-  #           required_version="=${DEFAULT_TERRAFORM_VERSION}"
-  #         fi
-  #         if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
-  #           echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
-  #           exit 1
-  #         fi
-  #         version=$(echo "$required_version" | cut -d= -f2)
-  #         echo "version=${version}" >> $GITHUB_OUTPUT
+      - name: Get terraform version
+        id: discover
+        run: |
+          echo "Get terraform version for ${{ matrix.project }}"
+          set +o pipefail
+          required_version=$(grep ^terraform "${TEAM_DIR}/${{ matrix.project }}"/*.tf -A 20 | grep -w required_version | cut -d\" -f2)
+          if [[ -z "$required_version" ]]; then
+            echo "Using default terraform version specified in pipeline $DEFAULT_TERRAFORM_VERSION" >&2
+            required_version="=${DEFAULT_TERRAFORM_VERSION}"
+          fi
+          if [[ ! "$required_version" =~ =[0-9]+.[0-9]+.[0-9]+ ]]; then
+            echo "Unexpected terraform required_version format, expect '=x.y.z': $required_version" >&2
+            exit 1
+          fi
+          version=$(echo "$required_version" | cut -d= -f2)
+          echo "version=${version}" >> $GITHUB_OUTPUT
 
-  #     - name: Setup Terraform
-  #       uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
-  #       with:
-  #         terraform_version: ${{ steps.discover.outputs.version }}
-  #         terraform_wrapper: false
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@633666f66e0061ca3b725c73b2ec20cd13a8fdd1 # v2.0.3
+        with:
+          terraform_version: ${{ steps.discover.outputs.version }}
+          terraform_wrapper: false
 
-  #     - name: Setup Terragrunt
-  #       run: |
-  #         wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
-  #         chmod u+x /usr/local/bin/terragrunt
+      - name: Setup Terragrunt
+        run: |
+          wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64
+          chmod u+x /usr/local/bin/terragrunt
 
-  #     - name: Init
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-  #       run: |
-  #         terragrunt init
-  #         terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
+      - name: Init
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          terragrunt init
+          terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
       
-  #     - name: Plan
-  #       id: plan
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-  #       run: |
-  #         exitcode=0
-  #         chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-  #         terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
-  #         echo "terragrunt plan exit code = $exitcode"
-  #         echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
-  #         (( exitcode == 1 )) && exit 1 || exit 0
+      - name: Plan
+        id: plan
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          exitcode=0
+          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          echo "terragrunt plan exit code = $exitcode"
+          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
+          (( exitcode == 1 )) && exit 1 || exit 0
 
-  #     - name: Apply
-  #       if: ${{ steps.plan.outputs.exitcode == '2' }}
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-  #       run: |
-  #         terragrunt apply tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
+      - name: Apply
+        if: ${{ steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          terragrunt apply tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
 
-  #     - name: Create Apply PR message
-  #       if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-  #       working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-  #       run: |
-  #         comment() {
-  #           url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-  #           len=$(cat tfapply.txt | wc -c)
-  #           echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-  #           echo
-  #           echo '```'
-  #           head -c 65476 tfapply.txt
-  #           echo
-  #           echo '```'
-  #           if [[ $len -gt 65476 ]]; then
-  #             echo "** Truncated output.  See $url for the rest **"
-  #           fi
-  #         }
-  #         echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
-  #         comment >> $GITHUB_ENV
-  #         echo 'EOF' >> $GITHUB_ENV
+      - name: Create Apply PR message
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
+        run: |
+          comment() {
+            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            len=$(cat tfapply.txt | wc -c)
+            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
+            echo
+            echo '```'
+            head -c 65476 tfapply.txt
+            echo
+            echo '```'
+            if [[ $len -gt 65476 ]]; then
+              echo "** Truncated output.  See $url for the rest **"
+            fi
+          }
+          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
+          comment >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
-  #     - name: Post Apply to PR
-  #       if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-  #       env:
-  #         message: "${{ env.TF_APPLY_OUT }}"
-  #         pr_number: "${{ needs.init.outputs.pr_number }}"
-  #       run: |
-  #         escaped_message=$(echo "$message" | jq -Rsa .)
-  #         curl -sS -X POST \
-  #           -H "Accept: application/vnd.github+json" \
-  #           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-  #           "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
-  #           -d '{"body":'"${escaped_message}"'}'
+      - name: Post Apply to PR
+        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
+        env:
+          message: "${{ env.TF_APPLY_OUT }}"
+          pr_number: "${{ needs.init.outputs.pr_number }}"
+        run: |
+          escaped_message=$(echo "$message" | jq -Rsa .)
+          curl -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
+            -d '{"body":'"${escaped_message}"'}'
