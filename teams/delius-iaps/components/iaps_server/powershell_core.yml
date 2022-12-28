@@ -1,0 +1,29 @@
+# ---
+# name: powershell_core
+# description: Component to upgrade to using PowerShell Core
+# schemaVersion: 1.0
+# parameters:
+#   - Version:
+#       type: string
+#       default: 0.1.3
+#       description: Component version (update this each time the file changes)
+#   - Platform:
+#       type: string
+#       default: "Windows"
+#       description: Platform.
+#   - PowerShellCoreVersion:
+#       type: string
+#       default: 7.3.0
+#       description: Version of the PowerShell Core to install
+# phases:
+#   - name: build
+#     steps:
+#       - name: InstallPowerShellCore
+#         action: ExecutePowerShell
+#         inputs:
+#           commands:
+#             - |
+#               choco install -y chocolatey-core.extension
+#               choco install -y kb3118401
+#               choco install -y powershell-core --version '{{ PowerShellCoreVersion }}' --install-arguments='"ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 REGISTER_MANIFEST=1 ADD_FILE_CONTEXT_MENU_RUNPOWERSHELL=1"'
+#               Set-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion\WinLogon' -Name Shell -Value 'C:\Program Files\Powershell\7\pwsh.exe' -ErrorAction Stop
