@@ -48,14 +48,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/modules/imagebuilder"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis/rhel_6_10_baseimage"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
     directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
     schedule:
       interval: "daily"
