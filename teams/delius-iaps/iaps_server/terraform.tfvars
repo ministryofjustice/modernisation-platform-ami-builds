@@ -30,7 +30,7 @@ block_device_mappings_ebs = [
     device_name = "/dev/xvdf" # this will map to the first drive in windows, D:
     volume_size = 7
     volume_type = "gp3",
-    snapshot_id = data.aws_ebs_snapshot.windows_server_2022_installation_media.id
+    snapshot_id = "snap-04435aa8246764616" # Windows Server 2022 Installation Media
   },
 ]
 
