@@ -25,7 +25,13 @@ block_device_mappings_ebs = [
     device_name = "/dev/sda1" # root volume
     volume_size = 30
     volume_type = "gp3"
-  }
+  },
+  {
+    device_name = "/dev/xvdf" # this will map to the first drive in windows, D:
+    volume_size = 7
+    volume_type = "gp3",
+    snapshot_id = data.aws_ebs_snapshot.windows_server_2022_installation_media.id
+  },
 ]
 
 components_aws = [
@@ -33,12 +39,12 @@ components_aws = [
   "ec2launch-v2-windows"
 ]
 
-components_custom = []
-#   {
-#     path       = "./components/windows_server_2022_jumpserver/powershell_core.yml"
-#     parameters = []
-#   }
-# ]
+components_custom = [
+  {
+    path       = "./components/iaps_server/add_net_framework_features.yml"
+    parameters = []
+  }
+]
 
 infrastructure_configuration = {
   instance_types = ["t3.medium"]
@@ -56,11 +62,15 @@ launch_permission_accounts_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
+    "delius-iaps-development"
   ]
 
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
+    "delius-iaps-development",
+    "delius-iaps-preproduction",
+    "delius-iaps-production"
   ]
 }
 
