@@ -19,4 +19,4 @@ phases:
         inputs:
           commands:
             - |
-               add-windowsfeature net-framework-features D:\sources\sxs\
+              add-windowsfeature net-framework-features D:\sources\sxs\
