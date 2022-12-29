@@ -34,7 +34,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
         kms_key_id            = var.kms_key_id
         volume_size           = block_device_mapping.value.volume_size
         volume_type           = block_device_mapping.value.volume_type
-        snapshot_id           = try(block_device_mapping.value.snapshot_id, null)
+        snapshot_id           = block_device_mapping.value.snapshot_id # Optional ebs snapshot id
       }
     }
   }
