@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.2.0
       description: Component version
   - Platform:
       type: string
@@ -19,4 +19,4 @@ phases:
         inputs:
           commands:
             - |
-              add-windowsfeature net-framework-features D:\sources\sxs\
+              add-windowsfeature net-framework-features -Source D:\sources\sxs\

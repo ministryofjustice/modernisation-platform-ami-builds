@@ -32,6 +32,12 @@ main.tf     - common terraform symbolic linked by each image dir
 To run pipeline manually, you can either specify "all" to run terraform
 across all the images, or give a specific image directory, e.g. "imagedir1"
 
+## Building and versioning
+
+### How do I change a component?
+1. Update component yml file and increment component version (e.g. delius-iaps/components/iaps_server/add_net_framework_features.yml)
+2. Update AMI configuration version (e.g. delius-iaps/iaps_server/terraform.tfvars)
+
 ## Distribution of Images
 
 The common terraform allows different distribution configs to be defined
@@ -47,6 +53,14 @@ branch isn't defined in the map.
 
 The value corresponds to the `distribution_configuration` defined in
 the imagebuilder module.
+
+## Troubleshooting
+
+### How can I monitor the building of the AMI
+
+1. SSM onto the build instance
+2. Examine log group events in the core-shared-services account, e.g. there is a log group called /aws/imagebuilder/delius_iaps_server. There is a log stream per build
+3. Examine Systems Manager Automation events
 
 ## Making use of ASGs
 
