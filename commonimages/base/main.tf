@@ -3,13 +3,11 @@ module "imagebuilder" {
 
   region                          = var.region
   team_name                       = var.ami_name_prefix # would be best to rename team_name -> ami_name_prefix for all, leave for later PR
-  account_id                      = data.aws_caller_identity.current.account_id
   ami_base_name                   = var.ami_base_name
   configuration_version           = var.configuration_version
   description                     = var.description
   release_or_patch                = var.BRANCH_NAME != "main" ? "test" : var.release_or_patch
   tags                            = merge(local.shared_tags, var.tags)
-  kms_key_id                      = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
   account_ids_lookup              = local.environment_management.account_ids
   parent_image                    = var.parent_image
   block_device_mappings_ebs       = var.block_device_mappings_ebs

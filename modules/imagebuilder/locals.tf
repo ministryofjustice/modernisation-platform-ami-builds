@@ -8,6 +8,10 @@ locals {
     "{{ imagebuilder:buildDate }}"
   ]))
 
+  account_id = data.aws_caller_identity.current.account_id
+
+  kms_key_id = data.aws_kms_key.hmpps_ebs_encryption_cmk.arn
+
   core_shared_services = {
     repo_tfstate            = data.terraform_remote_state.core_shared_services_production.outputs
     imagebuilder_mp_tfstate = data.terraform_remote_state.imagebuilder_mp.outputs

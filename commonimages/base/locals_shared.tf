@@ -9,6 +9,4 @@ locals {
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/commonimages/base/${var.ami_base_name}"
   }
 
-  environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
-
 }
