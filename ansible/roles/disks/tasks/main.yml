@@ -8,9 +8,14 @@
   tags:
     - amibuild
 
-- name: setup disks
+- name: setup swap
   block:
     - import_tasks: configure_swap_disk.yml
+  tags:
+    - amibuild
+
+- name: setup disks
+  block:
     - import_tasks: configure_oracle_disk.yml
   tags:
     - amibuild

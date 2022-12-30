@@ -4,4 +4,4 @@ oracle_app_disks:
   - device: /dev/sdc
     mount: /u02
 
-swap_disk: /dev/sds
+swap_disk: ""
