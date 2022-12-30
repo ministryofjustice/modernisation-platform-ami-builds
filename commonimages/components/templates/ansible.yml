@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.3
+      default: 0.0.5
       description: "Component version, increment if you make changes."
   - Platform:
       type: string
@@ -20,7 +20,7 @@ parameters:
       description: Git branch to use when cloning the ansible repo
   - AnsibleRepo:
       type: string
-      default: modernisation-platform-ami-builds
+      default: modernisation-platform-configuration-management
       description: The ansible github repo to clone
   - AnsibleRepoDir:
       type: string
@@ -45,17 +45,22 @@ phases:
             - |
               # do not set -u as it breaks on RedHat 6
               set -e
+              PATH=$PATH:/usr/local/bin
               run_ansible() {
+                # define all params here to make standalone testing of script easier
                 repo="{{ AnsibleRepo }}"
                 ami_tag="{{ Ami }}"
                 ansible_repo_dir="{{ AnsibleRepoDir }}"
                 ansible_tags="{{ AnsibleTags }}"
+                ansible_args="{{ AnsibleArgs }}"
+                branch="{{ Branch }}"
 
                 # clone ansible roles and playbook
+                yum install -y git
                 ansible_dir=$(mktemp -d)
-                echo "Cloning $repo into $ansible_dir using branch={{ Branch }}"
+                echo "Cloning $repo into $ansible_dir using branch=$branch"
                 cd $ansible_dir
-                git clone -b {{ Branch }} "https://github.com/ministryofjustice/$repo.git"
+                git clone -b $branch "https://github.com/ministryofjustice/$repo.git"
 
                 # set python version
                 if [[ $(which python3.9 2> /dev/null) ]]; then
@@ -101,7 +106,7 @@ phases:
                 --extra-vars "target=localhost" \
                 --extra-vars "@group_vars/ami_$ami_tag.yml" \
                 --tags "$ansible_tags" \
-                --become {{ AnsibleArgs }}
+                --become $ansible_args
 
                 # Cleanup
                 deactivate
@@ -110,6 +115,6 @@ phases:
                 rm -rf $ansible_dir/python-venv
                 rmdir $ansible_dir
               }
-              echo "ansible {{ Ami }} start" | logger -p local3.info -t ami-component
-              run_ansible 2>&1 | logger -p local3.info -t ami-component
-              echo "ansible {{ Ami }} end" | logger -p local3.info -t ami-component
+              echo "ansible $ami_tag start" | logger -p local3.info -t ami-component
+              run_ansible 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "ansible $ami_tag end" | logger -p local3.info -t ami-component

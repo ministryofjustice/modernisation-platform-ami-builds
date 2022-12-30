@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.2
+      default: 0.0.4
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -20,28 +20,47 @@ phases:
           commands:
             - |
               set -e
-              cd /tmp
-              py_version=3.6.3
-              py_file=Python-$py_version
-              py_tar=$py_file.tar.xz
-              # download and build Python
-              wget --no-check-certificate https://python.org/ftp/python/$py_version/$py_tar
-              tar xf $py_tar
-              rm -f $py_tar
-              cd $py_file/
-              # ensure zlib is enabled, required for some ansible modules
-              sed -i 's/^#zlib/zlib/' Modules/Setup.dist
-              ./configure --enable-optimizations
-              sudo make altinstall
+              PATH=$PATH:/usr/local/bin
+              main() {
+                cd /tmp
+                # install packages to build python
+                yum install -y gcc wget ca-certificates
+                # install packages for python extenions
+                yum install -y openssl-devel zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel
+                yum install -y gdbm-devel db4-devel xz-devel expat-devel
+
+                py_version=3.6.3
+                py_file=Python-$py_version
+                py_tar=$py_file.tar.xz
+                # download and build Python
+                wget --no-check-certificate https://python.org/ftp/python/$py_version/$py_tar
+                tar xf $py_tar
+                rm -f $py_tar
+                cd $py_file/
+                # ensure zlib is enabled, required for some ansible modules
+                sed -i 's/^#zlib/zlib/' Modules/Setup.dist
+                ./configure --enable-optimizations
+                sudo make altinstall
+              }
+              echo "python3.6 start" | logger -p local3.info -t ami-component
+              main 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "python3.6 end" | logger -p local3.info -t ami-component
+
       - name: InstallPipAndVirtualenv
         action: ExecuteBash
         inputs:
           commands:
             - |
               set -e
-              cd /tmp
-              # install pip and virtualenv
-              wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
-              python3.6 get-pip.py
-              python3.6 -m pip install --upgrade pip
-              python3.6 -m pip install virtualenv
+              PATH=$PATH:/usr/local/bin
+              main() {
+                cd /tmp
+                # install pip and virtualenv
+                wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+                python3.6 get-pip.py
+                python3.6 -m pip install --upgrade pip
+                python3.6 -m pip install virtualenv
+              }
+              echo "python3.6 virtualenv start" | logger -p local3.info -t ami-component
+              main 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "python3.6 virtualenv end" | logger -p local3.info -t ami-component
