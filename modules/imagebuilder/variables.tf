@@ -45,12 +45,6 @@ variable "kms_key_id" {
   default     = null
 }
 
-variable "account_ids_lookup" {
-  description = "A map of account names to account ids that can be used for parent_image.owner"
-  default     = {}
-  type        = map(string)
-}
-
 variable "components_common" {
   type = list(object({
     name    = string

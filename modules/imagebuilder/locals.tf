@@ -57,7 +57,11 @@ locals {
     Name = local.ami_name
   })
 
-  ami_parent_id  = try(var.account_ids_lookup[var.parent_image.owner], var.parent_image.owner)
+  environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
+
+  account_ids_lookup = local.environment_management.account_ids
+
+  ami_parent_id  = try(local.account_ids_lookup[var.parent_image.owner], var.parent_image.owner)
   ami_parent_arn = try("arn:aws:imagebuilder:${var.region}:${local.ami_parent_id}:image/${var.parent_image.arn_resource_id}", null)
 }
 

@@ -1,6 +1,4 @@
 locals {
-  environment_management = jsondecode(data.aws_secretsmanager_secret_version.environment_management.secret_string)
-
   team_name        = "oasys"
   application_name = "core-shared-services"
   environment      = trimprefix(terraform.workspace, "core-shared-services-")
