@@ -7,4 +7,3 @@ roles_list:
   - amazon-ssm-agent
   - amazon-cloudwatch-agent
   - amazon-cli
-  - disks

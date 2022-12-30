@@ -2,7 +2,7 @@ module "imagebuilder" {
   source = "./../../modules//imagebuilder"
 
   region                          = var.region
-  team_name                       = var.ami_name_prefix # would be best to rename team_name -> ami_name_prefix for all, leave for later PR
+  team_name                       = var.ami_name_prefix
   account_id                      = data.aws_caller_identity.current.account_id
   ami_base_name                   = var.ami_base_name
   configuration_version           = var.configuration_version
