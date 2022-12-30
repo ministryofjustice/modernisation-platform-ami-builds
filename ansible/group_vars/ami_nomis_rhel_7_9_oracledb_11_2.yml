@@ -12,6 +12,3 @@ roles_list:
   - script-exporter
   - oracle-11g
   - oracle-secure-web
-
-
-swap_disk: /dev/sds
