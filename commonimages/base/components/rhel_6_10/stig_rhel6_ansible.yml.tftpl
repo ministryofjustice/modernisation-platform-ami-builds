@@ -21,64 +21,71 @@ phases:
           commands:
             - |
               set -e
-              repo="modernisation-platform-ami-builds"
-              ami_tag="${ami}"
+              PATH=$PATH:/usr/local/bin
+              run_ansible() {
+                repo="modernisation-platform-ami-builds"
+                ami_tag="${ami}"
 
-              # clone ansible roles and playbook
-              ansible_dir=$(mktemp -d)
-              echo "Cloning $repo into $ansible_dir using branch=${branch}"
-              cd $ansible_dir
-              git clone -b ${branch} "https://github.com/ministryofjustice/$repo.git"
+                # clone ansible roles and playbook
+                yum install -y git
+                ansible_dir=$(mktemp -d)
+                echo "Cloning $repo into $ansible_dir using branch=${branch}"
+                cd $ansible_dir
+                git clone -b ${branch} "https://github.com/ministryofjustice/$repo.git"
 
-              # set python version
-              if [[ $(which python3.9) ]]; then
-                python=$(which python3.9)
-              elif [[ $(which python3.6) ]]; then
-                python=$(which python3.6)
-              else
-                echo "Python3.9/3.6 not found"
-                exit 1
-              fi
-              echo "python: $python"
+                # set python version
+                if [[ $(which python3.9) ]]; then
+                  python=$(which python3.9)
+                elif [[ $(which python3.6) ]]; then
+                  python=$(which python3.6)
+                else
+                  echo "Python3.9/3.6 not found"
+                  exit 1
+                fi
+                echo "python: $python"
 
-              # install python dependencies outside of virtual env so ansible
-              # can be executed remotely
-              cd $ansible_dir/$repo/ansible
-              $python -m pip install -r requirements.txt
+                # install python dependencies outside of virtual env so ansible
+                # can be executed remotely
+                cd $ansible_dir/$repo/ansible
+                $python -m pip install -r requirements.txt
 
-              # activate virtual environment
-              mkdir $ansible_dir/python-venv && cd "$_"
-              $python -m venv ansible
-              source ansible/bin/activate
-              $python -m pip install --upgrade pip
-              if [[ "$python" =~ 3.6 ]]; then
-                $python -m pip install wheel
-                $python -m pip install cryptography==2.3
-                export LC_ALL=en_US.UTF-8
-                $python -m pip install ansible-core==2.11.12
-              else
-                $python -m pip install ansible==6.0.0
-              fi
+                # activate virtual environment
+                mkdir $ansible_dir/python-venv && cd "$_"
+                $python -m venv ansible
+                source ansible/bin/activate
+                $python -m pip install --upgrade pip
+                if [[ "$python" =~ 3.6 ]]; then
+                  $python -m pip install wheel
+                  $python -m pip install cryptography==2.3
+                  export LC_ALL=en_US.UTF-8
+                  $python -m pip install ansible-core==2.11.12
+                else
+                  $python -m pip install ansible==6.0.0
+                fi
 
-              # install requirements in virtual env
-              cd $ansible_dir/$repo/ansible
-              $python -m pip install -r requirements.txt
-              ansible-galaxy role install -r requirements.yml
-              ansible-galaxy collection install -r requirements.yml --force
+                # install requirements in virtual env
+                cd $ansible_dir/$repo/ansible
+                $python -m pip install -r requirements.txt
+                ansible-galaxy role install -r requirements.yml
+                ansible-galaxy collection install -r requirements.yml --force
 
-              # run ansible (note comma after localhost is deliberate)
-              ansible-playbook -v playbooks/stig_rhel6.yml \
-              --connection=local \
-              --inventory localhost, \
-              --extra-vars "ansible_python_interpreter=$python" \
-              --extra-vars "target=localhost" \
-              --tags "amibuild,prelim,cat1,cat2" \
-              --skip-tags "low,aide,sshd,selinux,V-38484,V-38497,V-38518,V-38519,V-38585,V-38623,V-51337" \
-              --become
+                # run ansible (note comma after localhost is deliberate)
+                ansible-playbook -v playbooks/stig_rhel6.yml \
+                --connection=local \
+                --inventory localhost, \
+                --extra-vars "ansible_python_interpreter=$python" \
+                --extra-vars "target=localhost" \
+                --tags "amibuild,prelim,cat1,cat2" \
+                --skip-tags "low,aide,sshd,selinux,V-38484,V-38497,V-38518,V-38519,V-38585,V-38623,V-51337" \
+                --become
 
-              # Cleanup
-              deactivate
-              echo "Cleaning up $ansible_dir"
-              rm -rf $ansible_dir/$repo
-              rm -rf $ansible_dir/python-venv
-              rmdir $ansible_dir
+                # Cleanup
+                deactivate
+                echo "Cleaning up $ansible_dir"
+                rm -rf $ansible_dir/$repo
+                rm -rf $ansible_dir/python-venv
+                rmdir $ansible_dir
+              }
+              echo "stig_rhel6_ansible $ami_tag start" | logger -p local3.info -t ami-component
+              run_ansible 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "stig_rhel6_ansible $ami_tag end" | logger -p local3.info -t ami-component
