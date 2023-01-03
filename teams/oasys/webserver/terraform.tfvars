@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.1" # haven't added oasys or webserver specific stuff yet
+configuration_version = "0.0.2" # haven't added oasys or webserver specific stuff yet
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
@@ -14,10 +14,8 @@ tags = {
 }
 
 parent_image = {
-  owner = "core-shared-services-production"
-  ami_search_filters = {
-    name = ["base_rhel_7_9_*"]
-  }
+  owner           = "core-shared-services-production"
+  arn_resource_id = "base-rhel-7-9/x.x.x"
 }
 
 block_device_mappings_ebs = [
