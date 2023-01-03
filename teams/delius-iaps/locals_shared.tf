@@ -11,7 +11,6 @@ locals {
     business-unit = "HMPPS"
     application   = upper(local.team_name)
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
-    github-actor  = var.GH_ACTOR_NAME == "" ? "n/a" : var.GH_ACTOR_NAME
     is-production = var.BRANCH_NAME == "main" ? "true" : "false"
     owner         = "Probation Webops: probation-webops@digital.justice.gov.uk"
     source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/teams/delius-iaps"
