@@ -397,7 +397,7 @@ jobs:
         run: |
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-      
+
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
