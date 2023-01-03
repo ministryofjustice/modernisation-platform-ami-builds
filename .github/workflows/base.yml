@@ -233,7 +233,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
+          COMMENT_BODY_CONTAINS: "**`${{ env.BASE_DIR }}/"
           PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
