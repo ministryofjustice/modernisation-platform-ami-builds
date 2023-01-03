@@ -49,6 +49,7 @@ on:
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
+  pull-requests: write # For posting comments to PR
 
 env:
   AWS_REGION: "eu-west-2"
@@ -79,11 +80,6 @@ jobs:
       projects: ${{ steps.parseinput.outputs.projects }}
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
       matrix: ${{ steps.setupproject.outputs.matrix }}
-
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout the code
