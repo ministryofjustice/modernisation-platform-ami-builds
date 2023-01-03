@@ -234,7 +234,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
-          PR_NUMBER: "${{ steps.parseinput.outputs.pr_number }}"
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
           go build
