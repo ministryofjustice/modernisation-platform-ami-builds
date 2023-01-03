@@ -49,6 +49,7 @@ on:
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
+  pull-requests: write # For posting comments to PR
 
 env:
   AWS_REGION: "eu-west-2"
@@ -228,14 +229,16 @@ jobs:
           done
           echo "]}"  >> $GITHUB_OUTPUT
 
-      # security best practice: use specific version of public actions (v0.3.0)
       - name: Hide previous PR comments
-        uses: int128/hide-comment-action@d1de49c69633a4748cc5de31fe956d71c0188545 # v1.20.0
         if: ${{ github.event_name == 'pull_request' }}
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          authors: ""
-          starts-with: "**`${{ env.BASE_DIR }}/"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
+          PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
+        run: |
+          cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
+          go build
+          ./minimise-comments
 
 
   plan:
