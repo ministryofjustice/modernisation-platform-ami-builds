@@ -40,6 +40,14 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/delius-iaps"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-iaps/iaps_server"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/example"
     schedule:
       interval: "daily"
@@ -57,6 +65,14 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/teams/nomis/windows_server_2022_jumpserver"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys/webserver"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
