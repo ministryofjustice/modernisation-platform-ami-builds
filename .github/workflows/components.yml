@@ -131,7 +131,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COMMENT_BODY_CONTAINS: "**`${{ env.BASE_DIR }}/"
+          COMMENT_BODY_CONTAINS: "**`${{ env.BASE_DIR }}"
           PR_NUMBER: "${{ github.event.pull_request.number }}"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
@@ -191,7 +191,7 @@ jobs:
         run: |
           exitcode=0
           chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terraform plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          terraform plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt || exitcode=$?
           echo "terraform plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
@@ -202,11 +202,11 @@ jobs:
         run: |
           comment() {
             url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tf.plan | wc -c)
+            len=$(cat tfplan.txt | wc -c)
             echo '**`${{ env.BASE_DIR }}`** terraform plan on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
             echo
             echo '```'
-            head -c 65476 tf.plan
+            head -c 65476 tfplan.txt
             echo
             echo '```'
             if [[ $len -gt 65476 ]]; then
