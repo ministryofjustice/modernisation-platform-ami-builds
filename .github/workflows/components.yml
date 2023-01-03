@@ -56,7 +56,6 @@ jobs:
 
     outputs:
       action: ${{ steps.parseinput.outputs.action }}
-      # plan_args: ${{ steps.parseinput.outputs.plan_args }} ????
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
 
     steps:
@@ -108,23 +107,19 @@ jobs:
           echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
           action="plan"
           pr_number=""
-          plan_args=""
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             action="${{ steps.projects_workflow_dispatch.outputs.action }}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             pr_number="${{ github.event.pull_request.number }}"
-            plan_args="-no-color"  # as we will post plan to PR
           elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             pr_number="${{ steps.get_pr_number.outputs.pr }}"
-            plan_args="-no-color"  # as we will post plan to PR
             action="apply"
           else
             echo "Unsupported event ${GITHUB_EVENT_NAME}"
             exit 1
           fi
-          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args}"
+          echo "Set action=${action} pr_number=${pr_number}"
           echo "action=${action}" >> $GITHUB_OUTPUT
-          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
           echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
 
       - name: Hide previous PR comments
