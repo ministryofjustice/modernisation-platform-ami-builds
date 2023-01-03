@@ -183,7 +183,7 @@ jobs:
             fi
           done
           echo List of projects [ ${projects} ]
-          echo ::set-output name=projects::${projects}
+          echo "projects={projects}" >> $GITHUB_OUTPUT
 
       - name: Parse inputs
         id: parseinput
