@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.3
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -20,17 +20,31 @@ phases:
           commands:
             - |
               set -e
-              cd /tmp
-              py_version=3.9.6
-              # install python
-              wget https://www.python.org/ftp/python/$py_version/Python-$py_version.tgz
-              tar xzf Python-$py_version.tgz
-              rm -f Python-$py_version.tgz
-              cd Python-$py_version
-              # ensure zlib is enabled, required for some ansible modules
-              sed -i 's/^#zlib/zlib/' Modules/Setup
-              ./configure --enable-optimizations
-              sudo make altinstall
+              PATH=$PATH:/usr/local/bin
+              main() {
+                export PIP_ROOT_USER_ACTION=ignore
+                cd /tmp
+                # install packages to build python
+                yum install -y gcc wget ca-certificates libffi-devel
+                # install packages for python extenions
+                yum install -y openssl-devel zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel
+                yum install -y gdbm-devel db4-devel xz-devel expat-devel
+
+                py_version=3.9.6
+                # install python
+                wget https://www.python.org/ftp/python/$py_version/Python-$py_version.tgz
+                tar xzf Python-$py_version.tgz
+                rm -f Python-$py_version.tgz
+                cd Python-$py_version
+                # ensure zlib is enabled, required for some ansible modules
+                sed -i 's/^#zlib/zlib/' Modules/Setup
+                ./configure --enable-optimizations
+                sudo make altinstall
+              }
+              echo "python3.9 start" | logger -p local3.info -t ami-component
+              main 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "python3.9 end" | logger -p local3.info -t ami-component
+
       # Install pip
       - name: InstallPipAndVirtualenv
         action: ExecuteBash
@@ -38,6 +52,13 @@ phases:
           commands:
             - |
               set -e
-              # install pip and virtualenv
-              python3.9 -m pip install --upgrade pip
-              python3.9 -m pip install virtualenv
+              PATH=$PATH:/usr/local/bin
+              main() {
+                export PIP_ROOT_USER_ACTION=ignore
+                # install pip and virtualenv
+                python3.9 -m pip install --upgrade pip
+                python3.9 -m pip install virtualenv
+              }
+              echo "python3.9 virtualenv start" | logger -p local3.info -t ami-component
+              main 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              echo "python3.9 virtualenv end" | logger -p local3.info -t ami-component

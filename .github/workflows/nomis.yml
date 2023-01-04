@@ -49,6 +49,7 @@ on:
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
+  pull-requests: write # For posting comments to PR
 
 env:
   AWS_REGION: "eu-west-2"
@@ -75,15 +76,9 @@ jobs:
 
     outputs:
       action: ${{ steps.parseinput.outputs.action }}
-      plan_args: ${{ steps.parseinput.outputs.plan_args }}
       projects: ${{ steps.parseinput.outputs.projects }}
       pr_number: ${{ steps.parseinput.outputs.pr_number }}
       matrix: ${{ steps.setupproject.outputs.matrix }}
-
-    permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout the code
@@ -187,7 +182,7 @@ jobs:
             fi
           done
           echo List of projects [ ${projects} ]
-          echo ::set-output name=projects::${projects}
+          echo projects=${projects} >> $GITHUB_OUTPUT
 
       - name: Parse inputs
         id: parseinput
@@ -195,27 +190,23 @@ jobs:
           echo "Parsing input parameters event=${GITHUB_EVENT_NAME}"
           action="plan"
           pr_number=""
-          plan_args=""
           if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
             projects="${{ steps.projects_workflow_dispatch.outputs.projects }}"
             action="${{ steps.projects_workflow_dispatch.outputs.action }}"
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ github.event.pull_request.number }}"
-            plan_args="-no-color"  # as we will post plan to PR
           elif [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
             projects="${{ steps.projects_pull_push.outputs.projects }}"
             pr_number="${{ steps.get_pr_number.outputs.pr }}"
-            plan_args="-no-color"  # as we will post plan to PR
             action="apply"
           else
             echo "Unsupported event ${GITHUB_EVENT_NAME}"
             exit 1
           fi
-          echo "Set action=${action} pr_number=${pr_number} plan_args=${plan_args} project=${projects}"
+          echo "Set action=${action} pr_number=${pr_number} project=${projects}"
           echo "projects=${projects}" >> $GITHUB_OUTPUT
           echo "action=${action}" >> $GITHUB_OUTPUT
-          echo "plan_args=${plan_args}" >> $GITHUB_OUTPUT
           echo "pr_number=${pr_number}" >> $GITHUB_OUTPUT
 
       - name: Setup project matrix
@@ -238,7 +229,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMENT_BODY_CONTAINS: "**`${{ env.TEAM_DIR }}/"
-          PR_NUMBER: "${{ steps.get_pr_number.outputs.pr }}"
+          PR_NUMBER: "${{ github.event.pull_request.number }}"
         run: |
           cd ${GITHUB_WORKSPACE}/scripts/minimise-comments
           go build
@@ -401,7 +392,7 @@ jobs:
         run: |
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-      
+
       - name: Plan
         id: plan
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"

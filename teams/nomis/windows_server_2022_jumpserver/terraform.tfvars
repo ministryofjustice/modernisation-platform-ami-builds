@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "windows_server_2022_jumpserver"
-configuration_version = "0.3.2"
+configuration_version = "0.3.5"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2022 jumpserver"
 
@@ -14,10 +14,8 @@ tags = {
 }
 
 parent_image = {
-  owner = "core-shared-services-production"
-  ami_search_filters = {
-    name = ["mp_WindowsServer2022_*"]
-  }
+  owner           = "core-shared-services-production"
+  arn_resource_id = "mp-windowsserver2022/x.x.x"
 }
 
 block_device_mappings_ebs = [

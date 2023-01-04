@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "rhel_7_9_oracledb_11_2"
-configuration_version = "0.4.0"
+configuration_version = "0.4.2"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -14,10 +14,8 @@ tags = {
 }
 
 parent_image = {
-  owner = "core-shared-services-production"
-  ami_search_filters = {
-    name = ["base_rhel_7_9_*"]
-  }
+  owner           = "core-shared-services-production"
+  arn_resource_id = "base-rhel-7-9/x.x.x"
 }
 
 block_device_mappings_ebs = [
