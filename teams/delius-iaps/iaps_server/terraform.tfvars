@@ -41,6 +41,10 @@ components_custom = [
   {
     path       = "./components/iaps_server/add_net_framework_features.yml"
     parameters = []
+  },
+  {
+    path       = "./components/iaps_server/delius_iaps_install_base_packages.yml"
+    parameters = []
   }
 ]
 
