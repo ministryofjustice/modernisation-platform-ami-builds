@@ -21,7 +21,7 @@ parent_image = {
 block_device_mappings_ebs = [
   {
     device_name = "/dev/sda1" # boot volume
-    volume_size = 1
+    volume_size = 30
     volume_type = "gp3"
   },
   {
