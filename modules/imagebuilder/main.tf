@@ -119,9 +119,9 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
       name               = local.ami_name
       description        = var.description
       kms_key_id         = local.kms_key_id
-      target_account_ids = [var.account_ids_lookup[var.account_to_distribute_ami]]
+      target_account_ids = [local.account_ids_lookup[var.account_to_distribute_ami]]
       launch_permission {
-        user_ids = flatten([for name in var.launch_permission_account_names : var.account_ids_lookup[name]])
+        user_ids = flatten([for name in var.launch_permission_account_names : local.account_ids_lookup[name]])
       }
       ami_tags = local.ami_tags
     }
@@ -129,7 +129,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     dynamic "launch_template_configuration" {
       for_each = var.launch_template_exists ? [var.account_to_distribute_ami] : []
       content {
-        account_id         = var.account_ids_lookup[launch_template_configuration.value]
+        account_id         = local.account_ids_lookup[launch_template_configuration.value]
         launch_template_id = data.aws_launch_template.id
       }
     }

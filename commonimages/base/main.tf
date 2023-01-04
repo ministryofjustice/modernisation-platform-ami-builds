@@ -8,7 +8,6 @@ module "imagebuilder" {
   description                     = var.description
   release_or_patch                = var.BRANCH_NAME != "main" ? "test" : var.release_or_patch
   tags                            = merge(local.shared_tags, var.tags)
-  account_ids_lookup              = local.environment_management.account_ids
   parent_image                    = var.parent_image
   block_device_mappings_ebs       = var.block_device_mappings_ebs
   components_aws                  = var.components_aws
