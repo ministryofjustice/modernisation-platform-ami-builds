@@ -36,7 +36,7 @@ across all the images, or give a specific image directory, e.g. "imagedir1"
 
 ### How do I change a component?
 1. Update component yml file and increment component version (e.g. delius-iaps/components/iaps_server/add_net_framework_features.yml)
-2. Update AMI configuration version (e.g. delius-iaps/iaps_server/terraform.tfvars)
+2. Update recipe version (AKA configuration version),  e.g. delius-iaps/iaps_server/terraform.tfvars.
 
 ## Distribution of Images
 
