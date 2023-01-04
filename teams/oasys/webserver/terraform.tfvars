@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.2" # haven't added oasys or webserver specific stuff yet
+configuration_version = "0.0.3" # haven't added oasys or webserver specific stuff yet
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
@@ -21,7 +21,7 @@ parent_image = {
 block_device_mappings_ebs = [
   {
     device_name = "/dev/sda1" # boot volume
-    volume_size = 1
+    volume_size = 30
     volume_type = "gp3"
   },
   {
