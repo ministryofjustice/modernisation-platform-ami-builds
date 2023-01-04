@@ -6,7 +6,7 @@ resource "aws_imagebuilder_component" "this" {
   platform    = each.value.yaml.parameters[1].Platform.default
   version     = each.value.yaml.parameters[0].Version.default
   data        = each.value.raw
-  kms_key_id  = var.kms_key_id
+  kms_key_id  = local.kms_key_id
   tags        = local.tags
 
   lifecycle {
@@ -31,7 +31,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
       ebs {
         delete_on_termination = true
         encrypted             = true
-        kms_key_id            = var.kms_key_id
+        kms_key_id            = local.kms_key_id
         volume_size           = block_device_mapping.value.volume_size
         volume_type           = block_device_mapping.value.volume_type
         snapshot_id           = block_device_mapping.value.snapshot_id # Optional ebs snapshot id
@@ -49,7 +49,7 @@ resource "aws_imagebuilder_image_recipe" "this" {
   dynamic "component" {
     for_each = var.components_common
     content {
-      component_arn = "arn:aws:imagebuilder:${var.region}:${var.account_id}:component/${replace(component.value["name"], "_", "-")}/${component.value["version"]}"
+      component_arn = "arn:aws:imagebuilder:${var.region}:${local.account_id}:component/${replace(component.value["name"], "_", "-")}/${component.value["version"]}"
       dynamic "parameter" {
         for_each = component.value["parameters"]
         content {
@@ -118,10 +118,10 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     ami_distribution_configuration {
       name               = local.ami_name
       description        = var.description
-      kms_key_id         = var.kms_key_id
-      target_account_ids = [var.account_ids_lookup[var.account_to_distribute_ami]]
+      kms_key_id         = local.kms_key_id
+      target_account_ids = [local.account_ids_lookup[var.account_to_distribute_ami]]
       launch_permission {
-        user_ids = flatten([for name in var.launch_permission_account_names : var.account_ids_lookup[name]])
+        user_ids = flatten([for name in var.launch_permission_account_names : local.account_ids_lookup[name]])
       }
       ami_tags = local.ami_tags
     }
@@ -129,7 +129,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
     dynamic "launch_template_configuration" {
       for_each = var.launch_template_exists ? [var.account_to_distribute_ami] : []
       content {
-        account_id         = var.account_ids_lookup[launch_template_configuration.value]
+        account_id         = local.account_ids_lookup[launch_template_configuration.value]
         launch_template_id = data.aws_launch_template.id
       }
     }

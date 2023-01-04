@@ -8,11 +8,6 @@ variable "team_name" {
   description = "Name of the team used to prefix resources, e.g. nomis"
 }
 
-variable "account_id" {
-  type        = string
-  description = "current account id"
-}
-
 variable "ami_base_name" {
   type        = string
   description = "Name of the image, e.g. rhel_7_9_baseimage"
@@ -37,18 +32,6 @@ variable "description" {
 variable "tags" {
   type        = map(string)
   description = "Set of tags to apply to resources"
-}
-
-variable "kms_key_id" {
-  type        = string
-  description = "Encryption key to apply to image and components"
-  default     = null
-}
-
-variable "account_ids_lookup" {
-  description = "A map of account names to account ids that can be used for parent_image.owner"
-  default     = {}
-  type        = map(string)
 }
 
 variable "components_common" {
