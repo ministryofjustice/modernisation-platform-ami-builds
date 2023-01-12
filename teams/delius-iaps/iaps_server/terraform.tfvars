@@ -77,3 +77,5 @@ launch_permission_accounts_by_branch = {
 }
 
 launch_template_exists = false
+
+s3_artefacts_bucket = "ec2-image-builder-iaps-artefacts"

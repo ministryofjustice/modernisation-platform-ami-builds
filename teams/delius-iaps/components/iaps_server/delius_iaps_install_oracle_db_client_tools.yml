@@ -1,0 +1,90 @@
+---
+name: delius_iaps_install_oracle_db_client_tools
+description: Installs delius_iaps_install_oracle_db_client_tools
+schemaVersion: 1.0
+parameters:
+  - S3ArtefactBucket:
+      type: string
+      description: Name of s3 bucket holding software artefacts
+phases:
+  - name: build
+    steps:
+      - name: GenerateOracleClientRSP
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\OracleClient.rsp
+            content: |
+              oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response_schema_v12.1.0
+              ORACLE_HOSTNAME=
+              UNIX_GROUP_NAME=
+              SELECTED_LANGUAGES=en,en_GB
+              ORACLE_HOME=C:\app\client\Administrator\product\12.1.0\client_1
+              ORACLE_BASE=C:\app\client\Administrator
+              oracle.install.IsBuiltInAccount=true
+              oracle.install.OracleHomeUserName=
+              oracle.install.OracleHomeUserPassword=
+              oracle.install.client.installType=Administrator
+              oracle.install.client.customComponents=
+              oracle.install.client.schedulerAgentHostName=
+              oracle.install.client.schedulerAgentPortNumber=
+            overwrite: false
+      - name: GenerateSQLNETORATMPL
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\sqlnet.ora.tmpl
+            content: |
+              SQLNET.AUTHENTICATION_SERVICES = (NTS)
+              NAMES.DIRECTORY_PATH= (TNSNAMES, EZCONNECT) 
+            overwrite: false
+      - name: GenerateTNSNAMESORATMPL
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\tnsnames.ora.tmpl
+            content: |
+              PCMSSHADOW =
+                (DESCRIPTION =
+                  (ADDRESS_LIST =
+                    (ADDRESS = (PROTOCOL = TCP)(HOST = iaps-db)(PORT = 1521))
+                  )
+                  (CONNECT_DATA =
+                    (SID = IAPS)
+                  )
+                )
+
+              IAPSNR =
+                (DESCRIPTION =
+                  (ADDRESS_LIST =
+                    (ADDRESS = (PROTOCOL = TCP)(HOST = iaps-db)(PORT = 1521))
+                  )
+                  (CONNECT_DATA =
+                    (SID = IAPS)
+                  )
+                )  
+            overwrite: false
+
+      - name: DownloadArtefacts
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              # The local file path where files should be copied
+              $localPath = "${env:TEMP}\oracle"
+
+              Read-S3Object -BucketName $bucketName  -Key "oracle/Oracle_12c_Win32_12.1.0.2.0.7z" -File "$localPath\Oracle_12c_Win32_12.1.0.2.0.7z"
+
+      - name: SetupOracleClient
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              try {
+                & "$env:ProgramFiles\7-Zip\7z.exe" "x" "-y" "-o${env:TEMP}\Oracle\Install" "${env:TEMP}\Oracle\Oracle_12c_Win32_12.1.0.2.0.7z"
+              }
+              catch [Exception] {
+                  Write-Host ('Failed to extract Oracle client setup using 7z')
+                  echo $_.Exception|format-list -force
+                  exit 1
+              }
