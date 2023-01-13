@@ -47,7 +47,7 @@ components_custom = [
     parameters = []
   },
   {
-    path       = "./components/iaps_server/delius_iaps_install_oracle_db_client_tools.yml"
+    path = "./components/iaps_server/delius_iaps_install_oracle_db_client_tools.yml"
     parameters = [
       {
         name  = "S3ArtefactBucket"
