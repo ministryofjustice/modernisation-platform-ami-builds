@@ -3,6 +3,14 @@ name: delius_iaps_install_oracle_db_client_tools
 description: Installs delius_iaps_install_oracle_db_client_tools
 schemaVersion: 1.0
 parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
   - S3ArtefactBucket:
       type: string
       description: Name of s3 bucket holding software artefacts
