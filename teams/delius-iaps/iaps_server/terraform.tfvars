@@ -48,7 +48,12 @@ components_custom = [
   },
   {
     path       = "./components/iaps_server/delius_iaps_install_oracle_db_client_tools.yml"
-    parameters = []
+    parameters = [
+      {
+        name  = "S3ArtefactBucket"
+        value = "ec2-image-builder-iaps-artefacts"
+      }
+    ]
   }
 ]
 
