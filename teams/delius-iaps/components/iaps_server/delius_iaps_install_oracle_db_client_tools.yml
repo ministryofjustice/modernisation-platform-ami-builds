@@ -1,0 +1,134 @@
+---
+name: delius_iaps_install_oracle_db_client_tools
+description: Installs delius_iaps_install_oracle_db_client_tools
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+  - S3ArtefactBucket:
+      type: string
+      description: Name of s3 bucket holding software artefacts
+phases:
+  - name: build
+    steps:
+      - name: GenerateOracleClientRSP
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\OracleClient.rsp
+            content: |
+              oracle.install.responseFileVersion=/oracle/install/rspfmt_clientinstall_response_schema_v12.1.0
+              UNIX_GROUP_NAME=
+              SELECTED_LANGUAGES=en,en_GB
+              ORACLE_HOME=C:\app\client\Administrator\product\12.1.0\client_1
+              ORACLE_BASE=C:\app\client\Administrator
+              oracle.install.IsBuiltInAccount=true
+              oracle.install.OracleHomeUserName=
+              oracle.install.OracleHomeUserPassword=
+              oracle.install.client.installType=Administrator
+              oracle.install.client.customComponents=
+              oracle.install.client.schedulerAgentHostName=
+              oracle.install.client.schedulerAgentPortNumber=
+            overwrite: false
+      - name: GenerateSQLNETORATMPL
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\sqlnet.ora
+            content: |
+              SQLNET.AUTHENTICATION_SERVICES = (NTS)
+              NAMES.DIRECTORY_PATH= (TNSNAMES, EZCONNECT)
+            overwrite: false
+      - name: GenerateTNSNAMESORATMPL
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\oracle\tnsnames.ora
+            content: |
+              PCMSSHADOW =
+                (DESCRIPTION =
+                  (ADDRESS_LIST =
+                    (ADDRESS = (PROTOCOL = TCP)(HOST = iaps-db)(PORT = 1521))
+                  )
+                  (CONNECT_DATA =
+                    (SID = IAPS)
+                  )
+                )
+
+              IAPSNR =
+                (DESCRIPTION =
+                  (ADDRESS_LIST =
+                    (ADDRESS = (PROTOCOL = TCP)(HOST = iaps-db)(PORT = 1521))
+                  )
+                  (CONNECT_DATA =
+                    (SID = IAPS)
+                  )
+                )
+            overwrite: false
+
+      - name: DownloadArtefacts
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "oracle/Oracle_12c_Win32_12.1.0.2.0.7z" -File "${env:TEMP}\oracle\Oracle_12c_Win32_12.1.0.2.0.7z"
+
+      - name: SetupOracleClient
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              try {
+                & "$env:ProgramFiles\7-Zip\7z.exe" "x" "-y" "-o${env:TEMP}\Oracle\Install" "${env:TEMP}\Oracle\Oracle_12c_Win32_12.1.0.2.0.7z"
+              }
+              catch [Exception] {
+                Write-Host ('Failed to extract Oracle client setup using 7z')
+                echo $_.Exception|format-list -force
+                exit 1
+              }
+
+              try {
+                $oaparamfile = "${env:TEMP}\Oracle\Install\Oracle_12c_Win32_12.1.0.2.0\client32\install\oraparam.ini"
+                if (Test-Path -Path $oaparamfile) {
+                  ((Get-Content -path $oaparamfile -Raw) -replace 'MSVCREDIST_LOC=vcredist_x64.exe','MSVCREDIST_LOC=vcredist_x86.exe') | Set-Content -Path $oaparamfile
+                } else {
+                  write-host('Error - could not find oracle setup param file: $oaparamfile')
+                  exit 1
+                }
+                # Create x86 reg entry
+                Push-Location
+                Set-Location 'HKLM:'
+                New-Item -Path '.\SOFTWARE\Wow6432Node' -Name ORACLE -Type Directory -Force
+                New-Itemproperty -Path .\SOFTWARE\Wow6432Node\ORACLE -Name 'inst_loc' -Value 'C:\Program Files (x86)\Oracle\Inventory' -PropertyType 'String'
+                Pop-Location
+              }
+              catch [Exception] {
+                Write-Host ('Failed creating x86 registry entries')
+                echo $_.Exception|format-list -force
+                exit 1
+              }
+
+              try {
+                  $oracleanswerfile = "${env:TEMP}\Oracle\OracleClient.rsp"
+                  Start-Process -FilePath "${env:TEMP}\Oracle\Install\Oracle_12c_Win32_12.1.0.2.0\client32\setup.exe" -Verb RunAs -ArgumentList "-silent -nowelcome -nowait -noconfig -responseFile $oracleanswerfile 'ORACLE_HOSTNAME=$env:computername'" -Wait
+                  if (!(Test-Path C:\app)) {
+                      Write-Host('Error - Something went wrong installing Oracle client - unable to find install path')
+                      exit 1
+                  }
+              }
+              catch [Exception] {
+                  Write-Host ('Failed installing Oracle Client')
+                  echo $_.Exception|format-list -force
+                  exit 1
+              }
+
+              Copy-Item "${env:TEMP}\Oracle\tnsnames.ora" -Destination 'C:\app\client\Administrator\product\12.1.0\client_1\network\admin\tnsnames.ora'
+              Copy-Item "${env:TEMP}\Oracle\sqlnet.ora" -Destination 'C:\app\client\Administrator\product\12.1.0\client_1\network\admin\sqlnet.ora'
+
+              Set-ItemProperty -path "HKLM:\SOFTWARE\Wow6432Node\ORACLE\KEY_OraClient12Home1_32bit" -name "NLS_LANG" -value "ENGLISH_UNITED KINGDOM.WE8MSWIN1252"
