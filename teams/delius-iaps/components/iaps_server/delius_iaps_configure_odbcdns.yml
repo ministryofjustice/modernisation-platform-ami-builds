@@ -1,0 +1,48 @@
+---
+name: delius_iaps_configure_odbc_dsn
+description: Configure ODBC DSNs
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+phases:
+  - name: build
+    steps:
+      - name: ConfigureODBCDSN
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Continue"
+              $VerbosePreference = "Continue"
+
+              try {
+                  Write-Host('Creating ODBC DSNs')
+                  Import-Module -Name Wdac
+                  $OdbcDriver = Get-OdbcDriver -Name 'Oracle in OraClient12Home1_32bit' -Platform 32-bit
+                  If(!$OdbcDriver.Count) # Only continue if 1 SQL ODBC driver is installed
+                  {
+                      Add-OdbcDsn -Name 'PCMSIFIAPS' `
+                                  -DriverName $OdbcDriver.Name `
+                                  -Platform 32-bit `
+                                  -DsnType System `
+                                  -SetPropertyValue @("DataSourceName=PCMSIFIAPS", "ServerName=IAPSNR")
+
+                      Add-OdbcDsn -Name 'PCMSSHADOW' `
+                                  -DriverName $OdbcDriver.Name `
+                                  -Platform 32-bit `
+                                  -DsnType System `
+                                  -SetPropertyValue @("DataSourceName=PCMSSHADOW", "ServerName=PCMSSHADOW")
+                  }
+              }
+              catch [Exception] {
+                  Write-Host ('Failed to Create ODBC DSNs')
+                  echo $_.Exception|format-list -force
+                  exit 1
+              }
