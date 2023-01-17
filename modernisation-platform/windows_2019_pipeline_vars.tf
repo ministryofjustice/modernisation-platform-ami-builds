@@ -37,7 +37,7 @@ locals {
     }
 
     components = [
-      "windows.yml"
+      "windows_2019.yml"
     ]
 
     # Removed "stig-build-windows-medium" because current version 1.5.1 does not support the Parent Image OS Version of Microsoft Windows Server 2022
