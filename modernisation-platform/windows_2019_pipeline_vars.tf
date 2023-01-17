@@ -9,7 +9,7 @@ locals {
 
     recipe = {
       name         = join("", [local.team_name, "_WindowsServer2019"])
-      parent_image = "arn:aws:imagebuilder:us-east-1:aws:image/windows-server-2019-english-full-base-x86/x.x.x"
+      parent_image = "arn:aws:imagebuilder:eu-west-2:aws:image/windows-server-2019-english-full-base-x86/x.x.x"
       version      = "1.0.0"
       device_name  = "/dev/sda1"
 
