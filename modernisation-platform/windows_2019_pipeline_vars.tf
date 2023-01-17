@@ -1,6 +1,6 @@
 locals {
 
-  windows_pipeline = {
+  windows_2019_pipeline = {
 
     pipeline = {
       name     = join("", [local.team_name, "_WindowsServer2019"])
