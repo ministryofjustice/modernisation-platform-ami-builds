@@ -39,7 +39,7 @@ components_custom = [
     path       = "../../../commonimages/components/templates/prometheus_windows_exporter.yml"
     parameters = []
     }, {
-    path       = "../../../commonimages/components/templates/jumpserver.yml"
+    path       = "./components/windows_server_2022_jumpserver/jumpserver_2019.yml"
     parameters = []
   }
 ]

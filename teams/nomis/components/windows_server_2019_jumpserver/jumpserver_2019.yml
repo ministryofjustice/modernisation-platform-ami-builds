@@ -1,11 +1,11 @@
 ---
-name: jumpserver
+name: jumpserver_2019
 description: Jumpserver provisioner component.
 schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 1.0.13
+      default: 1.0.0
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
