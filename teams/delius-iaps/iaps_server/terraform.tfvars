@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius"
 ami_base_name         = "iaps_server"
-configuration_version = "0.0.7"
+configuration_version = "0.0.8"
 release_or_patch      = "patch" # or "patch", see nomis AMI image building strategy doc
 description           = "Delius IAPS server"
 
@@ -58,7 +58,16 @@ components_custom = [
   {
     path       = "./components/iaps_server/delius_iaps_configure_odbcdns.yml"
     parameters = []
-  }
+  },
+  {
+    path = "./components/iaps_server/delius_iaps_install_oracle_sql_developer.yml"
+    parameters = [
+      {
+        name  = "S3ArtefactBucket"
+        value = "ec2-image-builder-iaps-artefacts"
+      }
+    ]
+  },
 ]
 
 infrastructure_configuration = {
