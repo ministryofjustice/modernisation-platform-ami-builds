@@ -1,0 +1,43 @@
+---
+name: delius_iaps_install_oracle_sql_developer
+description: Installs delius_iaps_install_oracle_sql_developer
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+  - S3ArtefactBucket:
+      type: string
+      description: Name of s3 bucket holding software artefacts
+phases:
+  - name: build
+    steps:
+      - name: DownloadArtefacts
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "oracle/sqldeveloper-4.1.3.20.78-x64.7z" -File "${env:TEMP}\oracle\sqldeveloper-4.1.3.20.78-x64.7z"
+
+      - name: ExtractSQLDeveloper
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              & "$env:ProgramFiles\7-Zip\7z.exe" "x" "-y" "-o${env:ProgramData}" "${env:TEMP}\oracle\sqldeveloper-4.1.3.20.78-x64.7z"
+
+              $WshShell = New-Object -ComObject WScript.Shell
+              $Shortcut = $WshShell.CreateShortcut("C:\Users\Public\Desktop\SQLDeveloper.lnk")
+              $Shortcut.TargetPath = "${env:ProgramData}\sqldeveloper-4.1.3.20.78-x64\sqldeveloper\sqldeveloper.exe"
+              $Shortcut.Save()
