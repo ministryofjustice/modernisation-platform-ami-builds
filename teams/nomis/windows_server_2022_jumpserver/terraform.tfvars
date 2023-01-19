@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "windows_server_2022_jumpserver"
-configuration_version = "0.3.5"
+configuration_version = "0.3.6"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2022 jumpserver"
 
@@ -33,12 +33,6 @@ components_aws = [
 
 components_custom = [
   {
-    path       = "./components/windows_server_2022_jumpserver/powershell_core.yml"
-    parameters = []
-    }, {
-    path       = "./components/windows_server_2022_jumpserver/prometheus_windows_exporter.yml"
-    parameters = []
-    }, {
     path       = "./components/windows_server_2022_jumpserver/jumpserver.yml"
     parameters = []
   }
