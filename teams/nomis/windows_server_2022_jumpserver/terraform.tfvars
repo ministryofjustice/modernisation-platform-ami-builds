@@ -33,12 +33,6 @@ components_aws = [
 
 components_custom = [
   {
-    path       = "../../commonimages/components/templates/powershell_core.yml"
-    parameters = []
-    }, {
-    path       = "../../commonimages/components/templates/prometheus_windows_exporter.yml"
-    parameters = []
-    }, {
     path       = "./components/windows_server_2022_jumpserver/jumpserver.yml"
     parameters = []
   }
