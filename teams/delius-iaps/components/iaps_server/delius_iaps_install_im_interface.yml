@@ -1,0 +1,49 @@
+---
+name: delius_iaps_install_im_interface
+description: Installs delius_iaps_install_im_interface
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+  - S3ArtefactBucket:
+      type: string
+      description: Name of s3 bucket holding software artefacts
+phases:
+  - name: build
+    steps:
+      - name: DownloadArtefacts
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -KeyPrefix "apps/im-interface/" -Folder "${env:TEMP}\im-interface"
+      - name: InstallIMInterface
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Start-Process -Wait -FilePath "${env:TEMP}\im-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
+              New-Item -ItemType Junction -Path "C:\Program Files\I2N\IapsIMInterface" -Target "C:\Program Files (x86)\I2N\IapsIMInterface"
+      - name: GenerateIMIAPSConfig
+        action: CreateFile
+        inputs:
+          - path: C:\Program Files (x86)\I2N\IapsIMInterface\Config\IMIAPS.xml
+            content: |
+              <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+              <DLLDEF>
+                <IAPSORACLE NAME="IAPSCENTRAL" DESCRIPTION="iaps-db" USER="" PASSWORD="" PROBEDELAYSECS="600" ODBC="DSN=PCMSIFIAPS;uid=%USER%;pwd=%PASSWORD%" TOIAPS="Y" />
+                <SOAPSERVER URL="https://localhost/IMIapsSoap/service.svc" ODBC="DSN=IM;Server=;Database=;uid=;pwd=" />
+              </DLLDEF>
+            overwrite: false
