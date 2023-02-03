@@ -10,7 +10,8 @@ release_or_patch      = "release"
 description           = "oasys webserver image"
 
 tags = {
-  os-version = "rhel 7.9"
+  os-version  = "rhel 7.9"
+  server-type = "oasys-web"
 }
 
 parent_image = {
