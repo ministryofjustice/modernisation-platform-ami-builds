@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius"
 ami_base_name         = "iaps_server"
-configuration_version = "0.0.10"
+configuration_version = "0.0.11"
 release_or_patch      = "patch" # see nomis AMI image building strategy doc
 description           = "Delius IAPS server"
 
@@ -77,6 +77,10 @@ components_custom = [
       }
     ]
   },
+  {
+    path = "./components/iaps_server/delius_iaps_configure_cloudwatch_agent.yml"
+    parameters = []
+  }
 ]
 
 infrastructure_configuration = {
