@@ -78,7 +78,7 @@ components_custom = [
     ]
   },
   {
-    path = "./components/iaps_server/delius_iaps_configure_cloudwatch_agent.yml"
+    path       = "./components/iaps_server/delius_iaps_configure_cloudwatch_agent.yml"
     parameters = []
   }
 ]
