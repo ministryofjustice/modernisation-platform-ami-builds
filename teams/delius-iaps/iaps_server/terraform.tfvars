@@ -47,7 +47,7 @@ components_custom = [
     parameters = []
   },
   {
-    path = "./components/iaps_server/delius_iaps_install_oracle_db_client_tools.yml"
+    path       = "./components/iaps_server/delius_iaps_install_oracle_db_client_tools.yml"
     parameters = [
       {
         name  = "S3ArtefactBucket"
@@ -60,7 +60,7 @@ components_custom = [
     parameters = []
   },
   {
-    path = "./components/iaps_server/delius_iaps_install_oracle_sql_developer.yml"
+    path       = "./components/iaps_server/delius_iaps_install_oracle_sql_developer.yml"
     parameters = [
       {
         name  = "S3ArtefactBucket"
@@ -69,7 +69,7 @@ components_custom = [
     ]
   },
   {
-    path = "./components/iaps_server/delius_iaps_install_im_interface.yml"
+    path       = "./components/iaps_server/delius_iaps_install_im_interface.yml"
     parameters = [
       {
         name  = "S3ArtefactBucket"
@@ -82,7 +82,7 @@ components_custom = [
     parameters = []
   },
   {
-    path = "./components/iaps_server/delius_iaps_add_manual.yml"
+    path       = "./components/iaps_server/delius_iaps_add_manual.yml"
     parameters = [
       {
         name  = "S3ArtefactBucket"
