@@ -29,7 +29,7 @@ phases:
               # choco install -y vcredist2008 # Commented out - hoping we don't need to explicitly mention this due to dynamic package dependency
 
               Write-Host('nginx proxy')
-              choco install -y nginx  # --params "/installLocation:C:\nginx /port:80"
+              choco install -y nginx
 
               Write-Host('Firefox browser')
               choco install -y firefox # install latest version
