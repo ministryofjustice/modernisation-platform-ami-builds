@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.1.1
       description: Component version
   - Platform:
       type: string
@@ -25,7 +25,7 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
-              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "oracle/sqldeveloper-4.1.3.20.78-x64.7z" -File "${env:TEMP}\oracle\sqldeveloper-4.1.3.20.78-x64.7z"
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "delius-iaps/oracle/sqldeveloper-4.1.3.20.78-x64.7z" -File "${env:TEMP}\oracle\sqldeveloper-4.1.3.20.78-x64.7z"
 
       - name: ExtractSQLDeveloper
         action: ExecutePowerShell

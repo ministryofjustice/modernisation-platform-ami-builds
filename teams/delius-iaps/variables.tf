@@ -113,8 +113,3 @@ variable "launch_permission_accounts_by_branch" {
   type        = map(any)
   description = "The list of accounts to give launch permissions to by branch"
 }
-
-variable "s3_artefacts_bucket" {
-  type        = string
-  description = "Name of the s3 bucket holding software artefacts"
-}
