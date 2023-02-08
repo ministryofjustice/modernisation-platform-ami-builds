@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.1.1
       description: Component version
   - Platform:
       type: string
@@ -25,4 +25,4 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
-              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "manuals/How-to-import-Database-connections-into-Oracle-SQL-Developer-from-XML.pdf" -File "C:\Users\Public\Desktop\How-to-import-Database-connections-into-Oracle-SQL-Developer-from-XML.pdf"
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -Key "delius-iaps/manuals/How-to-import-Database-connections-into-Oracle-SQL-Developer-from-XML.pdf" -File "C:\Users\Public\Desktop\How-to-import-Database-connections-into-Oracle-SQL-Developer-from-XML.pdf"
