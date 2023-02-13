@@ -76,6 +76,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/oasys/oracle_db"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/oasys/webserver"
     schedule:
       interval: "daily"
