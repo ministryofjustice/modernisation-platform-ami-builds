@@ -5,12 +5,13 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.3" # haven't added oasys or webserver specific stuff yet
+configuration_version = "0.0.7"
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
 tags = {
-  os-version = "rhel 7.9"
+  os-version  = "rhel 7.9"
+  server-type = "oasys-web"
 }
 
 parent_image = {
