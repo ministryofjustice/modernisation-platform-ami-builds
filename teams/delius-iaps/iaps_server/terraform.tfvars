@@ -108,7 +108,9 @@ launch_permission_accounts_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
-    "delius-iaps-development"
+    "delius-iaps-development",
+    "delius-iaps-preproduction",
+    "delius-iaps-production"
   ]
 
   # push to any other branch / local run
