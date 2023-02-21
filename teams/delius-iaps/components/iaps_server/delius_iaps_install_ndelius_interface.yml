@@ -471,23 +471,4 @@ phases:
                 </PROGRAMMECODES>
               </CODELOOKUPS>
             </DLLDEF>
-            overwrite: false      
-      - name: Copy Live config files from ... to install file
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - |
-              jkkkkkk
-      - name: Updating IapsNDeliusInterface\Config\NDELIUSIF.xml
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - |
-              yjkkkk
-      - name: RestartIapsNDeliusInterfaceWinService
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - |
-              kkllll
-              
+            overwrite: false
