@@ -26,6 +26,16 @@ phases:
               $VerbosePreference = "Continue"
 
               Read-S3Object -BucketName {{ S3ArtefactBucket }} -KeyPrefix "/apps/ndelius-interface/" -Folder " ${env:TEMP}\apps\ndelius-interface"
+      - name: InstallNDeliusInterface
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+              
+              Start-Process -Wait -FilePath "${env:TEMP}\apps\ndelius-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
+              New-Item -ItemType Junction -Path "C:\Program Files\I2N\IapsNDeliusInterface" -Target "C:\Program Files (x86)\I2N\IapsNDeliusInterface"
       - name: RemoveInvalidShortcut
         action: ExecutePowerShell
         inputs:
@@ -56,25 +66,15 @@ phases:
               $bytes = [System.IO.File]::ReadAllBytes("$iapsshortcut")
               $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
               [System.IO.File]::WriteAllBytes("$iapsshortcut", $bytes)
-      - name: InstallNDeliusInterface
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - |
-              $ErrorActionPreference = "Stop"
-              $VerbosePreference = "Continue"
-              
-              Start-Process -Wait -FilePath "${env:TEMP}\apps\ndelius-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
-              New-Item -ItemType Junction -Path "C:\Program Files\I2N\IapsNDeliusInterface" -Target "C:\Program Files (x86)\I2N\IapsNDeliusInterface"
       - name: GenerateNDELIUSIFConfig
         action: CreateFile
         inputs:
-        - path: C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\IMIAPS.xml
+        - path: C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml
           content: |
             <?xml version="1.0" encoding="utf-8" standalone="yes"?>
             <DLLDEF>
               <INTERFACES>
-                <INTERFACE NAME="PCMS" DESCRIPTION="NDeliusIF on Interface server" USER="" PASSWORD="" PROBEDELAYSECS="30" ODBC="DSN=PCMSSHADOW;uid=%USER%;pwd=%PASSWORD%" SOAPURL="https://localhost:443/NDeliusIAPS" SOAPUSER="IAPS-User" SOAPPASS="" REPLICAURL="" REPLICAPASSWORD="" REPLICAPASSWORDCODED="&#x1D;!=7/-za" SOAPCERT="*.probation.service.justice.gov.uk" REPLICACERT="" SOAPPASSCODED="1&#xD;&#x1B;&#x16;&lt;&#x7;5.$&#xF;,b&quot; /5" PASSWORDCODED="&#x1D;!=7/-za">
+                <INTERFACE NAME="PCMS" DESCRIPTION="NDeliusIF on Interface server" USER="" PASSWORD="" PROBEDELAYSECS="30" ODBC="DSN=PCMSSHADOW;uid=%USER%;pwd=%PASSWORD%" SOAPURL="https://localhost:443/NDeliusIAPS" SOAPUSER="IAPS-User" SOAPPASS="" REPLICAURL="" REPLICAPASSWORD="" REPLICAPASSWORDCODED="" SOAPCERT="*.probation.service.justice.gov.uk" REPLICACERT="" SOAPPASSCODED="" PASSWORDCODED="">
                 </INTERFACE>
               </INTERFACES>
               <EXCLUSIONS>
@@ -471,4 +471,4 @@ phases:
                 </PROGRAMMECODES>
               </CODELOOKUPS>
             </DLLDEF>
-            overwrite: false
+          overwrite: false
