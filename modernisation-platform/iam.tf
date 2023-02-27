@@ -47,7 +47,9 @@ resource "aws_iam_role" "image_builder_role" {
               "arn:aws:s3:::ec2-image-builder-*/*",
               "arn:aws:s3:::ec2-image-builder-*",
               "arn:aws:s3:::mod-platform-image-artefact-bucket*/*",
-              "arn:aws:s3:::mod-platform-image-artefact-bucket*"
+              "arn:aws:s3:::mod-platform-image-artefact-bucket*",
+              "arn:aws:s3:::modernisation-platform-software*/*",
+              "arn:aws:s3:::modernisation-platform-software*"
             ]
           },
           {
