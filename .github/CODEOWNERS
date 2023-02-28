@@ -4,5 +4,5 @@
 /ansible @ministryofjustice/studio-webops
 /teams/delius-iaps @ministryofjustice/hmpps-migration
 /teams/onr @ministryofjustice/studio-webops
-/teams/example @ministryofjustice/
-/teams/sprinkler @ministryofjustice/
+/teams/example @ministryofjustice
+/teams/sprinkler @ministryofjustice
