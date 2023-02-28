@@ -3,5 +3,6 @@
 /teams/oasys @ministryofjustice/studio-webops
 /ansible @ministryofjustice/studio-webops
 /teams/delius-iaps @ministryofjustice/hmpps-migration
-/teams/onr @ministryofjustice/hmpps-dso-pr-reviewer
-
+/teams/onr @ministryofjustice/studio-webops
+/teams/example @ministryofjustice/
+/teams/sprinkler @ministryofjustice/
