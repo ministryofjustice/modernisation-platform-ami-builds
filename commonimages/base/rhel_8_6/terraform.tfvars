@@ -14,7 +14,7 @@ tags = {
 parent_image = {
   owner = "309956199498" # Redhat
   ami_search_filters = {
-    name = ["RHEL-8.8_HVM-*"]
+    name = ["RHEL-8.6_HVM-*"]
   }
 }
 
