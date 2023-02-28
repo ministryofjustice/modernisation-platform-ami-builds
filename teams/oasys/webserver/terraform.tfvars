@@ -5,18 +5,18 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.7"
+configuration_version = "0.0.8"
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
 tags = {
-  os-version  = "rhel 7.9"
+  os-version  = "rhel 8.5"
   server-type = "oasys-web"
 }
 
 parent_image = {
   owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-7-9/x.x.x"
+  arn_resource_id = "base-rhel-8-5/x.x.x"
 }
 
 block_device_mappings_ebs = [
