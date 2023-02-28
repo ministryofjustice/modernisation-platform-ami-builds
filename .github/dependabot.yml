@@ -24,7 +24,7 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/commonimages/base/rhel_8_7_0"
+    directory: "/commonimages/base/rhel_8_5"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
