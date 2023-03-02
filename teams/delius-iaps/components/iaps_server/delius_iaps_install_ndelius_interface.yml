@@ -49,7 +49,9 @@ phases:
               Set-Acl $i2npath $acl
 
               Write-Host('Remove invalid shortcut')
-              if ( Test-Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk") { Remove-Item -Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk" }
+              if ( Test-Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk") {
+                Remove-Item -Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk"
+              }
 
               Write-Host('Creating new shortcut for all users')
               $iapsapp = "C:\Program Files (x86)\I2N\IapsNDeliusInterface\PCMSIfConsole.exe"
@@ -58,7 +60,7 @@ phases:
               $Shortcut = $WshShell.CreateShortcut("$iapsshortcut")
               $Shortcut.TargetPath = $iapsapp
               $Shortcut.Save()
-
+              
               Write-Host('Setting RunAs Adminisrator flag on new shortcut')
               $bytes = [System.IO.File]::ReadAllBytes("$iapsshortcut")
               $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
