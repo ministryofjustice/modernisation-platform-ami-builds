@@ -24,6 +24,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_8_5"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/commonimages/components"
     schedule:
       interval: "daily"
@@ -64,6 +68,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/nomis/windows_server_2019_jumpserver"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/nomis/windows_server_2022_jumpserver"
     schedule:
       interval: "daily"
@@ -72,7 +80,19 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/oasys/oracle_db"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/oasys/webserver"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/onr"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/onr/oracle_db"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
