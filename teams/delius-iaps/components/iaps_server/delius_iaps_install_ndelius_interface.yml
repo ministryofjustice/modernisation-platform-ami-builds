@@ -25,7 +25,7 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
-              Read-S3Object -BucketName {{ S3ArtefactBucket }} -KeyPrefix "/apps/ndelius-interface/" -Folder " ${env:TEMP}\apps\ndelius-interface"
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -KeyPrefix "delius-iaps/apps/ndelius-interface/" -Folder " ${env:TEMP}\ndelius-interface"
       - name: InstallNDeliusInterface
         action: ExecutePowerShell
         inputs:
@@ -34,7 +34,7 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
               
-              Start-Process -Wait -FilePath "${env:TEMP}\apps\ndelius-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
+              Start-Process -Wait -FilePath "${env:TEMP}\ndelius-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
               New-Item -ItemType Junction -Path "C:\Program Files\I2N\IapsNDeliusInterface" -Target "C:\Program Files (x86)\I2N\IapsNDeliusInterface"
       - name: RemoveInvalidShortcut
         action: ExecutePowerShell
@@ -83,9 +83,9 @@ phases:
                 <EXCLUSION DAY="Tuesday" START="14:20" END="14:21">
                 </EXCLUSION>
               </EXCLUSIONS>
-              <EMAIL SMTPURL="smtp" SMTPUSER="" PASSWORD="" PASSWORDCODED="&lt;5&quot;:4,;;" ENABLED="0" SENDTIME="10:00:00" FROMADDRESS="PCMS1-Interface@probation.service.justice.gov.uk">
-                <RECIPIENT EMAIL="terry.horridge@i2n.co.uk" />
-                <RECIPIENT EMAIL="helen.curtis@i2n.com" />
+              <EMAIL SMTPURL="smtp" SMTPUSER="" PASSWORD="" PASSWORDCODED="" ENABLED="0" SENDTIME="10:00:00" FROMADDRESS="PCMS1-Interface@probation.service.justice.gov.uk">
+                <RECIPIENT EMAIL="helen.curtis@necsws.com" />
+                <RECIPIENT EMAIL="emma.gregory@necsws.com" />
               </EMAIL>
               <FIXUPS MIGRATEMODE1="0" MIGRATEMODE2="0" SKIPEVENTERROR="1">
               </FIXUPS>

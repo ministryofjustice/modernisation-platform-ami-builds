@@ -73,7 +73,7 @@ components_custom = [
     parameters = [
       {
         name  = "S3ArtefactBucket"
-        value = "ec2-image-builder-iaps-artefacts"
+        value = "mod-platform-image-artefact-bucket20230203091453221500000001"
       }
     ]
   },
