@@ -62,6 +62,7 @@ To add a new team
 ```
   key = "imagebuilder-[team name].tfstate"
 ```
+**To ensure you can review any PRs you generate** add the team to the **.github/CODEOWNERS**. Check the contents of the file to see what is needed. Generally it is /teams/<team name> @ministryofjustice/<team name>. Ones that are currently in place can be seen in CODEOWNERS. 
 
 ### How to define an AMI (and associated Image Builder resources)
 

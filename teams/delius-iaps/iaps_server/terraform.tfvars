@@ -51,7 +51,7 @@ components_custom = [
     parameters = [
       {
         name  = "S3ArtefactBucket"
-        value = "ec2-image-builder-iaps-artefacts"
+        value = "mod-platform-image-artefact-bucket20230203091453221500000001"
       }
     ]
   },
@@ -64,7 +64,29 @@ components_custom = [
     parameters = [
       {
         name  = "S3ArtefactBucket"
-        value = "ec2-image-builder-iaps-artefacts"
+        value = "mod-platform-image-artefact-bucket20230203091453221500000001"
+      }
+    ]
+  },
+  {
+    path = "./components/iaps_server/delius_iaps_install_im_interface.yml"
+    parameters = [
+      {
+        name  = "S3ArtefactBucket"
+        value = "mod-platform-image-artefact-bucket20230203091453221500000001"
+      }
+    ]
+  },
+  {
+    path       = "./components/iaps_server/delius_iaps_configure_cloudwatch_agent.yml"
+    parameters = []
+  },
+  {
+    path = "./components/iaps_server/delius_iaps_add_manual.yml"
+    parameters = [
+      {
+        name  = "S3ArtefactBucket"
+        value = "mod-platform-image-artefact-bucket20230203091453221500000001"
       }
     ]
   },
@@ -95,10 +117,12 @@ launch_permission_accounts_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
-    "delius-iaps-development"
+    "delius-iaps-development",
+    "delius-iaps-preproduction",
+    "delius-iaps-production"
   ]
 
-  # push to any other branch / local run
+  # push to any other branch / local run
   default = [
     "core-shared-services-production",
     "delius-iaps-development",
@@ -108,5 +132,3 @@ launch_permission_accounts_by_branch = {
 }
 
 launch_template_exists = false
-
-s3_artefacts_bucket = "ec2-image-builder-iaps-artefacts"

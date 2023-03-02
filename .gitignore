@@ -3,6 +3,7 @@
 .terragrunt-cache
 *.tfstate*
 .DS_Store
+.idea/
 tmp/
 .vscode/
 .terraform.lock.hcl

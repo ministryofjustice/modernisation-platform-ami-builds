@@ -1,20 +1,20 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.7"
-description           = "shared rhel 7.9 base image"
+configuration_version = "0.0.2"
+description           = "shared rhel 8.5 base image"
 
-ami_base_name = "rhel_7_9"
+ami_base_name = "rhel_8_5"
 
 tags = {
-  os-version = "rhel 7.9"
+  os-version = "rhel 8.5"
   owner      = "digital-studio-operations-team@digital.justice.gov.uk"
 }
 
 parent_image = {
   owner = "309956199498" # Redhat
   ami_search_filters = {
-    name = ["RHEL-7.9_HVM-*"]
+    name = ["RHEL-8.5_HVM-*x86*"]
   }
 }
 

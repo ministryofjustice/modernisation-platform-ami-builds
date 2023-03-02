@@ -1,0 +1,38 @@
+---
+name: S3 operations on Windows example
+description: Upload/download objects from/to Windows to/from S3.
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      description: Component version (update this each time the file changes). Set outside of this document (in the pipeline variables).
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+  - S3bucket:
+      type: string
+      description: Name of the S3 bucket to upload/download to/from. Set outside of this document (in the pipeline variables).
+  - Key:
+      type: string
+      description: Path to the file on the S3 bucket. Set outside of this document (in the pipeline variables).
+  - FilePath:
+      type: string
+      description: Path to the file on the EC2. Set outside of this document (in the pipeline variables).
+phases:
+  - name: build
+    steps:
+      - name: push_to_s3
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              Write-S3Object -BucketName {{ S3bucket }} -Key {{ Key }} -Content "Hello World"
+  - name: test
+    steps:
+      - name: download_from_s3
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              Read-S3Object -BucketName {{ S3bucket }} -Key {{ Key }} -File {{ FilePath }}

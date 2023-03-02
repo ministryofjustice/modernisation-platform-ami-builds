@@ -4,14 +4,13 @@
 
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
-ami_base_name         = "webserver"
-configuration_version = "0.0.8"
+ami_base_name         = "oracle_db"
+configuration_version = "0.0.2"
 release_or_patch      = "release"
-description           = "oasys webserver image"
+description           = "oasys oracle db image"
 
 tags = {
-  os-version  = "rhel 8.5"
-  server-type = "oasys-web"
+  os-version = "rhel 8.5"
 }
 
 parent_image = {
@@ -20,26 +19,26 @@ parent_image = {
 }
 
 block_device_mappings_ebs = [
-  {
-    device_name = "/dev/sda1" # boot volume
-    volume_size = 30
-    volume_type = "gp3"
-  },
-  {
-    device_name = "/dev/sda2" # root volume
-    volume_size = 30
-    volume_type = "gp3"
-  },
-  {
-    device_name = "/dev/sdb" # /u01 oracle app disk
-    volume_size = 128
-    volume_type = "gp3"
-  },
-  {
-    device_name = "/dev/sdc" # /u02 oracle app disk
-    volume_size = 128
-    volume_type = "gp3"
-  }
+  # {
+  #   device_name = "/dev/sda1" # boot volume
+  #   volume_size = 30
+  #   volume_type = "gp3"
+  # },
+  # {
+  #   device_name = "/dev/sda2" # root volume
+  #   volume_size = 30
+  #   volume_type = "gp3"
+  # },
+  # {
+  #   device_name = "/dev/sdb" # /u01 oracle app disk
+  #   volume_size = 128
+  #   volume_type = "gp3"
+  # },
+  # {
+  #   device_name = "/dev/sdc" # /u02 oracle app disk
+  #   volume_size = 128
+  #   volume_type = "gp3"
+  # }
 ]
 
 components_aws = [
@@ -81,3 +80,4 @@ launch_permission_accounts_by_branch = {
 }
 
 launch_template_exists = false
+

@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.1.2
       description: Component version
   - Platform:
       type: string
@@ -29,17 +29,13 @@ phases:
               # choco install -y vcredist2008 # Commented out - hoping we don't need to explicitly mention this due to dynamic package dependency
 
               Write-Host('nginx proxy')
-              choco install -y nginx  # --params "/installLocation:C:\nginx /port:80"
+              choco install -y nginx
 
               Write-Host('Firefox browser')
               choco install -y firefox # install latest version
 
               Write-Host('7Zip archive util')
               choco install -y 7zip # install latest version
-
-              Write-Host('Install openssl for converting between pkcs12 and pem')
-              # Installs vcredist140 (Visual C++ 2017) as a dependency
-              # choco install -y openssl.light --version 1.1.1.20181020 # Hoping we don't need this
 
               Write-Host('Install SoapUI for test and debugging')
               choco install -y soapui

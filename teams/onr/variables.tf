@@ -81,7 +81,6 @@ variable "block_device_mappings_ebs" {
     device_name = string
     volume_size = number
     volume_type = string
-    snapshot_id = optional(string)
   }))
   description = "the block device mappings"
 }

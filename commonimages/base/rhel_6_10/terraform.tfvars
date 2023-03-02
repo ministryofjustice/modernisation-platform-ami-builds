@@ -2,7 +2,7 @@
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
 
-configuration_version = "0.0.6"
+configuration_version = "0.0.7"
 description           = "shared rhel 6.10 base image"
 
 ami_base_name = "rhel_6_10"
