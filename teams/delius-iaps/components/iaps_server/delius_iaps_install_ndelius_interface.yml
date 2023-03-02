@@ -41,9 +41,6 @@ phases:
         inputs:
           commands:
             - |
-              Write-Host('Remove invalid shortcut')
-              Remove-Item -Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk"
-
               Write-Host('Grant local Users group full access recursively to I2N program dir')
               $i2npath = "C:\Program Files (x86)\I2N"
               $acl = (Get-Item $i2npath).GetAccessControl('Access')
