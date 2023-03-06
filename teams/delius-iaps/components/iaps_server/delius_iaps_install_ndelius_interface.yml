@@ -65,410 +65,50 @@ phases:
               $bytes = [System.IO.File]::ReadAllBytes("$iapsshortcut")
               $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
               [System.IO.File]::WriteAllBytes("$iapsshortcut", $bytes)
-      - name: GenerateNDELIUSIFConfig
-        action: CreateFile
+      - name: DownloadAXMLFile
+        action: ExecutePowerShell
         inputs:
-          - path: C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml
-            content: |
-              <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-              <DLLDEF>
-                <INTERFACES>
-                  <INTERFACE NAME="PCMS" DESCRIPTION="NDeliusIF on Interface server" USER="" PASSWORD="" PROBEDELAYSECS="30" ODBC="DSN=PCMSSHADOW;uid=%USER%;pwd=%PASSWORD%" SOAPURL="https://localhost:443/NDeliusIAPS" SOAPUSER="IAPS-User" SOAPPASS="" REPLICAURL="" REPLICAPASSWORD="" REPLICAPASSWORDCODED="" SOAPCERT="*.probation.service.justice.gov.uk" REPLICACERT="" SOAPPASSCODED="" PASSWORDCODED="">
-                  </INTERFACE>
-                </INTERFACES>
-                <EXCLUSIONS>
-                  <EXCLUSION DAY="Monday" START="10:25" END="10:26">
-                  </EXCLUSION>
-                  <EXCLUSION DAY="Tuesday" START="14:20" END="14:21">
-                  </EXCLUSION>
-                </EXCLUSIONS>
-                <EMAIL SMTPURL="smtp" SMTPUSER="" PASSWORD="" PASSWORDCODED="" ENABLED="0" SENDTIME="10:00:00" FROMADDRESS="PCMS1-Interface@probation.service.justice.gov.uk">
-                  <RECIPIENT EMAIL="helen.curtis@necsws.com" />
-                  <RECIPIENT EMAIL="emma.gregory@necsws.com" />
-                </EMAIL>
-                <FIXUPS MIGRATEMODE1="0" MIGRATEMODE2="0" SKIPEVENTERROR="1">
-                </FIXUPS>
-                <CUSTOMDATA>
-                </CUSTOMDATA>
-                <CODELOOKUPS>
-                  <AREAMAPS>
-                    <AREAMAP CODE="N59">N59</AREAMAP>
-                    <AREAMAP CODE="N58">N58</AREAMAP>
-                    <AREAMAP CODE="N57">N57</AREAMAP>
-                    <AREAMAP CODE="N56">N56</AREAMAP>
-                    <AREAMAP CODE="N55">N55</AREAMAP>
-                    <AREAMAP CODE="N54">N54</AREAMAP>
-                    <AREAMAP CODE="N53">N53</AREAMAP>
-                    <AREAMAP CODE="N52">N52</AREAMAP>
-                    <AREAMAP CODE="N51">N51</AREAMAP>
-                    <AREAMAP CODE="N50">N50</AREAMAP>
-                    <AREAMAP CODE="C21">C21</AREAMAP>
-                    <AREAMAP CODE="C20">C20</AREAMAP>
-                    <AREAMAP CODE="C19">C19</AREAMAP>
-                    <AREAMAP CODE="C18">C18</AREAMAP>
-                    <AREAMAP CODE="C17">C17</AREAMAP>
-                    <AREAMAP CODE="C16">C16</AREAMAP>
-                    <AREAMAP CODE="C15">C15</AREAMAP>
-                    <AREAMAP CODE="C14">C14</AREAMAP>
-                    <AREAMAP CODE="C13">C13</AREAMAP>
-                    <AREAMAP CODE="C12">C12</AREAMAP>
-                    <AREAMAP CODE="C11">C11</AREAMAP>
-                    <AREAMAP CODE="C10">C10</AREAMAP>
-                    <AREAMAP CODE="C09">C09</AREAMAP>
-                    <AREAMAP CODE="C08">C08</AREAMAP>
-                    <AREAMAP CODE="C07">C07</AREAMAP>
-                    <AREAMAP CODE="C06">C06</AREAMAP>
-                    <AREAMAP CODE="C05">C05</AREAMAP>
-                    <AREAMAP CODE="C04">C04</AREAMAP>
-                    <AREAMAP CODE="C03">C03</AREAMAP>
-                    <AREAMAP CODE="C02">C02</AREAMAP>
-                    <AREAMAP CODE="C01">C01</AREAMAP>
-                    <AREAMAP CODE="N07">N07</AREAMAP>
-                    <AREAMAP CODE="N06">N06</AREAMAP>
-                    <AREAMAP CODE="N05">N05</AREAMAP>
-                    <AREAMAP CODE="N04">N04</AREAMAP>
-                    <AREAMAP CODE="N03">N03</AREAMAP>
-                    <AREAMAP CODE="N02">N02</AREAMAP>
-                    <AREAMAP CODE="N01">N01</AREAMAP>
-                    <AREAMAP CODE="ASP">ASP</AREAMAP>
-                    <AREAMAP CODE="BED">BED</AREAMAP>
-                    <AREAMAP CODE="CBS">CBS</AREAMAP>
-                    <AREAMAP CODE="CHS">CHS</AREAMAP>
-                    <AREAMAP CODE="CMB">CMB</AREAMAP>
-                    <AREAMAP CODE="DBS">DBS</AREAMAP>
-                    <AREAMAP CODE="DCP">DCP</AREAMAP>
-                    <AREAMAP CODE="DRS">DRS</AREAMAP>
-                    <AREAMAP CODE="DTV">DTV</AREAMAP>
-                    <AREAMAP CODE="ESX">ESX</AREAMAP>
-                    <AREAMAP CODE="GCS">GCS</AREAMAP>
-                    <AREAMAP CODE="HBS">HBS</AREAMAP>
-                    <AREAMAP CODE="HFS">HFS</AREAMAP>
-                    <AREAMAP CODE="HPS">HPS</AREAMAP>
-                    <AREAMAP CODE="KNT">KNT</AREAMAP>
-                    <AREAMAP CODE="LCS">LCS</AREAMAP>
-                    <AREAMAP CODE="LDN">LDN</AREAMAP>
-                    <AREAMAP CODE="LNS">LNS</AREAMAP>
-                    <AREAMAP CODE="LTS">LTS</AREAMAP>
-                    <AREAMAP CODE="MCG">MCG</AREAMAP>
-                    <AREAMAP CODE="MRS">MRS</AREAMAP>
-                    <AREAMAP CODE="NBR">NBR</AREAMAP>
-                    <AREAMAP CODE="NHS">NHS</AREAMAP>
-                    <AREAMAP CODE="NSP">NSP</AREAMAP>
-                    <AREAMAP CODE="NTS">NTS</AREAMAP>
-                    <AREAMAP CODE="SSP">SSP</AREAMAP>
-                    <AREAMAP CODE="SWM">SWM</AREAMAP>
-                    <AREAMAP CODE="TVP">TVY</AREAMAP>
-                    <AREAMAP CODE="WMP">WMP</AREAMAP>
-                    <AREAMAP CODE="WPT">WAL</AREAMAP>
-                    <AREAMAP CODE="WTS">WTS</AREAMAP>
-                    <AREAMAP CODE="WWS">WWS</AREAMAP>
-                    <AREAMAP CODE="YSN">YSN</AREAMAP>
-                    <AREAMAP CODE="YSS">YSS</AREAMAP>
-                    <AREAMAP CODE="YSW">YSW</AREAMAP>
-                  </AREAMAPS>
-                  <CONTACTSTATUSES>
-                    <CONTACTSTATUS CODE="Scheduled">Scheduled</CONTACTSTATUS>
-                    <CONTACTSTATUS CODE="Attended">ATTC</CONTACTSTATUS>
-                    <CONTACTSTATUS CODE="Reattendance Required">ATTC</CONTACTSTATUS>
-                    <CONTACTSTATUS CODE="Unacceptable Absence">UAAB</CONTACTSTATUS>
-                    <CONTACTSTATUS CODE="Acceptable Absence">AAAA</CONTACTSTATUS>
-                  </CONTACTSTATUSES>
-                  <CONTACTTYPES>
-                    <CONTACTTYPE CODE="Main">CAPX</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Catchup">CAPX</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Follow-up">CAPX</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Session">CAPX</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Pre-programme">APRE</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Post-programme">APOS</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Referred">EIAA</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Enrolled">EIAC</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Prog Ready">EIAB</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Transfer">EIAD</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Transferred">EIAD</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Repeat">EIAF</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Restart">EIAE</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Suspended">EIAG</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Abandoned">EIAI</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Resumed">EIAH</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Restored">EIAJ</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Completion">EIAK</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Completed">EIAL</CONTACTTYPE>
-                    <CONTACTTYPE CODE="CMSLink">EICO</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Letter Sent">EICD</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Phone Call">EICC</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Comment">EICA</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Email">EICB</CONTACTTYPE>
-                    <CONTACTTYPE CODE="3 Way Meeting">EICE</CONTACTTYPE>
-                    <CONTACTTYPE CODE="Other">EICO</CONTACTTYPE>
-                    <CONTACTTYPE CODE="DEFAULT">EICO</CONTACTTYPE>
-                  </CONTACTTYPES>
-                  <SESSIONCONTACTS>
-                    <SESSIONCONTACT CODE="CAPX">Session</SESSIONCONTACT>
-                  </SESSIONCONTACTS>
-                  <DELIUSCONTACTS>
-                    <DELIUSCONTACT CODE="APRE">Pre-programme</DELIUSCONTACT>
-                    <DELIUSCONTACT CODE="APOS">Post-programme</DELIUSCONTACT>
-                    <DELIUSCONTACT CODE="ACOM">National Delius</DELIUSCONTACT>
-                    <DELIUSCONTACT CODE="C308">National Delius</DELIUSCONTACT>
-                    <DELIUSCONTACT CODE="C309">National Delius</DELIUSCONTACT>
-                    <DELIUSCONTACT CODE="DEFAULT">National Delius</DELIUSCONTACT>
-                  </DELIUSCONTACTS>
-                  <LEGACYCONTACTS>
-                  </LEGACYCONTACTS>
-                  <DELIUSSTATUSES>
-                    <DELIUSSTATUS CODE="Scheduled">Scheduled</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="ATTC">Attended</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AFTC">Attended</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="ATSH">Attended</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="ATSS">Attended</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="ATFI">Attended</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="UAAB">Unacceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AAAA">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AAME">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AARE">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AASD">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AAHO">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AAEM">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AAFC">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AACL">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AARC">Acceptable Absence</DELIUSSTATUS>
-                    <DELIUSSTATUS CODE="AFTA">Unacceptable Absence</DELIUSSTATUS>
-                  </DELIUSSTATUSES>
-                  <CHANGETIMES>
-                    <CHANGETIME CODE="Referred">01:01</CHANGETIME>
-                    <CHANGETIME CODE="Prog Ready">01:06</CHANGETIME>
-                    <CHANGETIME CODE="Enrolled">01:11</CHANGETIME>
-                    <CHANGETIME CODE="Transfer">23:09</CHANGETIME>
-                    <CHANGETIME CODE="Repeat">01:21</CHANGETIME>
-                    <CHANGETIME CODE="Restart">01:31</CHANGETIME>
-                    <CHANGETIME CODE="Suspended">23:29</CHANGETIME>
-                    <CHANGETIME CODE="Abandoned">23:19</CHANGETIME>
-                    <CHANGETIME CODE="Resumed">01:41</CHANGETIME>
-                    <CHANGETIME CODE="Restored">01:51</CHANGETIME>
-                    <CHANGETIME CODE="Completion">23:39</CHANGETIME>
-                    <CHANGETIME CODE="Completed">23:49</CHANGETIME>
-                    <CHANGETIME CODE="CMSLink">23:05</CHANGETIME>
-                  </CHANGETIMES>
-                  <DISPOSALS>
-                    <DISPOSAL CODE="OU15">32</DISPOSAL>
-                    <DISPOSAL CODE="113">79</DISPOSAL>
-                    <DISPOSAL CODE="201">54</DISPOSAL>
-                    <DISPOSAL CODE="202">55</DISPOSAL>
-                    <DISPOSAL CODE="203">56</DISPOSAL>
-                    <DISPOSAL CODE="204">05</DISPOSAL>
-                    <DISPOSAL CODE="205">01</DISPOSAL>
-                    <DISPOSAL CODE="206">50</DISPOSAL>
-                    <DISPOSAL CODE="207">52</DISPOSAL>
-                    <DISPOSAL CODE="208">15</DISPOSAL>
-                    <DISPOSAL CODE="209">43</DISPOSAL>
-                    <DISPOSAL CODE="210">42</DISPOSAL>
-                    <DISPOSAL CODE="211">05</DISPOSAL>
-                    <DISPOSAL CODE="212">79</DISPOSAL>
-                    <DISPOSAL CODE="213">47</DISPOSAL>
-                    <DISPOSAL CODE="214">48</DISPOSAL>
-                    <DISPOSAL CODE="215">49</DISPOSAL>
-                    <DISPOSAL CODE="216">02</DISPOSAL>
-                    <DISPOSAL CODE="217">03</DISPOSAL>
-                    <DISPOSAL CODE="218">04</DISPOSAL>
-                    <DISPOSAL CODE="219">79</DISPOSAL>
-                    <DISPOSAL CODE="220">45</DISPOSAL>
-                    <DISPOSAL CODE="221">79</DISPOSAL>
-                    <DISPOSAL CODE="222">52</DISPOSAL>
-                    <DISPOSAL CODE="223">52</DISPOSAL>
-                    <DISPOSAL CODE="224">79</DISPOSAL>
-                    <DISPOSAL CODE="225">79</DISPOSAL>
-                    <DISPOSAL CODE="226">79</DISPOSAL>
-                    <DISPOSAL CODE="227">54</DISPOSAL>
-                    <DISPOSAL CODE="228">54</DISPOSAL>
-                    <DISPOSAL CODE="229">56</DISPOSAL>
-                    <DISPOSAL CODE="233">82</DISPOSAL>
-                    <DISPOSAL CODE="301">58</DISPOSAL>
-                    <DISPOSAL CODE="302">22</DISPOSAL>
-                    <DISPOSAL CODE="303">60</DISPOSAL>
-                    <DISPOSAL CODE="304">31</DISPOSAL>
-                    <DISPOSAL CODE="305">29</DISPOSAL>
-                    <DISPOSAL CODE="306">32</DISPOSAL>
-                    <DISPOSAL CODE="307">81</DISPOSAL>
-                    <DISPOSAL CODE="308">20</DISPOSAL>
-                    <DISPOSAL CODE="310">20</DISPOSAL>
-                    <DISPOSAL CODE="311">22</DISPOSAL>
-                    <DISPOSAL CODE="312">79</DISPOSAL>
-                    <DISPOSAL CODE="313">28</DISPOSAL>
-                    <DISPOSAL CODE="315">34</DISPOSAL>
-                    <DISPOSAL CODE="316">34</DISPOSAL>
-                    <DISPOSAL CODE="317">35</DISPOSAL>
-                    <DISPOSAL CODE="318">36</DISPOSAL>
-                    <DISPOSAL CODE="319">37</DISPOSAL>
-                    <DISPOSAL CODE="322">79</DISPOSAL>
-                    <DISPOSAL CODE="325">80</DISPOSAL>
-                    <DISPOSAL CODE="326">83</DISPOSAL>
-                    <DISPOSAL CODE="327">84</DISPOSAL>
-                    <DISPOSAL CODE="328">85</DISPOSAL>
-                    <DISPOSAL CODE="329">86</DISPOSAL>
-                    <DISPOSAL CODE="330">87</DISPOSAL>
-                    <DISPOSAL CODE="331">88</DISPOSAL>
-                    <DISPOSAL CODE="401">79</DISPOSAL>
-                    <DISPOSAL CODE="405">79</DISPOSAL>
-                    <DISPOSAL CODE="406">73</DISPOSAL>
-                    <DISPOSAL CODE="407">79</DISPOSAL>
-                    <DISPOSAL CODE="408">75</DISPOSAL>
-                    <DISPOSAL CODE="409">79</DISPOSAL>
-                    <DISPOSAL CODE="410">79</DISPOSAL>
-                    <DISPOSAL CODE="411">79</DISPOSAL>
-                    <DISPOSAL CODE="412">70</DISPOSAL>
-                    <DISPOSAL CODE="413">79</DISPOSAL>
-                    <DISPOSAL CODE="414">79</DISPOSAL>
-                    <DISPOSAL CODE="415">79</DISPOSAL>
-                    <DISPOSAL CODE="416">79</DISPOSAL>
-                    <DISPOSAL CODE="417">79</DISPOSAL>
-                    <DISPOSAL CODE="418">78</DISPOSAL>
-                    <DISPOSAL CODE="419">79</DISPOSAL>
-                    <DISPOSAL CODE="420">79</DISPOSAL>
-                    <DISPOSAL CODE="421">79</DISPOSAL>
-                    <DISPOSAL CODE="422">79</DISPOSAL>
-                    <DISPOSAL CODE="423">79</DISPOSAL>
-                    <DISPOSAL CODE="424">79</DISPOSAL>
-                    <DISPOSAL CODE="425">79</DISPOSAL>
-                    <DISPOSAL CODE="426">79</DISPOSAL>
-                    <DISPOSAL CODE="427">79</DISPOSAL>
-                    <DISPOSAL CODE="428">79</DISPOSAL>
-                    <DISPOSAL CODE="429">79</DISPOSAL>
-                    <DISPOSAL CODE="499">79</DISPOSAL>
-                    <DISPOSAL CODE="501">79</DISPOSAL>
-                    <DISPOSAL CODE="502">79</DISPOSAL>
-                    <DISPOSAL CODE="503">79</DISPOSAL>
-                    <DISPOSAL CODE="504">79</DISPOSAL>
-                    <DISPOSAL CODE="505">79</DISPOSAL>
-                    <DISPOSAL CODE="507">79</DISPOSAL>
-                    <DISPOSAL CODE="506">79</DISPOSAL>
-                    <DISPOSAL CODE="508">79</DISPOSAL>
-                    <DISPOSAL CODE="509">79</DISPOSAL>
-                    <DISPOSAL CODE="510">79</DISPOSAL>
-                    <DISPOSAL CODE="601">79</DISPOSAL>
-                    <DISPOSAL CODE="602">79</DISPOSAL>
-                    <DISPOSAL CODE="603">79</DISPOSAL>
-                    <DISPOSAL CODE="604">79</DISPOSAL>
-                    <DISPOSAL CODE="605">79</DISPOSAL>
-                    <DISPOSAL CODE="606">79</DISPOSAL>
-                    <DISPOSAL CODE="607">79</DISPOSAL>
-                    <DISPOSAL CODE="608">79</DISPOSAL>
-                    <DISPOSAL CODE="609">79</DISPOSAL>
-                    <DISPOSAL CODE="610">79</DISPOSAL>
-                    <DISPOSAL CODE="611">79</DISPOSAL>
-                    <DISPOSAL CODE="612">79</DISPOSAL>
-                    <DISPOSAL CODE="613">79</DISPOSAL>
-                    <DISPOSAL CODE="614">79</DISPOSAL>
-                    <DISPOSAL CODE="615">79</DISPOSAL>
-                    <DISPOSAL CODE="701">79</DISPOSAL>
-                    <DISPOSAL CODE="702">79</DISPOSAL>
-                    <DISPOSAL CODE="703">79</DISPOSAL>
-                    <DISPOSAL CODE="704">79</DISPOSAL>
-                    <DISPOSAL CODE="801">79</DISPOSAL>
-                    <DISPOSAL CODE="802">79</DISPOSAL>
-                    <DISPOSAL CODE="803">79</DISPOSAL>
-                    <DISPOSAL CODE="804">79</DISPOSAL>
-                    <DISPOSAL CODE="805">79</DISPOSAL>
-                    <DISPOSAL CODE="806">79</DISPOSAL>
-                    <DISPOSAL CODE="807">79</DISPOSAL>
-                    <DISPOSAL CODE="808">79</DISPOSAL>
-                    <DISPOSAL CODE="809">79</DISPOSAL>
-                    <DISPOSAL CODE="OU01">37</DISPOSAL>
-                  </DISPOSALS>
-                  <RISKLEVELS>
-                    <RISKLEVEL CODE="Low">Low risk</RISKLEVEL>
-                    <RISKLEVEL CODE="Medium">Medium risk</RISKLEVEL>
-                    <RISKLEVEL CODE="High">High risk</RISKLEVEL>
-                    <RISKLEVEL CODE="Very High">Very high risk</RISKLEVEL>
-                    <RISKLEVEL CODE="DEFAULT">
-                    </RISKLEVEL>
-                  </RISKLEVELS>
-                  <RACEETHNICS>
-                    <RACEETHNIC CODE="W1">W1</RACEETHNIC>
-                  </RACEETHNICS>
-                  <PROGRAMMECODES>
-                    <PROGRAMMECODE CODE="731">Becoming New Me +</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC3602">Becoming New Me +</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="732">iHorizon</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LCIH">iHorizon</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="730">New Me Strengths</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC261">New Me Strengths</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="RS66">Not yet specified</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="703">One to One</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="704">CSB</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="705">CALM</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="706">ART</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="707">IDAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="708">CDVP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="709">TV-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="710">N-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="711">C-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="712">ASRO</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="713">OSAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="715">DID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="716">The Women's Programme</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="718">CSCP Block 6</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="719">i-SOTP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="720">COVAID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="721">LIAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="722">TSP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="723">Becoming New Me</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="724">Building Skills for Recovery</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="725">BBRP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="726">RESOLVE</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="727">Living as New Me</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="729">HORIZON</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC65">Think First</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC60">ETS</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC53">One to One</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC57">CSB</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC56">CALM</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC54">ART</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC67">IDAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC58">CDVP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC64">TV-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC61">N-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC63">C-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC55">ASRO</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC66">OSAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC59">DID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC68">The Women's Programme</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC70">CSCP Block 6</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC71">i-SOTP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC73">COVAID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC72">LIAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC74">TSP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC75">Becoming New Me</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC76">Building Skills for Recovery</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC77">BBRP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC78">RESOLVE</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC259">Living as New Me</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="LC260">HORIZON</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P01">Think First</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P02">ETS</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P03">One to One</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P04">CSB</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P05">CALM</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P06">ART</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P07">IDAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P08">CDVP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P09">TV-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P10">N-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P11">C-SOGP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P12">ASRO</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P13">OSAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P15">DID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P16">The Women's Programme</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P18">CSCP Block 6</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P19">i-SOTP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P20">COVAID</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P21">LIAP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P22">TSP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P23">Becoming New Me</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P24">Building Skills for Recovery</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P25">BBRP</PROGRAMMECODE>
-                    <PROGRAMMECODE CODE="P26">RESOLVE</PROGRAMMECODE>
-                  </PROGRAMMECODES>
-                </CODELOOKUPS>
-              </DLLDEF>
-            overwrite: false
-            
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
+              $output = "${env:TEMP}\ndelius-interface"
+              Invoke-WebRequest -Uri $url -OutFile $output
+      - name: ConfigureNDELIUSIFConfig
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              Write-Host('Updating NDelius IF SOAPURL and SMTP Values in NDELIUSIF Config')
+              $ndifconfigfile="C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml"
+              $xml = [xml](get-content $ndifconfigfile)
+              $xmlElement = $xml.get_DocumentElement()
+              $xmlElementToModify = $xmlElement.INTERFACES.INTERFACE
+              foreach ($element in $xmlElementToModify)
+              {
+                if ($element.NAME -eq "PCMS")
+                {
+                  $element.SOAPURL="https://localhost:443/NDeliusIAPS"
+                  $element.SOAPCERT='*.probation.service.justice.gov.uk'
+                  $element.REPLICACERT=""
+                  $element.SOAPPASSCODED=""
+                  $element.REPLICAURL=""
+                }
+              }
+              $xmlElementToModify = $xmlElement.EMAIL
+              foreach ($element in $xmlElementToModify)
+              {
+                if ($element.SMTPURL -eq "tbdominoa.i2ntest.local")
+                {
+                  $element.SMTPURL="smtp"
+                }
+                if ($element.SMTPUSER -eq "administrator")
+                {
+                  $element.SMTPUSER=""
+                }
+                $element.PASSWORDCODED=""
+                $element.FROMADDRESS="PCMS1-Interface@probation.service.justice.gov.uk"
+              }
+              $xml.Save($ndifconfigfile)
