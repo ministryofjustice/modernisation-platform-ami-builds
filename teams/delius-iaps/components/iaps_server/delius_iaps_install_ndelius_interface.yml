@@ -76,39 +76,3 @@ phases:
               $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
               $output = "${env:TEMP}\ndelius-interface"
               Invoke-WebRequest -Uri $url -OutFile $output
-      - name: ConfigureNDELIUSIFConfig
-        action: ExecutePowerShell
-        inputs:
-          commands:
-            - |
-              Write-Host('Updating NDelius IF SOAPURL and SMTP Values in NDELIUSIF Config')
-              $ndifconfigfile="C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml"
-              $xml = [xml](get-content $ndifconfigfile)
-              $xmlElement = $xml.get_DocumentElement()
-              $xmlElementToModify = $xmlElement.INTERFACES.INTERFACE
-              foreach ($element in $xmlElementToModify)
-              {
-                if ($element.NAME -eq "PCMS")
-                {
-                  $element.SOAPURL="https://localhost:443/NDeliusIAPS"
-                  $element.SOAPCERT='*.probation.service.justice.gov.uk'
-                  $element.REPLICACERT=""
-                  $element.SOAPPASSCODED=""
-                  $element.REPLICAURL=""
-                }
-              }
-              $xmlElementToModify = $xmlElement.EMAIL
-              foreach ($element in $xmlElementToModify)
-              {
-                if ($element.SMTPURL -eq "tbdominoa.i2ntest.local")
-                {
-                  $element.SMTPURL="smtp"
-                }
-                if ($element.SMTPUSER -eq "administrator")
-                {
-                  $element.SMTPUSER=""
-                }
-                $element.PASSWORDCODED=""
-                $element.FROMADDRESS="PCMS1-Interface@probation.service.justice.gov.uk"
-              }
-              $xml.Save($ndifconfigfile)
