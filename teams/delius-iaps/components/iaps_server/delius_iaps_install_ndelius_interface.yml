@@ -74,5 +74,5 @@ phases:
               $VerbosePreference = "Continue"
 
               $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
-              $output = "${env:TEMP}\ndelius-interface"
+              $output = "${env:TEMP}\ndelius-interface\NDELIUSIF.xml"
               Invoke-WebRequest -Uri $url -OutFile $output
