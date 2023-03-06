@@ -1,0 +1,78 @@
+---
+name: delius_iaps_install_ndelius_interface
+description: Installs delius_iaps_install_ndelius_interface
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+  - S3ArtefactBucket:
+      type: string
+      description: Name of s3 bucket holding software artefacts
+phases:
+  - name: build
+    steps:
+      - name: DownloadArtefacts
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Read-S3Object -BucketName {{ S3ArtefactBucket }} -KeyPrefix "delius-iaps/apps/ndelius-interface/" -Folder " ${env:TEMP}\ndelius-interface"
+      - name: InstallNDeliusInterface
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Start-Process -Wait -FilePath "${env:TEMP}\ndelius-interface\setup.exe" -ArgumentList "/quiet /qn" -Verb RunAs
+              New-Item -ItemType Junction -Path "C:\Program Files\I2N\IapsNDeliusInterface" -Target "C:\Program Files (x86)\I2N\IapsNDeliusInterface"
+      - name: RemoveInvalidShortcut
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              Write-Host('Grant local Users group full access recursively to I2N program dir')
+              $i2npath = "C:\Program Files (x86)\I2N"
+              $acl = (Get-Item $i2npath).GetAccessControl('Access')
+              $rule = New-Object System.Security.AccessControl.FileSystemAccessRule("Users", "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow")
+              $acl.SetAccessRule($rule)
+              Set-Acl $i2npath $acl
+
+              Write-Host('Remove invalid shortcut')
+              if ( Test-Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk") {
+                Remove-Item -Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk"
+              }
+
+              Write-Host('Creating new shortcut for all users')
+              $iapsapp = "C:\Program Files (x86)\I2N\IapsNDeliusInterface\PCMSIfConsole.exe"
+              $iapsshortcut = "C:\Users\Public\Desktop\PCMSIfConsole.lnk"
+              $WshShell = New-Object -comObject WScript.Shell
+              $Shortcut = $WshShell.CreateShortcut("$iapsshortcut")
+              $Shortcut.TargetPath = $iapsapp
+              $Shortcut.Save()
+
+              Write-Host('Setting RunAs Adminisrator flag on new shortcut')
+              $bytes = [System.IO.File]::ReadAllBytes("$iapsshortcut")
+              $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
+              [System.IO.File]::WriteAllBytes("$iapsshortcut", $bytes)
+      - name: DownloadAXMLFile
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
+              $output = "${env:TEMP}\ndelius-interface"
+              Invoke-WebRequest -Uri $url -OutFile $output
