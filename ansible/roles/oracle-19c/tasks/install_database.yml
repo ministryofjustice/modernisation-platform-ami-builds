@@ -12,7 +12,7 @@
     creates: "{{ db_software }}"
     chdir: "{{ artefact_dir }}"
 
-- name: unzip db software 
+- name: unzip db software
   ansible.builtin.command:
     cmd: unzip "{{ artefact_dir }}/{{ db_software }}" -d "{{ db_home }}"
 

@@ -21,11 +21,11 @@
     creates: "{{ psu_patch }}"
     chdir: "{{ artefact_dir }}"
 
-- name: unzip grid software 
+- name: unzip grid software
   ansible.builtin.command:
     cmd: unzip "{{ artefact_dir }}/{{ grid_software }}" -d "{{ grid_home }}"
 
-- name: unzip grid software 
+- name: unzip grid software
   ansible.builtin.command:
     cmd: unzip "{{ artefact_dir }}/{{ psu_patch }}" -d "{{ artefact_dir }}"
 
