@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.1
+      default: 0.1.2
       description: Component version
   - Platform:
       type: string
@@ -74,5 +74,5 @@ phases:
               $VerbosePreference = "Continue"
 
               $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
-              $output = "${env:TEMP}\ndelius-interface\NDELIUSIF.xml"
+              $output = "C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml"
               Invoke-WebRequest -Uri $url -OutFile $output
