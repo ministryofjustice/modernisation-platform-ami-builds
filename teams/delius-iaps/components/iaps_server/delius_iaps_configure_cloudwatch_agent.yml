@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.1.1
       description: Component version
   - Platform:
       type: string
@@ -43,17 +43,17 @@ phases:
                         },
                         {
                           "file_path": "C:\\Program Files (x86)\\I2N\\IapsNDeliusInterface\\Log\\XMLTRANSFER.LOG",
-                          "log_group_name": "/iaps/i2n-xmltransfer.log",
+                          "log_group_name": "/iaps/ndinterface/xmltransfer.log",
                           "log_stream_name": "{hostname}"
                         },
                         {
                           "file_path": "C:\\Program Files (x86)\\I2N\\IapsNDeliusInterface\\Log\\DAILY\\DAYSUMMARY.LOG",
-                          "log_group_name": "/iaps/i2n-daysummary.log",
+                          "log_group_name": "/iaps/ndinterface/daysummary.log",
                           "log_stream_name": "{hostname}"
                         },
                         {
                           "file_path": "C:\\Program Files (x86)\\I2N\\IapsIMInterface\\Log\\IMIAPSIF.LOG",
-                          "log_group_name": "/iaps/imiapsif.log",
+                          "log_group_name": "/iaps/iminterface/imiapsif.log",
                           "log_stream_name": "{hostname}"
                         },
                         {
