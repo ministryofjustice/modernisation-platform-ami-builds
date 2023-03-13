@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<DLLDEF>
+  <INTERFACES>
+    <INTERFACE EXCREPORT="0" NAME="IAPSCENTRAL" AREACODE="ALL" DESCRIPTION="IAPS Central Oracle" USER="" PASSWORD="" TESTMATCHING="0" PROBEDELAYSECS="30" ODBC="DSN=PCMSIFIAPS;uid=%USER%;pwd=%PASSWORD%" PASSWORDCODED="">
+    </INTERFACE>
+  </INTERFACES>
+  <CUSTOMDATA>
+  </CUSTOMDATA>
+  <CODELOOKUPS>
+    <DEFPROGTEAMS>
+      <DEFPROGTEAM CODE="N59">South Central Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N58">South West Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N57">KSS Region - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N56">East of England Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N55">Yorkshire and The Humber Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N54">North East Region Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N53">East Midlands Region Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N52">West Midlands Region Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N51">North West Region Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N50">Greater Manchester Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N07">Customer Centre Referrals 7</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C17">Customer Centre Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C09">YSS Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C05">YSW Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C04">HLNY Referral Pending Allocation and Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C03">Durham Tees Valley CRC - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C01">Northumbria CRC - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N02">NPS North East - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C19">DCD nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C15">GCS nDelius Ref</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N05">South West NPS nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C08">CPA DLNR Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C12">Referral Clearing for WWS &amp; WMP CRC</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C11">SWM Programme Unit</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N04">NPS Midlands Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N01">NPS North West Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C02">Cumbria and Lancashire Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C07">PPT</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C06">Merseyside Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C16">Thames Valley CRC - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C20">HPS and Isle of Wight CRC-Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C21">Kent, SRY and SSX CRC - Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C13">BeNCH nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C18">ESX Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C14">Unallocated</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N06">NPS South East &amp; Eastern-Default Unallocated Team</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="C10">WLS CRC nDelius Unallocated Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="N03">WLS nDelius Unallocated Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="CHS">CHS nDelius Referrals Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="WAL">WLS nDelius Unallocated Referrals Legacy</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="TVY">TVY nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="SSP">SSPT nDelius Awaiting Referral</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="NSP">NSPT nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="WMP">WMP nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="GCS">GCS nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="KNT">KNT nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="BED">BED nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="DBS">DBS IAPS Migration</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="NTS">NTS nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="YSN">YSN nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="LCS">LCS Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="NBR">NBR nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="LTS">Leicestershire nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="CBS">Cambridgeshire Programmes</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="WTS">WTS Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="HPS">HPS Programmes Clearance</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="YSS">YSS Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="CMB">Cumbria Central Programmes Unit</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="HBS">HBS Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="NHS">NHS Programmes Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="MCG">PPT</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="LNS">Lincs Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="DRS">Dorset Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="ESX">ESX Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="LDN">London Programmes Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="SWM">Dummy Programme Unit</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="MRS">Merseyside Liverpool Programmes</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="WWS">WWS Referral Clearing</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="DTV">DTV Delius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="DCP">DCP nDelius Referrals</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="ASP">ASP nDelius Awaiting Allocation</DEFPROGTEAM>
+      <DEFPROGTEAM CODE="HFS">HFS Referral Clearing</DEFPROGTEAM>
+    </DEFPROGTEAMS>
+    <CONTACTCLASSES>
+      <CONTACTCLASS CODE="Pre-programme">Session</CONTACTCLASS>
+      <CONTACTCLASS CODE="Post-programme">Session</CONTACTCLASS>
+      <CONTACTCLASS CODE="DEFAULT">Log</CONTACTCLASS>
+    </CONTACTCLASSES>
+  </CODELOOKUPS>
+</DLLDEF>

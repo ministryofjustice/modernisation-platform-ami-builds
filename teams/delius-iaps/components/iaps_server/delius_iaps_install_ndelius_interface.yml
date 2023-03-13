@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.2
+      default: 0.1.3
       description: Component version
   - Platform:
       type: string
@@ -65,7 +65,7 @@ phases:
               $bytes = [System.IO.File]::ReadAllBytes("$iapsshortcut")
               $bytes[0x15] = $bytes[0x15] -bor 0x20 #set byte 21 (0x15) bit 6 (0x20) ON
               [System.IO.File]::WriteAllBytes("$iapsshortcut", $bytes)
-      - name: DownloadAXMLFile
+      - name: DownloadXMLConfigFiles
         action: ExecutePowerShell
         inputs:
           commands:
@@ -73,6 +73,5 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
-              $url = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml"
-              $output = "C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml"
-              Invoke-WebRequest -Uri $url -OutFile $output
+              Invoke-WebRequest -Uri "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/IAPSCMSIF.xml" -OutFile "C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\IAPSCMSIF.xml"
+              Invoke-WebRequest -Uri "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/NDELIUSIF.xml" -OutFile "C:\Program Files (x86)\I2N\IapsNDeliusInterface\Config\NDELIUSIF.xml"
