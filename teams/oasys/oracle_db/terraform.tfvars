@@ -29,16 +29,26 @@ block_device_mappings_ebs = [
   #   volume_size = 30
   #   volume_type = "gp3"
   # },
-  # {
-  #   device_name = "/dev/sdb" # /u01 oracle app disk
-  #   volume_size = 128
-  #   volume_type = "gp3"
-  # },
-  # {
-  #   device_name = "/dev/sdc" # /u02 oracle app disk
-  #   volume_size = 128
-  #   volume_type = "gp3"
-  # }
+  {
+    device_name = "/dev/sdb" # /u01 oracle app disk
+    volume_size = 100
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdc" # /u02 oracle app disk
+    volume_size = 500
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sde" # DATA01
+    volume_size = 200
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdj" # DATA01
+    volume_size = 50
+    volume_type = "gp3"
+  },
 ]
 
 components_aws = [

@@ -9,7 +9,7 @@ locals {
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
         }, {
         name  = "Branch"
-        value = var.BRANCH_NAME == "" ? "main" : var.BRANCH_NAME
+        value = "oasys-db" # var.BRANCH_NAME == "" ? "main" : var.BRANCH_NAME
       }]
     }
   ]
