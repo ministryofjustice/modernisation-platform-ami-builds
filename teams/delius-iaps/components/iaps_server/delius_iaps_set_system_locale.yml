@@ -1,6 +1,6 @@
 ---
 name: delius_iaps_set_system_locale
-description: Sets locale to values requested by 
+description: Sets locale to values requested by
 schemaVersion: 1.0
 parameters:
   - Version:
@@ -24,4 +24,4 @@ phases:
 
               Set-WinSystemLocale -SystemLocale en-GB
               Set-WinHomeLocation -GeoId 242
-              Set-WinUserLanguageList -LanguageList (New-WinUserLanguageList -Language en-GB) -Force 
+              Set-WinUserLanguageList -LanguageList (New-WinUserLanguageList -Language en-GB) -Force
