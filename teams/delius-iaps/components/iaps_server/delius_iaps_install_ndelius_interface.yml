@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.3
+      default: 0.1.4
       description: Component version
   - Platform:
       type: string
@@ -48,9 +48,12 @@ phases:
               $acl.SetAccessRule($rule)
               Set-Acl $i2npath $acl
 
-              Write-Host('Remove invalid shortcut')
+              Write-Host('Remove invalid shortcuts')
               if ( Test-Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk") {
                 Remove-Item -Path "C:\Users\Public\Desktop\Migration Utility (Iaps-NDelius IF).lnk"
+              }
+              if ( Test-Path "C:\Users\Public\Desktop\Iaps-PCMS Interface Console.lnk") {
+                Remove-Item -Path "C:\Users\Public\Desktop\Iaps-PCMS Interface Console.lnk"
               }
 
               Write-Host('Creating new shortcut for all users')
