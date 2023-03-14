@@ -39,6 +39,10 @@ components_aws = [
 
 components_custom = [
   {
+    path       = "./components/iaps_server/delius_iaps_set_system_locale.yml"
+    parameters = []
+  },
+  {
     path       = "./components/iaps_server/add_net_framework_features.yml"
     parameters = []
   },

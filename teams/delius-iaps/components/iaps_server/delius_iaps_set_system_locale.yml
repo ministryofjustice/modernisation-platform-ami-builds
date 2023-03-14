@@ -1,0 +1,27 @@
+---
+name: delius_iaps_set_system_locale
+description: Sets locale to values requested by 
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.0
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+phases:
+  - name: build
+    steps:
+      - name: SetGBLocale
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              $ErrorActionPreference = "Stop"
+              $VerbosePreference = "Continue"
+
+              Set-WinSystemLocale -SystemLocale en-GB
+              Set-WinHomeLocation -GeoId 242
+              Set-WinUserLanguageList -LanguageList (New-WinUserLanguageList -Language en-GB) -Force 
