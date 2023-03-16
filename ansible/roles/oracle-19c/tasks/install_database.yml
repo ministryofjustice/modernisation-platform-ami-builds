@@ -1,0 +1,46 @@
+- name: create response file
+  template:
+    src: db_install.rsp.j2
+    dest: "{{ stage }}/{{ database_response_file }}"
+    mode: u=rw,g=r,o=r
+    owner: oracle
+    group: oinstall
+
+- name: copy {{ db_software }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ db_software }} .
+    creates: "{{ db_software }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: unzip db software
+  ansible.builtin.command:
+    cmd: unzip "{{ artefact_dir }}/{{ db_software }}" -d "{{ db_home }}"
+
+- name: copy OPatch from s3 bucket
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ opatch }} {{ stage }}
+    creates: "{{ stage }}/{{ opatch }}"
+
+- name: upgrade OPatch on database home and grid home
+  ansible.builtin.unarchive:
+    src: "{{ stage }}/{{ opatch }}"
+    dest: "{{ grid_home }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwX,g=rX,o=rX
+    remote_src: yes
+
+- name: install database server and apply patches
+  ansible.builtin.command:
+    argv:
+      - "{{ stage }}/database/runInstaller"
+      - -silent
+      - -waitforcompletion
+      - -ignorePrereqFailure
+      - -responseFile {{ stage }}/{{ database_response_file }}
+      - -applyRU "{{ artefact_dir }}/34160854/34130714"
+      - -applyOneOffs "{{ artefact_dir }}/34160854/34086870"
+  become_user: oracle
+
+- name: run post install root script
+  ansible.builtin.command: "{{ database_home }}/root.sh"

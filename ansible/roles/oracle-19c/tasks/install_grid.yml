@@ -1,0 +1,69 @@
+- name: create response files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ stage }}/{{ item }}"
+    mode: u=rw,g=r,o=r
+    owner: oracle
+    group: oinstall
+  loop:
+    - "{{ password_response_file }}"
+    - "{{ grid_response_file }}"
+
+- name: copy {{ grid_software }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ grid_software }} .
+    creates: "{{ grid_software }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: copy {{ psu_patch }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ psu_patch }} .
+    creates: "{{ psu_patch }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: unzip grid software
+  ansible.builtin.command:
+    cmd: unzip "{{ artefact_dir }}/{{ grid_software }}" -d "{{ grid_home }}"
+
+- name: unzip psu patch software 
+  ansible.builtin.command:
+    cmd: unzip "{{ artefact_dir }}/{{ psu_patch }}" -d "{{ artefact_dir }}"
+
+- name: copy OPatch from s3 bucket
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ opatch }} {{ stage }}
+    creates: "{{ stage }}/{{ opatch }}"
+
+- name: upgrade OPatch in grid home
+  ansible.builtin.unarchive:
+    src: "{{ stage }}/{{ opatch }}"
+    dest: "{{ grid_home }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwX,g=rX,o=rX
+    remote_src: yes
+
+- name: run oracle grid install
+  ansible.builtin.command:
+    argv:
+      - "{{ grid_home }}/gridSetup.sh"
+      - -silent
+      - -waitforcompletion
+      - -ignorePrereqFailure
+      - -responseFile {{ stage }}/{{ grid_response_file }}
+      - -applyRU "{{ artefact_dir }}/34160854/34130714"
+    creates: "{{ grid_home }}/bin/sqlplus"
+  become_user: oracle
+  vars:
+    ansible_remote_tmp: "{{ temp }}"
+
+- name: run orainstRoot script
+  ansible.builtin.command: "{{ oracle_inventory }}/orainstRoot.sh"
+
+- name: run root script
+  ansible.builtin.command: "{{ grid_home }}/root.sh"
+
+- name: Run configuration script
+  ansible.builtin.command:
+    cmd: "{{ grid_home }}/gridSetup.sh -executeConfigTools -responseFile {{ stage }}/{{ grid_response_file }} -silent"
+  become_user: oracle

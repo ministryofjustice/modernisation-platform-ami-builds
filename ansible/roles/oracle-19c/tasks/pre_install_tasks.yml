@@ -1,0 +1,52 @@
+- name: create new directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: oracle
+    group: oinstall
+    mode: u=rwx,g=rxs,o=rx
+    state: directory
+    recurse: yes
+  loop:
+    - "{{ oracle_home }}"
+    - "{{ temp }}"
+    - "{{ stage }}"
+
+- name: copy {{ oracle_asmlib_rpm }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ oracle_asmlib_rpm }} .
+    creates: "{{ oracle_asmlib_rpm }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: copy {{ oracle_prereq_rpm }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ oracle_prereq_rpm }} .
+    creates: "{{ oracle_prereq_rpm }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: copy {{ oracleasm_support_rpm }} from s3 bucket # this relies on the remote machine having correct IAM Role assigned
+  ansible.builtin.command:
+    cmd: /usr/local/bin/aws s3 cp s3://{{ s3_bucket_with_prefix }}/{{ oracleasm_support_rpm }} .
+    creates: "{{ oracleasm_support_rpm }}"
+    chdir: "{{ artefact_dir }}"
+
+- name: install oracle asmlib rpms from {{ oracle_asmlib_rpm }}
+  ansible.builtin.yum:
+    name: "{{ artefact_dir }}/{{ oracle_asmlib_rpm }}"
+    state: present
+
+- name: install oracle asmlib rpms from {{ oracleasm_support_rpm }}
+  ansible.builtin.yum:
+    name: "{{ artefact_dir }}/{{ oracleasm_support_rpm }}"
+    state: present
+
+- name: install oracle prerequisite rpms from {{ oracle_prereq_rpm }}
+  ansible.builtin.yum:
+    name: "{{ artefact_dir }}/{{ oracle_prereq_rpm }}"
+    state: present
+
+- name: disable selinux
+  import_role:
+    name: common
+    tasks_from: selinux.yml
+  vars:
+    selinux_state: permissive

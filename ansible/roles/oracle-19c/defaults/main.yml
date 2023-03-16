@@ -1,0 +1,60 @@
+#s3_bucket_with_prefix: s3-bucket20210929163229537900000001/oracle-11g-software
+s3_bucket_with_prefix: oasys-development-20230208104904211300000001/oracle-19c-software
+artefact_dir: /u02
+oracle_asmlib_rpm: oracleasmlib-2.0.17-1.el8.x86_64.rpm
+oracle_prereq_rpm: oracle-database-preinstall-19c-1.0-2.el8.x86_64.rpm
+oracleasm_support_rpm: oracleasm-support-2.1.12-1.el8.x86_64.rpm
+opatch: p6880880_190000_Linux-x86-64.zip
+
+stage: "{{ artefact_dir }}/stage"
+temp: "{{ artefact_dir }}/temp"
+patch: "{{ stage }}/patches"
+psu_patch: p34160854_190000_Linux-x86-64.zip
+oracle_home: /u01/app/oracle/product/19c
+oracle_inventory: /u01/app/oraInventory
+oracle_PATH: /usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/oracle/.local/bin:/home/oracle/bin # this is to avoid having to source oracle environment variables
+
+database_response_file: db_install.rsp
+database_base: /u01/app/oracle
+database_home: "{{ oracle_home }}/db_1"
+db_software: LINUX.X64_193000_db_home.zip
+
+grid_response_file: grid_install.rsp
+grid_base: /u01/app/grid
+grid_home: "{{ oracle_home }}/gridhome_1"
+grid_software: LINUX.X64_193000_grid_home.zip
+
+password_response_file: grid_pw.rsp
+
+asmpassword: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=12') }}"
+asmmonitorpassword: "{{ lookup('ansible.builtin.password', '/dev/null chars=ascii_letters,digits length=12') }}"
+
+grid_env:
+  ORACLE_HOME: "{{ grid_home }}"
+  PATH: "{{ grid_home }}/bin:{{ oracle_PATH }}"
+
+db_env:
+  ORACLE_HOME: "{{ database_home }}"
+  PATH: "{{ database_home }}/bin:{{ oracle_PATH }}"
+
+oracle_asm_data_disks: # the 'device' needs to match the device name in AWS
+  - device: /dev/sde
+    label: DATA01
+  - device: /dev/sdf
+    label: DATA02
+  - device: /dev/sdg
+    label: DATA03
+  - device: /dev/sdh
+    label: DATA04
+  - device: /dev/sdi
+    label: DATA05
+
+oracle_asm_flash_disks:
+  - device: /dev/sdj
+    label: FLASH01
+  - device: /dev/sdk
+    label: FLASH02
+
+oracle_externaljob_bin_path: "{{ oracle_home }}/db_1/bin/extjob"
+oracle_externaljob_rdbms_path: "{{ oracle_home }}/db_1/rdbms/admin"
+oracle_externaljob_file: externaljob.ora
