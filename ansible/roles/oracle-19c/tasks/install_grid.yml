@@ -25,7 +25,7 @@
   ansible.builtin.command:
     cmd: unzip "{{ artefact_dir }}/{{ grid_software }}" -d "{{ grid_home }}"
 
-- name: unzip psu patch software 
+- name: unzip psu patch software
   ansible.builtin.command:
     cmd: unzip "{{ artefact_dir }}/{{ psu_patch }}" -d "{{ artefact_dir }}"
 
