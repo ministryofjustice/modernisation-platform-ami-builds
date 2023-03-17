@@ -25,4 +25,6 @@ launch_permission_account_names = [
   "oasys-test",
   "nomis-combined-reporting-development",
   "nomis-combined-reporting-test",
+  "nomis-data-hub-development",
+  "nomis-data-hub-test",
 ]
