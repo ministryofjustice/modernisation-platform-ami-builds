@@ -1,7 +1,0 @@
-oracle_app_disks:
-  - device: /dev/sdb
-    mount: /u01
-  - device: /dev/sdc
-    mount: /u02
-
-swap_disk: /dev/sds

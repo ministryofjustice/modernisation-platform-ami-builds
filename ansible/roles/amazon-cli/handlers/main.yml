@@ -1,3 +1,0 @@
----
-- name: Install aws cli
-  include_tasks: tasks/install-rhel-awscli.yml

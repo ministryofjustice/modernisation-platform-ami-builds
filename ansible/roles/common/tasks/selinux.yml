@@ -1,5 +1,0 @@
-- name: set selinux mode
-  ansible.builtin.lineinfile:
-    path: /etc/selinux/config
-    regexp: "^SELINUX="
-    line: SELINUX={{ selinux_state }}

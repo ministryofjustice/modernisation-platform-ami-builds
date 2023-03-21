@@ -1,5 +1,0 @@
-- name: change login message
-  ansible.builtin.copy:
-    src: motd
-    dest: /etc/motd
-    force: yes

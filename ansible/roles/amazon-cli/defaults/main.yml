@@ -1,3 +1,0 @@
----
-awscli_installer_url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-awscli_installer_dir: "~/.ansible-amazon-cli"

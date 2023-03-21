@@ -1,2 +1,0 @@
-page_size_kb: 2048
-pages: "{{ (0.5 * ansible_memtotal_mb * 1024 / page_size_kb) | int }}"
