@@ -1,9 +1,0 @@
----
-ansible_python_interpreter: /usr/local/bin/python3.9
-roles_list:
-  - time
-  - node-exporter
-  - message-of-the-day
-  - amazon-ssm-agent
-  - amazon-cloudwatch-agent
-  - amazon-cli
