@@ -96,6 +96,23 @@ image_pipeline = {
   }
 }
 
+account_to_distribute_ami_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "nomis-preproduction",
+    "nomis-production",
+  ]
+
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+  ]
+}
 
 launch_permission_accounts_by_branch = {
   # push to main branch
@@ -115,7 +132,5 @@ launch_permission_accounts_by_branch = {
   ]
 
 }
-
-account_to_distribute_ami = local.launch_permission_accounts_by_branch
 
 launch_template_exists = false
