@@ -58,7 +58,7 @@ variable "ami_name_prefix" {
   default     = "baseimage"
 }
 variable "account_to_distribute_ami_by_branch" {
-  type        = string
+  type        = map(any)
   description = "Account that you will distribute the ami to by given github branch"
   default     = null
 }
