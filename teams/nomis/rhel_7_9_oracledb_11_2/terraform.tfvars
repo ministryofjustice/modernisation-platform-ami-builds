@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "rhel_7_9_oracledb_11_2"
-configuration_version = "0.4.3"
+configuration_version = "0.4.4"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -96,7 +96,6 @@ image_pipeline = {
   }
 }
 
-account_to_distribute_ami = "core-shared-services-production"
 
 launch_permission_accounts_by_branch = {
   # push to main branch
@@ -104,8 +103,8 @@ launch_permission_accounts_by_branch = {
     "core-shared-services-production",
     "nomis-development",
     "nomis-test",
-    "oasys-development",
-    "oasys-test"
+    "nomis-preproduction",
+    "nomis-production",
   ]
 
   # push to any other branch / local run
@@ -113,9 +112,10 @@ launch_permission_accounts_by_branch = {
     "core-shared-services-production",
     "nomis-development",
     "nomis-test",
-    "oasys-development",
-    "oasys-test"
   ]
+
 }
+
+account_to_distribute_ami = local.launch_permission_accounts_by_branch
 
 launch_template_exists = false
