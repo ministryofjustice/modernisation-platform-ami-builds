@@ -111,13 +111,27 @@ variable "infrastructure_configuration" {
 
 variable "account_to_distribute_ami" {
   type        = string
-  description = "Account to distribute the ami"
+  description = "Account to distribute the ami, if just a single account"
+  default     = null
+}
+variable "accounts_to_distribute_ami" {
+  type        = list(string)
+  description = "Accounts to distribute the ami, if more than one"
+  default     = []
 }
 
 variable "launch_template_exists" {
   type        = string
-  description = "Whether the launch template exists, assumed to be the same as ami_base_name"
+  description = "this variable has no effect, left in for backward compatibility.  Use launch_template_configurations instead"
   default     = false
+}
+variable "launch_template_configurations" {
+  type = list(object({
+    account_name       = string
+    launch_template_id = string
+  }))
+  description = "List of account_names/launch_template_ids to automatically update"
+  default     = []
 }
 
 variable "image_pipeline" {
@@ -128,6 +142,7 @@ variable "image_pipeline" {
   })
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
 }
+
 
 variable "launch_permission_account_names" {
   type        = list(string)
