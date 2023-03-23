@@ -17,7 +17,7 @@ locals {
   accounts_to_distribute_ami = try(
     var.accounts_to_distribute_ami_by_branch[var.BRANCH_NAME],
     var.accounts_to_distribute_ami_by_branch["default"],
-    var.account_to_distribute_ami
+    [var.account_to_distribute_ami]
   )
 
   launch_permission_account_names = try(
