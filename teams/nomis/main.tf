@@ -16,7 +16,7 @@ module "imagebuilder" {
   component_template_args         = local.component_template_args
   user_data                       = var.user_data
   infrastructure_configuration    = var.infrastructure_configuration
-  account_to_distribute_ami       = local.account_to_distribute_ami
+  accounts_to_distribute_ami      = local.accounts_to_distribute_ami
   launch_permission_account_names = local.launch_permission_account_names
   launch_template_exists          = var.launch_template_exists
   image_pipeline                  = var.image_pipeline
