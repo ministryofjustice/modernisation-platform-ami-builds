@@ -130,7 +130,6 @@ launch_permission_accounts_by_branch = {
     "nomis-development",
     "nomis-test",
   ]
-
 }
 
 launch_template_exists = false

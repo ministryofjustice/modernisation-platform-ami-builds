@@ -57,9 +57,15 @@ variable "ami_name_prefix" {
   description = "the prefix to the ami name"
   default     = "baseimage"
 }
+variable "account_to_distribute_ami_by_branch" {
+  type        = string
+  description = "Account that you will distribute the ami to by given github branch"
+  default     = null
+}
 variable "account_to_distribute_ami" {
   type        = string
-  description = "Account that you will distribute the ami to"
+  description = "Account that you will distribute the ami to. Alternative to account_to_distribute_ami_by_branch"
+  default     = null
 }
 
 variable "tags" {
