@@ -4,10 +4,14 @@
 
 AMI images can use ansible as part of the build process.
 
-The following directory structure is proposed where common ansible resources,
-such as roles, are located here. Team specific resources, such as playbooks,
-are located within the relevant `teams` directory. Directory strucure as
-follows:
+NOTE: ansible configuration is now primarily found in the
+modernisation-platform-configuration-management repo which is used for both
+AMI builds and EC2 provisioning.
+
+If the modernisation-platform-configuration-management repo is not suitable, 
+the following directory structure can be used, where common ansible resources,
+such as roles, are located here. Team specificresources, such as playbooks, 
+are located within the relevant `teams` directory.  Directory strucure as follows:
 
 <pre>
 .

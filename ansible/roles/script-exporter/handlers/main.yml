@@ -1,5 +1,0 @@
-- name: reload script-exporter
-  ansible.builtin.service:
-    name: script-exporter
-    enabled: yes
-    state: restarted

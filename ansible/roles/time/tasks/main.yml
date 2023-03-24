@@ -1,4 +1,0 @@
-- import_tasks: chrony.yml
-  tags:
-    - amibuild
-    - ec2patch

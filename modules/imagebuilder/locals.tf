@@ -67,5 +67,10 @@ locals {
 
   ami_parent_id  = try(local.account_ids_lookup[var.parent_image.owner], var.parent_image.owner)
   ami_parent_arn = try("arn:aws:imagebuilder:${var.region}:${local.ami_parent_id}:image/${var.parent_image.arn_resource_id}", null)
+
+  accounts_to_distribute_ami = distinct(flatten([
+    var.account_to_distribute_ami != null ? [var.account_to_distribute_ami] : [],
+    var.accounts_to_distribute_ami
+  ]))
 }
 

@@ -50,8 +50,3 @@ data "aws_ami" "parent" {
     }
   }
 }
-
-data "aws_launch_template" "this" {
-  count = var.launch_template_exists ? 1 : 0
-  name  = var.ami_base_name
-}
