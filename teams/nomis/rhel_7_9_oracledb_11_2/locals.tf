@@ -8,9 +8,8 @@ locals {
         name  = "Ami"
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
         }, {
-        name = "Branch"
-        # value = "main" # replace main with corresponding ansible branch if you are testing
-        value = "nomis/DSOS-1817/oracle-11g-ami-update"
+        name  = "Branch"
+        value = "main" # replace main with corresponding ansible branch if you are testing
       }]
     }
   ]
