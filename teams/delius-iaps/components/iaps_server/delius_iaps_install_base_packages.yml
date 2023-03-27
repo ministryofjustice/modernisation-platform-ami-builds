@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.2
+      default: 0.1.3
       description: Component version
   - Platform:
       type: string
@@ -36,6 +36,3 @@ phases:
 
               Write-Host('7Zip archive util')
               choco install -y 7zip # install latest version
-
-              Write-Host('Install SoapUI for test and debugging')
-              choco install -y soapui
