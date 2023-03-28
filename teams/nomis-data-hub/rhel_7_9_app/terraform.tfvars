@@ -22,6 +22,8 @@ components_aws = [
   "update-linux"
 ]
 
+block_device_mappings_ebs = []
+
 components_custom = []
 
 systems_manager_agent = {
