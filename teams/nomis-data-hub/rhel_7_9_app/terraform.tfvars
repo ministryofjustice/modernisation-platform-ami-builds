@@ -16,7 +16,7 @@ tags = {
 parent_image = {
   owner           = "core-shared-services-production"
   arn_resource_id = "base-rhel-7-9/x.x.x"
-} 
+}
 
 components_aws = [
   "update-linux"
