@@ -60,6 +60,18 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub/rhel_7_9_app"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub/rhel_7_9_ems"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
     schedule:
       interval: "daily"
