@@ -36,3 +36,6 @@ phases:
 
               Write-Host('7Zip archive util')
               choco install -y 7zip # install latest version
+
+              Write-Host('OpenSSL util')
+              choco install -y openssl # install latest version
