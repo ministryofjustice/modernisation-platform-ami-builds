@@ -11,7 +11,7 @@
     </EXCLUSION>
   </EXCLUSIONS>
   <EMAIL SMTPURL="smtp" SMTPUSER="" PASSWORD="" PASSWORDCODED="" ENABLED="0" SENDTIME="10:00:00" FROMADDRESS="">
-    <RECIPIENT EMAIL="helen.curtis@necsws.com"/>
+    <RECIPIENT EMAIL="helen.curtis@necsws.com" />
     <RECIPIENT EMAIL="emma.gregory@necsws.com" />
   </EMAIL>
   <FIXUPS MIGRATEMODE1="0" MIGRATEMODE2="0" SKIPEVENTERROR="1">
