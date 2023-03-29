@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.5
+      default: 0.1.6
       description: Component version
   - Platform:
       type: string
@@ -43,4 +43,4 @@ phases:
               choco install -y openssl # install latest version
 
               # Move OpenSSL to a location that is in the PATH
-              move /Y "C:\Program Files\OpenSSL-Win64\bin\openssl.exe" "C:\ProgramData\chocolatey\bin"
+              Move-Item -Path "C:\Program Files\OpenSSL-Win64\bin\openssl.exe" -Destination "C:\ProgramData\chocolatey\bin" -Force
