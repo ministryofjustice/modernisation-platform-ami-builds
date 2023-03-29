@@ -46,6 +46,8 @@ resource "aws_iam_role" "image_builder_role" {
             Resource = [
               "arn:aws:s3:::ec2-image-builder-*/*",
               "arn:aws:s3:::ec2-image-builder-*",
+              "arn:aws:s3:::*-software*/*",
+              "arn:aws:s3:::*-software*",
               "arn:aws:s3:::mod-platform-image-artefact-bucket*/*",
               "arn:aws:s3:::mod-platform-image-artefact-bucket*",
               "arn:aws:s3:::modernisation-platform-software*/*",
@@ -111,6 +113,32 @@ resource "aws_iam_role" "image_builder_role" {
             Effect = "Allow"
             Resource = [
               "*",
+            ]
+          },
+        ]
+        Version = "2012-10-17"
+      }
+    )
+  }
+  inline_policy {
+    name = "ImageBuilderKmsPolicy"
+    policy = jsonencode(
+      {
+        Statement = [
+          {
+            Action = [
+              "kms:Encrypt",
+              "kms:Decrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey",
+              "kms:CreateGrant",
+              "kms:ListGrants",
+              "kms:RevokeGrant",
+            ]
+            Effect = "Allow"
+            Resource = [
+              "arn:aws:kms:eu-west-2:*:key/*"
             ]
           },
         ]
