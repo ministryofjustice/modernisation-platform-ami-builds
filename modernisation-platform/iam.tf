@@ -120,6 +120,32 @@ resource "aws_iam_role" "image_builder_role" {
       }
     )
   }
+  inline_policy {
+    name = "ImageBuilderKmsPolicy"
+    policy = jsonencode(
+      {
+        Statement = [
+          {
+            Action = [
+              "kms:Encrypt",
+              "kms:Decrypt",
+              "kms:ReEncrypt*",
+              "kms:GenerateDataKey*",
+              "kms:DescribeKey",
+              "kms:CreateGrant",
+              "kms:ListGrants",
+              "kms:RevokeGrant",
+            ]
+            Effect = "Allow"
+            Resource = [
+              "arn:aws:kms:eu-west-2:*:key/*"
+            ]
+          },
+        ]
+        Version = "2012-10-17"
+      }
+    )
+  }
 
   tags     = {}
   tags_all = {}
