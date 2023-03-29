@@ -27,8 +27,8 @@ phases:
               Write-Host('vcredist packages')
               # choco install -y vcredist2010 # Commented out - hoping we don't need to explicitly mention this due to dynamic package dependency
               # choco install -y vcredist2008 # Commented out - hoping we don't need to explicitly mention this due to dynamic package dependency
-              cinst -y vcredist140
-              cinst -y vcredist2015
+              choco install -y vcredist140
+              choco install -y vcredist2015
 
               Write-Host('nginx proxy')
               choco install -y nginx
