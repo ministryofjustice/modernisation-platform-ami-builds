@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.0
+      default: 0.1.1
       description: Component version
   - Platform:
       type: string
@@ -14,6 +14,32 @@ parameters:
 phases:
   - name: build
     steps:
+      - name: CreateLocaleConfigFile
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\UKRegion.xml
+            content: |
+              <gs:GlobalizationServices xmlns:gs="urn:longhornGlobalizationUnattend">
+              <gs:UserList>
+                <gs:User UserID="Current" CopySettingsToDefaultUserAcct="true" CopySettingsToSystemAcct="true"/>
+              </gs:UserList>
+              <gs:UserLocale>
+                <gs:Locale Name="en-GB" SetAsCurrent="true" ResetAllSettings="true">
+              </gs:UserLocale>
+              <gs:SystemLocale Name="en-GB"/>
+              <gs:LocationPreferences>
+                <gs:GeoID Value="242"/>
+              </gs:LocationPreferences>
+              <gs:MUILanguagePreferences>
+                <gs:MUILanguage Value="en-GB"/>
+                <gs:MUIFallback Value="en-US"/>
+              </gs:MUILanguagePreferences>
+              <gs:InputPreferences>
+                <!--en-GB-->
+                <gs:InputLanguageID Action="add" ID="0809:00000809" Default="true"/>
+              </gs:InputPreferences>
+              </gs:GlobalizationServices>
+            overwrite: false
       - name: SetGBLocale
         action: ExecutePowerShell
         inputs:
@@ -22,6 +48,8 @@ phases:
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
-              Set-WinSystemLocale -SystemLocale en-GB
-              Set-WinHomeLocation -GeoId 242
-              Set-WinUserLanguageList -LanguageList (New-WinUserLanguageList -Language en-GB) -Force
+              # Set Locale, language etc.
+              & $env:SystemRoot\System32\control.exe "intl.cpl,,/f:`"C:\Windows\Temp\UKRegion.xml`""
+
+              # Set languages/culture
+              Set-Culture en-GB
