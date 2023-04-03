@@ -30,6 +30,9 @@ phases:
               choco install -y vcredist140
               choco install -y vcredist2015
 
+              # install PSCX module
+              Install-Module -Name Pscx -AllowClobber
+
               Write-Host('nginx proxy')
               choco install -y nginx
 
