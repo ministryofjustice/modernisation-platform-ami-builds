@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.8
+      default: 0.1.9
       description: Component version
   - Platform:
       type: string
@@ -19,6 +19,7 @@ phases:
         inputs:
           commands:
             - |
+              $ConfirmPreference="none"
               $ErrorActionPreference = "Stop"
               $VerbosePreference = "Continue"
 
@@ -30,10 +31,12 @@ phases:
               choco install -y vcredist140
               choco install -y vcredist2015
 
-              # Trust PS Gallery Repo
-              Set-PSRepository -name 'PSGallery' -InstallationPolicy Trusted
               # Install NuGet
               Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+              # Trust PS Gallery Repo
+              Set-PSRepository -name 'PSGallery' -InstallationPolicy Trusted
+
               # install PSCX module
               Install-Module -Name Pscx -AllowClobber -Force
               Install-Module -Name AWSPowerShell -MinimumVersion 4.1.196 # Current latest version as of 3/1/23 is 4.1.196
