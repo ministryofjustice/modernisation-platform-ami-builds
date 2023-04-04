@@ -30,6 +30,10 @@ phases:
               choco install -y vcredist140
               choco install -y vcredist2015
 
+              # Trust PS Gallery Repo
+              Set-PSRepository -name 'PSGallery' -InstallationPolicy Trusted
+              # Install NuGet
+              Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
               # install PSCX module
               Install-Module -Name Pscx -AllowClobber
 
