@@ -35,7 +35,7 @@ phases:
               # Install NuGet
               Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
               # install PSCX module
-              Install-Module -Name Pscx -AllowClobber
+              Install-Module -Name Pscx -AllowClobber -Force
 
               Write-Host('nginx proxy')
               choco install -y nginx
