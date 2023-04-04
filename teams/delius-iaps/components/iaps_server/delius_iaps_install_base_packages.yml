@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.7
+      default: 0.1.8
       description: Component version
   - Platform:
       type: string
@@ -30,8 +30,13 @@ phases:
               choco install -y vcredist140
               choco install -y vcredist2015
 
+              # Trust PS Gallery Repo
+              Set-PSRepository -name 'PSGallery' -InstallationPolicy Trusted
+              # Install NuGet
+              Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
               # install PSCX module
-              Install-Module -Name Pscx -AllowClobber
+              Install-Module -Name Pscx -AllowClobber -Force
+              Install-Module -Name AWSPowerShell -MinimumVersion 4.1.196 # Current latest version as of 3/1/23 is 4.1.196
 
               Write-Host('nginx proxy')
               choco install -y nginx
