@@ -36,6 +36,7 @@ phases:
               Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
               # install PSCX module
               Install-Module -Name Pscx -AllowClobber -Force
+              Install-Module -Name AWSPowerShell -MinimumVersion 4.1.196 # Current latest version as of 3/1/23 is 4.1.196
 
               Write-Host('nginx proxy')
               choco install -y nginx
