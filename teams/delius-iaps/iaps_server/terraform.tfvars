@@ -7,8 +7,8 @@ ami_name_prefix       = "delius"
 ami_base_name         = "iaps_server"
 configuration_version = "0.0.26"
 
-release_or_patch      = "patch" # see nomis AMI image building strategy doc
-description           = "Delius IAPS server"
+release_or_patch = "patch" # see nomis AMI image building strategy doc
+description      = "Delius IAPS server"
 
 tags = {
   os-version = "windows server 2022"
