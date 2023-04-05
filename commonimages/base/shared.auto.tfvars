@@ -19,12 +19,14 @@ account_to_distribute_ami = "core-shared-services-production"
 
 launch_permission_account_names = [
   "core-shared-services-production",
-  "nomis-development",
-  "nomis-test",
-  "oasys-development",
-  "oasys-test",
   "nomis-combined-reporting-development",
   "nomis-combined-reporting-test",
   "nomis-data-hub-development",
   "nomis-data-hub-test",
+  "nomis-development",
+  "nomis-test",
+  "oasys-development",
+  "oasys-preproduction",
+  "oasys-production",
+  "oasys-test",
 ]

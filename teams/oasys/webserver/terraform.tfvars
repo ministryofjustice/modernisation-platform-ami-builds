@@ -69,14 +69,18 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "oasys-development",
-    "oasys-test"
+    # "oasys-preproduction",
+    # "oasys-production",
+    "oasys-test",
   ]
 
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
     "oasys-development",
-    "oasys-test"
+    # "oasys-preproduction",
+    # "oasys-production",
+    "oasys-test",
   ]
 }
 
