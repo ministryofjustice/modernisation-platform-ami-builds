@@ -69,8 +69,8 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "oasys-development",
-    "oasys-preproduction",
-    "oasys-production",
+    # "oasys-preproduction",
+    # "oasys-production",
     "oasys-test",
   ]
 
