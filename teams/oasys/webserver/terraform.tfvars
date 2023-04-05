@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.8"
+configuration_version = "0.0.9"
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
@@ -69,8 +69,8 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "oasys-development",
-    # "oasys-preproduction",
-    # "oasys-production",
+    "oasys-preproduction",
+    "oasys-production",
     "oasys-test",
   ]
 
@@ -78,8 +78,8 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "oasys-development",
-    # "oasys-preproduction",
-    # "oasys-production",
+    "oasys-preproduction",
+    "oasys-production",
     "oasys-test",
   ]
 }
