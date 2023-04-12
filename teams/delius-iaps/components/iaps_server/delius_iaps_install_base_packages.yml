@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.9
+      default: 0.1.10
       description: Component version
   - Platform:
       type: string
@@ -14,6 +14,21 @@ parameters:
 phases:
   - name: build
     steps:
+      # Download cert file using the ActionModule, as it provides the option to ignore cert validation errors. See commit message for more details
+      - name: DownloadLetsEncryptRootCert
+        action: WebDownload
+        onFailure: Abort
+        inputs:
+          - source: https://letsencrypt.org/certs/isrgrootx1.der
+            destination: C:\Windows\Temp\certs\isrgrootx1.der
+            ignoreCertificateErrors: true
+      # Install Let's Encrypt root CA. See commit message for more details
+      - name: ImportLetsEncryptRootCert
+        action: ExecutePowerShell
+        onFailure: Abort
+        inputs:
+          commands:
+            - Import-Certificate -FilePath C:\Windows\Temp\certs\isrgrootx1.der -CertStoreLocation Cert:\LocalMachine\Root
       - name: DeliusIapsInstallBasePackages
         action: ExecutePowerShell
         inputs:
@@ -45,7 +60,7 @@ phases:
               choco install -y nginx
 
               Write-Host('Firefox browser')
-              choco install -y firefox # install latest version
+              choco install -y firefoxesr --params "/l:en-GB" # install latest long-term support version
 
               Write-Host('7Zip archive util')
               choco install -y 7zip # install latest version
