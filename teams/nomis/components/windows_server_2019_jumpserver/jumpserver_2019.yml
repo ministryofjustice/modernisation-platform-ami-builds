@@ -74,7 +74,7 @@ phases:
 
               # Download SQL Developer
               Read-S3Object -BucketName $S3_BUCKET -Key jumpserver-software/sqldeveloper-22.2.1.234.1810-x64.zip -File C:\jumpserver-software\sqldeveloper-22.2.1.234.1810-x64.zip
-              
+
               # Extract SQL Developer - there is no installer for this application
               Expand-Archive -Path C:\jumpserver-software\sqldeveloper-22.2.1.234.1810-x64.zip -DestinationPath "C:\Program Files\Oracle"
 
