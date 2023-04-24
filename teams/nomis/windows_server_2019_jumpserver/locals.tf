@@ -1,13 +1,13 @@
 locals {
   components_common = [
     {
-      name       = "prometheus_windows_exporter"
-      version    = "1.1.7"
+      name       = "powershell_core"
+      version    = "0.2.0"
       parameters = []
     },
     {
-      name       = "powershell_core"
-      version    = "0.1.9"
+      name       = "aws_cli"
+      version    = "0.0.1"
       parameters = []
     },
   ]
