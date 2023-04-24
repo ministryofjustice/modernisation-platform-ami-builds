@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.9
+      default: 0.2.0
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -13,7 +13,7 @@ parameters:
       description: Platform.
   - PowerShellCoreVersion:
       type: string
-      default: 7.3.1
+      default: 7.3.4
       description: Version of the PowerShell Core to install
 phases:
   - name: build

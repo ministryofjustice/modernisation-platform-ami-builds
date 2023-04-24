@@ -1,0 +1,25 @@
+---
+name: aws_cli
+description: Component to Install the AWS Cli on Windows
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+  - AwsCliVersion:
+      type: string
+      default: 2.11.13
+      description: Version of the AWS Cli to install
+phases:
+  - name: build
+    steps:
+      - name: InstallAwsCli
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - choco install -y awscli --version '{{ AwsCliVersion }}'
