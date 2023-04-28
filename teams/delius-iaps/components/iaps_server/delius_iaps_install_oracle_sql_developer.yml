@@ -72,5 +72,5 @@ phases:
         onFailure: Abort
         inputs:
           - source: "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/login.cmd"
-            destination: "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\login.cmd"
+            destination: "C:\ProgramData\\Microsoft\\Windows\\Start Menu\Programs\\StartUp\\login.cmd"
             ignoreCertificateErrors: true
