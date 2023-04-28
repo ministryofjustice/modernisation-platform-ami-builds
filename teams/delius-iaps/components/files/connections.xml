@@ -30,9 +30,6 @@
             <StringRefAddr addrType="hostname">
             <Contents>[DB_HOST_PLACEHOLDER]</Contents>
             </StringRefAddr>
-            <StringRefAddr addrType="password">
-            <Contents>[NPS_DB_PWD_PLACEHOLDER]</Contents>
-            </StringRefAddr>
             <StringRefAddr addrType="driver">
             <Contents>oracle.jdbc.OracleDriver</Contents>
             </StringRefAddr>
@@ -85,9 +82,6 @@
             </StringRefAddr>
             <StringRefAddr addrType="hostname">
             <Contents>[DB_HOST_PLACEHOLDER]</Contents>
-            </StringRefAddr>
-            <StringRefAddr addrType="password">
-            <Contents>[SHADOW_DB_PWD_PLACEHOLDER]</Contents>
             </StringRefAddr>
             <StringRefAddr addrType="driver">
             <Contents>oracle.jdbc.OracleDriver</Contents>
