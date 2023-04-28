@@ -57,7 +57,7 @@ phases:
         inputs:
           - source: "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/connections.xml"
             destination: C:\scripts\connections.xml
-            ignoreCertificateErrors: true
+            ignoreCertificateErrors: false
 
       - name: DownloadSQLConnectionBootstrapPS1
         action: WebDownload
@@ -65,7 +65,7 @@ phases:
         inputs:
           - source: "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/login.ps1"
             destination: C:\scripts\login.ps1
-            ignoreCertificateErrors: true
+            ignoreCertificateErrors: false
 
       - name: DownloadSQLConnectionBootstrapBAT
         action: WebDownload
@@ -73,4 +73,4 @@ phases:
         inputs:
           - source: "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/login.cmd"
             destination: "C:\ProgramData\\Microsoft\\Windows\\Start Menu\Programs\\StartUp\\login.cmd"
-            ignoreCertificateErrors: true
+            ignoreCertificateErrors: false
