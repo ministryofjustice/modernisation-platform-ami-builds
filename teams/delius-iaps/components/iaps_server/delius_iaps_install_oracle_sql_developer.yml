@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.1.4
+      default: 0.1.5
       description: Component version
   - Platform:
       type: string
@@ -72,5 +72,5 @@ phases:
         onFailure: Abort
         inputs:
           - source: "https://github.com/ministryofjustice/modernisation-platform-ami-builds/raw/main/teams/delius-iaps/components/files/login.cmd"
-            destination: "C:\ProgramData\\Microsoft\\Windows\\Start Menu\Programs\\StartUp\\login.cmd"
+            destination: "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\\login.cmd"
             ignoreCertificateErrors: false
