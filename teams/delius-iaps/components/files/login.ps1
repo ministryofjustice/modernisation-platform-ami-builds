@@ -3,5 +3,5 @@ $connectionsXMLFullPath = "${connectionXMLDirectory}\connections.xml"
 if (![System.IO.File]::Exists($connectionsXMLFullPath)) {
     New-Item -ItemType Directory -Path $connectionXMLDirectory -Force
     $connectionXMLContents = Get-Content -Path "C:\scripts\connections.xml"
-    $connectionXMLContents | Out-File -FilePath $connectionsXMLFullPath
+    $connectionXMLContents | Out-File -FilePath $connectionsXMLFullPath -Encoding utf8
 }
