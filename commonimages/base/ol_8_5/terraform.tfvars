@@ -1,7 +1,7 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.1"
+configuration_version = "0.0.2"
 description           = "shared oracle linux 8.5 base image"
 
 ami_base_name = "ol_8_5"
@@ -18,10 +18,7 @@ parent_image = {
   }
 }
 
-components_aws = [
-  "update-linux",
-  "stig-build-linux-medium"
-]
+components_aws = []
 
 components_custom = []
 
