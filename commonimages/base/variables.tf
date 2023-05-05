@@ -14,6 +14,7 @@ variable "region" {
   default     = "eu-west-2"
   description = "Infrastructure AWS region - only one region supported with current module design"
 }
+
 variable "user_data" {
   type        = string
   default     = null
@@ -44,19 +45,23 @@ variable "configuration_version" {
   type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
 }
+
 variable "description" {
   type        = string
   description = "Description of the image"
 }
+
 variable "ami_base_name" {
   type        = string
   description = "e.g. rhel_7_9"
 }
+
 variable "ami_name_prefix" {
   type        = string
   description = "the prefix to the ami name"
   default     = "baseimage"
 }
+
 variable "account_to_distribute_ami" {
   type        = string
   description = "Account that you will distribute the ami to"
@@ -66,15 +71,16 @@ variable "tags" {
   type        = map(any)
   description = "The tags for the ami"
 }
+
 variable "infrastructure_configuration" {
   type        = map(any)
   description = "Infrastructure configuration, see aws_imagebuilder_infrastructure_configuration documentation for details on the parameters"
 }
+
 variable "image_pipeline" {
   type        = map(any)
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
 }
-
 
 variable "block_device_mappings_ebs" {
   type = list(object({
@@ -108,6 +114,7 @@ variable "components_custom" {
   }))
   description = "The custom components used to build the ami"
 }
+
 variable "launch_permission_account_names" {
   type        = list(string)
   description = "The list of accounts to give launch permissions to"

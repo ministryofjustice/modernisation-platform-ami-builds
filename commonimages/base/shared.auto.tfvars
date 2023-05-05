@@ -29,4 +29,5 @@ launch_permission_account_names = [
   "oasys-preproduction",
   "oasys-production",
   "oasys-test",
+  "delius-core-development"
 ]
