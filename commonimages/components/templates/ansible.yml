@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.5
+      default: 0.0.6
       description: "Component version, increment if you make changes."
   - Platform:
       type: string
@@ -63,13 +63,20 @@ phases:
                 git clone -b $branch "https://github.com/ministryofjustice/$repo.git"
 
                 # set python version
+                # check if already installed (e.g. RHEL6/7 via python component)
                 if [[ $(which python3.9 2> /dev/null) ]]; then
                   python=$(which python3.9)
                 elif [[ $(which python3.6 2> /dev/null) ]]; then
                   python=$(which python3.6)
                 else
-                  echo "Python3.9/3.6 not found"
-                  exit 1
+                  # otherwise just install via yum
+                  yum install -y python39 || true
+                  if [[ $(which python3.9 2> /dev/null) ]]; then
+                    python=$(which python3.9)
+                  else
+                    echo "Python3.9/3.6 not found"
+                    exit 1
+                  fi
                 fi
                 echo "python: $python"
 
