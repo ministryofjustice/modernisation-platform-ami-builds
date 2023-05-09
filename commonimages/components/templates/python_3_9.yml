@@ -21,7 +21,7 @@ phases:
             - |
               set -e
               PATH=$PATH:/usr/local/bin
-              main() {
+              mainCustom() {
                 export PIP_ROOT_USER_ACTION=ignore
                 cd /tmp
                 # install packages to build python
@@ -36,13 +36,35 @@ phases:
                 tar xzf Python-$py_version.tgz
                 rm -f Python-$py_version.tgz
                 cd Python-$py_version
-                # ensure zlib is enabled, required for some ansible modules
+                # ensure zlib is enabled, required for some ansible modules
                 sed -i 's/^#zlib/zlib/' Modules/Setup
                 ./configure --enable-optimizations
                 sudo make altinstall
               }
+
+              mainDnf() {
+                dnf module install python39 -y
+                alternatives --set python3 /usr/bin/python3.9
+              }
+
+              FILE=/etc/os-release
+              if [ -e $FILE ]; then
+                . $FILE
+                RELEASE="$ID${VERSION_ID:+.${VERSION_ID}}"
+              else
+                echo "The file $FILE does not exist. Exiting."
+                exit 1
+              fi
               echo "python3.9 start" | logger -p local3.info -t ami-component
-              main 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              # install python - choosing relevant method based on os-release
+              case "${RELEASE}" in
+                ol*)
+                  mainDnf 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+                  ;;
+                *)
+                  mainCustom 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+                  ;;
+              esac
               echo "python3.9 end" | logger -p local3.info -t ami-component
 
       # Install pip
