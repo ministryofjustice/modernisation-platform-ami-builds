@@ -3,10 +3,6 @@ locals {
 
   components_common = [
     {
-      name       = "python_3_9"
-      version    = "0.0.3"
-      parameters = []
-      }, {
       name    = "ansible"
       version = "0.0.6"
       parameters = [{
