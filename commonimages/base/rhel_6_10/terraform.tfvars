@@ -24,6 +24,7 @@ parent_image = {
   arn_resource_id = "base-rhel-6-10/0.1.0"
 }
 
+
 # rhel6.10 cannot use amazon-ssm-agent, this is installed via user_data
 components_aws = [
   "update-linux",
