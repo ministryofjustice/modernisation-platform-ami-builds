@@ -15,7 +15,7 @@ tags = {
 
 parent_image = {
   owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-8-5/x.x.x"
+  arn_resource_id = "base-ol-8-5/x.x.x"
 }
 
 block_device_mappings_ebs = [
