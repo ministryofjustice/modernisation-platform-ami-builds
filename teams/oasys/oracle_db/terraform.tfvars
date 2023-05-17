@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.0.5"
+configuration_version = "0.0.6"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
@@ -15,7 +15,7 @@ tags = {
 
 parent_image = {
   owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-8-5/x.x.x"
+  arn_resource_id = "base-ol-8-5/x.x.x"
 }
 
 block_device_mappings_ebs = [
