@@ -147,6 +147,7 @@ phases:
                 $siteElement.SetAttribute('url', $site)
                 $compatModeElement = $xmlDoc.CreateElement("compat-mode")
                 $openInElement = $xmlDoc.CreateElement("open-in")
+                $openInElement.SetAttribute('allow-redirect', 'true')
                 $compatModeElement.InnerText = "Default"
                 $openInElement.InnerText = "IE11"
                 $siteElement.AppendChild($compatModeElement)
