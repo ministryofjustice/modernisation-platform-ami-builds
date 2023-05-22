@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "windows_server_2022_jumpserver"
-configuration_version = "0.4.0"
+configuration_version = "0.4.1"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2022 jumpserver"
 
