@@ -9,7 +9,7 @@ locals {
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
         }, {
         name  = "Branch"
-        value = var.BRANCH_NAME == "" ? "main" : var.BRANCH_NAME
+        value = "nit676-add-delius-core-oracle-db-config" # Custom branch added for testing, was: var.BRANCH_NAME == "" ? "main" : var.BRANCH_NAME
       }]
     }
   ]
