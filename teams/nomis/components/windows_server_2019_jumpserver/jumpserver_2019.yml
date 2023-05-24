@@ -193,3 +193,9 @@ phases:
               $shortcut_link = $shortcut.CreateShortcut("C:\Users\Public\Desktop\SQL Developer.lnk")
               $shortcut_link.TargetPath = "C:\Program Files\Oracle\sqldeveloper\sqldeveloper.exe"
               $shortcut_link.Save()
+      - name: InstallLibreOffice
+        actions: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              choco install -y libreoffice-still
