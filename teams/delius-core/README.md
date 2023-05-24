@@ -1,4 +1,4 @@
-# Nomis and Oasys Images
+# Delius-core images
 
 ## Overview
 
