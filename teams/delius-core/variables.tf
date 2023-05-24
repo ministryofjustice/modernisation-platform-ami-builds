@@ -3,6 +3,7 @@ variable "BRANCH_NAME" {
   default     = "main"
   description = "Github actions running branch"
 }
+
 variable "GH_ACTOR_NAME" {
   type        = string
   default     = ""
@@ -14,11 +15,13 @@ variable "region" {
   default     = "eu-west-2"
   description = "Infrastructure AWS region - only one region supported with current module design"
 }
+
 variable "user_data" {
   type        = string
   default     = null
   description = "Ec2 user data"
 }
+
 variable "release_or_patch" {
   type        = string
   default     = ""
@@ -44,22 +47,33 @@ variable "configuration_version" {
   type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
 }
+
 variable "description" {
   type        = string
   description = "Description of the image"
 }
+
 variable "ami_base_name" {
   type        = string
   description = "e.g. rhel_7_9"
 }
+
 variable "ami_name_prefix" {
   type        = string
   description = "the prefix to the ami name"
   default     = "baseimage"
 }
+
+variable "accounts_to_distribute_ami_by_branch" {
+  type        = map(any)
+  description = "Account that you will distribute the ami to by given github branch"
+  default     = null
+}
+
 variable "account_to_distribute_ami" {
   type        = string
-  description = "Account that you will distribute the ami to"
+  description = "Account that you will distribute the ami to. Alternative to account_to_distribute_ami_by_branch"
+  default     = null
 }
 
 variable "tags" {
