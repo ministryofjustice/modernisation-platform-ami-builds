@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 1.0.19
+      default: 1.0.20
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -195,7 +195,7 @@ phases:
               $shortcut_link.TargetPath = "C:\Program Files\Oracle\sqldeveloper\sqldeveloper.exe"
               $shortcut_link.Save()
       - name: InstallLibreOffice
-        actions: ExecutePowerShell
+        action: ExecutePowerShell
         inputs:
           commands:
             - |
