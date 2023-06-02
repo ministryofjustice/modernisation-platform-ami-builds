@@ -78,7 +78,7 @@ jobs:
           fetch-depth: 0
       - name: Run Checkov action
         id: checkov
-        uses: bridgecrewio/checkov-action@69a075e9810e69c3deb5b5ce4f0847d388e0209c # v12.2366.0
+        uses: bridgecrewio/checkov-action@11d7733f6006f634923b16438f2636934af43b1a # v12.2371.0
         with:
           directory: ./
           framework: terraform
