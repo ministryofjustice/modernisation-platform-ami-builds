@@ -48,6 +48,14 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/delius-core"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-core/oracle_db"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/delius-iaps"
     schedule:
       interval: "daily"
