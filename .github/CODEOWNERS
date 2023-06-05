@@ -2,6 +2,7 @@
 /teams/nomis @ministryofjustice/studio-webops
 /teams/oasys @ministryofjustice/studio-webops
 /ansible @ministryofjustice/studio-webops
+/teams/delius-core @ministryofjustice/hmpps-migration
 /teams/delius-iaps @ministryofjustice/hmpps-migration
 /teams/onr @ministryofjustice/studio-webops
 /teams/example @ministryofjustice/modernisation-platform
