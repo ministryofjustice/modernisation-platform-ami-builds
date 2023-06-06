@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius_core_ol_8_5"
 ami_base_name         = "oracle_db_19c"
-configuration_version = "0.0.2"
+configuration_version = "0.0.3"
 release_or_patch      = "patch" # see nomis AMI image building strategy doc
 description           = "Delius Core Oracle Database Image"
 
@@ -26,24 +26,54 @@ block_device_mappings_ebs = [
   },
   {
     device_name = "/dev/sdb" # /u01 oracle app disk
-    volume_size = 20
+    volume_size = 100
     volume_type = "gp3"
   },
   {
     device_name = "/dev/sdc" # /u02 oracle app disk
-    volume_size = 20
+    volume_size = 100
     volume_type = "gp3"
   },
   {
-    device_name = "/dev/sde" # DATA01
-    volume_size = 20
+    device_name = "/dev/sds" # swap disk
+    volume_size = 4
     volume_type = "gp3"
   },
   {
-    device_name = "/dev/sdj" # DATA01
-    volume_size = 20
+    device_name = "/dev/sde" # oracle asm disk DATA01
+    volume_size = 1
     volume_type = "gp3"
   },
+  {
+    device_name = "/dev/sdf" # oracle asm disk DATA02
+    volume_size = 1
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdg" # oracle asm disk DATA03
+    volume_size = 1
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdh" # oracle asm disk DATA04
+    volume_size = 1
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdi" # oracle asm disk DATA05
+    volume_size = 1
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdj" # oracle asm disk FLASH01
+    volume_size = 1
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sdk" # oracle asm disk FLASH02
+    volume_size = 1
+    volume_type = "gp3"
+  }
 ]
 
 components_aws = []
