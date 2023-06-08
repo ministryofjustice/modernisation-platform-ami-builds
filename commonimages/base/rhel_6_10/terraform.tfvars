@@ -22,9 +22,6 @@ parent_image = {
   # Just to keep the pipeline going, reference a previous base rhel6 as the base
   owner           = "core-shared-services-production"
   arn_resource_id = "base-rhel-6-10/0.1.0"
-  ami_search_filters = {
-    name = ["RHEL-6.10_HVM-*"]
-  }
 }
 
 # rhel6.10 cannot use amazon-ssm-agent, this is installed via user_data
