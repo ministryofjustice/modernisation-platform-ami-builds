@@ -1,6 +1,6 @@
 # following are passed in via pipeline
-# BRANCH_NAME =  
-# GH_ACTOR_NAME = 
+# BRANCH_NAME =
+# GH_ACTOR_NAME =
 
 configuration_version = "0.1.0"
 description           = "shared rhel 6.10 base image"
@@ -13,7 +13,15 @@ tags = {
 }
 
 parent_image = {
-  owner = "679593333241" # Redhat
+  # Official Redhat image now only available in named accounts
+  # owner = "679593333241" # Redhat
+  # ami_search_filters = {
+  #   name = ["RHEL-6.10_HVM-*"]
+  # }
+
+  # Just to keep the pipeline going, reference a previous base rhel6 as the base
+  owner           = "core-shared-services-production"
+  arn_resource_id = "base-rhel-6-10/0.1.0"
   ami_search_filters = {
     name = ["RHEL-6.10_HVM-*"]
   }
