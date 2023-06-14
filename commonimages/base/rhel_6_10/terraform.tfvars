@@ -14,14 +14,14 @@ tags = {
 
 parent_image = {
   # Official Redhat image now only available in named accounts
-  # owner = "679593333241" # Redhat
-  # ami_search_filters = {
-  #   name = ["RHEL-6.10_HVM-*"]
-  # }
-
+  owner = "679593333241" # Redhat
+  ami_search_filters = {
+    name = ["RHEL-6.10_HVM-*"]
+  }
+  include_deprecated = true
   # Just to keep the pipeline going, reference a previous base rhel6 as the base
-  owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-6-10/0.1.0"
+  # owner           = "core-shared-services-production"
+  # arn_resource_id = "base-rhel-6-10/0.1.0"
 }
 
 
