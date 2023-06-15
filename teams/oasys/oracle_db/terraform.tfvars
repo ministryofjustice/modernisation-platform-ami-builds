@@ -5,12 +5,12 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.0.6"
+configuration_version = "0.0.7"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
 tags = {
-  os-version = "rhel 8.5"
+  os-version = "oracle linux 8.5"
 }
 
 parent_image = {
@@ -51,9 +51,7 @@ block_device_mappings_ebs = [
   },
 ]
 
-components_aws = [
-  "update-linux"
-]
+components_aws = []
 
 components_custom = []
 
