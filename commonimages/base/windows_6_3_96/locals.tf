@@ -5,12 +5,9 @@ locals {
     {
       name    = "ansible"
       version = "0.0.6"
-      parameters = [{
-        name  = "Ami"
-        value = join("_", [var.ami_name_prefix, var.ami_base_name])
-        }, {
+      parameters = [ {
         name  = "Branch"
-        value = "main" # replace main with corresponding ansible branch if you are testing
+        value = "development" # replace main with corresponding ansible branch if you are testing
       }]
     }
   ]
