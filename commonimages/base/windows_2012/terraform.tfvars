@@ -15,7 +15,7 @@ tags = {
 parent_image = {
   owner = "679593333241"
   ami_search_filters = {
-    name = ["EC2LaunchV2-Windows_Server-2012_R2_RTM-English-Full-Base-*"]
+    name = ["Windows_Server-2012-R2_RTM-English-64Bit-Base-*"]
   }
 }
 
