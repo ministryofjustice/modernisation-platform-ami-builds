@@ -69,14 +69,32 @@ image_pipeline = {
   }
 }
 
-account_to_distribute_ami = "core-shared-services-production"
+accounts_to_distribute_ami_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "oasys-development",
+    "oasys-test",
+    "oasys-preproduction",
+    "oasys-production",
+  ]
+
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "oasys-development",
+    "oasys-test"
+  ]
+}
 
 launch_permission_accounts_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
     "oasys-development",
-    "oasys-test"
+    "oasys-test",
+    "oasys-preproduction",
+    "oasys-production",
   ]
 
   # push to any other branch / local run
