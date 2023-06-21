@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.0.7"
+configuration_version = "0.0.8"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
@@ -69,6 +69,10 @@ image_pipeline = {
   }
 }
 
+
+# need to distribute to all oasys accounts if making instance
+# if making asg you only need to build the ami in core-shared-services-production
+# this is because otherwise (for some reason) when making an instance it won't be able to find the disk snapshots - probably a permission issue
 accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
