@@ -15,7 +15,7 @@ tags = {
 parent_image = {
   owner = "679593333241"
   ami_search_filters = {
-    name = ["Windows_Server-2012-R2_RTM-English-64Bit-Base-*"]
+    name = ["Windows_Server-2012-R2_RTM-*"]
   }
 }
 
