@@ -60,6 +60,12 @@ variable "ami_name_prefix" {
 variable "account_to_distribute_ami" {
   type        = string
   description = "Account that you will distribute the ami to"
+  default     = null
+}
+variable "accounts_to_distribute_ami_by_branch" {
+  type        = map(any)
+  description = "Account that you will distribute the ami to by given github branch"
+  default     = null
 }
 
 variable "tags" {

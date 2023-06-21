@@ -62,6 +62,9 @@ image_pipeline = {
   }
 }
 
+# need to distribute to all oasys accounts if making instance
+# if making asg you only need to build the ami in core-shared-services-production
+# this is because otherwise (for some reason) when making an instance it won't be able to find the disk snapshots - probably a permission issue
 account_to_distribute_ami = "core-shared-services-production"
 
 launch_permission_accounts_by_branch = {
