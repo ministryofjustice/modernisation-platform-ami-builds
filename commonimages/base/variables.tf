@@ -92,7 +92,12 @@ variable "block_device_mappings_ebs" {
   description = "the block device mappings"
 }
 
-
+variable "systems_manager_agent" {
+  type = object({
+    uninstall_after_build = bool
+  })
+  description = "systems manager agent config"
+}
 
 variable "components_aws" {
   type        = list(string)
