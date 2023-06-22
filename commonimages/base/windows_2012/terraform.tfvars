@@ -38,6 +38,9 @@ infrastructure_configuration = {
   instance_types = ["t3.medium"]
 }
 
+systems_manager_agent = {
+  uninstall_after_build = true
+}
 
 image_pipeline = {
   schedule = {
