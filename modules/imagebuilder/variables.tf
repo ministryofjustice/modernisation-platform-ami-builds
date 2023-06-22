@@ -95,12 +95,6 @@ variable "parent_image" {
   description = "The image this ami will be based on"
 }
 
-variable "systems_manager_agent" {
-  type = object({
-    uninstall_after_build = bool
-  })
-  description = "systems manager agent config"
-}
 
 variable "infrastructure_configuration" {
   type = object({
@@ -133,6 +127,15 @@ variable "launch_template_configurations" {
   description = "List of account_names/launch_template_ids to automatically update"
   default     = []
 }
+
+variable "systems_manager_agent" {
+  type = object({
+    uninstall_after_build = bool
+  })
+  description = "systems manager agent config"
+  default     = null
+}
+
 
 variable "image_pipeline" {
   type = object({

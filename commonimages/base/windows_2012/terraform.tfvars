@@ -13,7 +13,7 @@ tags = {
 }
 
 parent_image = {
-  owner = "679593333241"
+  owner = "801119661308"
   ami_search_filters = {
     name = ["Windows_Server-2012-R2_RTM-*"]
   }
@@ -36,10 +36,6 @@ components_custom = []
 
 infrastructure_configuration = {
   instance_types = ["t3.medium"]
-}
-
-systems_manager_agent = {
-  uninstall_after_build = false
 }
 
 image_pipeline = {
