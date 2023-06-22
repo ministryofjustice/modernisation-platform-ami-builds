@@ -97,6 +97,7 @@ variable "systems_manager_agent" {
     uninstall_after_build = bool
   })
   description = "systems manager agent config"
+  default = null
 }
 
 variable "components_aws" {
