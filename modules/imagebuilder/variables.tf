@@ -134,6 +134,15 @@ variable "launch_template_configurations" {
   default     = []
 }
 
+variable "systems_manager_agent" {
+  type = object({
+    uninstall_after_build = bool
+  })
+  description = "systems manager agent config"
+  default     = null
+}
+
+
 variable "image_pipeline" {
   type = object({
     schedule = object({
