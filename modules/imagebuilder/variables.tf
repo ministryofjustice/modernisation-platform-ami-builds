@@ -95,12 +95,6 @@ variable "parent_image" {
   description = "The image this ami will be based on"
 }
 
-variable "systems_manager_agent" {
-  type = object({
-    uninstall_after_build = bool
-  })
-  description = "systems manager agent config"
-}
 
 variable "infrastructure_configuration" {
   type = object({
