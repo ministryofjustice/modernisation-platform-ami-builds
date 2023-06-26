@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.0.8"
+configuration_version = "0.0.9"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
@@ -47,6 +47,11 @@ block_device_mappings_ebs = [
   {
     device_name = "/dev/sdj" # DATA01
     volume_size = 50
+    volume_type = "gp3"
+  },
+  {
+    device_name = "/dev/sds" # swap
+    volume_size = 2
     volume_type = "gp3"
   },
 ]
