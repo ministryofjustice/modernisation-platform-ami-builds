@@ -4,18 +4,18 @@
 
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
-ami_base_name         = "windows_server_2022_jumpserver"
-configuration_version = "0.4.3"
+ami_base_name         = "windows_server_2019"
+configuration_version = "0.1.0"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
-description           = "Windows Server 2022 jumpserver"
+description           = "Windows Server 2019"
 
 tags = {
-  os-version = "windows server 2022"
+  os-version = "windows server 2019"
 }
 
 parent_image = {
   owner           = "core-shared-services-production"
-  arn_resource_id = "mp-windowsserver2022/x.x.x"
+  arn_resource_id = "mp-windowsserver2019/x.x.x"
 }
 
 block_device_mappings_ebs = [
@@ -31,12 +31,7 @@ components_aws = [
   "ec2launch-v2-windows"
 ]
 
-components_custom = [
-  {
-    path       = "./components/windows_server_2022_jumpserver/jumpserver.yml"
-    parameters = []
-  }
-]
+components_custom = []
 
 infrastructure_configuration = {
   instance_types = ["t3.medium"]

@@ -96,11 +96,11 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/windows_server_2019_jumpserver"
+    directory: "/teams/nomis/windows_server_2019"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis/windows_server_2022_jumpserver"
+    directory: "/teams/nomis/windows_server_2022"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
