@@ -32,6 +32,7 @@ components_aws = [
 ]
 
 components_custom = []
+# jumpserver config currently being moved to modernisation-platform-environmenta user-data script
 # components_custom = [
 #  {
 #    path       = "./components/windows_server_2022_jumpserver/jumpserver.yml"
