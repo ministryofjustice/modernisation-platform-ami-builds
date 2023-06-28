@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "windows_server_2022_jumpserver"
-configuration_version = "0.4.3"
+configuration_version = "0.5.0"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2022 jumpserver"
 
@@ -31,12 +31,14 @@ components_aws = [
   "ec2launch-v2-windows"
 ]
 
-components_custom = [
-  {
-    path       = "./components/windows_server_2022_jumpserver/jumpserver.yml"
-    parameters = []
-  }
-]
+components_custom = []
+# jumpserver config currently being moved to modernisation-platform-environmenta user-data script
+# components_custom = [
+#   {
+#     path       = "./components/windows_server_2019_jumpserver/jumpserver_2019.yml"
+#     parameters = []
+#   }
+# ]
 
 infrastructure_configuration = {
   instance_types = ["t3.medium"]
