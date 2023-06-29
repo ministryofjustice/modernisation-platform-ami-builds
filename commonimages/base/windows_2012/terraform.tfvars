@@ -26,7 +26,7 @@ block_device_mappings_ebs = [
     volume_type = "gp3"
   },
   {
-    device_name = "/dev/sdb" # /u01 oracle app disk
+    device_name = "/dev/sdb" # new volume created
     volume_size = 100
     volume_type = "gp3"
   }
