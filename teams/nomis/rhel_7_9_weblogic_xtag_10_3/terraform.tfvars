@@ -25,8 +25,8 @@ block_device_mappings_ebs = [
     volume_type = "gp3"
   },
   {
-    device_name = "/dev/sdb"  # /u01
-    volume_size = 100
+    device_name = "/dev/sdb" # /u01
+    volume_size = 25
     volume_type = "gp3"
   }
 ]
