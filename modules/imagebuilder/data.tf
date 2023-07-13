@@ -38,9 +38,9 @@ data "aws_imagebuilder_component" "this" {
 }
 
 data "aws_ami" "parent" {
-  count       = var.parent_image.ami_search_filters != null ? 1 : 0
-  most_recent = true
-  owners      = [local.ami_parent_id]
+  count              = var.parent_image.ami_search_filters != null ? 1 : 0
+  most_recent        = true
+  owners             = [local.ami_parent_id]
   include_deprecated = var.parent_image.include_deprecated
 
   dynamic "filter" {
