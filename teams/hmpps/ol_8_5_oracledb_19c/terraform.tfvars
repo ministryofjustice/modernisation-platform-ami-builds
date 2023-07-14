@@ -106,10 +106,10 @@ accounts_to_distribute_ami_by_branch = {
     "hmpps-oem-test",
     "hmpps-oem-preproduction",
     "hmpps-oem-production",
-    "corporate-staff-rostering-development",   
-    "corporate-staff-rostering-test",   
-    "corporate-staff-rostering-preproduction",   
-    "corporate-staff-rostering-production",   
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
+    "corporate-staff-rostering-preproduction",
+    "corporate-staff-rostering-production",
   ]
 
   # push to any other branch / local run
@@ -119,8 +119,8 @@ accounts_to_distribute_ami_by_branch = {
     "oasys-test",
     "hmpps-oem-development",
     "hmpps-oem-test",
-    "corporate-staff-rostering-development",   
-    "corporate-staff-rostering-test",   
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
   ]
 }
 
@@ -136,10 +136,10 @@ launch_permission_accounts_by_branch = {
     "hmpps-oem-test",
     "hmpps-oem-preproduction",
     "hmpps-oem-production",
-    "corporate-staff-rostering-development",   
-    "corporate-staff-rostering-test",   
-    "corporate-staff-rostering-preproduction",   
-    "corporate-staff-rostering-production",   
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
+    "corporate-staff-rostering-preproduction",
+    "corporate-staff-rostering-production",
   ]
 
   # push to any other branch / local run
@@ -149,8 +149,8 @@ launch_permission_accounts_by_branch = {
     "oasys-test",
     "hmpps-oem-development",
     "hmpps-oem-test",
-    "corporate-staff-rostering-development",   
-    "corporate-staff-rostering-test",   
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
   ]
 }
 
