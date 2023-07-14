@@ -2,7 +2,7 @@
 # BRANCH_NAME =
 # GH_ACTOR_NAME =
 
-configuration_version = "0.1.0"
+configuration_version = "0.2.0"
 description           = "shared rhel 6.10 base image"
 
 ami_base_name = "rhel_6_10"
@@ -13,16 +13,14 @@ tags = {
 }
 
 parent_image = {
-  # Official Redhat image now only available in named accounts
-  # owner = "679593333241" # Redhat
-  # ami_search_filters = {
-  #   name = ["RHEL-6.10_HVM-*"]
-  # }
-
-  # Just to keep the pipeline going, reference a previous base rhel6 as the base
-  owner           = "core-shared-services-production"
-  arn_resource_id = "base-rhel-6-10/0.1.0"
+  # Red Hat Enterprise Linux 6.10 with Extended Lifecycle Support through June 30, 2024
+  owner = "679593333241" # Redhat
+  ami_search_filters = {
+    name = ["RHEL-6.10_HVM-*"]
+  }
+  include_deprecated = true
 }
+
 
 # rhel6.10 cannot use amazon-ssm-agent, this is installed via user_data
 components_aws = [
