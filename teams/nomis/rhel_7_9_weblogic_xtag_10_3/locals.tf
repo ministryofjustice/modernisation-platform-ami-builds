@@ -9,8 +9,7 @@ locals {
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
         }, {
         name  = "Branch"
-        value = "nomis/DSOS-2000/create-xtag-ami"
-        # value = "main" # replace main with corresponding ansible branch if you are testing
+        value = "main" # replace main with corresponding ansible branch if you are testing
       }]
     }
   ]
