@@ -43,7 +43,36 @@ image_pipeline = {
   }
 }
 
-account_to_distribute_ami = "core-shared-services-production"
+accounts_to_distribute_ami_by_branch = { 
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "nomis-preproduction",
+    "nomis-production",
+    "oasys-development",
+    "oasys-test",
+    "oasys-preproduction",
+    "oasys-production",
+    "nomis-data-hub-development",
+    "nomis-data-hub-test",
+    "nomis-data-hub-preproduction",
+    "nomis-data-hub-production"
+  ]
+
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "nomis-development",
+    "nomis-test",
+    "oasys-development",
+    "oasys-test",
+    "nomis-data-hub-development",
+    "nomis-data-hub-test"
+  ]
+
+}
 
 launch_permission_accounts_by_branch = {
   # push to main branch
