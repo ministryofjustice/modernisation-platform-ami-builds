@@ -43,7 +43,7 @@ image_pipeline = {
   }
 }
 
-accounts_to_distribute_ami_by_branch = { 
+accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
