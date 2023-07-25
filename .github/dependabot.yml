@@ -108,6 +108,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_7_9_weblogic_xtag_10_3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/nomis/windows_server_2019_jumpserver"
     schedule:
       interval: "daily"
