@@ -7,3 +7,4 @@
 /teams/onr @ministryofjustice/studio-webops
 /teams/example @ministryofjustice/modernisation-platform
 /teams/sprinkler @ministryofjustice/modernisation-platform
+/teams/hmpps @ministryofjustice/studio-webops @ministryofjustice/hmpps-migration
