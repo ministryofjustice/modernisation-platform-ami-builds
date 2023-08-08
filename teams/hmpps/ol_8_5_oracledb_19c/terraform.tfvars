@@ -110,6 +110,10 @@ accounts_to_distribute_ami_by_branch = {
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-preproduction",
     "corporate-staff-rostering-production",
+    "nomis-combined-reporting-development",
+    "nomis-combined-reporting-test",
+    "nomis-combined-reporting-preproduction",
+    "nomis-combined-reporting-production",
   ]
 
   # push to any other branch / local run
@@ -121,6 +125,8 @@ accounts_to_distribute_ami_by_branch = {
     "hmpps-oem-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
+    "nomis-combined-reporting-development",
+    "nomis-combined-reporting-test",
   ]
 }
 
