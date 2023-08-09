@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius_core_ol_8_5"
 ami_base_name         = "oracle_db_19c"
-configuration_version = "0.0.4"
+configuration_version = "0.0.5"
 release_or_patch      = "patch" # see nomis AMI image building strategy doc
 description           = "Delius Core Oracle Database Image"
 
@@ -90,7 +90,18 @@ image_pipeline = {
   }
 }
 
-account_to_distribute_ami = "core-shared-services-production"
+accounts_to_distribute_ami_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "delius-core-development"
+  ]
+  default = [
+    # push to any other branch / local run
+    "core-shared-services-production",
+    "delius-core-development"
+  ]
+}
 
 launch_permission_accounts_by_branch = {
   # push to main branch
