@@ -20,6 +20,11 @@ parent_image = {
 }
 
 block_device_mappings_ebs = [
+  {
+    device_name = "/dev/sdb" # /u01 oracle app disk
+    volume_size = 100
+    volume_type = "gp3"
+  },
 ]
 
 components_aws = [
