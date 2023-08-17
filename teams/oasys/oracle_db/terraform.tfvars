@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.0.9"
+configuration_version = "0.1.0"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
@@ -82,17 +82,11 @@ accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
-    "oasys-development",
-    "oasys-test",
-    "oasys-preproduction",
-    "oasys-production",
   ]
 
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
-    "oasys-development",
-    "oasys-test"
   ]
 }
 
