@@ -124,6 +124,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/oasys/weblogic"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/oasys/webserver"
     schedule:
       interval: "daily"
