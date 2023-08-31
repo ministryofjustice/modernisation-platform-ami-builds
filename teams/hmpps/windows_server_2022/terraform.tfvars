@@ -47,6 +47,7 @@ accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
+    "hmpps-domain-services-development",
     "nomis-development",
     "nomis-test",
     "nomis-preproduction",
@@ -64,6 +65,7 @@ accounts_to_distribute_ami_by_branch = {
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
+    "hmpps-domain-services-development",
     "nomis-development",
     "nomis-test",
     "oasys-development",
