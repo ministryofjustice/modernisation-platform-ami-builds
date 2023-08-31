@@ -27,6 +27,7 @@ launch_permission_account_names = [
   "hmpps-oem-preproduction",
   "hmpps-oem-production",
   "hmpps-oem-test",
+  "hmpps-domain-services-test",
   "nomis-combined-reporting-development",
   "nomis-combined-reporting-preproduction",
   "nomis-combined-reporting-production",
