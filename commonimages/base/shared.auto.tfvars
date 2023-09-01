@@ -1,14 +1,6 @@
 
 ami_name_prefix = "base"
 
-block_device_mappings_ebs = [
-  {
-    device_name = "/dev/sda1" # root volume
-    volume_size = 30
-    volume_type = "gp3"
-  }
-]
-
 image_pipeline = {
   schedule = {
     schedule_expression = "cron(0 0 1 * ? *)"

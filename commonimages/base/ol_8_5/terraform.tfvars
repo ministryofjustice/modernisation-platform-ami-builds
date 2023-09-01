@@ -1,7 +1,7 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.5"
+configuration_version = "0.0.6"
 description           = "shared oracle linux 8.5 base image"
 
 ami_base_name = "ol_8_5"
@@ -17,6 +17,14 @@ parent_image = {
     name = ["OL8.5-x86_64-*"]
   }
 }
+
+block_device_mappings_ebs = [
+  {
+    device_name = "/dev/sda1" # root volume
+    volume_size = 30
+    volume_type = "gp3"
+  }
+]
 
 components_aws = []
 
