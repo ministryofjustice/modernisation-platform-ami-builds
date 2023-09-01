@@ -2,7 +2,7 @@
 # BRANCH_NAME =
 # GH_ACTOR_NAME =
 
-configuration_version = "0.2.0"
+configuration_version = "0.2.1"
 description           = "shared rhel 6.10 base image"
 
 ami_base_name = "rhel_6_10"
@@ -21,6 +21,13 @@ parent_image = {
   include_deprecated = true
 }
 
+block_device_mappings_ebs = [
+  {
+    device_name = "/dev/sda1" # root volume
+    volume_size = 30
+    volume_type = "gp3"
+  }
+]
 
 # rhel6.10 cannot use amazon-ssm-agent, this is installed via user_data
 components_aws = [

@@ -1,7 +1,7 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.9"
+configuration_version = "0.1.0"
 description           = "shared rhel 7.9 base image"
 
 ami_base_name = "rhel_7_9"
@@ -17,6 +17,14 @@ parent_image = {
     name = ["RHEL-7.9_HVM-*"]
   }
 }
+
+block_device_mappings_ebs = [
+  {
+    device_name = "/dev/sda1" # root volume
+    volume_size = 30
+    volume_type = "gp3"
+  }
+]
 
 components_aws = [
   "update-linux",
