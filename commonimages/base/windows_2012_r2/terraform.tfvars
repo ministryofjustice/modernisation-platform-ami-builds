@@ -40,7 +40,7 @@ components_aws = [
 components_custom = []
 
 infrastructure_configuration = {
-  instance_types = ["t3.medium"]
+  instance_types = ["t3.xlarge"] # required for Windows SQL Server Enterprise minimum requirements
 }
 
 image_pipeline = {
