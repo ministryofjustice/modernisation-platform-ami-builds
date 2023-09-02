@@ -32,7 +32,7 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/commonimages/base/windows_2012"
+    directory: "/commonimages/base/windows_2012_r2"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
@@ -77,6 +77,10 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/teams/hmpps/ol_8_5_oracledb_19c"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/rhel_8_5"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
