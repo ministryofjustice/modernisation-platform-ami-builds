@@ -40,7 +40,7 @@ components_aws = [
 components_custom = []
 
 infrastructure_configuration = {
-  instance_types = ["t3.xlarge"] # required for Windows SQL Server Enterprise minimum requirements
+  instance_types = ["t3.xlarge"] # Windows SQL Server Enterprise minimum requirements, 2012 R2 won't build unless these are met...
 }
 
 image_pipeline = {
