@@ -4,7 +4,7 @@
 
 region                = "eu-west-2"
 ami_base_name         = "windows_server_2012_r2"
-configuration_version = "0.0.4"
+configuration_version = "0.0.5"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2012 R2"
 
@@ -15,7 +15,7 @@ tags = {
 parent_image = {
   owner = "801119661308"
   ami_search_filters = {
-    name = ["Windows_Server-2012-R2_RTM-*"]
+    name = ["Windows_Server-2012-R2_RTM-English-64Bit-Base-2023.08.10"] # specify as going EOL in 2023
   }
 }
 
@@ -40,7 +40,7 @@ components_aws = [
 components_custom = []
 
 infrastructure_configuration = {
-  instance_types = ["t3.xlarge"] # Windows SQL Server Enterprise minimum requirements, 2012 R2 won't build unless these are met...
+  instance_types = ["t3.medium"]
 }
 
 image_pipeline = {
@@ -49,5 +49,8 @@ image_pipeline = {
   }
 }
 
+systems_manager_agent = {
+  uninstall_after_build = false
+}
 
 launch_template_exists = false
