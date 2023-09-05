@@ -4,7 +4,7 @@
 
 region                = "eu-west-2"
 ami_base_name         = "windows_server_2012_r2"
-configuration_version = "0.0.5"
+configuration_version = "0.0.6"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2012 R2"
 
@@ -47,10 +47,6 @@ image_pipeline = {
   schedule = {
     schedule_expression = "cron(0 0 2 * ? *)"
   }
-}
-
-systems_manager_agent = {
-  uninstall_after_build = false
 }
 
 launch_template_exists = false
