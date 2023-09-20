@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "windows_server_2022"
-configuration_version = "0.0.4"
+configuration_version = "0.0.5"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "windows server 2022"
 
@@ -48,6 +48,10 @@ accounts_to_distribute_ami_by_branch = {
   main = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "corporate-staff-rostering-test",
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-preproduction",
+    "corporate-staff-rostering-production",
     "nomis-development",
     "nomis-test",
     "nomis-preproduction",
@@ -66,6 +70,8 @@ accounts_to_distribute_ami_by_branch = {
   default = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
     "nomis-development",
     "nomis-test",
     "oasys-development",
@@ -81,6 +87,10 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
+    "corporate-staff-rostering-preproduction",
+    "corporate-staff-rostering-production",
     "nomis-development",
     "nomis-test",
     "nomis-preproduction",
@@ -99,6 +109,8 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "corporate-staff-rostering-development",
+    "corporate-staff-rostering-test",
     "nomis-development",
     "nomis-test",
     "oasys-development",
