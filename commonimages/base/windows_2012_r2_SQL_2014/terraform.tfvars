@@ -33,7 +33,7 @@ block_device_mappings_ebs = [
 ]
 
 components_aws = [
-  "amazon-cloudwatch-agent-windows"
+  "amazon-cloudwatch-agent-windows",
   "ec2launch-v2-windows"
 ]
 
