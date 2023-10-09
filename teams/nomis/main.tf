@@ -26,6 +26,6 @@ module "imagebuilder" {
 }
 
 output "parent_ami" {
-  value       = length(module.imagebuilder) > 0 ? { for key, value in module.imagebuilder : key => value.parent_ami } : {}
+  value       = try({ for key, value in module.imagebuilder : key => value.parent_ami }, {})
   description = "parent AMI details"
 }
