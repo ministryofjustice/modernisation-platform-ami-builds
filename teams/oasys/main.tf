@@ -24,8 +24,3 @@ module "imagebuilder" {
   branch                          = var.BRANCH_NAME
   gh_actor                        = var.GH_ACTOR_NAME
 }
-
-output "parent_ami" {
-  value       = { for key, value in module.imagebuilder : key => value.parent_ami }
-  description = "parent AMI details"
-}

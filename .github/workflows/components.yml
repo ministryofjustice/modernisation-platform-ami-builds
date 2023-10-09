@@ -44,7 +44,7 @@ env:
   TF_ENV: production
 
   BASE_DIR: commonimages/components
-  DEFAULT_TERRAFORM_VERSION: 1.3.3
+  DEFAULT_TERRAFORM_VERSION: 1.5.7
 
 defaults:
   run:
