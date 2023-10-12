@@ -93,7 +93,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "this" {
   instance_profile_name         = local.core_shared_services.imagebuilder_mp_tfstate.image_builder_profile
   description                   = var.description
   instance_types                = var.infrastructure_configuration.instance_types
-  security_group_ids            = values(local.core_shared_services.repo_tfstate.image_builder_security_group_id)
+  security_group_ids            = [local.core_shared_services.repo_tfstate.image_builder_security_group_id.non_live_data]
   subnet_id                     = local.core_shared_services.repo_tfstate.non_live_private_subnet_ids[0]
   terminate_instance_on_failure = true
   tags                          = local.tags
