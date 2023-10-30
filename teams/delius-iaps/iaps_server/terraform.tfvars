@@ -104,6 +104,7 @@ infrastructure_configuration = {
 image_pipeline = {
   schedule = {
     schedule_expression = "cron(0 0 2 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 
