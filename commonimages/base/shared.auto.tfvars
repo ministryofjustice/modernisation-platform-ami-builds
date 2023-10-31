@@ -3,7 +3,8 @@ ami_name_prefix = "base"
 
 image_pipeline = {
   schedule = {
-    schedule_expression = "cron(0 0 1 * ? *)"
+    schedule_expression                = "cron(0 0 1 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 

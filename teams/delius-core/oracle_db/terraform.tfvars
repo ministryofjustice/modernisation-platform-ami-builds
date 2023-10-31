@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius_core_ol_8_5"
 ami_base_name         = "oracle_db_19c"
-configuration_version = "0.0.7"
+configuration_version = "0.0.8"
 release_or_patch      = "patch" # see nomis AMI image building strategy doc
 description           = "Delius Core Oracle Database Image"
 
@@ -36,7 +36,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression = "cron(0 0 2 * ? *)"
+    schedule_expression                = "cron(0 0 2 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 

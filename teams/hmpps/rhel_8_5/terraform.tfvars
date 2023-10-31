@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "rhel_8_5_join_to_azure"
-configuration_version = "0.0.1"
+configuration_version = "0.0.2"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "hmpps rhel 8.5 join to Azure domain"
 
@@ -45,7 +45,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression = "cron(0 0 2 * ? *)"
+    schedule_expression                = "cron(0 0 2 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 
