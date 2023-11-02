@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "oracle_db"
-configuration_version = "0.1.0"
+configuration_version = "0.1.1"
 release_or_patch      = "release"
 description           = "oasys oracle db image"
 
@@ -70,7 +70,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression = "cron(0 0 2 * ? *)"
+    schedule_expression                = "cron(0 0 2 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 

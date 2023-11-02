@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "rhel_7_9_oracledb_11_2"
-configuration_version = "0.4.5"
+configuration_version = "0.4.6"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis rhel 7.9 oracleDB 11.2 image"
 
@@ -92,7 +92,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression = "cron(0 0 2 * ? *)"
+    schedule_expression                = "cron(0 0 2 * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
 
