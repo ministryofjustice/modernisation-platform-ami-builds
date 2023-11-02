@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "bip"
-configuration_version = "0.0.2"
+configuration_version = "0.0.3"
 release_or_patch      = "release"
 description           = "oasys bip image"
 
