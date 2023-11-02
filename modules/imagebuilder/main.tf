@@ -149,7 +149,7 @@ resource "aws_imagebuilder_image_pipeline" "this" {
     image_tests_enabled = false
   }
   schedule {
-    schedule_expression = var.image_pipeline.schedule.schedule_expression
+    schedule_expression                = var.image_pipeline.schedule.schedule_expression
     pipeline_execution_start_condition = var.image_pipeline.schedule.pipeline_execution_start_condition
   }
 }
