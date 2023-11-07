@@ -141,7 +141,8 @@ variable "systems_manager_agent" {
 variable "image_pipeline" {
   type = object({
     schedule = object({
-      schedule_expression = string
+      schedule_expression                = string
+      pipeline_execution_start_condition = string
     })
   })
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"

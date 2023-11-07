@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis_data_hub"
 ami_base_name         = "rhel_7_9_ems"
-configuration_version = "0.0.2"
+configuration_version = "0.0.3"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis data hub rhel 7.9 ems image"
 
