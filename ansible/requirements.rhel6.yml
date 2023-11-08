@@ -1,0 +1,18 @@
+# from Galaxy
+roles:
+  - name: mindpointgroup.stig_rhel6
+    version: 0.9.7
+
+collections:
+  - name: community.general
+    source: https://old-galaxy.ansible.com
+    version: 3.7.0
+  - name: amazon.aws
+    source: https://old-galaxy.ansible.com
+    version: 3.2.0
+  - name: community.aws
+    source: https://old-galaxy.ansible.com
+    version: 3.2.1
+  - name: ansible.posix
+    source: https://galaxy.ansible.com
+    version: 1.4.0

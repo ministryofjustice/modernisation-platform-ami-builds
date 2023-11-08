@@ -66,8 +66,8 @@ phases:
                 # install requirements in virtual env
                 cd $ansible_dir/$repo/ansible
                 $python -m pip install -r requirements.txt
-                ansible-galaxy role install -r requirements.yml
-                ansible-galaxy collection install -r requirements.yml --force
+                ansible-galaxy role install -r requirements.rhel6.yml
+                ansible-galaxy collection install -r requirements.rhel6.yml --force
 
                 # run ansible (note comma after localhost is deliberate)
                 ansible-playbook -v playbooks/stig_rhel6.yml \
