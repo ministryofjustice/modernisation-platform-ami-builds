@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "bip"
-configuration_version = "0.0.3"
+configuration_version = "0.0.4"
 release_or_patch      = "release"
 description           = "oasys bip image"
 
@@ -66,23 +66,39 @@ image_pipeline = {
 # need to distribute to all oasys accounts if making instance
 # if making asg you only need to build the ami in core-shared-services-production
 # this is because otherwise (for some reason) when making an instance it won't be able to find the disk snapshots - probably a permission issue
-account_to_distribute_ami = "core-shared-services-production"
-
-launch_permission_accounts_by_branch = {
+accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
     "core-shared-services-production",
     "oasys-development",
+    "oasys-test",
     "oasys-preproduction",
     "oasys-production",
-    "oasys-test",
   ]
 
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
     "oasys-development",
+    "oasys-test"
+  ]
+}
+
+launch_permission_accounts_by_branch = {
+  # push to main branch
+  main = [
+    "core-shared-services-production",
+    "oasys-development",
     "oasys-test",
+    "oasys-preproduction",
+    "oasys-production",
+  ]
+
+  # push to any other branch / local run
+  default = [
+    "core-shared-services-production",
+    "oasys-development",
+    "oasys-test"
   ]
 }
 
