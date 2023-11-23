@@ -49,6 +49,7 @@ accounts_to_distribute_ami_by_branch = {
   main = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "hmpps-domain-services-test",
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-preproduction",
@@ -71,6 +72,7 @@ accounts_to_distribute_ami_by_branch = {
   default = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "hmpps-domain-services-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
     "nomis-development",
@@ -88,6 +90,7 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "hmpps-domain-services-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-preproduction",
@@ -110,6 +113,7 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
+    "hmpps-domain-services-test"
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
     "nomis-development",
