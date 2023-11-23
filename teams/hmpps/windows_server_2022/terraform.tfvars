@@ -113,7 +113,7 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "hmpps-domain-services-development",
-    "hmpps-domain-services-test"
+    "hmpps-domain-services-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
     "nomis-development",
