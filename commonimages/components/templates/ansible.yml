@@ -47,7 +47,6 @@ phases:
               set -e
               PATH=$PATH:/usr/local/bin
               run_ansible() {
-                set -e
                 # define all params here to make standalone testing of script easier
                 repo="{{ AnsibleRepo }}"
                 ami_tag="{{ Ami }}"
@@ -124,5 +123,5 @@ phases:
                 rmdir $ansible_dir
               }
               echo "ansible $ami_tag start" | logger -p local3.info -t ami-component
-              run_ansible 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              run_ansible | logger -p local3.info -t ami-component -s 2>&1
               echo "ansible $ami_tag end" | logger -p local3.info -t ami-component

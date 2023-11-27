@@ -23,7 +23,6 @@ phases:
               set -e
               PATH=$PATH:/usr/local/bin
               run_ansible() {
-                set -e
                 repo="modernisation-platform-ami-builds"
                 ami_tag="${ami}"
 
@@ -88,5 +87,5 @@ phases:
                 rmdir $ansible_dir
               }
               echo "stig_rhel6_ansible $ami_tag start" | logger -p local3.info -t ami-component
-              run_ansible 2>&1 | logger -p local3.info -t ami-component -s 2>&1
+              run_ansible | logger -p local3.info -t ami-component -s 2>&1
               echo "stig_rhel6_ansible $ami_tag end" | logger -p local3.info -t ami-component
