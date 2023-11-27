@@ -2,7 +2,7 @@
 # BRANCH_NAME =
 # GH_ACTOR_NAME =
 
-configuration_version = "0.2.2"
+configuration_version = "0.2.3"
 description           = "shared rhel 6.10 base image"
 
 ami_base_name = "rhel_6_10"
@@ -36,7 +36,7 @@ components_aws = [
 
 components_custom = [
   {
-    path       = "./components/rhel_6_10/stig_rhel6_ansible.yml.tftpl"
+    path       = "../../commonimages/base/components/rhel_6_10/stig_rhel6_ansible.yml.tftpl"
     parameters = []
   }
 ]
