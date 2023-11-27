@@ -47,6 +47,7 @@ phases:
               set -e
               PATH=$PATH:/usr/local/bin
               run_ansible() {
+                set -e
                 # define all params here to make standalone testing of script easier
                 repo="{{ AnsibleRepo }}"
                 ami_tag="{{ Ami }}"

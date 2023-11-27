@@ -23,6 +23,7 @@ phases:
               set -e
               PATH=$PATH:/usr/local/bin
               run_ansible() {
+                set -e
                 repo="modernisation-platform-ami-builds"
                 ami_tag="${ami}"
 
