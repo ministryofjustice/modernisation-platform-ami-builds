@@ -66,8 +66,8 @@ phases:
                 # install requirements in virtual env
                 cd $ansible_dir/$repo/ansible
                 $python -m pip install -r requirements.txt
-                ansible-galaxy role install -r requirements.yml
-                ansible-galaxy collection install -r requirements.yml --force
+                ansible-galaxy role install -r requirements.rhel6.yml
+                ansible-galaxy collection install -r requirements.rhel6.yml --force
 
                 # run ansible (note comma after localhost is deliberate)
                 ansible-playbook -v playbooks/stig_rhel6.yml \
@@ -87,5 +87,5 @@ phases:
                 rmdir $ansible_dir
               }
               echo "stig_rhel6_ansible $ami_tag start" | logger -p local3.info -t ami-component
-              run_ansible | logger -p local3.info -t ami-component -s 2>&1
+              run_ansible 2>&1 | logger -p local3.info -t ami-component -s 2>&1
               echo "stig_rhel6_ansible $ami_tag end" | logger -p local3.info -t ami-component
