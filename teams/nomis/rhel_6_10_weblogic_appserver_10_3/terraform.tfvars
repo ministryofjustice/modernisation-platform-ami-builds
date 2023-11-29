@@ -36,10 +36,6 @@ components_aws = [
 ]
 
 components_custom = [
-  {
-    path       = "./components/rhel_6_10/stig_rhel6_ansible.yml.tftpl"
-    parameters = []
-  }
 ]
 
 systems_manager_agent = {
