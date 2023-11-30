@@ -9,7 +9,7 @@ locals {
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
         }, {
         name  = "Branch"
-        value = "dso-2239/ansible-failure-handling-in-ami-builds" # replace main with corresponding ansible branch if you are testing
+        value = "main" # replace main with corresponding ansible branch if you are testing
       }]
     }
   ]
