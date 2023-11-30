@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.7
+      default: 0.0.11
       description: "Component version, increment if you make changes."
   - Platform:
       type: string
@@ -44,7 +44,7 @@ phases:
           commands:
             - |
               # do not set -u as it breaks on RedHat 6
-              set -e
+              set -eo pipefail
               PATH=$PATH:/usr/local/bin
               run_ansible() {
                 # define all params here to make standalone testing of script easier
