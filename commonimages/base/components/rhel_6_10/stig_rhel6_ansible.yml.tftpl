@@ -20,7 +20,7 @@ phases:
         inputs:
           commands:
             - |
-              set -e
+              set -eo pipefail
               PATH=$PATH:/usr/local/bin
               run_ansible() {
                 repo="modernisation-platform-ami-builds"
