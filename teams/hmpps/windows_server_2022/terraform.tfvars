@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "windows_server_2022"
-configuration_version = "0.0.8"
+configuration_version = "0.0.9"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "windows server 2022"
 
@@ -50,6 +50,8 @@ accounts_to_distribute_ami_by_branch = {
     "core-shared-services-production",
     "hmpps-domain-services-development",
     "hmpps-domain-services-test",
+    "hmpps-domain-services-preproduction",
+    "hmpps-domain-services-production",
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-preproduction",
@@ -91,6 +93,8 @@ launch_permission_accounts_by_branch = {
     "core-shared-services-production",
     "hmpps-domain-services-development",
     "hmpps-domain-services-test",
+    "hmpps-domain-services-preproduction",
+    "hmpps-domain-services-production",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-preproduction",
