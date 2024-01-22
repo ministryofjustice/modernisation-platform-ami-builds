@@ -2,6 +2,10 @@
 # BRANCH_NAME =
 # GH_ACTOR_NAME =
 
+# This AMI is currently broken due to parent_image configuration
+# The AMI was intended for PlanetFM but AWS Migration tool used instead
+disable_ami = true
+
 region                = "eu-west-2"
 ami_base_name         = "windows_server_2012_r2_SQL_2014_enterprise"
 configuration_version = "0.0.7"

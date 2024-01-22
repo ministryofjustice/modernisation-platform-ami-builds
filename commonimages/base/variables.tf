@@ -121,3 +121,9 @@ variable "launch_permission_account_names" {
   type        = list(string)
   description = "The list of accounts to give launch permissions to"
 }
+
+variable "disable_ami" {
+  description = "Set this to true if an AMI is no longer required"
+  type        = bool
+  default     = false
+}
