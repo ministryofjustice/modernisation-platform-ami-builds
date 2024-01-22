@@ -1,6 +1,4 @@
 module "imagebuilder" {
-  count = var.disable_ami ? 0 : 1
-
   source = "./../../modules//imagebuilder"
 
   region                          = var.region
