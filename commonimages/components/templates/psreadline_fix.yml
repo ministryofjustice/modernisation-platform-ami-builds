@@ -16,6 +16,6 @@ phases:
     steps:
       - name: RunPSReadLineModuleInstallForceCommand
         inputs:
-          commands: 
+          commands:
             - |
               Install-Module -Name PSReadLine -Repository PSGallery -MinimumVersion 2.2.2 -Force
