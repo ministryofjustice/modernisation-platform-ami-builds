@@ -15,6 +15,7 @@ phases:
   - name: build
     steps:
       - name: RunPSReadLineModuleInstallForceCommand
+        action: ExecutePowerShell
         inputs:
           commands:
             - |
