@@ -1,0 +1,21 @@
+---
+name: psreadline_fix
+description: Component to fix PSReadline not rendering shell in things like Fleet Manager sessions on Windows Server 2022
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.1
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: RunPSReadLineModuleInstallForceCommand
+        inputs:
+          commands: 
+            - |
+              Install-Module -Name PSReadLine -Repository PSGallery -MinimumVersion 2.2.2 -Force

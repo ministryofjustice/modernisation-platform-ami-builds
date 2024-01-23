@@ -10,6 +10,11 @@ locals {
       version    = "0.0.2"
       parameters = []
     },
+    {
+      name       = "psreadline_fix"
+      version    = "0.0.1"
+      parameters = []
+    }
   ]
 
   component_template_args = {}
