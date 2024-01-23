@@ -5,8 +5,8 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "windows_server_2022"
-configuration_version = "0.0.9"
-release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
+configuration_version = "0.1.0"
+release_or_patch      = "patch" # or "patch", see nomis AMI image building strategy doc
 description           = "windows server 2022"
 
 tags = {
