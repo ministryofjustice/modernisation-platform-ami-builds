@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -19,4 +19,4 @@ phases:
         inputs:
           commands:
             - |
-              Install-Module -Name PSReadLine -Repository PSGallery -MinimumVersion 2.2.2 -Force
+              Install-Module -Name PSReadLine -Repository PSGallery -MinimumVersion 2.2.2 -Force -AllowClobber -Confirm:$false
