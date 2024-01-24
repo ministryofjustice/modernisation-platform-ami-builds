@@ -2,7 +2,7 @@ locals {
   components_common = [
     {
       name       = "powershell_core"
-      version    = "0.3.0"
+      version    = "0.4.0"
       parameters = []
     },
     {
@@ -12,7 +12,7 @@ locals {
     },
     {
       name       = "psreadline_fix"
-      version    = "0.0.3"
+      version    = "0.0.4"
       parameters = []
     }
   ]
