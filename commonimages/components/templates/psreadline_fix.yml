@@ -1,0 +1,41 @@
+---
+name: psreadline_fix
+description: Component to fix PSReadline not rendering shell in things like Fleet Manager sessions on Windows Server 2022
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.4
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: RunPSReadLineModuleInstallForceCommand
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+
+              Install-Module -Name PSReadLine -Repository PSGallery -MinimumVersion 2.2.2 -Force -AllowClobber -Confirm:$false
+
+              # delete old versions of Windows PowerShell PSReadline which are the issue
+
+              $psreadlineModuleDirectories = Get-ChildItem -Path "C:\Program Files\WindowsPowerShell\Modules\PSReadline" -Directory
+
+              foreach ($psreadlineModuleDirectory in $psreadlineModuleDirectories) {
+                $moduleDirectoryPath = $psreadlineModuleDirectory.FullName
+                $moduleDirectoryName = $psreadlineModuleDirectory.Name
+
+                if ($moduleDirectoryName -le "2.2.2") {
+                Remove-Item -Recurse -Force -Path $moduleDirectoryPath
+                }
+              }
+
+              $PSReadlineVersion = (Get-Module -ListAvailable PSReadLine).Version
+
+              Write-Host "PSReadline Module Version: $PSReadlineVersion"
