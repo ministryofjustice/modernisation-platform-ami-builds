@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.12"
+configuration_version = "0.0.13"
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
@@ -53,7 +53,7 @@ systems_manager_agent = {
 }
 
 infrastructure_configuration = {
-  instance_types = ["t3.large"]
+  instance_types = ["r7g.medium"]
 }
 
 image_pipeline = {
