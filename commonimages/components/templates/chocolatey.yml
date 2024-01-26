@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -19,4 +19,12 @@ phases:
         inputs:
           commands:
             - |
-              Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+              if (Get-Command choco.exe -ErrorAction SilentlyContinue) {
+                Write-Host "Chocolatey already installed"
+                [System.Environment]::Exit(0)
+              } else {
+                Write-Host "Installing Chocolatey"
+                Set-ExecutionPolicy Bypass -Scope Process -Force[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                [System.Environment]::Exit(3010)
+              }
+

@@ -2,7 +2,7 @@ locals {
   components_common = [
     {
       name       = "chocolatey"
-      version    = "0.0.1"
+      version    = "0.0.2"
       parameters = []
     },
     {
