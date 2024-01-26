@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.3
+      default: 0.0.4
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -14,7 +14,7 @@ parameters:
 phases:
   - name: build
     steps:
-      - name: InstallPowerShellCore
+      - name: InstallChocolatey
         action: ExecutePowerShell
         inputs:
           commands:
@@ -24,7 +24,9 @@ phases:
                 [System.Environment]::Exit(0)
               } else {
                 Write-Host "Installing Chocolatey"
-                Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                Set-ExecutionPolicy Bypass -Scope Process -Force
+                [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+                Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
                 [System.Environment]::Exit(3010)
               }
 
