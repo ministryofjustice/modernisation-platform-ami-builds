@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "webserver"
-configuration_version = "0.0.13"
+configuration_version = "0.0.14"
 release_or_patch      = "release"
 description           = "oasys webserver image"
 
@@ -20,16 +20,16 @@ parent_image = {
 }
 
 block_device_mappings_ebs = [
-  {
-    device_name = "/dev/sda1" # boot volume
-    volume_size = 30
-    volume_type = "gp3"
-  },
-  {
-    device_name = "/dev/sda2" # root volume
-    volume_size = 30
-    volume_type = "gp3"
-  },
+  # {
+  #   device_name = "/dev/sda1" # boot volume
+  #   volume_size = 30
+  #   volume_type = "gp3"
+  # },
+  # {
+  #   device_name = "/dev/sda2" # root volume
+  #   volume_size = 30
+  #   volume_type = "gp3"
+  # },
   {
     device_name = "/dev/sdb" # /u01 oracle app disk
     volume_size = 128
