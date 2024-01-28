@@ -7,7 +7,7 @@ locals {
     },
     {
       name       = "powershell_core_server_2012"
-      version    = "0.0.1"
+      version    = "0.0.3"
       parameters = []
     },
     {
