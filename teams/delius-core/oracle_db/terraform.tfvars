@@ -48,12 +48,22 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "delius-core-development",
+    "delius-core-test",
+    "delius-mis-development",
+    "delius-mis-test",
+    "delius-mis-preproduction",
+    "delius-mis-production",
   ]
 
   # push to any other branch / local run
   default = [
     "core-shared-services-production",
     "delius-core-development",
+    "delius-core-test",
+    "delius-mis-development",
+    "delius-mis-test",
+    "delius-mis-preproduction",
+    "delius-mis-production",
   ]
 }
 
