@@ -2,12 +2,12 @@ locals {
   components_common = [
     {
       name       = "powershell_core"
-      version    = "0.4.0"
+      version    = "0.6.0"
       parameters = []
     },
     {
       name       = "aws_cli"
-      version    = "0.0.2"
+      version    = "0.0.4"
       parameters = []
     },
     {
