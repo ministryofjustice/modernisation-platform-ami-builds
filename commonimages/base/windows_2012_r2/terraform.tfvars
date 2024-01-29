@@ -4,7 +4,7 @@
 
 region                = "eu-west-2"
 ami_base_name         = "windows_server_2012_r2"
-configuration_version = "0.1.3"
+configuration_version = "0.1.9"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "Windows Server 2012 R2"
 

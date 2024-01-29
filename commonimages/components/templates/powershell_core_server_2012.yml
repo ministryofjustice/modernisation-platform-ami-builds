@@ -1,0 +1,28 @@
+---
+name: powershell_core_server_2012
+description: Component to install PowerShell Core on Windows Server 2012, has different command line flags as there are not supported packages for this version since Windows Server 2012 r2 is nearing EOL
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.3
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+  - PowerShellCoreVersion:
+      type: string
+      default: 7.4.1
+      description: Version of the PowerShell Core to install
+phases:
+  - name: build
+    steps:
+      - name: InstallPowerShellCore
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              choco install -y chocolatey-core.extension
+              choco install -y kb3118401
+              choco install -y powershell-core --version '{{ PowerShellCoreVersion }}' --install-arguments='"ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 USE_MU=0 ENABLE_MU=0 ADD_PATH=1 DISABLE_TELEMETRY"'
