@@ -2,5 +2,5 @@ include {
   path = find_in_parent_folders()
 }
 terraform {
-  source = "../../..//teams/delius-iaps"
+  source = "../../..//teams/delius-core"
 }
