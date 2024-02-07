@@ -1,0 +1,166 @@
+---
+name: delius_iaps_configure_cloudwatch_agent
+description: Configures the cloudwatch agent
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.1.1
+      description: Component version
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform name
+phases:
+  - name: build
+    steps:
+      - name: CreateCloudWatchAgentConfigFile
+        action: CreateFile
+        inputs:
+          - path: C:\Windows\Temp\aws\cloudwatch\cloudwatch.config.json
+            overwrite: true
+            content: |
+              {
+                "logs": {
+                  "logs_collected": {
+                    "files": {
+                      "collect_list": [
+                        {
+                          "file_path": "c:\\ProgramData\\Amazon\\AmazonCloudWatchAgent\\Logs\\amazon-cloudwatch-agent.log",
+                          "log_group_name": "/iaps/amazon-cloudwatch-agent.log",
+                          "log_stream_name": "{hostname}",
+                          "timestamp_format": "%H: %M: %S%y%b%-d"
+                        },
+                        {
+                          "file_path": "c:\\tools\\nginx-*\\logs\\access.log",
+                          "log_group_name": "/iaps/access.log",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "file_path": "c:\\tools\\nginx-*\\logs\\error.log",
+                          "log_group_name": "/iaps/error.log",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "file_path": "C:\\Program Files (x86)\\I2N\\IapsNDeliusInterface\\Log\\XMLTRANSFER.LOG",
+                          "log_group_name": "/iaps/ndinterface/xmltransfer.log",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "file_path": "C:\\Program Files (x86)\\I2N\\IapsNDeliusInterface\\Log\\DAILY\\DAYSUMMARY.LOG",
+                          "log_group_name": "/iaps/ndinterface/daysummary.log",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "file_path": "C:\\Program Files (x86)\\I2N\\IapsIMInterface\\Log\\IMIAPSIF.LOG",
+                          "log_group_name": "/iaps/iminterface/imiapsif.log",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "file_path": "c:\\Setup\\BackupLogs\\backup.log",
+                          "log_group_name": "/iaps/backup.log",
+                          "log_stream_name": "{hostname}"
+                        }  
+                      ]
+                    },
+                    "windows_events": {
+                      "collect_list": [
+                        {
+                          "event_format": "xml",
+                          "event_levels": [
+                            "WARNING",
+                            "ERROR",
+                            "CRITICAL"
+                          ],
+                          "event_name": "System",
+                          "log_group_name": "/iaps/system-events",
+                          "log_stream_name": "{hostname}"
+                        },
+                        {
+                          "event_format": "xml",
+                          "event_levels": [
+                            "WARNING",
+                            "ERROR",
+                            "CRITICAL"
+                          ],
+                          "event_name": "Application",
+                          "log_group_name": "/iaps/application-events",
+                          "log_stream_name": "{hostname}"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "metrics": {
+                  "append_dimensions": {
+                    "AutoScalingGroupName": "${aws:AutoScalingGroupName}"
+                  },
+                  "metrics_collected": {
+                    "LogicalDisk": {
+                      "measurement": [
+                        "% Free Space"
+                      ],
+                      "metrics_collection_interval": 60,
+                      "resources": [
+                        "*"
+                      ]
+                    },
+                    "Memory": {
+                      "measurement": [
+                        "% Committed Bytes In Use"
+                      ],
+                      "metrics_collection_interval": 60
+                    },
+                    "Paging File": {
+                      "measurement": [
+                        "% Usage"
+                      ],
+                      "metrics_collection_interval": 60,
+                      "resources": [
+                        "*"
+                      ]
+                    },
+                    "PhysicalDisk": {
+                      "measurement": [
+                        "% Disk Time"
+                      ],
+                      "metrics_collection_interval": 60,
+                      "resources": [
+                        "*"
+                      ]
+                    },
+                    "Processor": {
+                      "measurement": [
+                        "% User Time",
+                        "% Idle Time",
+                        "% Interrupt Time"
+                      ],
+                      "metrics_collection_interval": 60,
+                      "resources": [
+                        "_Total"
+                      ]
+                    },
+                    "statsd": {
+                      "metrics_aggregation_interval": 60,
+                      "metrics_collection_interval": 30,
+                      "service_address": ":8125"
+                    }
+                  }
+                }
+              }
+      - name: SetCloudWatchAgentConfig
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              # Copy config file to same directory as windows service
+              $serviceFilePathInQuotes = (Get-WmiObject -Class Win32_service | where Name -eq AmazonCloudWatchAgent).PathName
+              $serviceFilePath = $serviceFilePathInQuotes -replace '"', '' 
+              $serviceDirectoryPath = split-path -Path $serviceFilePath
+              $configFileName = "cloudwatch.config.json"
+              $configFilePath = join-path -path $serviceDirectoryPath -childPath $configFileName
+
+              copy-item -path (join-path -path "C:\Windows\Temp\aws\cloudwatch\" -childpath $configFileName) -destination $configFilePath -force
+
+              # Ensure cloudwatch agent uses config file              
+              Start-Process powershell.exe -WorkingDirectory $serviceDirectoryPath -Wait -ArgumentList ".\amazon-cloudwatch-agent-ctl.ps1 -a fetch-config -m ec2 -c file:$configFileName"
