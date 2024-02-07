@@ -1,5 +1,5 @@
 ---
-name: delius_iaps_set_system_locale
+name: delius_mis_set_system_locale
 description: Sets locale to values requested by
 schemaVersion: 1.0
 parameters:

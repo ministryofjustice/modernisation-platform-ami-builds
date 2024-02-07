@@ -1,5 +1,5 @@
 ---
-name: delius_iaps_configure_cloudwatch_agent
+name: delius_mis_configure_cloudwatch_agent
 description: Configures the cloudwatch agent
 schemaVersion: 1.0
 parameters:
