@@ -1,5 +1,5 @@
 ---
-name: add_net_framework_features
+name: mis_add_net_framework_features
 description: Component to add net-framework-features windows feature
 schemaVersion: 1.0
 parameters:
