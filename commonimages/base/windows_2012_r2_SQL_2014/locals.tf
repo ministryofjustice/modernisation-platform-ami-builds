@@ -15,6 +15,11 @@ locals {
       version    = "0.0.4"
       parameters = []
     },
+    {
+      name       = "git_windows"
+      version    = "0.0.1"
+      parameters = []
+    }
   ]
 
   component_template_args = {}
