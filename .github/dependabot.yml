@@ -64,6 +64,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/delius-core/mis_windows_server"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/delius-core/oracle_db"
     schedule:
       interval: "daily"
