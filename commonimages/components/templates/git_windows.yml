@@ -1,0 +1,22 @@
+---
+name: git_windows
+description: Component to install Git for Windows
+schemaVersion: 1.0
+parameters:
+  - Version:
+      type: string
+      default: 0.0.2
+      description: Component version (update this each time the file changes)
+  - Platform:
+      type: string
+      default: "Windows"
+      description: Platform.
+phases:
+  - name: build
+    steps:
+      - name: InstallGitForWindows
+        action: ExecutePowerShell
+        inputs:
+          commands:
+            - |
+              choco install git.install -y

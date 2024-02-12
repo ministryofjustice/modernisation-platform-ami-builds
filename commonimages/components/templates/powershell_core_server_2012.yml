@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.3
+      default: 0.4.0
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -25,4 +25,4 @@ phases:
             - |
               choco install -y chocolatey-core.extension
               choco install -y kb3118401
-              choco install -y powershell-core --version '{{ PowerShellCoreVersion }}' --install-arguments='"ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1 USE_MU=0 ENABLE_MU=0 ADD_PATH=1 DISABLE_TELEMETRY"'
+              choco install -y powershell-core --version '{{ PowerShellCoreVersion }}' --install-arguments='"ADD_EXPLORER_CONTEXT_MENU_OPENPOWERSHELL=1"'
