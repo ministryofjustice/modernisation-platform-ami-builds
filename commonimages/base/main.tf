@@ -1,5 +1,5 @@
 module "imagebuilder" {
-  count = var.configuration_version ? 1 : 0
+  # count = var.configuration_version ? 1 : 0
 
   source = "./../../modules//imagebuilder"
 
