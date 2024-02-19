@@ -13,9 +13,9 @@ tags = {
 }
 
 parent_image = {
-  owner = "679593333241"
+  owner = "374269020027"
   ami_search_filters = {
-    name = ["sc-a-216-5d93057e-941a-4d1b-884f-ec900151c1d1-230-5d93057e-941a-4d1b-884f-ec900151c1d1"] # AWS image not available so taken from marketplace. NOTE: This may fail at the build step if there is some sort of licensing restriction
+    name = ["base_windows_server_2012_r2_release_2023-09-07T*"] # AWS image not available so taken from marketplace. NOTE: This may fail at the build step if there is some sort of licensing restriction
   }
 }
 
