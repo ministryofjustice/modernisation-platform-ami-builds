@@ -45,6 +45,7 @@ variable "launch_template_exists" {
 variable "configuration_version" {
   type        = string
   description = "Version number of this configuration, increment on changes, e.g. 1.0.1"
+  default     = null
 }
 
 variable "description" {
