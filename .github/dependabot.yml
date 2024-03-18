@@ -96,6 +96,10 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/windows_server_2019"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
     directory: "/teams/nomis"
     schedule:
       interval: "daily"
