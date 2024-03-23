@@ -92,11 +92,11 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/windows_server_2022"
+    directory: "/teams/hmpps/windows_server_2019"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/windows_server_2019"
+    directory: "/teams/hmpps/windows_server_2022"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
