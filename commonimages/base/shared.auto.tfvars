@@ -24,7 +24,9 @@ accounts_to_distribute_ami_by_branch = {
 
 }
 
-launch_permission_account_names = [
+launch_permission_account_names = {
+  
+  main = [
   "core-shared-services-production",
   "corporate-staff-rostering-development",
   "corporate-staff-rostering-preproduction",
@@ -63,5 +65,10 @@ launch_permission_account_names = [
   "planetfm-production",
   "planetfm-test",
   "delius-core-development"
-]
+  ]
+
+  default = [
+  "core-shared-services-production",
+  ]
+}
 
