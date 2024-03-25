@@ -8,13 +8,19 @@ image_pipeline = {
   }
 }
 
-account_to_distribute_ami = [
+accounts_to_distribute_ami_by_branch = {
+  # push to main branch
+  main = [
   "core-shared-services-production",
   "oasys-national-reporting-development",
   "oasys-national-reporting-preproduction",
   "oasys-national-reporting-production",
   "oasys-national-reporting-test"
 ]
+
+  default = []
+
+}
 
 launch_permission_account_names = [
   "core-shared-services-production",
