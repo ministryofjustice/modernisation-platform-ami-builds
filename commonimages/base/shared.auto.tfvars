@@ -11,18 +11,20 @@ image_pipeline = {
 accounts_to_distribute_ami_by_branch = {
   # push to main branch
   main = [
-    "core-shared-services-production",
-    "oasys-national-reporting-development",
-    "oasys-national-reporting-preproduction",
-    "oasys-national-reporting-production",
-    "oasys-national-reporting-test"
+  "core-shared-services-production",
+  "oasys-national-reporting-development",
+  "oasys-national-reporting-preproduction",
+  "oasys-national-reporting-production",
+  "oasys-national-reporting-test"
   ]
 
-  default = []
+  default = [
+    "core-shared-services-production"
+  ]
 
 }
 
-launch_permission_account_names = [
+launch_permission_accounts_by_branch = [
   "core-shared-services-production",
   "corporate-staff-rostering-development",
   "corporate-staff-rostering-preproduction",
@@ -61,4 +63,5 @@ launch_permission_account_names = [
   "planetfm-production",
   "planetfm-test",
   "delius-core-development"
-]
+  ]
+
