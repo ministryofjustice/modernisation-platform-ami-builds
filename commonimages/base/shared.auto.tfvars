@@ -24,7 +24,7 @@ accounts_to_distribute_ami_by_branch = {
 
 }
 
-launch_permission_account_names = {
+launch_permission_accounts_by_branch = {
 
   main = [
     "core-shared-services-production",
