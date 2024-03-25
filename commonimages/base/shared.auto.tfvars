@@ -14,7 +14,7 @@ account_to_distribute_ami = [
   "oasys-national-reporting-preproduction",
   "oasys-national-reporting-production",
   "oasys-national-reporting-test"
-  ]
+]
 
 launch_permission_account_names = [
   "core-shared-services-production",
