@@ -124,11 +124,6 @@ variable "components_custom" {
   description = "The custom components used to build the ami"
 }
 
-variable "launch_permission_account_names" {
-  type        = list(string)
-  description = "The list of accounts to give launch permissions to"
-}
-
 variable "launch_permission_accounts_by_branch" {
   type        = map(any)
   description = "The list of accounts to give launch permissions to by branch"
