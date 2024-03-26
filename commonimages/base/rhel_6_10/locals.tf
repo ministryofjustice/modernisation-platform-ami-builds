@@ -12,7 +12,7 @@ locals {
       parameters = []
       }, {
       name    = "ansible"
-      version = "0.0.11"
+      version = "0.0.5" # set to last known working ansible component version
       parameters = [{
         name  = "Ami"
         value = join("_", [var.ami_name_prefix, var.ami_base_name])
