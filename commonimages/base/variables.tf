@@ -63,9 +63,16 @@ variable "ami_name_prefix" {
   default     = "baseimage"
 }
 
+variable "accounts_to_distribute_ami_by_branch" {
+  type        = map(any)
+  description = "Account that you will distribute the ami to by given github branch"
+  default     = null
+}
+
 variable "account_to_distribute_ami" {
   type        = string
   description = "Account that you will distribute the ami to"
+  default     = null
 }
 
 variable "tags" {
@@ -117,7 +124,7 @@ variable "components_custom" {
   description = "The custom components used to build the ami"
 }
 
-variable "launch_permission_account_names" {
-  type        = list(string)
-  description = "The list of accounts to give launch permissions to"
+variable "launch_permission_accounts_by_branch" {
+  type        = map(any)
+  description = "The list of accounts to give launch permissions to by branch"
 }
