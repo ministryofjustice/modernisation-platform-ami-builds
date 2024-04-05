@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.11
+      default: 0.0.12
       description: "Component version, increment if you make changes."
   - Platform:
       type: string
@@ -83,7 +83,11 @@ phases:
                 # install python dependencies outside of virtual env so ansible
                 # can be executed remotely
                 cd $ansible_dir/$repo/$ansible_repo_dir
-                $python -m pip install -r requirements.txt
+                if [[ "$python" =~ 3.6]]; then
+                  $python -m pip install -r requirements.txt -c constraints.rhel6.txt
+                else
+                  $python -m pip install -r requirements.txt
+                fi
 
                 # activate virtual environment
                 mkdir $ansible_dir/python-venv && cd "$_"
@@ -101,7 +105,11 @@ phases:
 
                 # install requirements in virtual env
                 cd $ansible_dir/$repo/$ansible_repo_dir
-                $python -m pip install -r requirements.txt
+                if [[ "$python" =~ 3.6]]; then
+                  $python -m pip install -r requirements.txt -c constraints.rhel6.txt
+                else
+                  $python -m pip install -r requirements.txt
+                fi
                 ansible-galaxy role install -r requirements.yml
                 ansible-galaxy collection install -r requirements.yml --force
 
