@@ -107,11 +107,13 @@ phases:
                 cd $ansible_dir/$repo/$ansible_repo_dir
                 if [[ "$python" =~ 3.6 ]]; then
                   $python -m pip install -r requirements.txt -c constraints.rhel6.txt
+                  ansible-galaxy role install -r requirements.rhel6.yml
+                  ansible-galaxy collection install -r requirements.rhel6.yml --force
                 else
                   $python -m pip install -r requirements.txt
+                  ansible-galaxy role install -r requirements.yml
+                  ansible-galaxy collection install -r requirements.yml --force
                 fi
-                ansible-galaxy role install -r requirements.yml
-                ansible-galaxy collection install -r requirements.yml --force
 
                 # run ansible (note comma after localhost is deliberate)
                 ansible-playbook site.yml \
