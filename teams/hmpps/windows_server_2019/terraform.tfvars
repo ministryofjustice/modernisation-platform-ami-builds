@@ -51,7 +51,7 @@ accounts_to_distribute_ami_by_branch = {
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
-    "oasys-national-reporting-production"
+    "oasys-national-reporting-production",
     "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "nomis-combined-reporting-preproduction",
@@ -62,8 +62,8 @@ accounts_to_distribute_ami_by_branch = {
   default = [
     "core-shared-services-production",
     "oasys-national-reporting-development",
-    "oasys-national-reporting-test"
-    "nomis-combined-reporting-development"
+    "oasys-national-reporting-test",
+    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test"
   ]
 
