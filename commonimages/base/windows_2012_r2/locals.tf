@@ -19,6 +19,11 @@ locals {
       name       = "git_windows"
       version    = "0.0.2"
       parameters = []
+    },
+    {
+      name       = "powershell_5_1"
+      version    = "0.0.1"
+      parameters = []
     }
   ]
 
