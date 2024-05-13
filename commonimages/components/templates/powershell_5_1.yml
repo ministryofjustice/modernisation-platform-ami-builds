@@ -1,11 +1,11 @@
 ---
 name: powershell_5_1
 description: Component to install Windows Management Framework 5.1 on Windows Server 2012. This includes PowerShell 5.1 and will supercede Powershell 4.0 so we can use more modern commandlets.
-SchemaVersion: 1.0
+schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.1
+      default: 0.0.2
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
