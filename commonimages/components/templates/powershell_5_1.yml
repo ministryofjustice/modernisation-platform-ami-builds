@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.3
+      default: 0.0.4
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -19,5 +19,11 @@ phases:
         inputs:
           commands:
             - |
-              choco install -y powershell
-              exit 3010
+              if ( $PSVersionTable.PSVersion.Major -ge 5 ) {
+                Write-Host "PowerShell 5 or higher is already installed"
+                exit 0
+              } else {
+                Write-Host "Installing PowerShell 5.1"
+                choco install -y powershell
+                exit 3010
+              }
