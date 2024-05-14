@@ -25,7 +25,7 @@ locals {
       description        = "Description here"
       instance_types     = ["t2.nano", "t3.micro"]
       name               = join("", [local.team_name, "_WindowsServer2022"])
-      security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id]
+      security_group_ids = [data.terraform_remote_state.modernisation-platform-repo.outputs.image_builder_security_group_id.non_live_data]
       subnet_id          = data.terraform_remote_state.modernisation-platform-repo.outputs.non_live_private_subnet_ids[0]
       terminate_on_fail  = true
     }
