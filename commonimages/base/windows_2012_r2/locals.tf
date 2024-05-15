@@ -22,7 +22,7 @@ locals {
     },
     {
       name       = "powershell_5_1"
-      version    = "0.0.4"
+      version    = "0.0.5"
       parameters = []
     }
   ]
