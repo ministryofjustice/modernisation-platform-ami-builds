@@ -19,11 +19,12 @@ phases:
         inputs:
           commands:
             - |
-              if ( $PSVersionTable.PSVersion.Major -ge 5 ) {
-                Write-Host "PowerShell 5 or higher is already installed"
-                exit 0
-              } else {
+              $PSMajorVersion = $PSVersionTable.PSVersion.Major
+              if ( $PSMajorVersion -le 4 ) {
                 Write-Host "Installing PowerShell 5.1"
                 choco install -y powershell
                 exit 3010
+              } else {
+                Write-Host "PowerShell $PSMajorVersion is installed"
+                exit 0
               }
