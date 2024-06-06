@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "ol_8_5_oracledb_19c"
-configuration_version = "0.0.8"
+configuration_version = "0.0.9"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "hmpps oracle 19c image on oracle linux 8.5"
 
@@ -119,6 +119,10 @@ accounts_to_distribute_ami_by_branch = {
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
+    "nomis-development",
+    "nomis-test",
+    "nomis-preproduction",
+    "nomis-production",
   ]
 
   # push to any other branch / local run
@@ -134,6 +138,8 @@ accounts_to_distribute_ami_by_branch = {
     "nomis-combined-reporting-test",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
+    "nomis-development",
+    "nomis-test",
   ]
 }
 
@@ -161,6 +167,10 @@ launch_permission_accounts_by_branch = {
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
+    "nomis-development",
+    "nomis-test",
+    "nomis-preproduction",
+    "nomis-production",
   ]
 
   # push to any other branch / local run
@@ -176,6 +186,8 @@ launch_permission_accounts_by_branch = {
     "nomis-combined-reporting-test",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
+    "nomis-development",
+    "nomis-test",
   ]
 }
 
