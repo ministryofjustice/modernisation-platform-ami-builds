@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis"
 ami_base_name         = "rhel_7_9_weblogic_xtag_10_3"
-configuration_version = "0.0.8"
+configuration_version = "0.0.9"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis rhel 7.9 weblogic XTAG image"
 
@@ -47,10 +47,6 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
 }
 
 launch_template_exists = false
