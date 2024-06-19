@@ -148,8 +148,11 @@ resource "aws_imagebuilder_image_pipeline" "this" {
   image_tests_configuration {
     image_tests_enabled = false
   }
-  schedule {
-    schedule_expression                = var.image_pipeline.schedule.schedule_expression
-    pipeline_execution_start_condition = var.image_pipeline.schedule.pipeline_execution_start_condition
+  dynamic "schedule" {
+    for_each = var.image_pipeline.schedule != null ? [var.image_pipeline.schedule] : []
+    content {
+      schedule_expression                = schedule.value.schedule_expression
+      pipeline_execution_start_condition = schedule.value.pipeline_execution_start_condition
+    }
   }
 }

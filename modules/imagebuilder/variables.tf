@@ -146,8 +146,10 @@ variable "image_pipeline" {
     })
   })
   description = "Pipeline configuration, see aws_imagebuilder_image_pipeline documentation for details on the parameters"
+  default = {
+    schedule = null
+  }
 }
-
 
 variable "launch_permission_account_names" {
   type        = list(string)
