@@ -4,6 +4,9 @@ set -euo pipefail
 
 dependabot_file=.github/dependabot.yml
 
+# Clear the dependabot file
+> $dependabot_file
+
 # Get a list of Terraform folders
 all_tf_folders=`find . -type f -name '*.tf' | sed 's#/[^/]*$##' | sed 's/.\///'| sort | uniq`
 echo
@@ -29,11 +32,11 @@ updates:
   # See: github.com/dependabot/dependabot-core/issues/2178
 EOL
 
-for folder in $all_tf_folders
-do
-echo "Generating entry for ${folder}"
+echo "Generating entry for Terraform ecosystem"
 echo "  - package-ecosystem: \"terraform\"" >> $dependabot_file
-echo "    directory: \"/${folder}\"" >> $dependabot_file
+echo "    directories:" >> $dependabot_file
+for folder in $all_tf_folders; do
+  echo "      - \"/$folder\"" >> $dependabot_file
+done
 echo "    schedule:" >> $dependabot_file
 echo "      interval: \"daily\"" >> $dependabot_file
-done
