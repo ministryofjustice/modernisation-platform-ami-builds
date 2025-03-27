@@ -164,8 +164,8 @@ You can view and start EC2 Image Builder pipelines by assuming a role in the cor
 - Consider separate environment for deploying / testing branches against
 - Consider implementation of OPA tests to safeguard changes to files that should remain static
 
-[Standards Link]: https://github-community.cloud-platform.service.justice.gov.uk/repository-standards/modernisation-platform-ami-builds "Repo standards badge."
-[Standards Icon]: https://github-community.cloud-platform.service.justice.gov.uk/repository-standards/api/modernisation-platform-ami-builds/badge
+[Standards Link]: https://github-community.service.justice.gov.uk/repository-standards/modernisation-platform-ami-builds "Repo standards badge."
+[Standards Icon]: https://github-community.service.justice.gov.uk/repository-standards/api/modernisation-platform-ami-builds/badge
 [Format Code Icon]: https://img.shields.io/github/actions/workflow/status/ministryofjustice/modernisation-platform-ami-builds/format-code.yml?labelColor=231f20&style=for-the-badge&label=Formate%20Code
 [Format Code Link]: https://github.com/ministryofjustice/modernisation-platform-ami-builds/actions/workflows/format-code.yml
 [Scorecards Icon]: https://img.shields.io/github/actions/workflow/status/ministryofjustice/modernisation-platform-ami-builds/scorecards.yml?branch=main&labelColor=231f20&style=for-the-badge&label=Scorecards
