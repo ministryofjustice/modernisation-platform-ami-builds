@@ -1,5 +1,5 @@
-# This file is auto-generated, do not manually amend.
-# https://github.com/ministryofjustice/modernisation-platform-ami-builds/blob/main/scripts/generate-dependabot-file.sh
+# This file is auto-generated here, do not manually amend. 
+# https://github.com/ministryofjustice/modernisation-platform/blob/main/scripts/generate-dependabot.sh
 
 version: 2
 
@@ -8,25 +8,146 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    groups:
-      action-dependencies:
-        patterns:
-          - "*"
+  # Dependabot doesn't currently support wildcard or multiple directory declarations within
+  # a dependabot configuration, so we need to add all directories individually
+  # See: github.com/dependabot/dependabot-core/issues/2178
   - package-ecosystem: "terraform"
-    directories:
-      - "commonimages/**/*"
-      - "modernisation-platform/**/*"
-      - "modules/**/*"
-      - "scripts/**/*"
-      - "teams/**/*"
+    directory: "/commonimages/base"
     schedule:
       interval: "daily"
-  - package-ecosystem: "gomod"
-    directories:
-      - "scripts/**/*"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/ol_8_5"
     schedule:
       interval: "daily"
-    groups:
-      gomod-dependencies:
-        patterns:
-          - "*"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_6_10"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_7_9"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_8_5"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/rhel_8_5_arm64"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/base/windows_2012_r2"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/commonimages/components"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/modernisation-platform"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/modules/imagebuilder"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/scripts/templates"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-core"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-core/mis_windows_server"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-core/oracle_db"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-iaps"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/delius-iaps/iaps_server"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/example"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/ol_8_5_oracledb_19c"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/rhel_8_5"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/windows_server_2019"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/hmpps/windows_server_2022"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub/rhel_7_9_app"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis-data-hub/rhel_7_9_ems"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_7_9_oracledb_11_2"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/nomis/rhel_7_9_weblogic_xtag_10_3"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys/bip"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys/oracle_db"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys/weblogic"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/oasys/webserver"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "terraform"
+    directory: "/teams/sprinkler"
+    schedule:
+      interval: "daily"
