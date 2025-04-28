@@ -140,9 +140,9 @@ No further change will need to be made to the component block of the pipeline te
 
 ### How to add a new GitHub workflow
 
-GitHub workflow files are used to invoke Terraform and an example workflow is defined at [./.github/workflows/example.yml](./.github/workflows/example.yml).
-To create a workflow for your team, simply copy `example.yml` and add a new file named `[your_team_name].yml`.
-The workflow within the example workflow has no branch condition that might restrict when Terraform is applied. Please change as appropriate for your team's processes.
+GitHub workflow files are used to invoke Terraform through a reusable workflow defined at [.github/workflows/reusable_terraform_plan_apply.yml](.github/workflows/reusable_terraform_plan_apply.yml).
+To create a workflow for your team, create a new file in .github/workflows/ (e.g., `[your_team_name].yml`) that calls the reusable workflow.
+An example usage is provided in  [./.github/workflows/example.yml](./.github/workflows/example.yml).
 
 ### How to view and start EC2 Image Builder pipelines
 
