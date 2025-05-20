@@ -56,9 +56,9 @@ on:
 
 permissions:
   contents: read # This is required for actions/checkout
-  pull-requests: write # For posting comments to PR
   issues: write # Required for posting comments on PRs
   id-token: write # Required for OIDC token authentication with AWS
+  pull-requests: write # For posting comments to PR
 
 env:
   TF_IN_AUTOMATION: true
