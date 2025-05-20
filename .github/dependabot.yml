@@ -151,3 +151,13 @@ updates:
     directory: "/teams/sprinkler"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: pip
+    directory: /ansible
+    schedule:
+      interval: daily
+
+  - package-ecosystem: gomod
+    directory: /scripts/minimise-comments
+    schedule:
+      interval: daily
