@@ -54,6 +54,12 @@ on:
       PASSPHRASE:
         required: true
 
+permissions:
+  contents: read # This is required for actions/checkout
+  issues: write # Required for posting comments on PRs
+  id-token: write # Required for OIDC token authentication with AWS
+  pull-requests: write # For posting comments to PR
+
 env:
   TF_IN_AUTOMATION: true
   TF_VAR_BRANCH_NAME: ${{ github.event_name == 'pull_request' && 'main' || (github.head_ref || github.ref_name) }}
