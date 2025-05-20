@@ -23,10 +23,22 @@ echo "Writing dependabot.yml file"
 version: 2
 
 updates:
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: gomod
+    directory: /scripts/minimise-comments
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /ansible
+    schedule:
+      interval: daily
+
   # Dependabot doesn't currently support wildcard or multiple directory declarations within
   # a dependabot configuration, so we need to add all directories individually
   # See: github.com/dependabot/dependabot-core/issues/2178
