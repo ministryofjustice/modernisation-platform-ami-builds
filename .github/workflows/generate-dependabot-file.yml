@@ -11,6 +11,11 @@ on:
       - 'scripts/generate-dependabot-file.sh'
   workflow_dispatch:
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+  pull-requests: write # For posting comments to PR
+
 defaults:
   run:
     shell: bash
