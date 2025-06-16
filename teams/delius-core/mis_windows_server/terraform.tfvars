@@ -69,6 +69,7 @@ components_custom = [
   },
   {
     path = "../../../commonimages/components/templates/aws_cli.yml"
+    parameters = []
   }
 ]
 
