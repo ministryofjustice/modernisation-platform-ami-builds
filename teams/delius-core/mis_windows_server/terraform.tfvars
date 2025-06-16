@@ -64,22 +64,6 @@ components_custom = [
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/nomis_windows_server.yml"
-    parameters = []
-  },
-  {
-    path       = "../../../commonimages/components/templates/nomis_windows_server_configure.yml"
-    parameters = []
-  },
-  {
-    path       = "../../../commonimages/components/templates/nomis_windows_server_configure_firewall.yml"
-    parameters = []
-  },
-  {
-    path       = "../../../commonimages/components/templates/nomis_windows_server_configure_awscli.yml"
-    parameters = []
-  },
-  {
     path       = "../../../commonimages/components/templates/chocolatey.yml"
     parameters = []
   },
