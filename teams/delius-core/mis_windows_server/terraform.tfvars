@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius"
 ami_base_name         = "mis_windows_server"
-configuration_version = "0.0.1"
+configuration_version = "0.0.2"
 
 release_or_patch = "patch" # see nomis AMI image building strategy doc
 description      = "Delius MIS server"
@@ -50,6 +50,26 @@ components_custom = [
   {
     path       = "./components/mis_windows_server/delius_mis_configure_cloudwatch_agent.yml"
     parameters = []
+  },
+  {
+    path       = "../../../commonimages/components/templates/psreadline_fix.yml"
+    parameters = []
+  },
+  {
+    path       = "../../../commonimages/components/templates/powershell_core.yml"
+    parameters = []
+  },
+  {
+    path       = "../../../commonimages/components/templates/git_windows.yml"
+    parameters = []
+  },
+  {
+    path       = "../../../commonimages/components/templates/chocolatey.yml"
+    parameters = []
+  },
+  {
+    path       = "../../../commonimages/components/templates/aws_cli.yml"
+    parameters = []
   }
 ]
 
@@ -59,7 +79,7 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
+    schedule_expression                = "cron(0 0 * * ? *)"
     pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
   }
 }
