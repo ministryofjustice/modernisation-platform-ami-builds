@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius"
 ami_base_name         = "mis_windows_server"
-configuration_version = "0.0.2"
+configuration_version = "0.0.3"
 
 release_or_patch = "patch" # see nomis AMI image building strategy doc
 description      = "Delius MIS server"
@@ -52,23 +52,23 @@ components_custom = [
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/psreadline_fix.yml"
+    path       = "../../commonimages/components/templates/psreadline_fix.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/powershell_core.yml"
+    path       = "../../commonimages/components/templates/powershell_core.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/git_windows.yml"
+    path       = "../../commonimages/components/templates/git_windows.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/chocolatey.yml"
+    path       = "../../commonimages/components/templates/chocolatey.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/aws_cli.yml"
+    path       = "../../commonimages/components/templates/aws_cli.yml"
     parameters = []
   }
 ]
@@ -79,8 +79,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression                = "cron(0 0 * * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+    schedule_expression                = "cron(0 13 * * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 }
 
@@ -89,7 +89,6 @@ accounts_to_distribute_ami_by_branch = {
   main = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -98,7 +97,6 @@ accounts_to_distribute_ami_by_branch = {
   default = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -109,7 +107,6 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -118,7 +115,6 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
