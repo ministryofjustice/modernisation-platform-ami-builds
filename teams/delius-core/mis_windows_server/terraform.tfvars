@@ -79,8 +79,8 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression                = "cron(0 0 * * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+    schedule_expression                = "cron(0 11 * * ? *)"
+    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 }
 
@@ -89,7 +89,6 @@ accounts_to_distribute_ami_by_branch = {
   main = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -98,7 +97,6 @@ accounts_to_distribute_ami_by_branch = {
   default = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -109,7 +107,6 @@ launch_permission_accounts_by_branch = {
   main = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -118,7 +115,6 @@ launch_permission_accounts_by_branch = {
   default = [
     "core-shared-services-production",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
