@@ -79,7 +79,7 @@ infrastructure_configuration = {
 
 image_pipeline = {
   schedule = {
-    schedule_expression                = "cron(0 11 * * ? *)"
+    schedule_expression                = "cron(0 12 * * ? *)"
     pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 }
