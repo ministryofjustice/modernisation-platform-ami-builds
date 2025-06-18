@@ -52,23 +52,23 @@ components_custom = [
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/psreadline_fix.yml"
+    path       = "../../../../commonimages/components/templates/psreadline_fix.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/powershell_core.yml"
+    path       = "../../../../commonimages/components/templates/powershell_core.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/git_windows.yml"
+    path       = "../../../../commonimages/components/templates/git_windows.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/chocolatey.yml"
+    path       = "../../../../commonimages/components/templates/chocolatey.yml"
     parameters = []
   },
   {
-    path       = "../../../commonimages/components/templates/aws_cli.yml"
+    path       = "../../../../commonimages/components/templates/aws_cli.yml"
     parameters = []
   }
 ]
