@@ -313,6 +313,7 @@ jobs:
 
       - name: Plan
         id: plan
+        shell: bash
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
@@ -424,6 +425,7 @@ jobs:
       
       - name: Plan
         id: plan
+        shell: bash
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           exitcode=0
