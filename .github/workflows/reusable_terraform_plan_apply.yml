@@ -317,7 +317,8 @@ jobs:
         run: |
           exitcode=0
           chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terragrunt plan -no-color -detailed-exitcode | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt || exitcode=$?
+          terragrunt plan -no-color -detailed-exitcode | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfplan.txt
+          exitcode=${PIPESTATUS[0]}
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
@@ -427,7 +428,8 @@ jobs:
         run: |
           exitcode=0
           chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh || exitcode=$?
+          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh
+          exitcode=${PIPESTATUS[0]}
           echo "terragrunt plan exit code = $exitcode"
           echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
           (( exitcode == 1 )) && exit 1 || exit 0
