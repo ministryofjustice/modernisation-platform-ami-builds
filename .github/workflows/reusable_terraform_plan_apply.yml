@@ -423,57 +423,9 @@ jobs:
         run: |
           terragrunt init
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
-      
-      - name: Plan
-        id: plan
-        shell: bash
-        continue-on-error: true
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          exitcode=0
-          chmod +x ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          terragrunt plan -detailed-exitcode -no-color -out=tf.plan | ${GITHUB_WORKSPACE}/scripts/redact-output.sh
-          exitcode=${PIPESTATUS[0]}
-          echo "terragrunt plan exit code = $exitcode"
-          echo "exitcode=${exitcode}" >> $GITHUB_OUTPUT
-          (( exitcode == 1 )) && exit 1 || exit 0
 
       - name: Apply
-        if: ${{ steps.plan.outputs.exitcode == '2' }}
+        if: ${{ needs.plan.outputs['plan.exitcode'] == '2' }}
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt apply tf.plan -no-color | ${GITHUB_WORKSPACE}/scripts/redact-output.sh | tee tfapply.txt
-
-      - name: Create Apply PR message
-        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
-        run: |
-          comment() {
-            url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            len=$(cat tfapply.txt | wc -c)
-            echo '**`${{ env.TEAM_DIR }}/${{ matrix.project }}`** terraform apply on `${{ github.event_name }}` event [#${{ github.run_number }}](${url})'
-            echo
-            echo '```'
-            head -c 65476 tfapply.txt
-            echo
-            echo '```'
-            if [[ $len -gt 65476 ]]; then
-              echo "** Truncated output.  See $url for the rest **"
-            fi
-          }
-          echo 'TF_APPLY_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
-      - name: Post Apply to PR
-        if: ${{ github.event_name == 'push' && steps.plan.outputs.exitcode == '2' }}
-        env:
-          message: "${{ env.TF_APPLY_OUT }}"
-          pr_number: "${{ needs.init.outputs.pr_number }}"
-        run: |
-          escaped_message=$(echo "$message" | jq -Rsa .)
-          curl -sS -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${pr_number}/comments" \
-            -d '{"body":'"${escaped_message}"'}'
+          terragrunt apply --auto-approve
