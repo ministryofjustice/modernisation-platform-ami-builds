@@ -425,7 +425,6 @@ jobs:
           terragrunt workspace select "core-shared-services-${TF_ENV}" || terragrunt workspace new "core-shared-services-${TF_ENV}"
 
       - name: Apply
-        if: ${{ needs.plan.outputs['plan.exitcode'] == '2' }}
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
           terragrunt apply --auto-approve
