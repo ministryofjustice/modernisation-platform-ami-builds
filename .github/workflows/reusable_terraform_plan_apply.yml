@@ -427,4 +427,4 @@ jobs:
       - name: Apply
         working-directory: "${{ env.TEAM_DIR }}/${{ matrix.project }}"
         run: |
-          terragrunt apply --auto-approve
+          terragrunt apply --auto-approve | ${GITHUB_WORKSPACE}/scripts/redact-output.sh
