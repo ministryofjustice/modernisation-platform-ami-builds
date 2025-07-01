@@ -97,6 +97,9 @@ image_pipeline = {
 
 accounts_to_distribute_ami_by_branch = {
   # push to main branch
+
+  # removed     "nomis-combined-reporting-development", from sections below (TM-1355)
+
   main = [
     "core-shared-services-production",
     "oasys-development",
@@ -111,7 +114,6 @@ accounts_to_distribute_ami_by_branch = {
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-preproduction",
     "corporate-staff-rostering-production",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "nomis-combined-reporting-preproduction",
     "nomis-combined-reporting-production",
@@ -134,7 +136,6 @@ accounts_to_distribute_ami_by_branch = {
     "hmpps-oem-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
@@ -159,7 +160,6 @@ launch_permission_accounts_by_branch = {
     "corporate-staff-rostering-test",
     "corporate-staff-rostering-preproduction",
     "corporate-staff-rostering-production",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "nomis-combined-reporting-preproduction",
     "nomis-combined-reporting-production",
@@ -182,7 +182,6 @@ launch_permission_accounts_by_branch = {
     "hmpps-oem-test",
     "corporate-staff-rostering-development",
     "corporate-staff-rostering-test",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
