@@ -20,6 +20,8 @@ accounts_to_distribute_ami_by_branch = {
 
 }
 
+# removed "nomis-combined-reporting-development", from the section below (TM-1355)
+
 launch_permission_accounts_by_branch = {
 
   main = [

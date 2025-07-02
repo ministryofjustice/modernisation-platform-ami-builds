@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "ol_8_5_oracledb_19c"
-configuration_version = "0.0.9"
+configuration_version = "0.0.10"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "hmpps oracle 19c image on oracle linux 8.5"
 
@@ -97,6 +97,9 @@ image_pipeline = {
 
 accounts_to_distribute_ami_by_branch = {
   # push to main branch
+
+  # removed     "nomis-combined-reporting-development", from sections below (TM-1355)
+
   main = [
     "core-shared-services-production",
     "oasys-development",
