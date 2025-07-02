@@ -36,7 +36,6 @@ launch_permission_accounts_by_branch = {
     "hmpps-domain-services-test",
     "hmpps-domain-services-preproduction",
     "hmpps-domain-services-production",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-preproduction",
     "nomis-combined-reporting-production",
     "nomis-combined-reporting-test",

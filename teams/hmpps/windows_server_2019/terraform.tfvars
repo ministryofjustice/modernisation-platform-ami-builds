@@ -52,7 +52,6 @@ accounts_to_distribute_ami_by_branch = {
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "nomis-combined-reporting-preproduction",
     "nomis-combined-reporting-production"
@@ -63,7 +62,6 @@ accounts_to_distribute_ami_by_branch = {
     "core-shared-services-production",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test"
   ]
 
@@ -77,7 +75,6 @@ launch_permission_accounts_by_branch = {
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test",
     "nomis-combined-reporting-preproduction",
     "nomis-combined-reporting-production"
@@ -88,7 +85,6 @@ launch_permission_accounts_by_branch = {
     "core-shared-services-production",
     "oasys-national-reporting-development",
     "oasys-national-reporting-test",
-    "nomis-combined-reporting-development",
     "nomis-combined-reporting-test"
   ]
 }
