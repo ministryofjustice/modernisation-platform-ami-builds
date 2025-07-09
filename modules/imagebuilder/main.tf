@@ -108,7 +108,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "this" {
 }
 
 resource "aws_imagebuilder_distribution_configuration" "this" {
-  name        = local.team_ami_base_name
+  name        = replace("${local.team_ami_base_name}_${var.configuration_version}", ".", "_")
   description = var.description
   tags        = local.tags
 
@@ -139,7 +139,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
 }
 
 resource "aws_imagebuilder_image_pipeline" "this" {
-  name                             = local.team_ami_base_name
+  name                             = replace("${local.team_ami_base_name}_${var.configuration_version}", ".", "_")
   description                      = var.description
   image_recipe_arn                 = aws_imagebuilder_image_recipe.this.arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
