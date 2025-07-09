@@ -50,26 +50,6 @@ components_custom = [
   {
     path       = "./components/mis_windows_server/delius_mis_configure_cloudwatch_agent.yml"
     parameters = []
-  },
-  {
-    path       = "../../commonimages/components/templates/psreadline_fix.yml"
-    parameters = []
-  },
-  {
-    path       = "../../commonimages/components/templates/powershell_core.yml"
-    parameters = []
-  },
-  {
-    path       = "../../commonimages/components/templates/git_windows.yml"
-    parameters = []
-  },
-  {
-    path       = "../../commonimages/components/templates/chocolatey.yml"
-    parameters = []
-  },
-  {
-    path       = "../../commonimages/components/templates/aws_cli.yml"
-    parameters = []
   }
 ]
 
