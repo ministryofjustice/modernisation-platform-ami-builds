@@ -13,6 +13,9 @@ locals {
         }, {
         name  = "AnsibleTags"
         value = "amibuild,oracle_19c_download"
+        }, {
+        name  = "AnsibleArgs"
+        value = "-vvv"
       }]
     }
   ]
