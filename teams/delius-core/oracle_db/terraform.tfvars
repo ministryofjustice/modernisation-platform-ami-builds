@@ -74,7 +74,6 @@ accounts_to_distribute_ami_by_branch = {
     "delius-core-test",
     "delius-core-preproduction",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -86,7 +85,6 @@ accounts_to_distribute_ami_by_branch = {
     "delius-core-test",
     "delius-core-preproduction",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -100,7 +98,6 @@ launch_permission_accounts_by_branch = {
     "delius-core-test",
     "delius-core-preproduction",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]
@@ -112,7 +109,6 @@ launch_permission_accounts_by_branch = {
     "delius-core-test",
     "delius-core-preproduction",
     "delius-mis-development",
-    "delius-mis-test",
     "delius-mis-preproduction",
     "delius-mis-production",
   ]

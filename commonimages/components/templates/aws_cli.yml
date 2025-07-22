@@ -5,7 +5,7 @@ schemaVersion: 1.0
 parameters:
   - Version:
       type: string
-      default: 0.0.4
+      default: 0.0.5
       description: Component version (update this each time the file changes)
   - Platform:
       type: string
@@ -13,7 +13,7 @@ parameters:
       description: Platform.
   - AwsCliVersion:
       type: string
-      default: 2.15.14
+      default: 2.27.49
       description: Version of the AWS Cli v2 to install
 phases:
   - name: build

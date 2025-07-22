@@ -97,6 +97,9 @@ image_pipeline = {
 
 accounts_to_distribute_ami_by_branch = {
   # push to main branch
+
+  # removed     "nomis-combined-reporting-development", from sections below (TM-1355)
+
   main = [
     "core-shared-services-production",
     "oasys-development",
