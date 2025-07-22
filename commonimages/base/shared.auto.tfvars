@@ -51,7 +51,6 @@ launch_permission_accounts_by_branch = {
     "oasys-preproduction",
     "oasys-production",
     "oasys-test",
-    "oasys-national-reporting-development",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
     "oasys-national-reporting-test",
