@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "windows_server_2022"
-configuration_version = "0.2.2"
+configuration_version = "0.2.3"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "windows server 2022"
 
@@ -64,7 +64,6 @@ accounts_to_distribute_ami_by_branch = {
     "oasys-test",
     "oasys-preproduction",
     "oasys-production",
-    "oasys-national-reporting-development",
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
@@ -88,7 +87,6 @@ accounts_to_distribute_ami_by_branch = {
     "nomis-test",
     "oasys-development",
     "oasys-test",
-    "oasys-national-reporting-development",
     "oasys-national-reporting-test",
     "nomis-combined-reporting-test",
     "nomis-data-hub-development",
@@ -117,7 +115,6 @@ launch_permission_accounts_by_branch = {
     "oasys-test",
     "oasys-preproduction",
     "oasys-production",
-    "oasys-national-reporting-development",
     "oasys-national-reporting-test",
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
@@ -141,7 +138,6 @@ launch_permission_accounts_by_branch = {
     "nomis-test",
     "oasys-development",
     "oasys-test",
-    "oasys-national-reporting-development",
     "oasys-national-reporting-test",
     "nomis-combined-reporting-test",
     "nomis-data-hub-development",
