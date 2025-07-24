@@ -8,3 +8,4 @@ tmp/
 .vscode/
 .terraform.lock.hcl
 **/*-draft.md
+megalinter-reports
