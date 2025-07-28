@@ -1,6 +1,6 @@
 #!/bin/bash
 # Formats code in the same way as the code-formatter GitHub action
-# See https://github.com/ministryofjustice/github-actions/blob/main/code-formatter/action.yml
+# See https://github.com/ministryofjustice/modernisation-platform-github-actions/tree/main/format-code
 # Use this to avoid code-formatter commits during a PR
 
 for binary in terraform npx; do
