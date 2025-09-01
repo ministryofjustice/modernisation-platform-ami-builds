@@ -56,10 +56,8 @@ launch_permission_accounts_by_branch = {
     "oasys-national-reporting-preproduction",
     "oasys-national-reporting-production",
     "oasys-national-reporting-test",
-    "planetfm-development",
     "planetfm-preproduction",
     "planetfm-production",
-    "planetfm-test",
     "delius-core-development"
   ]
 
