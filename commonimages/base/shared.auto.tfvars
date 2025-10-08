@@ -26,10 +26,8 @@ launch_permission_accounts_by_branch = {
 
   main = [
     "core-shared-services-production",
-    "corporate-staff-rostering-development",
     "corporate-staff-rostering-preproduction",
     "corporate-staff-rostering-production",
-    "corporate-staff-rostering-test",
     "hmpps-oem-development",
     "hmpps-oem-preproduction",
     "hmpps-oem-production",
