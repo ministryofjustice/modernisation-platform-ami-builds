@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "oasys"
 ami_base_name         = "bip"
-configuration_version = "0.0.5"
+configuration_version = "0.0.6"
 release_or_patch      = "release"
 description           = "oasys bip image"
 
@@ -57,10 +57,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
+#   schedule = {
+#     schedule_expression                = "cron(0 0 2 * ? *)"
+#     pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+#   }
 }
 
 # need to distribute to all oasys accounts if making instance
