@@ -57,10 +57,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
+  # schedule = {
+  #   schedule_expression                = "cron(0 0 2 * ? *)"
+  #   pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+  # }
 }
 
 # need to distribute to all oasys accounts if making instance
