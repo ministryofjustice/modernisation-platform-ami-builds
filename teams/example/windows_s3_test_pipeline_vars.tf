@@ -10,7 +10,7 @@ locals {
 
     pipeline = {
       name     = join("", [local.team_name, "_WindowsServer2022_s3_test"])
-      schedule = "cron(0 0 2 * ? *)" # day after source image is built
+      schedule = null
     }
 
     recipe = {

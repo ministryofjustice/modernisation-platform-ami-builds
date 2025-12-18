@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "hmpps"
 ami_base_name         = "ol_8_5_oracledb_19c"
-configuration_version = "0.0.10"
+configuration_version = "0.0.11"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "hmpps oracle 19c image on oracle linux 8.5"
 
@@ -89,10 +89,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
+  # schedule = {
+  #   schedule_expression                = "cron(0 0 2 * ? *)"
+  #   pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+  # }
 }
 
 accounts_to_distribute_ami_by_branch = {

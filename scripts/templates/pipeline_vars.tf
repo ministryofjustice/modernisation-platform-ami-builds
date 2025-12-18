@@ -4,7 +4,7 @@ locals {
 
     pipeline = {
       name     = join("", [local.team_name, "_", local.suffix])
-      schedule = "cron(0 0 * * ? *)"
+      schedule = null
     }
 
     recipe = {

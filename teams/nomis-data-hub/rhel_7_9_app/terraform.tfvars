@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "nomis_data_hub"
 ami_base_name         = "rhel_7_9_app"
-configuration_version = "0.0.4"
+configuration_version = "0.0.5"
 release_or_patch      = "release" # or "patch", see nomis AMI image building strategy doc
 description           = "nomis data hub rhel 7.9 app image"
 
@@ -35,10 +35,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 0 2 * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
+  # schedule = {
+  #   schedule_expression                = "cron(0 0 2 * ? *)"
+  #   pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+  # }
 }
 
 accounts_to_distribute_ami_by_branch = {
