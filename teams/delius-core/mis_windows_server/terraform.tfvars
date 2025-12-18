@@ -58,10 +58,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 13 * * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  }
+  # schedule = {
+  #   schedule_expression                = "cron(0 13 * * ? *)"
+  #   pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+  # }
 }
 
 accounts_to_distribute_ami_by_branch = {

@@ -5,8 +5,8 @@ resource "aws_imagebuilder_image_pipeline" "windows_s3_test" {
   name                             = local.windows_s3_test.pipeline.name
 
   schedule {
-    schedule_expression                = local.windows_s3_test.pipeline.schedule
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+    # schedule_expression                = local.windows_s3_test.pipeline.schedule
+    # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   }
 
 }
