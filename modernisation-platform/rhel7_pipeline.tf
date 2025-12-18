@@ -5,8 +5,8 @@ resource "aws_imagebuilder_image_pipeline" "rhel7" {
   name                             = local.rhel_pipeline.pipeline.name
 
   # schedule {
-    # schedule_expression                = local.rhel_pipeline.pipeline.schedule
-    # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+  # schedule_expression                = local.rhel_pipeline.pipeline.schedule
+  # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
   # }
 
 }
