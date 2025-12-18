@@ -4,10 +4,10 @@ resource "aws_imagebuilder_image_pipeline" "amazonlinux2" {
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.amazonlinux2.arn
   name                             = local.linux_pipeline.pipeline.name
 
-  schedule {
+  # schedule {
     # schedule_expression                = local.linux_pipeline.pipeline.schedule
     # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  }
+  # }
 
 }
 

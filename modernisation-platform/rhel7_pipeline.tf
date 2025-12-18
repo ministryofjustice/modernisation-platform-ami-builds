@@ -4,10 +4,10 @@ resource "aws_imagebuilder_image_pipeline" "rhel7" {
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.rhel7.arn
   name                             = local.rhel_pipeline.pipeline.name
 
-  schedule {
+  # schedule {
     # schedule_expression                = local.rhel_pipeline.pipeline.schedule
     # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  }
+  # }
 
 }
 
