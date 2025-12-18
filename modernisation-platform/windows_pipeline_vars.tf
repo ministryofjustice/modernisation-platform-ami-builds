@@ -4,7 +4,7 @@ locals {
 
     pipeline = {
       name     = join("", [local.team_name, "_WindowsServer2022"])
-      schedule = ""
+      schedule = null
     }
 
     recipe = {
