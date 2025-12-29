@@ -4,10 +4,10 @@ resource "aws_imagebuilder_image_pipeline" "windowsserver2019" {
   distribution_configuration_arn   = aws_imagebuilder_distribution_configuration.windowsserver2019.arn
   name                             = local.windows_2019_pipeline.pipeline.name
 
-  schedule {
-    schedule_expression                = local.windows_2019_pipeline.pipeline.schedule
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  }
+  # schedule {
+  # schedule_expression                = local.windows_2019_pipeline.pipeline.schedule
+  # pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+  # }
 
 }
 

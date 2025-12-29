@@ -5,7 +5,7 @@
 region                = "eu-west-2"
 ami_name_prefix       = "delius"
 ami_base_name         = "mis_windows_server"
-configuration_version = "0.0.5"
+configuration_version = "0.0.6"
 
 release_or_patch = "patch" # see nomis AMI image building strategy doc
 description      = "Delius MIS server"
@@ -58,10 +58,10 @@ infrastructure_configuration = {
 }
 
 image_pipeline = {
-  schedule = {
-    schedule_expression                = "cron(0 13 * * ? *)"
-    pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-  }
+  # schedule = {
+  #   schedule_expression                = "cron(0 13 * * ? *)"
+  #   pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+  # }
 }
 
 accounts_to_distribute_ami_by_branch = {
