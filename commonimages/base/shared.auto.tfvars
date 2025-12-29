@@ -2,10 +2,11 @@
 ami_name_prefix = "base"
 
 image_pipeline = {
-  schedule = {
-    # schedule_expression                = "cron(0 0 1 * ? *)"
-    # pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
-  }
+  schedule = null
+#   schedule = {
+#     schedule_expression                = "cron(0 0 1 * ? *)"
+#     pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"
+#   }
 }
 
 accounts_to_distribute_ami_by_branch = {
