@@ -1,7 +1,7 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
-configuration_version = "0.0.10"
+configuration_version = "0.0.11"
 description           = "shared oracle linux 8.5 base image"
 
 ami_base_name = "ol_8_5"
