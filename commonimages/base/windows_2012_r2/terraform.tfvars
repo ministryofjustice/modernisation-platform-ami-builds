@@ -15,7 +15,7 @@ tags = {
 parent_image = {
   owner = "374269020027"
   ami_search_filters = {
-    name = ["base_windows_server_2012_r2_release_2023-09-07T*"] # specify our own Windows Server 2012 R2 base image as this went EOL in 2023
+    name = ["base_windows_server_2012_r2_release_2023-12-01T*"] # specify our own Windows Server 2012 R2 base image as this went EOL in 2023
     # based off the retired: EC2LaunchV2-Windows_Server-2012_R2_RTM-English-Full-Base-*
   }
 }
