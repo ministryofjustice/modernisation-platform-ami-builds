@@ -1,6 +1,9 @@
 # following are passed in via pipeline
 # BRANCH_NAME =  
 # GH_ACTOR_NAME = 
+
+remove = true
+
 configuration_version = "0.0.4"
 description           = "shared rhel 8.5 base image arm64"
 

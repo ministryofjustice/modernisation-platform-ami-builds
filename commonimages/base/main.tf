@@ -1,5 +1,6 @@
 module "imagebuilder" {
   source = "./../../modules//imagebuilder"
+  count = var.remove ? 0 : 1
 
   region                          = var.region
   team_name                       = var.ami_name_prefix # would be best to rename team_name -> ami_name_prefix for all, leave for later PR
