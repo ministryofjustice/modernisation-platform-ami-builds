@@ -5,7 +5,7 @@ locals {
     application   = "n/a"
     branch        = var.BRANCH_NAME == "" ? "n/a" : var.BRANCH_NAME
     is-production = var.BRANCH_NAME == "main" ? "true" : "false"
-    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/commonimages/base/${var.ami_base_name}"
+    source-code   = "https://github.com/ministryofjustice/modernisation-platform-ami-builds/tree/main/commonimages/base/rhel_8_5_arm64"
   }
 
   accounts_to_distribute_ami = try(
