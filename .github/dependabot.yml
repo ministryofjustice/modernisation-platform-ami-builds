@@ -4,10 +4,22 @@
 version: 2
 
 updates:
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: gomod
+    directory: /scripts/minimise-comments
+    schedule:
+      interval: daily
+
+  - package-ecosystem: pip
+    directory: /ansible
+    schedule:
+      interval: daily
+
   # Dependabot doesn't currently support wildcard or multiple directory declarations within
   # a dependabot configuration, so we need to add all directories individually
   # See: github.com/dependabot/dependabot-core/issues/2178
@@ -29,10 +41,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/commonimages/base/rhel_8_5"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/rhel_8_5_arm64"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
@@ -104,18 +112,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
-    directory: "/teams/nomis-data-hub"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis-data-hub/rhel_7_9_app"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis-data-hub/rhel_7_9_ems"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
     directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
     schedule:
       interval: "daily"
@@ -137,10 +133,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "terraform"
     directory: "/teams/oasys/oracle_db"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "terraform"
-    directory: "/teams/oasys/weblogic"
     schedule:
       interval: "daily"
   - package-ecosystem: "terraform"
