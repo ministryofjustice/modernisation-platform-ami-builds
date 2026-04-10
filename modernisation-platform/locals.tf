@@ -24,6 +24,7 @@ locals {
     application   = "Modernisation Platform: ${terraform.workspace}"
     is-production = local.is-production
     owner         = "Modernisation Platform: modernisation-platform@digital.justice.gov.uk"
+    service-area  = "Hosting"
   }
 
   ami_share_accounts = [for account, id in local.environment_management.account_ids : id]
