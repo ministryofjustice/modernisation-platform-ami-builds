@@ -47,10 +47,3 @@ cp -r ./templates ../teams/${TEAM}
       sed -i '' -e "s/#AWS_COMPONENT#/$AWS_COMPONENT/g" $file;
   done
 )
-
-
-# create workflow
-cp ./template.yml ../.github/workflows/${TEAM}_${SUFFIX}.yml
-
-sed -i '' -e "s/#TEAM#/$TEAM/g" ../.github/workflows/${TEAM}_${SUFFIX}.yml
-sed -i '' -e "s/#SUFFIX#/$SUFFIX/g" ../.github/workflows/${TEAM}_${SUFFIX}.yml
