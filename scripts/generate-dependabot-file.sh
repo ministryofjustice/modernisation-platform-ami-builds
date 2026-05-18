@@ -42,16 +42,22 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   - package-ecosystem: gomod
     directory: /scripts/minimise-comments
     schedule:
       interval: daily
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   - package-ecosystem: pip
     directory: /ansible
     schedule:
       interval: daily
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   # Dependabot doesn't currently support wildcard or multiple directory declarations within
   # a dependabot configuration, so we need to add all directories individually
@@ -65,4 +71,6 @@ echo "  - package-ecosystem: \"terraform\"" >> $dependabot_file
 echo "    directory: \"/${folder}\"" >> $dependabot_file
 echo "    schedule:" >> $dependabot_file
 echo "      interval: \"daily\"" >> $dependabot_file
+echo "    cooldown:" >> $dependabot_file
+echo "      default-days: ${dependabot_cooldown_default_days}" >> $dependabot_file
 done
