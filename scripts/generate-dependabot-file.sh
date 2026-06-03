@@ -4,6 +4,20 @@ set -euo pipefail
 
 dependabot_file=.github/dependabot.yml
 
+# Dependabot cooldown configuration (applies to version updates only)
+# Docs: https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#cooldown-
+dependabot_cooldown_default_days="${DEPENDABOT_COOLDOWN_DEFAULT_DAYS:-7}"
+
+if ! [[ "$dependabot_cooldown_default_days" =~ ^[0-9]+$ ]]; then
+  echo "ERROR: DEPENDABOT_COOLDOWN_DEFAULT_DAYS must be an integer (days), got: '$dependabot_cooldown_default_days'" >&2
+  exit 1
+fi
+
+if (( dependabot_cooldown_default_days < 1 || dependabot_cooldown_default_days > 90 )); then
+  echo "ERROR: DEPENDABOT_COOLDOWN_DEFAULT_DAYS must be between 1 and 90 (inclusive), got: '$dependabot_cooldown_default_days'" >&2
+  exit 1
+fi
+
 # Clear the dependabot file
 > $dependabot_file
 
@@ -28,16 +42,22 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   - package-ecosystem: gomod
     directory: /scripts/minimise-comments
     schedule:
       interval: daily
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   - package-ecosystem: pip
     directory: /ansible
     schedule:
       interval: daily
+    cooldown:
+      default-days: ${dependabot_cooldown_default_days}
 
   # Dependabot doesn't currently support wildcard or multiple directory declarations within
   # a dependabot configuration, so we need to add all directories individually
@@ -51,4 +71,6 @@ echo "  - package-ecosystem: \"terraform\"" >> $dependabot_file
 echo "    directory: \"/${folder}\"" >> $dependabot_file
 echo "    schedule:" >> $dependabot_file
 echo "      interval: \"daily\"" >> $dependabot_file
+echo "    cooldown:" >> $dependabot_file
+echo "      default-days: ${dependabot_cooldown_default_days}" >> $dependabot_file
 done
