@@ -71,7 +71,7 @@ accounts_to_distribute_ami_by_branch = {
     "nomis-data-hub-development",
     "nomis-data-hub-test",
     "nomis-data-hub-preproduction",
-    "nomis-data-hub-production",
+    "nomis-data-hub-production"
   ]
 
   # push to any other branch / local run
