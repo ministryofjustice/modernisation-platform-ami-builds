@@ -71,7 +71,7 @@ accounts_to_distribute_ami_by_branch = {
     "nomis-data-hub-development",
     "nomis-data-hub-test",
     "nomis-data-hub-preproduction",
-    "nomis-data-hub-production"
+    "nomis-data-hub-production",
   ]
 
   # push to any other branch / local run
@@ -118,7 +118,8 @@ launch_permission_accounts_by_branch = {
     "nomis-data-hub-development",
     "nomis-data-hub-test",
     "nomis-data-hub-preproduction",
-    "nomis-data-hub-production"
+    "nomis-data-hub-production",
+    "london-unpaid-work-development"
   ]
 
   # push to any other branch / local run
@@ -133,7 +134,8 @@ launch_permission_accounts_by_branch = {
     "oasys-national-reporting-test",
     "nomis-combined-reporting-test",
     "nomis-data-hub-development",
-    "nomis-data-hub-test"
+    "nomis-data-hub-test",
+    "london-unpaid-work-development"
   ]
 }
 
