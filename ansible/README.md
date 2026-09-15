@@ -8,10 +8,10 @@ NOTE: ansible configuration is now primarily found in the
 modernisation-platform-configuration-management repo which is used for both
 AMI builds and EC2 provisioning.
 
-If the modernisation-platform-configuration-management repo is not suitable, 
+If the modernisation-platform-configuration-management repo is not suitable,
 the following directory structure can be used, where common ansible resources,
-such as roles, are located here. Team specificresources, such as playbooks, 
-are located within the relevant `teams` directory.  Directory strucure as follows:
+such as roles, are located here. Team specificresources, such as playbooks,
+are located within the relevant `teams` directory. Directory strucure as follows:
 
 <pre>
 .
@@ -74,11 +74,11 @@ Ansible tasks are executed on ec2 instances via AWS Session Manager, so you must
 
 The `ansible_connection` variable is set to use the `community.aws.aws_ssm` plugin in [group_vars/aws_ec2.yml](/ansible/group_vars/aws_ec2.yml). The `aws_ec2` group is the default group for all instances that are obtained from dynamic inventory.
 
-Ensure you have set your AWS credentials as environment variables or setup your `~/.aws/credentials` accordingly before attempting to run ansible. Note that at the time of writing, it does not seem possible to run Ansible with credentials obtained from `aws sso login`. Temporary credentials can be obtained from https://moj.awsapps.com/start#/
+Ensure you have set your AWS credentials as environment variables or setup your `~/.aws/credentials` accordingly before attempting to run ansible. Note that at the time of writing, it does not seem possible to run Ansible with credentials obtained from `aws sso login`. Temporary credentials can be obtained from <https://moj.awsapps.com/start#/>
 
 You may encounter an error similar to `ERROR! A worker was found in a dead state`. Apparently this is a Python issue and the workaround is to set an env:
 
-```
+```python
 export no_proxy='*'
 ```
 
@@ -86,7 +86,7 @@ The Session Manager plugin requires that an S3 bucket is specified as one of the
 
 Define the list of roles to run on each type of server under an ami specific variable. For example [group_vars/ami_nomis_rhel_6_10_baseimage.yml](/ansible/group_vars/ami_nomis_rhel_6_10_baseimage.yml)
 
-```
+```python
 ---
 ansible_python_interpreter: /usr/local/bin/python3.9
 roles_list:
@@ -95,7 +95,7 @@ roles_list:
 
 Run ansible
 
-```
+```python
 # Run against all hosts in check mode
 ansible-playbook site.yml --check
 
