@@ -25,7 +25,7 @@ This repository contains the Modernisation Platform AMI build code and workflows
 
 ### AWS EC2 Image Builder
 
-Infrastructure-as-code (Terraform) is used in this repository to define AMIs and uses **AWS EC2 Image Builder** - a managed service for building, testing and deploying Amazon Machine Images. See https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html for information.
+Infrastructure-as-code (Terraform) is used in this repository to define AMIs and uses **AWS EC2 Image Builder** - a managed service for building, testing and deploying Amazon Machine Images. See <https://docs.aws.amazon.com/imagebuilder/latest/userguide/what-is-image-builder.html> for information.
 
 AWS Image Builder introduces concepts such as pipelines, recipes and components to define an AMI. These concepts are backed by equivalent Terraform resources. Recipes and Components natively enforce versioning, allowing changes to be tracked and identified. This raises an interesting consideration around the declarative nature of Terraform in combination with inherent versioning within Git repositories - a consideration which has led to a recommended approach in the use of AWS Image Builder within this repository.
 
@@ -64,7 +64,7 @@ To add a new team
 ```
   key = "imagebuilder-[team name].tfstate"
 ```
-**To ensure you can review any PRs you generate** add the team to the **.github/CODEOWNERS**. Check the contents of the file to see what is needed. Generally it is /teams/<team name> @ministryofjustice/<team name>. Ones that are currently in place can be seen in CODEOWNERS. 
+**To ensure you can review any PRs you generate** add the team to the **.github/CODEOWNERS**. Check the contents of the file to see what is needed. Generally it is /teams/<team name> @ministryofjustice/<team name>. Ones that are currently in place can be seen in CODEOWNERS.
 
 ### How to define an AMI (and associated Image Builder resources)
 
@@ -102,9 +102,9 @@ ami_share_accounts = [
 ]
 ```
 
-The above can be seen in the pull request https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c# but this includes far more detail than is required here.
+The above can be seen in the pull request <https://github.com/ministryofjustice/modernisation-platform-ami-builds/pull/18/files/6a589a6d3d0dc70f2bc28cb8cbb84075cad9d73c#> but this includes far more detail than is required here.
 
-Example code on how to create a team KMS key, and the permissions needed can be found in https://github.com/ministryofjustice/modernisation-platform-environments/blob/b73bba2e9d708efbc0db4492582829f52f00cb60/terraform/environments/sprinkler/kms.tf
+Example code on how to create a team KMS key, and the permissions needed can be found in <https://github.com/ministryofjustice/modernisation-platform-environments/blob/b73bba2e9d708efbc0db4492582829f52f00cb60/terraform/environments/sprinkler/kms.tf>
 
 ### How to use the per business unit shared kms key
 
