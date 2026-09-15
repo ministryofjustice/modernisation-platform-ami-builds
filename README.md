@@ -18,7 +18,7 @@ This repository contains the Modernisation Platform AMI build code and workflows
   - [How to guides](#how-to-guides)
     - [How to add a new team](#how-to-add-a-new-team)
     - [How to define an AMI (and associated Image Builder resources)](#how-to-define-an-ami-and-associated-image-builder-resources)
-    - [How to new components and manage versions](#how-to-new-components-and-manage-versions)
+    - [How to new components and manage versions](#how-to-add-new-components-and-manage-versions)
     - [How to add a new GitHub workflow](#how-to-add-a-new-github-workflow)
     - [Viewing and starting Image Builder pipelines](#how-to-view-and-start-ec2-image-builder-pipelines)
   - [Future additions and improvements](#future-additions-and-improvements)
@@ -61,9 +61,10 @@ To add a new team
 - change the _team_name_ variable in _**locals.tf**_, which will subsequently be interpolated and used in all Image Builder resource names.
 - Each team directory will use a different terraform remote state file defined in _**backend.tf**_ - so also rename the state file name by renaming the `key` attribute value, updating the team name to be consistent to that used in the previous step.
 
-```
+```terraform
   key = "imagebuilder-[team name].tfstate"
 ```
+
 **To ensure you can review any PRs you generate** add the team to the **.github/CODEOWNERS**. Check the contents of the file to see what is needed. Generally it is /teams/<team name> @ministryofjustice/<team name>. Ones that are currently in place can be seen in CODEOWNERS.
 
 ### How to define an AMI (and associated Image Builder resources)
@@ -88,7 +89,7 @@ The requirements, as an example, for sprinkler are shown below.
 
 Under data.tf
 
-```
+```terraform
 data "aws_kms_key" "sprinkler_ebs_encryption_key" {
   key_id = "arn:aws:kms:eu-west-2:${local.environment_management.account_ids["sprinkler-development"]}:alias/sprinkler_ebs-encryption-key"
 }
@@ -96,7 +97,7 @@ data "aws_kms_key" "sprinkler_ebs_encryption_key" {
 
 At the end of locals.tf include
 
-```
+```terraform
 ami_share_accounts = [
   "${local.environment_management.account_ids["sprinkler-development"]}"
 ]
@@ -142,7 +143,7 @@ No further change will need to be made to the component block of the pipeline te
 
 GitHub workflow files are used to invoke Terraform through a reusable workflow defined at [.github/workflows/reusable_terraform_plan_apply.yml](.github/workflows/reusable_terraform_plan_apply.yml).
 To create a workflow for your team, create a new file in .github/workflows/ (e.g., `[your_team_name].yml`) that calls the reusable workflow.
-An example usage is provided in  [./.github/workflows/example.yml](./.github/workflows/example.yml).
+An example usage is provided in [./.github/workflows/example.yml](./.github/workflows/example.yml).
 
 ### How to view and start EC2 Image Builder pipelines
 

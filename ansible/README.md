@@ -11,7 +11,7 @@ AMI builds and EC2 provisioning.
 If the modernisation-platform-configuration-management repo is not suitable,
 the following directory structure can be used, where common ansible resources,
 such as roles, are located here. Team specificresources, such as playbooks,
-are located within the relevant `teams` directory.  Directory strucure as follows:
+are located within the relevant `teams` directory. Directory strucure as follows:
 
 <pre>
 .
@@ -78,7 +78,7 @@ Ensure you have set your AWS credentials as environment variables or setup your 
 
 You may encounter an error similar to `ERROR! A worker was found in a dead state`. Apparently this is a Python issue and the workaround is to set an env:
 
-```
+```python
 export no_proxy='*'
 ```
 
@@ -86,7 +86,7 @@ The Session Manager plugin requires that an S3 bucket is specified as one of the
 
 Define the list of roles to run on each type of server under an ami specific variable. For example [group_vars/ami_nomis_rhel_6_10_baseimage.yml](/ansible/group_vars/ami_nomis_rhel_6_10_baseimage.yml)
 
-```
+```python
 ---
 ansible_python_interpreter: /usr/local/bin/python3.9
 roles_list:
@@ -95,7 +95,7 @@ roles_list:
 
 Run ansible
 
-```
+```python
 # Run against all hosts in check mode
 ansible-playbook site.yml --check
 
