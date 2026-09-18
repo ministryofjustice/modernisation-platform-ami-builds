@@ -45,10 +45,16 @@ jobs:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
       - name: Generate file
         run: bash ./scripts/generate-dependabot-file.sh
-      - name: Commit changes to GitHub
+
+      - name: Set up Git user
         run: bash ./scripts/git-setup.sh
-      - run: bash ./scripts/git-commit.sh .github
-      - run: bash ./scripts/git-pull-request.sh dependabot
+
+      - name: Commit and Create PR with Signed Commit
+        uses: ministryofjustice/modernisation-platform-github-actions/signed-commit@d467c7fb1bbeb73162ea736ca13adc8ba2ae74f8 # v6.2.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: "Automated Update: Dependabot File"
+          pr_body: "This PR updates the Dependabot configuration file."
         env:
           SECRET: ${{ secrets.GITHUB_TOKEN }}
       - name: Slack failure notification
