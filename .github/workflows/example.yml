@@ -1,6 +1,6 @@
 ---
 name: example
-on:
+"on":
   push:
     branches:
       - main

@@ -1,7 +1,7 @@
 ---
 name: delius-core
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       projects:

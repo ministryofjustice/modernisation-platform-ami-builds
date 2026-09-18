@@ -1,3 +1,4 @@
+---
 name: terraform plan apply
 # This reusable pipeline works across multiple terragrunt projects within a team
 # directory with locking (turnstyle) and PR comment functionality.
@@ -7,7 +8,7 @@ name: terraform plan apply
 #
 # It allow both plan/apply via manual dispatch.
 # For CI/CD, it runs a plan when PR raised and apply when merged.
-on:
+"on":
   workflow_call:
     inputs:
       team_dir:
@@ -98,7 +99,7 @@ jobs:
         run: |
           ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)
           echo "::add-mask::$ACCOUNT_NUMBER"
-          echo ACCOUNT_NUMBER=$ACCOUNT_NUMBER >> $GITHUB_ENV
+          echo "ACCOUNT_NUMBER=$ACCOUNT_NUMBER" >> "$GITHUB_ENV"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
@@ -268,7 +269,7 @@ jobs:
         run: |
           ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)
           echo "::add-mask::$ACCOUNT_NUMBER"
-          echo ACCOUNT_NUMBER=$ACCOUNT_NUMBER >> $GITHUB_ENV
+          echo "ACCOUNT_NUMBER=$ACCOUNT_NUMBER" >> "$GITHUB_ENV"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
@@ -342,9 +343,9 @@ jobs:
               echo "** Truncated output.  See $url for the rest **"
             fi
           }
-          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo 'TF_PLAN_OUT<<EOF' >> "$GITHUB_ENV"
+          comment >> "$GITHUB_ENV"
+          echo 'EOF' >> "$GITHUB_ENV"
 
       - name: Post Plan to PR
         env:
@@ -381,7 +382,7 @@ jobs:
         run: |
           ACCOUNT_NUMBER=$(jq -r -e '.modernisation_platform_account_id' <<< $ENVIRONMENT_MANAGEMENT)
           echo "::add-mask::$ACCOUNT_NUMBER"
-          echo ACCOUNT_NUMBER=$ACCOUNT_NUMBER >> $GITHUB_ENV
+          echo "ACCOUNT_NUMBER=$ACCOUNT_NUMBER" >> "$GITHUB_ENV"
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4

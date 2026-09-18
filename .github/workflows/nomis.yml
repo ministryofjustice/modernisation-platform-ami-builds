@@ -1,7 +1,7 @@
 ---
 name: nomis
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       projects:

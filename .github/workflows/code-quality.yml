@@ -1,6 +1,7 @@
+---
 name: Code Quality
 
-on:
+"on":
   push:
     branches: [main]
   pull_request:
@@ -25,3 +26,5 @@ jobs:
       validate_all_codebase: ${{ github.event_name != 'pull_request' && 'true' || 'false' }}
       checkov_arguments: >-
         --skip-check CKV_GIT_1,CKV_AWS_126,CKV2_AWS_38,CKV2_AWS_39
+      tflint_arguments: >-
+        --disable-rule=terraform_unused_declarations

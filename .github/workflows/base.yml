@@ -1,7 +1,7 @@
 ---
 name: base
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       projects:
