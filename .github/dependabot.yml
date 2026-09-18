@@ -1,211 +1,82 @@
-# This file is auto-generated here, do not manually amend. 
-# https://github.com/ministryofjustice/modernisation-platform/blob/main/scripts/generate-dependabot.sh
+---
+# This file is auto-generated, do not manually amend.
+# scripts/generate-dependabot-file.sh
 
 version: 2
 
 updates:
-
+  # Dependency management strategy:
+  # ministryofjustice/modernisation-platform#8211
+  #
+  # Major and minor/patch version updates are grouped separately, with both
+  # checked monthly to reduce routine Dependabot PR noise.
+  #
+  # Monthly is a compromise, not the ticket's proposed fortnightly major
+  # and six-monthly minor/patch cadence.
+  #
+  # Dependabot alerts and security updates must be enabled separately in
+  # repository/org settings; security updates do not wait for this schedule.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     cooldown:
       default-days: 7
+    groups:
+      action-major:
+        update-types:
+          - "major"
+      action-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
 
-  - package-ecosystem: gomod
-    directory: /scripts/minimise-comments
-    schedule:
-      interval: daily
-    cooldown:
-      default-days: 7
-
-  - package-ecosystem: pip
-    directory: /ansible
-    schedule:
-      interval: daily
-    cooldown:
-      default-days: 7
-
-  # Dependabot doesn't currently support wildcard or multiple directory declarations within
-  # a dependabot configuration, so we need to add all directories individually
-  # See: github.com/dependabot/dependabot-core/issues/2178
   - package-ecosystem: "terraform"
-    directory: "/commonimages/base"
+    directories:
+      - "/commonimages/**/*"
+      - "/modernisation-platform/**/*"
+      - "/modules/**/*"
+      - "/scripts/**/*"
+      - "/teams/**/*"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     cooldown:
       default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/ol_8_5"
+    groups:
+      terraform-major:
+        update-types:
+          - "major"
+      terraform-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "gomod"
+    directories:
+      - "/scripts/**/*"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     cooldown:
       default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/rhel_6_10"
+    groups:
+      gomod-major:
+        update-types:
+          - "major"
+      gomod-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "pip"
+    directories:
+      - "/ansible/**/*"
     schedule:
-      interval: "daily"
+      interval: "monthly"
     cooldown:
       default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/rhel_7_9"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/rhel_8_5"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/base/windows_2012_r2"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/commonimages/components"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/modernisation-platform"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/modules/imagebuilder"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/scripts/templates"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/delius-core"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/delius-core/mis_windows_server"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/delius-core/oracle_db"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/delius-iaps"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/delius-iaps/iaps_server"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/example"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/hmpps"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/ol_8_5_oracledb_19c"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/rhel_8_5"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/windows_server_2019"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/hmpps/windows_server_2022"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis/rhel_6_10_weblogic_appserver_10_3"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis/rhel_7_9_oracledb_11_2"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/nomis/rhel_7_9_weblogic_xtag_10_3"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/oasys"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/oasys/bip"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/oasys/oracle_db"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/oasys/webserver"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "terraform"
-    directory: "/teams/sprinkler"
-    schedule:
-      interval: "daily"
-    cooldown:
-      default-days: 7
+    groups:
+      pip-major:
+        update-types:
+          - "major"
+      pip-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
