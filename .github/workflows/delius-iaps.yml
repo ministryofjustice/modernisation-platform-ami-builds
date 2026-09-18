@@ -1,7 +1,7 @@
 ---
 name: delius-iaps
 
-on:
+"on":
   workflow_dispatch:
     inputs:
       projects:
@@ -40,7 +40,6 @@ permissions:
   contents: read # This is required for actions/checkout
   pull-requests: write # For posting comments to PR
   issues: write # Required for posting comments on PRs
-  
 
 defaults:
   run:

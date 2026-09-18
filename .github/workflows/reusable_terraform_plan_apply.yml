@@ -73,7 +73,7 @@ env:
 
 jobs:
   fetch-secrets:
-    uses: ministryofjustice/modernisation-platform-github-actions/.github/workflows/aws-secrets-management.yml@2988728879704953e739f82ac926d37931c6d01b # v6.1.9
+    uses: ministryofjustice/modernisation-platform-github-actions/.github/workflows/aws-secrets-management.yml@d467c7fb1bbeb73162ea736ca13adc8ba2ae74f8 # v6.2.5
     secrets:
       MODERNISATION_PLATFORM_ACCOUNT_NUMBER: ${{ secrets.MODERNISATION_PLATFORM_ACCOUNT_NUMBER }}
       PASSPHRASE: ${{ secrets.PASSPHRASE }}
@@ -343,9 +343,9 @@ jobs:
               echo "** Truncated output.  See $url for the rest **"
             fi
           }
-          echo 'TF_PLAN_OUT<<EOF' >> $GITHUB_ENV
-          comment >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+          echo 'TF_PLAN_OUT<<EOF' >> "$GITHUB_ENV"
+          comment >> "$GITHUB_ENV"
+          echo 'EOF' >> "$GITHUB_ENV"
 
       - name: Post Plan to PR
         env:
